@@ -1,0 +1,142 @@
+$bgcolor:rgb(37, 159, 246);
+$bgcolor1:rgb(14, 130, 212);
+
+$btcolor:#007bff;
+
+$phone-width:250px;
+$tablet-width:768px;
+$desktop-width:1024px;
+body,html{
+    height:100%;
+    margin:0;
+    padding: 0;
+}
+
+@mixin phone() {
+    @media (min-width: #{$phone-width}) and (max-width: #{$tablet-width}){
+        @content;
+        }
+
+}
+@mixin tablet() {
+
+@media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width}){
+    @content;
+    }
+
+}
+@mixin desktop() {
+
+@media (min-width: #{$desktop-width}){
+    @content;
+    }
+
+}
+.main-container{
+    min-height: calc(100vh - 50px);
+}
+.menu{
+    .btn:first-child{
+    border-start-start-radius: 20px;
+    }
+    .btn:nth-child(3){
+        border-end-end-radius: 20px;
+    }
+}
+.navbar{
+    background:linear-gradient(-50deg,$bgcolor,$bgcolor1);
+    border-bottom:2px solid whitesmoke;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+
+    -webkit-box-shadow: 1px 10px 14px -8px rgba(0,0,0,0.75);
+    -moz-box-shadow: 1px 10px 14px -8px rgba(0,0,0,0.75);
+    box-shadow: 1px 10px 14px -8px rgba(0,0,0,0.75);
+}
+
+
+.footer{
+    height:50px;
+    p{
+    margin: auto;
+    }
+    margin:0;
+    margin-top:2%;
+    border-top:2px solid darkblue;
+    background-color: $bgcolor;
+    width:100%;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.menu{
+    @include phone{
+    button{
+        display:none;
+    }
+}
+position: relative;
+left:-5%;
+}
+.img_logo{
+    width:70%;
+    max-width: 150px;
+    @include tablet{
+        width:35%;
+        
+    }
+    @include desktop{
+        width:25%;
+        max-width: 200px;
+       
+    }
+    position: absolute;
+    top:8px;
+    
+   
+}
+.img_logo:hover{
+    
+      cursor: pointer;
+    
+}
+.dropdown-menu{
+    left:-90%;
+    
+    button:hover{
+        background-color:whitesmoke;
+        transition: background-color 1s;
+    }
+    
+}
+.dropdown{
+    position: relative;
+    left:-5%;
+    @include tablet{
+        display:none;
+    }
+    @include desktop{
+        display:none;
+    }
+    .buttmenu{
+        background-color: $btcolor;
+        border-color:$btcolor;
+        border-radius: 20px;
+
+    }
+    
+}
+.nearby{
+    margin:auto;
+    width:80vw;
+    border:1px solid red;
+}
+.toggleNearby{
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+    border-radius: 50px;
+}
+.nearby-text{
+    margin-top:100px;
+}

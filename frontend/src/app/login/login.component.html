@@ -1,0 +1,22 @@
+<div class="container-fluid">
+
+  <div class="row login_Form">
+    <form class="login_form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="header"><p>Formularz logowania</p></div>
+      <div class="inputs">
+        <div class="form-group">
+        <label for="email">Adres email</label>
+      <input class="form-control" type="text" id="email" name="email" formControlName="email" placeholder="Adres Email"> 
+        </div>
+        <div class="form-group">
+      <label for="password">Hasło</label>
+      <input class="form-control" type="password" id="password" name="password" formControlName="password" placeholder="Hasło">
+        </div>
+      <button class="btn btn-primary" type="submit">Zaloguj</button>
+
+      <p>Nie posiadasz jeszcze konta?</p>
+      <a class="link" routerLink="/register">ZAREJESTRUJ SIĘ</a>
+    </div>
+    </form>
+  </div>
+</div>

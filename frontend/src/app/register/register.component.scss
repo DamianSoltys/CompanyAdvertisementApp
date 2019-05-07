@@ -1,0 +1,128 @@
+
+$phone-width:250px;
+$tablet-width:768px;
+$desktop-width:1024px;
+@mixin phone() {
+    @media (min-width: #{$phone-width}) and (max-width: #{$tablet-width}){
+        @content;
+        }
+
+}
+@mixin tablet() {
+
+@media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width}){
+    @content;
+    }
+
+}
+@mixin desktop() {
+
+@media (min-width: #{$desktop-width}){
+    @content;
+    }
+
+}
+@mixin boxShadow($property)
+{
+    -webkit-box-shadow:$property;
+    -moz-box-shadow:$property;
+    box-shadow:$property;
+}
+
+.register_form{
+    text-align: center;
+    margin: auto;
+    
+    width: 30vw;
+    min-width: 20%;
+    min-height: 550px;
+    @include boxShadow(0px 4px 5px 0px rgba(187,185,191,1));
+    border:0;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    button{
+        width:60%;
+        margin-bottom:2%;
+        border-radius: 50px;
+        border:0;
+        background:linear-gradient(-45deg, #FFA63D, #FF3D77, #338AFF,#3CF0C5);
+        animation:anime 16s linear infinite;
+        background-size: 600%;
+        margin-top:4%;
+        @include phone{
+            width:75%;
+        }
+    }
+    @include phone{
+        width:80vw;
+        margin-top:50px;
+    }
+    @include tablet{
+        width:50vw;
+        
+    }
+}
+.inputs{
+    
+    margin-top:8%;
+    p{
+        margin: 0;
+    }
+}
+.Register_Form{
+    margin-top:5%;
+    height:100%;
+    
+}
+.form-group{
+    width:60%;
+    margin: auto;
+    text-align: left;
+    @include phone{
+        width:75%;
+    }
+}
+.form-control{
+    width:100%;
+    margin:auto;
+}
+
+@keyframes anime {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  .header{
+    position: relative;
+    min-height:30px;
+    height: 6vh;
+    max-height: 60px;
+    background-color:rgb(30, 147, 197);
+    border:0;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    p{
+        color:white;
+        position: relative;
+        top:50%;
+        transform: translate(0,-50%);
+        font-size: 1.2em;
+    }
+  }
+  .link{
+    color: transparent;
+background: #666666;
+-webkit-background-clip: text;
+-moz-background-clip: text;
+background-clip: text;
+text-shadow: 0px 3px 3px rgba(255,255,255,0.5);
+}
+.link:hover{
+    opacity: 0.8;
+}

@@ -1,4 +1,4 @@
-package local.project.Inzynierka.persistence.model;
+package local.project.Inzynierka.persistence.entity;
 
 import java.io.Serializable;
 

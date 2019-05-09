@@ -1,4 +1,4 @@
-package local.project.Inzynierka.persistence.model;
+package local.project.Inzynierka.persistence.entity;
 
 import lombok.Data;
 
@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "favourite_branches")
-public class FavouriteBranch implements Serializable {
+public class FavouriteBranchEntity implements Serializable {
 
 
    @EmbeddedId
@@ -17,12 +17,11 @@ public class FavouriteBranch implements Serializable {
 
    @OneToOne
    @JoinColumns({@JoinColumn(name = "user_id", referencedColumnName = "user_id", updatable = false, insertable = false)})
-   private User user;
+   private UserEntity userEntity;
 
    @OneToOne
    @JoinColumns({@JoinColumn(name = "branch_id", referencedColumnName = "branch_id", insertable = false, updatable = false)})
-   private Branch branch;
-
+   private BranchEntity branchEntity;
 
     @Column(name = "created_at",  columnDefinition = "TIMESTAMP")
     private Timestamp createdAt;

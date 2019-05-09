@@ -1,4 +1,4 @@
-package local.project.Inzynierka.persistence.model;
+package local.project.Inzynierka.persistence.entity;
 
 import lombok.Data;
 
@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "branches")
-public class Branch implements IEntity {
+public class BranchEntity implements IEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,11 +17,11 @@ public class Branch implements IEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "branch_registerer_FK"))
-    private NaturalPerson registerer;
+    private NaturalPersonEntity registerer;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id", foreignKey = @ForeignKey(name = "company_branch_FK"))
-    private Company company;
+    private CompanyEntity companyEntity;
 
     @Column(nullable = false, length = 50)
     private String name;

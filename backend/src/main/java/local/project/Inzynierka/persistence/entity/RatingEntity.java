@@ -1,4 +1,4 @@
-package local.project.Inzynierka.persistence.model;
+package local.project.Inzynierka.persistence.entity;
 
 import lombok.Data;
 
@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "ratings")
-public class Rating implements IEntity {
+public class RatingEntity implements IEntity {
 
 
     @Id
@@ -20,11 +20,11 @@ public class Rating implements IEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false,foreignKey = @ForeignKey(name = "rating_user_FK"))
-    private User user;
+    private UserEntity userEntity;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "rated_FK"))
-    private Branch branch;
+    private BranchEntity branchEntity;
 
     @Column(nullable = false, name = "created_at", columnDefinition = "TIMESTAMP")
     private Timestamp createdAt;

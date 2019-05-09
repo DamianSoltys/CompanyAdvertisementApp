@@ -1,4 +1,4 @@
-package local.project.Inzynierka.persistence.model;
+package local.project.Inzynierka.persistence.entity;
 
 import lombok.Data;
 
@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "newsletter_subscriptions")
-public class NewsletterSubscription implements IEntity {
+public class NewsletterSubscriptionEntity implements IEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,11 +16,11 @@ public class NewsletterSubscription implements IEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "newsletter_company_FK"), nullable = false)
-    private Company company;
+    private CompanyEntity companyEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_email", foreignKey = @ForeignKey(name = "newsletter_email_FK"), nullable = false)
-    private EmailAddress emailAddress;
+    private EmailAddressEntity emailAddressEntity;
 
     @Column(nullable = false)
     private Boolean verified;

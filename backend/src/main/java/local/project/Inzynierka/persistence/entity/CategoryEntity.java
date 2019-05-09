@@ -1,4 +1,4 @@
-package local.project.Inzynierka.persistence.model;
+package local.project.Inzynierka.persistence.entity;
 
 import lombok.Data;
 
@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "categories")
-public class Category implements IEntity{
+public class CategoryEntity implements IEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,7 +1,6 @@
-package local.project.Inzynierka.persistence.model;
+package local.project.Inzynierka.persistence.entity;
 
 import lombok.Data;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -10,7 +9,7 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "companies")
-public class Company implements IEntity{
+public class CompanyEntity implements IEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,11 +44,11 @@ public class Company implements IEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "company_registerer_FK"))
-    private NaturalPerson registerer;
+    private NaturalPersonEntity registerer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "company_cateoorie_FK"))
-    private Category category;
+    private CategoryEntity categoryEntity;
 
     @Column(name = "created_at", nullable = false,  columnDefinition = "TIMESTAMP")
     private Date createdAt;

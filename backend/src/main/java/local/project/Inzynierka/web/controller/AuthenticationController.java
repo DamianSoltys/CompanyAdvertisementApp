@@ -2,6 +2,7 @@ package local.project.Inzynierka.web.controller;
 
 
 import local.project.Inzynierka.domain.model.User;
+import local.project.Inzynierka.web.dto.LoginDto;
 import local.project.Inzynierka.web.security.UserAuthenticationService;
 import local.project.Inzynierka.web.dto.UserRegistrationDto;
 import local.project.Inzynierka.web.mapper.UserDtoMapper;
@@ -25,11 +26,19 @@ public class AuthenticationController {
     @RequestMapping(value = "/user/registration", method = RequestMethod.POST)
     public void registerNewUser(@RequestBody UserRegistrationDto userRegistrationDto) {
 
-
-        Logger logger = LoggerFactory.getLogger("Logger");
-        logger.info(String.valueOf(userRegistrationDto));
-
         User user = mapper.map(userRegistrationDto);
         authenticationService.registerNewUser(user);
     }
+
+    @RequestMapping(value = "/user/login", method = RequestMethod.POST)
+    public boolean login(@RequestBody LoginDto loginDto) {
+        User user = mapper.map(loginDto);
+        return authenticationService.login(user);
+
+    }
+    @RequestMapping(value = "/user/logout", method = RequestMethod.POST)
+    public String logout() {
+        return "LOGGED OUT";
+    }
+
 }

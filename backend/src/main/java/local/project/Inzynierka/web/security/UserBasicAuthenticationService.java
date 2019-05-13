@@ -9,6 +9,11 @@ import local.project.Inzynierka.persistence.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +33,9 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
 
     @Autowired
     private UserMapper mapper;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -71,11 +79,7 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
     @Override
     public User findUserByEmail(String email) {
 
-        Logger logger = LoggerFactory.getLogger("findUserByEmail");
-
         UserEntity userEntity = userRepository.getByAddressEmail(email);
-
-        logger.info(String.valueOf(userEntity));
 
         if( userEntity == null ) {
             throw new NullPointerException();
@@ -83,4 +87,21 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
 
         return mapper.map(userEntity);
     }
+
+    @Override
+    public boolean login(User user) {
+        try{
+            UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(
+                    new UserPrincipal(user), user.getPassword());
+
+            System.out.println(loginToken);
+            Authentication authenticatedUser = authenticationManager.authenticate(loginToken);
+            SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+        } catch (AuthenticationException | IllegalStateException e) {
+            return false;
+        }
+        return true;
+    }
+
+
 }

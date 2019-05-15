@@ -7,6 +7,8 @@ import local.project.Inzynierka.persistence.entity.UserEntity;
 import local.project.Inzynierka.persistence.repository.EmailRepository;
 import local.project.Inzynierka.persistence.repository.UserRepository;
 import local.project.Inzynierka.web.errors.BadLoginDataException;
+import local.project.Inzynierka.web.errors.EmailAlreadyTakenException;
+import local.project.Inzynierka.web.errors.UserAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -40,16 +42,18 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
     private PasswordEncoder passwordEncoder;
 
     @Override @Transactional
-    public void registerNewUser(User user) {
+    public void registerNewUser(User user) throws UserAlreadyExistsException, EmailAlreadyTakenException {
 
 
 
         UserEntity userEntity = userRepository.findByName(user.getName());
         EmailAddressEntity emailAddressEntity = emailRepository.findByEmail(user.getEmailAddress().getEmail());
 
-        if(userEntity != null || emailAddressEntity != null){
-            throw new IllegalStateException();
-            // TODO REPLACE WITH CUSTOM EXCEPTION
+        if(userEntity != null ){
+            throw new UserAlreadyExistsException();
+        }
+        if( emailAddressEntity != null) {
+            throw new EmailAlreadyTakenException();
         }
 
         Timestamp now = new Timestamp(Calendar.getInstance().getTime().getTime());

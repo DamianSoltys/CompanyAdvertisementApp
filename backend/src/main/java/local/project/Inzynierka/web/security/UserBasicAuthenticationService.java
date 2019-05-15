@@ -6,8 +6,7 @@ import local.project.Inzynierka.persistence.entity.EmailAddressEntity;
 import local.project.Inzynierka.persistence.entity.UserEntity;
 import local.project.Inzynierka.persistence.repository.EmailRepository;
 import local.project.Inzynierka.persistence.repository.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import local.project.Inzynierka.web.errors.BadLoginDataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -87,17 +86,17 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
     }
 
     @Override
-    public boolean login(User user) {
+    public String login(User user) throws BadLoginDataException {
         try{
             UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(
                     new UserPrincipal(user), user.getPassword());
 
             Authentication authenticatedUser = authenticationManager.authenticate(loginToken);
             SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
-        } catch (AuthenticationException | IllegalStateException e) {
-            return false;
+        } catch (AuthenticationException  e) {
+            throw new BadLoginDataException();
         }
-        return true;
+        return "OK";
     }
 
 

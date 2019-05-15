@@ -4,6 +4,7 @@ package local.project.Inzynierka;
 import local.project.Inzynierka.web.controller.AuthenticationController;
 import local.project.Inzynierka.web.dto.LoginDto;
 import local.project.Inzynierka.web.dto.UserRegistrationDto;
+import local.project.Inzynierka.web.errors.BadLoginDataException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,8 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -47,14 +47,16 @@ public class LoginTest {
     }
 
     @Test
-    public void loginReturnsTrueWhenSuccessful(){
-        assertTrue(authenticationController.login(loginDto));
+    public void loginReturnsTrueWhenSuccessful()  {
+        var result = authenticationController.login(loginDto);
+        assertEquals("OK", result.getBody());
     }
 
     @Test
-    public void loginReturnsFalseWhenFailed(){
+    public void loginReturnsFalseWhenFailed()  {
         loginDto.setPassword("X");
-        assertFalse(authenticationController.login(loginDto));
+        var result =  authenticationController.login(loginDto);
+        assertNotSame("OK", result.getBody());
     }
 
 

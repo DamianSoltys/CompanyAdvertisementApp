@@ -29,15 +29,15 @@ public class FavouriteBranchEntity implements Serializable {
     @Column(name = "modified_at",  columnDefinition = "TIMESTAMP")
     private Timestamp modifiedAt;
 
+    @Embeddable
+    @Data
+    public class PK implements Serializable{
+
+        @Column(name = "user_id")
+        private long userId;
+
+        @Column(name = "branch_id")
+        private long branchId;
+    }
 }
 
-@Embeddable
-@Data
-class PK implements Serializable{
-
-    @Column(name = "user_id")
-    private long userId;
-
-    @Column(name = "branch_id")
-    private long branchId;
-}

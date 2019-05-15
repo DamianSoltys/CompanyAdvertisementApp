@@ -15,7 +15,7 @@ public class EmailAddressEntity implements IEntity {
     @Column(name = "email_id")
     private long id;
 
-    @Column(unique = true, nullable = false, length = 50, name = "email")
+    @Column(unique = true, nullable = false, length = 254, name = "email")
     private String email;
 
     @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP")

@@ -4,7 +4,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Date;
 
 @Data
 @Entity
@@ -27,7 +26,7 @@ public class CompanyEntity implements IEntity{
     @Column(nullable = false, length = 30)
     private String voivodeship;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 40)
     private String city;
 
     @Column(length = 30)
@@ -51,7 +50,7 @@ public class CompanyEntity implements IEntity{
     private CategoryEntity categoryEntity;
 
     @Column(name = "created_at", nullable = false,  columnDefinition = "TIMESTAMP")
-    private Date createdAt;
+    private Timestamp createdAt;
 
     @Column(name = "modified_at", nullable = false, columnDefinition = "TIMESTAMP")
     private Timestamp modifiedAt;
@@ -60,6 +59,6 @@ public class CompanyEntity implements IEntity{
     private String photoPath;
 
     @Column(name = "has_branch", nullable = false)
-    private Boolean hasBranch;
+    private boolean hasBranch;
 
 }

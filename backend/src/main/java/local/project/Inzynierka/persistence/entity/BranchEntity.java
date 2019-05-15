@@ -16,11 +16,11 @@ public class BranchEntity implements IEntity {
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(foreignKey = @ForeignKey(name = "branch_registerer_FK"))
+    @JoinColumn(foreignKey = @ForeignKey(name = "branch_registerer_FK"), nullable = false)
     private NaturalPersonEntity registerer;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "company_id", foreignKey = @ForeignKey(name = "company_branch_FK"))
+    @JoinColumn(name = "company_id", foreignKey = @ForeignKey(name = "company_branch_FK"), nullable = false)
     private CompanyEntity companyEntity;
 
     @Column(nullable = false, length = 50)
@@ -35,7 +35,7 @@ public class BranchEntity implements IEntity {
     @Column(length = 30)
     private String street;
 
-    @Column(nullable = false, length = 5)
+    @Column(nullable = false, length = 5, name = "building_no")
     private String buildingNo;
 
 
@@ -45,10 +45,10 @@ public class BranchEntity implements IEntity {
     @Column(nullable = false, name = "modified_at", columnDefinition = "TIMESTAMP")
     private Timestamp modifiedAt;
 
-    @Column(name = "x_geo_cordinate")
+    @Column(name = "x_geo_coordinate")
     private float geoX;
 
-    @Column(name = "y_geo_cordinate")
+    @Column(name = "y_geo_coordinate")
     private float geoY;
 
 }

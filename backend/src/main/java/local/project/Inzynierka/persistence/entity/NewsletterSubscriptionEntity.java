@@ -23,7 +23,7 @@ public class NewsletterSubscriptionEntity implements IEntity {
     private EmailAddressEntity emailAddressEntity;
 
     @Column(nullable = false)
-    private Boolean verified;
+    private boolean verified;
 
     @Column(nullable = false, name = "created_at", columnDefinition = "TIMESTAMP")
     private Timestamp createdAt;

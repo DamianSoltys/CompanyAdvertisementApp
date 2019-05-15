@@ -9,6 +9,9 @@ const routes: Routes = [
   },
   {
     path: 'register', loadChildren: './register/register.module#RegisterModule'
+  },
+  {
+    path:'search',loadChildren: './search/search.module#SearchModule'
   }
 ];
 

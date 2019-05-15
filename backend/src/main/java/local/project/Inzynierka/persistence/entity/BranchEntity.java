@@ -26,8 +26,9 @@ public class BranchEntity implements IEntity {
     @Column(nullable = false, length = 50)
     private String name;
 
-    @Column(nullable = false, length = 30)
-    private String voivodeship;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "voivodeship_id", nullable = false, foreignKey = @ForeignKey(name = "branch_voivodeship_FK"))
+    private VoivoideshipEntity voivodeship_id;
 
     @Column(nullable = false, length = 30)
     private String city;

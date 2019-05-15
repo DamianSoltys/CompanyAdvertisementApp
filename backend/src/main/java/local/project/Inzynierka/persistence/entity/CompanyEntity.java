@@ -23,8 +23,9 @@ public class CompanyEntity implements IEntity{
     @Column(unique = true, nullable = false, length = 14)
     private String REGON;
 
-    @Column(nullable = false, length = 30)
-    private String voivodeship;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "voivodeship_id", nullable = false, foreignKey = @ForeignKey(name = "company_voivodeship_FK"))
+    private VoivoideshipEntity voivodeship_id;
 
     @Column(nullable = false, length = 40)
     private String city;
@@ -46,7 +47,7 @@ public class CompanyEntity implements IEntity{
     private NaturalPersonEntity registerer;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "company_cateoorie_FK"))
+    @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "company_category_FK"))
     private CategoryEntity categoryEntity;
 
     @Column(name = "created_at", nullable = false,  columnDefinition = "TIMESTAMP")

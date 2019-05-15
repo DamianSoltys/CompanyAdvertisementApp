@@ -21,6 +21,10 @@ public class NaturalPersonEntity implements IEntity {
     @Column(nullable = false, name = "last_name", length = 30)
     private String lastName;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "voivodeship_id", nullable = false, foreignKey = @ForeignKey(name = "natural_person_voivodeship_FK"))
+    private VoivoideshipEntity voivodeship_id;
+
     @Column(nullable = false, length = 30)
     private String city;
 

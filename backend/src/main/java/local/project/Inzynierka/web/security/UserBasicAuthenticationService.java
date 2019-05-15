@@ -44,8 +44,6 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
     public void registerNewUser(User user) {
 
 
-        Logger logger = LoggerFactory.getLogger("registerNewUser");
-        logger.info(String.valueOf(user));
 
         UserEntity userEntity = userRepository.findByName(user.getName());
         EmailAddressEntity emailAddressEntity = emailRepository.findByEmail(user.getEmailAddress().getEmail());
@@ -94,7 +92,6 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
             UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(
                     new UserPrincipal(user), user.getPassword());
 
-            System.out.println(loginToken);
             Authentication authenticatedUser = authenticationManager.authenticate(loginToken);
             SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
         } catch (AuthenticationException | IllegalStateException e) {

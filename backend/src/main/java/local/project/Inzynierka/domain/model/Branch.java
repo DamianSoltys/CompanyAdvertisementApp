@@ -5,17 +5,20 @@ import lombok.Data;
 import java.sql.Timestamp;
 
 @Data
-public class NaturalPerson {
-    //TODO Add all fields
+public class Branch {
+
     private long id;
-    private String firstName;
-    private String lastName;
+    private NaturalPerson registerer;
+    private Company company;
+    private String name;
+    private String voivodeship;
     private String city;
     private String street;
-    private String apartmentNo;
     private String buildingNo;
-    private String phoneNo;
     private Timestamp createdAt;
     private Timestamp modifiedAt;
+
+    private float geoX;
+    private float  geoY;
 
 }

@@ -10,4 +10,11 @@ public class EmailAddress {
     private long id;
     private String email;
     private Timestamp createdAt;
+
+    public EmailAddress(String email) {
+        this.email = email;
+    }
+
+    public EmailAddress() {
+    }
 }

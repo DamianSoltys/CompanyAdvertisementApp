@@ -1,11 +1,9 @@
 package local.project.Inzynierka.web.security;
 
+import local.project.Inzynierka.domain.model.EmailAddress;
 import local.project.Inzynierka.domain.model.User;
-import local.project.Inzynierka.orchestration.mapper.UserMapper;
-import local.project.Inzynierka.persistence.entity.EmailAddressEntity;
-import local.project.Inzynierka.persistence.entity.UserEntity;
-import local.project.Inzynierka.persistence.repository.EmailRepository;
-import local.project.Inzynierka.persistence.repository.UserRepository;
+import local.project.Inzynierka.orchestration.services.EmailService;
+import local.project.Inzynierka.orchestration.services.UserService;
 import local.project.Inzynierka.web.errors.BadLoginDataException;
 import local.project.Inzynierka.web.errors.EmailAlreadyTakenException;
 import local.project.Inzynierka.web.errors.UserAlreadyExistsException;
@@ -19,21 +17,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.util.Calendar;
-
 
 @Service
 public class UserBasicAuthenticationService implements UserAuthenticationService {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
-    private EmailRepository emailRepository;
-
-    @Autowired
-    private UserMapper mapper;
+    private EmailService emailService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -42,55 +34,28 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
     private PasswordEncoder passwordEncoder;
 
     @Override @Transactional
-    public void registerNewUser(User user) throws UserAlreadyExistsException, EmailAlreadyTakenException {
+    public void registerNewUser(User user)  {
 
+        User requestedUser = userService.findByName(user.getName());
+        EmailAddress requestedEmail = emailService.findByEmail(user.getEmailAddress());
 
-
-        UserEntity userEntity = userRepository.findByName(user.getName());
-        EmailAddressEntity emailAddressEntity = emailRepository.findByEmail(user.getEmailAddress().getEmail());
-
-        if(userEntity != null ){
+        if(requestedUser != null ){
             throw new UserAlreadyExistsException();
         }
-        if( emailAddressEntity != null) {
+        if( requestedEmail != null) {
             throw new EmailAlreadyTakenException();
         }
 
-        Timestamp now = new Timestamp(Calendar.getInstance().getTime().getTime());
+        requestedEmail = new EmailAddress(user.getEmailAddress().getEmail());
+        requestedEmail = this.emailService.saveEmailAddress(requestedEmail);
 
-        emailAddressEntity = new EmailAddressEntity();
-        emailAddressEntity.setEmail(user.getEmailAddress().getEmail());
-        emailAddressEntity.setCreatedAt(now);
-        emailAddressEntity = emailRepository.save(emailAddressEntity);
-
-
-        userEntity = new UserEntity();
-        userEntity.setName(user.getName());
-        userEntity.setEmailAddressEntity(emailAddressEntity);
-        userEntity.setPasswordHash(passwordEncoder.encode(user.getPassword()));
-
-
-        userEntity.setCreatedAt(now);
-        userEntity.setModifiedAt(now);
-
-        userRepository.save(userEntity);
+        requestedUser = new User(user.getName(), passwordEncoder.encode(user.getPassword()), requestedEmail);
+        this.userService.createNewUser(requestedUser);
 
     }
 
     @Override
-    public User findUserByEmail(String email) {
-
-        UserEntity userEntity = userRepository.getByAddressEmail(email);
-
-        if( userEntity == null ) {
-            throw new NullPointerException();
-        }
-
-        return mapper.map(userEntity);
-    }
-
-    @Override
-    public String login(User user) throws BadLoginDataException {
+    public String login(User user)  {
         try{
             UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(
                     new UserPrincipal(user), user.getPassword());

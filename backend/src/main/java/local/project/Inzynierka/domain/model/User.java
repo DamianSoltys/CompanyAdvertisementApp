@@ -21,6 +21,12 @@ public class User {
 
     private int accountType;
 
+    public User(String name, String password, EmailAddress emailAddress) {
+        this.name = name;
+        this.password = password;
+        this.emailAddress = emailAddress;
+    }
+
     public User() {
     }
 

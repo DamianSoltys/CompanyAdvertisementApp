@@ -1,6 +1,8 @@
 package local.project.Inzynierka.web.security;
 
+import local.project.Inzynierka.domain.model.EmailAddress;
 import local.project.Inzynierka.domain.model.User;
+import local.project.Inzynierka.orchestration.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class ApplicationsUserDetailService implements UserDetailsService {
 
     @Autowired
-    private UserAuthenticationService userAuthenticationService;
+    private UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -22,15 +24,10 @@ public class ApplicationsUserDetailService implements UserDetailsService {
          TODO Add logging in using also name option.
         **/
 
-        Logger logger = LoggerFactory.getLogger("loadUserByName");
-        logger.info("BEFORE");
-        User user = userAuthenticationService.findUserByEmail(email);
-
-        logger.info("AFTER");
-
-
-
-        logger.info(String.valueOf(user));
+        User user = userService.findByEmailAddress(new EmailAddress(email));
+        if(user == null ){
+            throw new NullPointerException();
+        }
 
         return new UserPrincipal(user);
     }

@@ -1,6 +1,7 @@
 package local.project.Inzynierka.orchestration.mapper;
 
 import local.project.Inzynierka.domain.model.User;
+import local.project.Inzynierka.orchestration.errors.MappingException;
 import local.project.Inzynierka.persistence.entity.UserEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +19,8 @@ public class UserMapper {
 
     public User map(UserEntity userEntity) {
 
-
-
         if( userEntity == null ) {
-            throw new NullPointerException();
+            throw new MappingException();
         }
         User user = new User();
 
@@ -37,9 +36,20 @@ public class UserMapper {
         return user;
     }
 
-
-    // TODO Implement the mapping
     public UserEntity map(User user){
-        return null;
+        if(user == null) {
+            throw new MappingException();
+        }
+        UserEntity userEntity = new UserEntity();
+        userEntity.setPasswordHash(user.getPassword());
+        userEntity.setNaturalPersonEntity(naturalPersonMapper.map(user.getNaturalPerson()));
+        userEntity.setAccountType(user.getAccountType());
+        userEntity.setName(user.getName());
+        userEntity.setCreatedAt(user.getCreatedAt());
+        userEntity.setModifiedAt(user.getModifiedAt());
+        userEntity.setId(0L); ///  CREATING NEW UserEntity - ID equals to 0
+        userEntity.setEmailAddressEntity(emailMapper.map(user.getEmailAddress()));
+
+        return userEntity;
     }
 }

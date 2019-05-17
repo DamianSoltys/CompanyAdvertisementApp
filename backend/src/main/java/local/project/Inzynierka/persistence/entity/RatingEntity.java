@@ -8,12 +8,12 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "ratings")
-public class RatingEntity implements IEntity {
+public class RatingEntity implements IEntity<Long> {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private int rating;

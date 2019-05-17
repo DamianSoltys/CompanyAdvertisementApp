@@ -2,8 +2,8 @@ package local.project.Inzynierka.persistence.entity;
 
 import java.io.Serializable;
 
-interface IEntity extends Serializable {
+interface IEntity<T> extends Serializable {
 
-    long getId();
-    void setId(long id);
+    T getId();
+    void setId(T id);
 }

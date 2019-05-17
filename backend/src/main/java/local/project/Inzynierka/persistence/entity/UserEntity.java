@@ -8,13 +8,13 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "users")
-public class UserEntity implements IEntity {
+public class UserEntity implements IEntity<Long> {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private long id;
+    private Long id;
 
     @Column(nullable = false, name = "user_name", unique = true, length = 30)
     private String name;

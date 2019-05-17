@@ -8,12 +8,12 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "branches")
-public class BranchEntity implements IEntity {
+public class BranchEntity implements IEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "branch_id")
-    private long id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "branch_registerer_FK"), nullable = false)

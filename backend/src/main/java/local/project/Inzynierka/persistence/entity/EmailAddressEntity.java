@@ -8,12 +8,12 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "email_addresses")
-public class EmailAddressEntity implements IEntity {
+public class EmailAddressEntity implements IEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "email_id")
-    private long id;
+    private Long id;
 
     @Column(unique = true, nullable = false, length = 254, name = "email")
     private String email;

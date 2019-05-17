@@ -8,11 +8,11 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "categories")
-public class CategoryEntity implements IEntity{
+public class CategoryEntity implements IEntity<Long>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false, length = 30)
     private String name;

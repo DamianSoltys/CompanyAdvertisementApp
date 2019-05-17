@@ -8,11 +8,11 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "newsletter_subscriptions")
-public class NewsletterSubscriptionEntity implements IEntity {
+public class NewsletterSubscriptionEntity implements IEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "newsletter_company_FK"), nullable = false)

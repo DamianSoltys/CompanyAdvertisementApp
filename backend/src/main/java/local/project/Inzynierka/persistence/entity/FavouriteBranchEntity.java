@@ -9,11 +9,11 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "favourite_branches")
-public class FavouriteBranchEntity implements Serializable {
+public class FavouriteBranchEntity implements IEntity<FavouriteBranchEntity.PK> {
 
 
    @EmbeddedId
-   private PK pk;
+   private PK id;
 
    @OneToOne
    @JoinColumns({@JoinColumn(name = "user_id", referencedColumnName = "user_id", updatable = false, insertable = false)})

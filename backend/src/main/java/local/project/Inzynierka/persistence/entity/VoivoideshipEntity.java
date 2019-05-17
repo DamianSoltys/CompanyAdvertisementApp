@@ -10,12 +10,12 @@ import javax.persistence.*;
 @Entity
 @EntityListeners(PreventAnyUpdate.class)
 @Table(name = "voivodeships")
-public class VoivoideshipEntity implements IEntity{
+public class VoivoideshipEntity implements IEntity<Short>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "voivodeship_id")
-    private long id;
+    private Short id;
 
     @Column(nullable = false, unique = true, length = 25)
     private String name;

@@ -1,4 +1,9 @@
 package local.project.Inzynierka.persistence.repository;
 
-public interface NaturalPersonRepository {
+
+import local.project.Inzynierka.persistence.entity.NaturalPersonEntity;
+
+public interface NaturalPersonRepository extends ApplicationBigRepository<NaturalPersonEntity> {
+
+    NaturalPersonEntity findByPhoneNo(String phoneNo);
 }

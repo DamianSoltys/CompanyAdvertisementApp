@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-
+import * as $ from 'jquery';
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -15,6 +15,11 @@ searchform: FormGroup;
   }
 
   ngOnInit() {
+   
+      $('[data-toggle="popover"]').popover({
+        container: 'body'
+      });
+   
   }
 onSubmit(){
   console.log(this.searchform.value);

@@ -3,8 +3,11 @@
       <p>Znajdz swoją wymarzoną firmę!</p>
    <div class="search_div">
     <span><i class="fas fa-search"></i></span>
-    <input formControlName="search" type="text" class="form-control" name="search-input" placeholder="nazwa|kategoria|miasto">
-    <button type="submit" class="btn btn-primary pull-right">Szukaj</button>
+    <input formControlName="search" type="text" class="form-control" 
+    name="search-input" placeholder="nazwa,kategoria,miasto"
+    data-container="body"  data-toggle="popover" data-placement="bottom" 
+    data-content="Wyrazy powinny być oddzielone przecinkiem!">
+    <button type="submit" class="btn btn-primary pull-right" >Szukaj</button>
     </div>
   </form>
 </div>

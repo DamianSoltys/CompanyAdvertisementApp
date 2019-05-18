@@ -7,11 +7,19 @@
         <div class="form-group">
         <label for="email">Adres email</label>
       <input class="form-control" type="text" id="email" name="email" formControlName="email" placeholder="Adres Email"> 
-        </div>
+      <div  class="text-center" *ngIf="(loginForm.email.dirty || loginForm.email.touched) && loginForm.email.invalid">
+        <p class="text-danger" *ngIf="loginForm.email.errors.email">Proszę uzupełnić poprawnie email</p>
+        <p class="text-danger" *ngIf="loginForm.email.errors.required">Pole nie może być puste</p>
+      </div> 
+    </div>
         <div class="form-group">
       <label for="password">Hasło</label>
       <input class="form-control" type="password" id="password" name="password" formControlName="password" placeholder="Hasło">
-        </div>
+      <div  class="text-center" *ngIf="(loginForm.password.dirty || loginForm.password.touched) && loginForm.password.invalid">
+        <p class="text-danger" *ngIf="loginForm.password.errors.required">Pole nie może być puste</p>
+        <p class="text-danger" *ngIf="loginForm.password.errors.pattern">Proszę uzupełnić poprawnie hasło np: "Hasło5"</p>
+      </div> 
+    </div>
       <button class="btn btn-primary" type="submit">Zaloguj</button>
 
       <p>Nie posiadasz jeszcze konta?</p>

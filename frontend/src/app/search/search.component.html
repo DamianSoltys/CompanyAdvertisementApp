@@ -5,8 +5,12 @@
     <span><i class="fas fa-search"></i></span>
     <input formControlName="search" type="text" class="form-control" 
     name="search-input" placeholder="nazwa,kategoria,miasto"
-    data-container="body"  data-toggle="popover" data-placement="bottom" 
-    data-content="Wyrazy powinny być oddzielone przecinkiem!">
+    data-popover-content="#popoverHelp" data-toggle="popover" data-placement="bottom">
+    <div id="popoverHelp" style="display:none;">
+      <div class="popover-body">
+        <p>Wyrazy powinny być oddzielone przecinkiem!</p>
+      </div>
+    </div>
     <button type="submit" class="btn btn-primary pull-right" >Szukaj</button>
     </div>
   </form>

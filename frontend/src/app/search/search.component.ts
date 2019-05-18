@@ -8,20 +8,27 @@ import * as $ from 'jquery';
 })
 export class SearchComponent implements OnInit {
 searchform: FormGroup;
-  constructor(private fb: FormBuilder) { 
+  constructor(private fb: FormBuilder) {
   this.searchform = fb.group({
    search: [''],
   });
   }
 
   ngOnInit() {
-   
-      $('[data-toggle="popover"]').popover({
-        container: 'body'
+
+      $('[data-toggle=popover]').popover({
+        html: true,
+        trigger: 'focus',
+        content: function() {
+          const content = $(this).attr('data-popover-content');
+          return $(content).children('.popover-body').html();
+        }
       });
-   
+
   }
-onSubmit(){
-  console.log(this.searchform.value);
+onSubmit() {
+  let searchData = this.searchform.value['search'];
+  searchData = searchData.split(',');
+  console.log(searchData);
 }
 }

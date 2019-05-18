@@ -16,7 +16,7 @@ public class BranchEntity implements IEntity<Long> {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(foreignKey = @ForeignKey(name = "branch_registerer_FK"), nullable = false)
+    @JoinColumn(name = "registerer_id", foreignKey = @ForeignKey(name = "branch_registerer_FK"), nullable = false)
     private NaturalPersonEntity registerer;
 
     @ManyToOne(fetch = FetchType.EAGER)

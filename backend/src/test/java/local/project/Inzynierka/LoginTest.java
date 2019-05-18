@@ -4,7 +4,6 @@ package local.project.Inzynierka;
 import local.project.Inzynierka.web.controller.AuthenticationController;
 import local.project.Inzynierka.web.dto.LoginDto;
 import local.project.Inzynierka.web.dto.UserRegistrationDto;
-import local.project.Inzynierka.web.errors.BadLoginDataException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import static junit.framework.TestCase.*;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotSame;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -32,7 +32,7 @@ public class LoginTest {
 
         String name = "name";
         String password = "pass";
-        String email = "example@example.com";
+        String email = "e@example.com";
 
         UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
         userRegistrationDto.setEmail(email);

@@ -43,11 +43,11 @@ public class CompanyEntity implements IEntity<Long>{
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "company_registerer_FK"))
+    @JoinColumn(name = "registerer_id", nullable = false, foreignKey = @ForeignKey(name = "company_registerer_FK"))
     private NaturalPersonEntity registerer;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "company_category_FK"))
+    @JoinColumn(name = "category_id", nullable = false, foreignKey = @ForeignKey(name = "company_category_FK"))
     private CategoryEntity categoryEntity;
 
     @Column(name = "created_at", nullable = false,  columnDefinition = "TIMESTAMP")
@@ -56,7 +56,7 @@ public class CompanyEntity implements IEntity<Long>{
     @Column(name = "modified_at", nullable = false, columnDefinition = "TIMESTAMP")
     private Timestamp modifiedAt;
 
-    @Column(name = "photo_path", nullable = false, length = 50)
+    @Column(name = "photo_path", length = 50)
     private String photoPath;
 
     @Column(name = "has_branch", nullable = false)

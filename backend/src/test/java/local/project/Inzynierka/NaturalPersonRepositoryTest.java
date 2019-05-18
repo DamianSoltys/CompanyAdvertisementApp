@@ -46,7 +46,13 @@ public class NaturalPersonRepositoryTest {
         naturalPersonEntity.setApartmentNo(appNo);
         naturalPersonEntity.setId(0L);
 
+        /*
+        * FROM THE CONTEXT
+        * */
         VoivoideshipEntity voivodeshipEntity = voivodeshipRepository.findById((short)1).get(); // IT RETURNS OPTIONAL
+        /*
+         *
+         * */
         naturalPersonEntity.setVoivodeship_id(voivodeshipEntity);
 
         naturalPersonEntity.setBuildingNo(buildNo);
@@ -62,23 +68,29 @@ public class NaturalPersonRepositoryTest {
 
     @Test
     public void testSavingTwicePersistsNaturalPersonTwice(){
+
+        long beforeTestCount = naturalPersonRepository.count();
+        long entititesToSave = 2;
+        long expected = entititesToSave+beforeTestCount;
+
         naturalPersonRepository.save(naturalPersonEntity);
         naturalPersonEntity.setId(0L);  // New personal Entity - ID = 0
         naturalPersonEntity.setPhoneNo("555"); // UNIQUE PHONE_NO
         naturalPersonRepository.save(naturalPersonEntity);
 
-        Assert.assertEquals(2, naturalPersonRepository.count());
+        Assert.assertEquals(expected, naturalPersonRepository.count());
     }
 
-   @Test
+    @Test
     public void testFindingByPhoneNo(){
 
        naturalPersonEntity.setId(1L);
        naturalPersonRepository.save(naturalPersonEntity);
 
         Assert.assertEquals(naturalPersonEntity, naturalPersonRepository.findByPhoneNo(phoneNo));
-
     }
+
+
 
 
 }

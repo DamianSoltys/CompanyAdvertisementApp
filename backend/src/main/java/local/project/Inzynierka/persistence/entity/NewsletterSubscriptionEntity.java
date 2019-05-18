@@ -15,7 +15,7 @@ public class NewsletterSubscriptionEntity implements IEntity<Long> {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(foreignKey = @ForeignKey(name = "newsletter_company_FK"), nullable = false)
+    @JoinColumn(name = "company_id", foreignKey = @ForeignKey(name = "newsletter_company_FK"), nullable = false)
     private CompanyEntity companyEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)

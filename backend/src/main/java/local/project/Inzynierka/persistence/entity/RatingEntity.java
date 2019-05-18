@@ -3,6 +3,8 @@ package local.project.Inzynierka.persistence.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.sql.Timestamp;
 
 @Data
@@ -15,15 +17,16 @@ public class RatingEntity implements IEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Min(1) @Max(5)
     @Column(nullable = false)
     private int rating;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false,foreignKey = @ForeignKey(name = "rating_user_FK"))
+    @JoinColumn(name = "user_id", nullable = false,foreignKey = @ForeignKey(name = "rating_user_FK"))
     private UserEntity userEntity;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "rated_FK"))
+    @JoinColumn(name = "branch_id", nullable = false, foreignKey = @ForeignKey(name = "rated_FK"))
     private BranchEntity branchEntity;
 
     @Column(nullable = false, name = "created_at", columnDefinition = "TIMESTAMP")

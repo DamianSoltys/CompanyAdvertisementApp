@@ -11,30 +11,29 @@ import { RegisterService } from '../services/register.service';
 export class RegisterComponent implements OnInit {
 
   registerForm: FormGroup;
+  passwordMatch = false;
   constructor(private fb: FormBuilder, private regService: RegisterService) { }
 
   ngOnInit() {
     this.registerForm = this.fb.group({
       name: ['',
-      [Validators.required, Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/)),
-      Validators.minLength(4)]],
+      [Validators.required, Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
 
       email: ['',
       // tslint:disable-next-line:max-line-length
       [Validators.required, Validators.email]],
       password: ['',
-      [Validators.required, Validators.pattern(new RegExp(/^(?=.{1,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$/))],
-      Validators.minLength(8)],
-      checkpassword: ['',
-      [Validators.required, Validators.pattern(new RegExp(/^(?=.{1,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$/))],
-    Validators.minLength(8)]
+      [Validators.required, Validators.pattern(new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{5,}$/))]],
+      checkpassword: ['', [Validators.required]]
     });
   }
 
-  get regForm(){
+  get regForm() {
     return this.registerForm.controls;
   }
  onSubmit() {
+   if (this.regForm.password.value === this.regForm.checkpassword.value) {
+     this.passwordMatch = false;
     const User_Data = new UserReg();
     User_Data.name = this.registerForm.get('name').value;
     User_Data.email = this.registerForm.get('email').value;
@@ -44,8 +43,8 @@ export class RegisterComponent implements OnInit {
    }, (error) => {
      console.log(error);
    });
- }
- onSubmitt(){
-   console.log("test");
+  } else {
+    this.passwordMatch = true;
+  }
  }
 }

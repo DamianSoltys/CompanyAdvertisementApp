@@ -1,13 +1,13 @@
 <div class="container-fluid">
 
   <div class="row Register_Form">
-    <form class="register_form" [formGroup]="registerForm" (ngSubmit)="onSubmitt()">
+    <form class="register_form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
       <div class="header"><p>Formularz rejestracyjny</p></div>
       <div class="inputs">
         <div class="form-group">
           <label for="name">Nazwa</label>
       <input class="form-control" id="name" type="text" name="name" formControlName="name" placeholder="Nazwa"> 
-    <div *ngIf="(regForm.name.dirty || regForm.name.touched) && regForm.name.invalid">
+    <div class="text-center" *ngIf="(regForm.name.dirty || regForm.name.touched) && regForm.name.invalid">
       <p class="text-danger" *ngIf="regForm.name.errors.pattern">Proszę uzupełnić poprawnie pole</p>
       <p class="text-danger" *ngIf="regForm.name.errors.required">Nazwa nie może być pusta</p>
     </div>  
@@ -15,21 +15,30 @@
       <div class="form-group">
           <label for="email">Adres email</label>
       <input class="form-control" id="email"type="text" name="email" formControlName="email" placeholder="Adres Email">
-      <div *ngIf="(regForm.email.dirty || regForm.email.touched) && regForm.email.invalid">
-        <p class="text-danger" *ngIf="regForm.email.errors.email">Proszę uzupełnić poprawnie pole</p>
+      <div  class="text-center" *ngIf="(regForm.email.dirty || regForm.email.touched) && regForm.email.invalid">
+        <p class="text-danger" *ngIf="regForm.email.errors.email">Proszę uzupełnić poprawnie email</p>
         <p class="text-danger" *ngIf="regForm.email.errors.required">Pole nie może być puste</p>
       </div>  
     </div>
       <div class="form-group">
           <label for="password">Hasło</label>
       <input class="form-control" id="password" type="password" name="password" formControlName="password" placeholder="Hasło"> 
-      
+      <div  class="text-center" *ngIf="(regForm.password.dirty || regForm.password.touched) && regForm.password.invalid">
+        <p class="text-danger" *ngIf="regForm.password.errors.required">Pole nie może być puste</p>
+        <p class="text-danger" *ngIf="regForm.password.errors.pattern">Proszę uzupełnić poprawnie hasło np: "Hasło5"</p>
+      </div>  
     </div>
       <div class="form-group">
           <label for="checkpassword">Powtórz hasło</label>
       <input class="form-control" id="checkpassword"type="password" name="checkpassword" formControlName="checkpassword" placeholder="Potwierdź hasło">
-    </div>
+   
+      <div  class="text-center" *ngIf="(regForm.checkpassword.dirty || regForm.checkpassword.touched) && regForm.checkpassword.invalid">
+        <p class="text-danger" *ngIf="regForm.checkpassword.errors.required">Pole nie może być puste</p>
+      </div>    </div>
       <button class="btn btn-primary" type="submit" [disabled]="!registerForm.valid">Zarejestruj</button>
+      <div class="text-center" *ngIf="passwordMatch">
+      <p class="text-danger">Hasła muszą być identyczne!</p>
+    </div>
       <p>Masz już konto?</p>
     <a class="link" routerLink="/login">ZALOGUJ SIĘ</a>
     </div>

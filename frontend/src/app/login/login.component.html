@@ -19,7 +19,7 @@
         <p class="text-danger" *ngIf="logForm.password.errors.required">Pole nie może być puste</p>
       </div> 
     </div>
-      <button class="btn btn-primary" type="submit">Zaloguj</button>
+      <button class="btn btn-primary" [disabled]="!loginForm.valid" type="submit">Zaloguj</button>
 
       <p>Nie posiadasz jeszcze konta?</p>
       <a class="link" routerLink="/register">ZAREJESTRUJ SIĘ</a>

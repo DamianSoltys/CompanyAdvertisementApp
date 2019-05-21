@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "branches")
-public class BranchEntity implements IEntity<Long> {
+public class Branch implements IEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,18 +17,18 @@ public class BranchEntity implements IEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "registerer_id", foreignKey = @ForeignKey(name = "branch_registerer_FK"), nullable = false)
-    private NaturalPersonEntity registerer;
+    private NaturalPerson registerer;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id", foreignKey = @ForeignKey(name = "company_branch_FK"), nullable = false)
-    private CompanyEntity companyEntity;
+    private Company company;
 
     @Column(nullable = false, length = 50)
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "voivodeship_id", nullable = false, foreignKey = @ForeignKey(name = "branch_voivodeship_FK"))
-    private VoivoideshipEntity voivodeship_id;
+    private Voivoideship voivodeship_id;
 
     @Column(nullable = false, length = 30)
     private String city;

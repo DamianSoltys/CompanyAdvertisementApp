@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "ratings")
-public class RatingEntity implements IEntity<Long> {
+public class Rating implements IEntity<Long> {
 
 
     @Id
@@ -23,11 +23,11 @@ public class RatingEntity implements IEntity<Long> {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false,foreignKey = @ForeignKey(name = "rating_user_FK"))
-    private UserEntity userEntity;
+    private User user;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "branch_id", nullable = false, foreignKey = @ForeignKey(name = "rated_FK"))
-    private BranchEntity branchEntity;
+    private Branch branch;
 
     @Column(nullable = false, name = "created_at", columnDefinition = "TIMESTAMP")
     private Timestamp createdAt;

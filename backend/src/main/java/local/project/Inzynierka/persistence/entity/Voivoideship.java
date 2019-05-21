@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Entity
 @EntityListeners(PreventAnyUpdate.class)
 @Table(name = "voivodeships")
-public class VoivoideshipEntity implements IEntity<Short>{
+public class Voivoideship implements IEntity<Short>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

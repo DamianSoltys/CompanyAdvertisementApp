@@ -1,6 +1,7 @@
 package local.project.Inzynierka;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import local.project.Inzynierka.web.controller.AuthenticationController;
 import local.project.Inzynierka.web.dto.LoginDto;
 import local.project.Inzynierka.web.dto.UserRegistrationDto;
@@ -11,10 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotSame;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -27,8 +31,11 @@ public class LoginTest {
     @Autowired
     private AuthenticationController authenticationController;
 
+    @Autowired
+    private MockMvc mockMvc;
+
     @Before
-    public void setUp(){
+    public void setUp() throws Exception {
 
         String name = "name";
         String password = "pass";
@@ -43,7 +50,17 @@ public class LoginTest {
         loginDto.setEmail(email);
         loginDto.setPassword(password);
 
-        authenticationController.registerNewUser(userRegistrationDto);
+
+        ObjectMapper mapper= new ObjectMapper();
+        String json = mapper.writeValueAsString(userRegistrationDto);
+
+        mockMvc.perform(
+                    post("/user/registration")
+                            .content(json).
+                    contentType("application/json")).
+                andExpect(status().isOk());
+
+
     }
 
     @Test

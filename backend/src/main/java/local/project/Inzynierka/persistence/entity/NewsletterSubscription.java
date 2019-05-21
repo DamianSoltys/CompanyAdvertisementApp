@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "newsletter_subscriptions")
-public class NewsletterSubscriptionEntity implements IEntity<Long> {
+public class NewsletterSubscription implements IEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,11 +16,11 @@ public class NewsletterSubscriptionEntity implements IEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", foreignKey = @ForeignKey(name = "newsletter_company_FK"), nullable = false)
-    private CompanyEntity companyEntity;
+    private Company company;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_email", foreignKey = @ForeignKey(name = "newsletter_email_FK"), nullable = false)
-    private EmailAddressEntity emailAddressEntity;
+    private EmailAddress emailAddressEntity;
 
     @Column(nullable = false)
     private boolean verified;
@@ -32,8 +32,8 @@ public class NewsletterSubscriptionEntity implements IEntity<Long> {
     private Timestamp modifiedAt;
 
     @OneToOne
-    @JoinColumn(name = "id_token",referencedColumnName = "token_id", unique = true, nullable = false, foreignKey = @ForeignKey(name = "verify_newsletter_token_FK"))
-    private VerificationTokenEntity verificationTokenEntity;
+    @JoinColumn(name = "id_token",referencedColumnName = "token_id", unique = true, foreignKey = @ForeignKey(name = "verify_newsletter_token_FK"))
+    private VerificationToken verificationToken;
 
 
 }

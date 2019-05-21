@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "users")
-public class UserEntity implements IEntity<Long> {
+public class User implements IEntity<Long> {
 
 
     @Id
@@ -30,37 +30,43 @@ public class UserEntity implements IEntity<Long> {
 
     @OneToOne
     @JoinColumn(name = "id_natural_person", referencedColumnName = "id_natural_person",foreignKey = @ForeignKey(name = "natural_person_FK"))
-    private NaturalPersonEntity naturalPersonEntity;
+    private NaturalPerson naturalPerson;
 
     @OneToOne(optional = false)
     @JoinColumn(name = "id_email_address",referencedColumnName = "email_id", unique = true, nullable = false, foreignKey = @ForeignKey(name = "email_FK"))
-    private EmailAddressEntity emailAddressEntity;
+    private EmailAddress emailAddressEntity;
 
     @Column(nullable = false, name = "account_type")
     private int accountType;
 
-    @OneToOne(optional = false)
-    @JoinColumn(name = "id_token",referencedColumnName = "token_id", unique = true, nullable = false, foreignKey = @ForeignKey(name = "verify_user_token_FK"))
-    private VerificationTokenEntity verificationTokenEntity;
+    @OneToOne
+    @JoinColumn(name = "id_token",referencedColumnName = "token_id", unique = true, foreignKey = @ForeignKey(name = "verify_user_token_FK"))
+    private VerificationToken verificationToken;
 
-    public UserEntity() {
+    public User() {
     }
 
-    public UserEntity(long id, String name, String passwordHash, NaturalPersonEntity naturalPersonEntity, EmailAddressEntity emailAddressEntity, int accountType) {
+    public User(long id, String name, String passwordHash, NaturalPerson naturalPerson, EmailAddress emailAddressEntity, int accountType) {
         this.id = id;
         this.name = name;
         this.passwordHash = passwordHash;
-        this.naturalPersonEntity = naturalPersonEntity;
+        this.naturalPerson = naturalPerson;
         this.emailAddressEntity = emailAddressEntity;
         this.accountType = accountType;
+    }
+
+    public User(String name, String passwordHash, EmailAddress emailAddressEntity) {
+        this.name = name;
+        this.passwordHash = passwordHash;
+        this.emailAddressEntity = emailAddressEntity;
     }
 
     public static class UserBuilder {
         private long id;
         private String name;
         private String passwordHash;
-        private NaturalPersonEntity naturalPersonEntity;
-        private EmailAddressEntity emailAddressEntity;
+        private NaturalPerson naturalPerson;
+        private EmailAddress emailAddressEntity;
         private int accountType;
 
         public UserBuilder setId(long id) {
@@ -78,12 +84,12 @@ public class UserEntity implements IEntity<Long> {
             return this;
         }
 
-        public UserBuilder setNaturalPersonEntity(NaturalPersonEntity naturalPersonEntity) {
-            this.naturalPersonEntity = naturalPersonEntity;
+        public UserBuilder setNaturalPerson(NaturalPerson naturalPerson) {
+            this.naturalPerson = naturalPerson;
             return this;
         }
 
-        public UserBuilder setEmailAddressEntity(EmailAddressEntity emailAddressEntity) {
+        public UserBuilder setEmailAddressEntity(EmailAddress emailAddressEntity) {
             this.emailAddressEntity = emailAddressEntity;
             return this;
         }
@@ -93,8 +99,8 @@ public class UserEntity implements IEntity<Long> {
             return this;
         }
 
-        public UserEntity createUser() {
-            return new UserEntity(id, name, passwordHash, naturalPersonEntity, emailAddressEntity, accountType);
+        public User createUser() {
+            return new User(id, name, passwordHash, naturalPerson, emailAddressEntity, accountType);
         }
     }
 }

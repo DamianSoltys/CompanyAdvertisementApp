@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "favourite_branches")
-public class FavouriteBranchEntity implements IEntity<FavouriteBranchEntity.PK> {
+public class FavouriteBranch implements IEntity<FavouriteBranch.PK> {
 
 
    @EmbeddedId
@@ -17,11 +17,11 @@ public class FavouriteBranchEntity implements IEntity<FavouriteBranchEntity.PK> 
 
    @OneToOne
    @JoinColumns({@JoinColumn(name = "user_id", referencedColumnName = "user_id", updatable = false, insertable = false)})
-   private UserEntity userEntity;
+   private User user;
 
    @OneToOne
    @JoinColumns({@JoinColumn(name = "branch_id", referencedColumnName = "branch_id", insertable = false, updatable = false)})
-   private BranchEntity branchEntity;
+   private Branch branch;
 
     @Column(name = "created_at",  columnDefinition = "TIMESTAMP")
     private Timestamp createdAt;

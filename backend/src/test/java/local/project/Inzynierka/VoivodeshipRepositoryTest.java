@@ -2,7 +2,7 @@ package local.project.Inzynierka;
 
 
 import local.project.Inzynierka.persistence.common.VoivodeshipUpdateException;
-import local.project.Inzynierka.persistence.entity.VoivoideshipEntity;
+import local.project.Inzynierka.persistence.entity.Voivoideship;
 import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,16 +22,16 @@ public class VoivodeshipRepositoryTest {
 
     @Test(expected = VoivodeshipUpdateException.class)
     public void testCannotUpdateVoivodeshipsTable(){
-        VoivoideshipEntity voivoideshipEntity = new VoivoideshipEntity();
+        Voivoideship voivoideship = new Voivoideship();
 
-        voivodeshipRepository.save(voivoideshipEntity);
+        voivodeshipRepository.save(voivoideship);
     }
 
     @Test(expected = VoivodeshipUpdateException.class)
     public void testCannotRemoveAnyVoivoideship() {
-        VoivoideshipEntity voivoideshipEntity = new VoivoideshipEntity();
+        Voivoideship voivoideship = new Voivoideship();
 
-        voivodeshipRepository.delete(voivoideshipEntity);
+        voivodeshipRepository.delete(voivoideship);
     }
 
     @Test

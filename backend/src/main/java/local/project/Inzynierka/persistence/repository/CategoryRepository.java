@@ -1,6 +1,6 @@
 package local.project.Inzynierka.persistence.repository;
 
-import local.project.Inzynierka.persistence.entity.CategoryEntity;
+import local.project.Inzynierka.persistence.entity.Category;
 
-public interface CategoryRepository extends ApplicationBigRepository<CategoryEntity> {
+public interface CategoryRepository extends ApplicationBigRepository<Category> {
 }

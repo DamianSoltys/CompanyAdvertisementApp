@@ -1,6 +1,6 @@
 package local.project.Inzynierka.web.registration.listener;
 
-import local.project.Inzynierka.domain.model.User;
+import local.project.Inzynierka.persistence.entity.User;
 import local.project.Inzynierka.web.registration.event.OnRegistrationEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +17,9 @@ public class RegistrationEventListener {
 
     Logger logger = LoggerFactory.getLogger(RegistrationEventListener.class);
 
-    @Autowired
+    /*@Autowired
     private JavaMailSender javaMailSender;
-
+    */
 
     @Async
     @EventListener

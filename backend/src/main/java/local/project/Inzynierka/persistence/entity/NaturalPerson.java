@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "natural_persons")
-public class NaturalPersonEntity implements IEntity<Long> {
+public class NaturalPerson implements IEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +23,7 @@ public class NaturalPersonEntity implements IEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "voivodeship_id", nullable = false, foreignKey = @ForeignKey(name = "natural_person_voivodeship_FK"))
-    private VoivoideshipEntity voivodeship_id;
+    private Voivoideship voivodeship_id;
 
     @Column(nullable = false, length = 30)
     private String city;

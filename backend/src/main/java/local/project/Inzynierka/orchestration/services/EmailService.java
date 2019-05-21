@@ -1,6 +1,6 @@
 package local.project.Inzynierka.orchestration.services;
 
-import local.project.Inzynierka.domain.model.EmailAddress;
+import local.project.Inzynierka.persistence.entity.EmailAddress;
 
 public interface EmailService {
 

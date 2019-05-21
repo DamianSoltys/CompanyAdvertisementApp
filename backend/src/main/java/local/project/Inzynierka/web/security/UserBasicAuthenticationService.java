@@ -1,9 +1,9 @@
 package local.project.Inzynierka.web.security;
 
-import local.project.Inzynierka.domain.model.EmailAddress;
-import local.project.Inzynierka.domain.model.User;
 import local.project.Inzynierka.orchestration.services.EmailService;
 import local.project.Inzynierka.orchestration.services.UserService;
+import local.project.Inzynierka.persistence.entity.EmailAddress;
+import local.project.Inzynierka.persistence.entity.User;
 import local.project.Inzynierka.web.errors.BadLoginDataException;
 import local.project.Inzynierka.web.errors.EmailAlreadyTakenException;
 import local.project.Inzynierka.web.errors.UserAlreadyExistsException;
@@ -37,7 +37,7 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
     public void registerNewUser(User user)  {
 
         User requestedUser = userService.findByName(user.getName());
-        EmailAddress requestedEmail = emailService.findByEmail(user.getEmailAddress());
+        EmailAddress requestedEmail = emailService.findByEmail(user.getEmailAddressEntity());
 
         if(requestedUser != null ){
             throw new UserAlreadyExistsException();
@@ -46,10 +46,10 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
             throw new EmailAlreadyTakenException();
         }
 
-        requestedEmail = new EmailAddress(user.getEmailAddress().getEmail());
+        requestedEmail = new EmailAddress(user.getEmailAddressEntity().getEmail());
         requestedEmail = this.emailService.saveEmailAddress(requestedEmail);
 
-        requestedUser = new User(user.getName(), passwordEncoder.encode(user.getPassword()), requestedEmail);
+        requestedUser = new User(user.getName(), passwordEncoder.encode(user.getPasswordHash()), requestedEmail);
         this.userService.createNewUser(requestedUser);
 
     }
@@ -58,7 +58,7 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
     public String login(User user)  {
         try{
             UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(
-                    new UserPrincipal(user), user.getPassword());
+                    new UserPrincipal(user), user.getPasswordHash());
 
             Authentication authenticatedUser = authenticationManager.authenticate(loginToken);
             SecurityContextHolder.getContext().setAuthentication(authenticatedUser);

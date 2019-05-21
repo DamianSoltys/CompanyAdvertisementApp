@@ -1,6 +1,6 @@
 package local.project.Inzynierka.persistence.repository;
 
-import local.project.Inzynierka.persistence.entity.NewsletterSubscriptionEntity;
+import local.project.Inzynierka.persistence.entity.NewsletterSubscription;
 
-public interface NewsletterSubscriptionRepository extends ApplicationBigRepository<NewsletterSubscriptionEntity> {
+public interface NewsletterSubscriptionRepository extends ApplicationBigRepository<NewsletterSubscription> {
 }

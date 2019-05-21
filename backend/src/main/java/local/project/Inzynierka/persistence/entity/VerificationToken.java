@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 @Entity
 @Data
 @Table(name = "tokens")
-public class VerificationTokenEntity implements IEntity<Long> {
+public class VerificationToken implements IEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,7 @@ public class VerificationTokenEntity implements IEntity<Long> {
     @Column(name = "created_at")
    private Timestamp createdAt;
 
-    public VerificationTokenEntity(String token) {
+    public VerificationToken(String token) {
         this.token = token;
     }
 }

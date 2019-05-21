@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "email_addresses")
-public class EmailAddressEntity implements IEntity<Long> {
+public class EmailAddress implements IEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,5 +21,7 @@ public class EmailAddressEntity implements IEntity<Long> {
     @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP")
     private Timestamp createdAt;
 
-
+    public EmailAddress(String email) {
+        this.email = email;
+    }
 }

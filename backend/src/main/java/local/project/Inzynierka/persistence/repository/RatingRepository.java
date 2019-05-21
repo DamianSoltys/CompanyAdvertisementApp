@@ -1,6 +1,6 @@
 package local.project.Inzynierka.persistence.repository;
 
-import local.project.Inzynierka.persistence.entity.RatingEntity;
+import local.project.Inzynierka.persistence.entity.Rating;
 
-public interface RatingRepository  extends ApplicationBigRepository<RatingEntity> {
+public interface RatingRepository  extends ApplicationBigRepository<Rating> {
 }

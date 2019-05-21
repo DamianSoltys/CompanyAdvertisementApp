@@ -1,7 +1,7 @@
 package local.project.Inzynierka.web.mapper;
 
-import local.project.Inzynierka.domain.model.EmailAddress;
-import local.project.Inzynierka.domain.model.User;
+import local.project.Inzynierka.persistence.entity.EmailAddress;
+import local.project.Inzynierka.persistence.entity.User;
 import local.project.Inzynierka.web.dto.LoginDto;
 import local.project.Inzynierka.web.dto.UserRegistrationDto;
 import org.springframework.stereotype.Component;
@@ -16,11 +16,10 @@ public class UserDtoMapper {
         }
         User user = new User();
         user.setName(userRegistrationDto.getName());
-        user.setPassword(userRegistrationDto.getPassword());
+        user.setPasswordHash(userRegistrationDto.getPassword());
 
-        EmailAddress emailAddress = new EmailAddress();
-        emailAddress.setEmail(userRegistrationDto.getEmail());
-        user.setEmailAddress(emailAddress);
+        EmailAddress emailAddress = new EmailAddress(userRegistrationDto.getEmail());
+        user.setEmailAddressEntity(emailAddress);
 
         return user;
     }
@@ -30,11 +29,10 @@ public class UserDtoMapper {
             return null;
         }
         User user = new User();
-        user.setPassword(loginDto.getPassword());
+        user.setPasswordHash(loginDto.getPassword());
 
-        EmailAddress emailAddress = new EmailAddress();
-        emailAddress.setEmail(loginDto.getEmail());
-        user.setEmailAddress(emailAddress);
+        EmailAddress emailAddress = new EmailAddress(loginDto.getEmail());
+        user.setEmailAddressEntity(emailAddress);
 
         return user;
     }

@@ -1,7 +1,7 @@
 package local.project.Inzynierka;
 
-import local.project.Inzynierka.persistence.entity.NaturalPersonEntity;
-import local.project.Inzynierka.persistence.entity.VoivoideshipEntity;
+import local.project.Inzynierka.persistence.entity.NaturalPerson;
+import local.project.Inzynierka.persistence.entity.Voivoideship;
 import local.project.Inzynierka.persistence.repository.NaturalPersonRepository;
 import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
 import local.project.Inzynierka.shared.utils.DateUtils;
@@ -25,7 +25,7 @@ public class NaturalPersonRepositoryTest {
     @Autowired
     private VoivodeshipRepository voivodeshipRepository;
 
-    private NaturalPersonEntity naturalPersonEntity;
+    private NaturalPerson naturalPerson;
 
     private static String phoneNo = "111222333";
 
@@ -40,30 +40,30 @@ public class NaturalPersonRepositoryTest {
         String buildNo = "5d";
 
 
-        naturalPersonEntity = new NaturalPersonEntity();
-        naturalPersonEntity.setFirstName(firstName);
-        naturalPersonEntity.setLastName(lastName);
-        naturalPersonEntity.setApartmentNo(appNo);
-        naturalPersonEntity.setId(0L);
+        naturalPerson = new NaturalPerson();
+        naturalPerson.setFirstName(firstName);
+        naturalPerson.setLastName(lastName);
+        naturalPerson.setApartmentNo(appNo);
+        naturalPerson.setId(0L);
 
         /*
         * FROM THE CONTEXT
         * */
-        VoivoideshipEntity voivodeshipEntity = voivodeshipRepository.findById((short)1).get(); // IT RETURNS OPTIONAL
+        Voivoideship voivodeshipEntity = voivodeshipRepository.findById((short)1).get(); // IT RETURNS OPTIONAL
         /*
          *
          * */
-        naturalPersonEntity.setVoivodeship_id(voivodeshipEntity);
+        naturalPerson.setVoivodeship_id(voivodeshipEntity);
 
-        naturalPersonEntity.setBuildingNo(buildNo);
-        naturalPersonEntity.setCity(city);
+        naturalPerson.setBuildingNo(buildNo);
+        naturalPerson.setCity(city);
 
         Timestamp now = DateUtils.getNowTimestamp();
-        naturalPersonEntity.setCreatedAt(now);
-        naturalPersonEntity.setModifiedAt(now);
+        naturalPerson.setCreatedAt(now);
+        naturalPerson.setModifiedAt(now);
 
-        naturalPersonEntity.setPhoneNo(phoneNo);
-        naturalPersonEntity.setStreet(street);
+        naturalPerson.setPhoneNo(phoneNo);
+        naturalPerson.setStreet(street);
     }
 
     @Test
@@ -73,10 +73,10 @@ public class NaturalPersonRepositoryTest {
         long entititesToSave = 2;
         long expected = entititesToSave+beforeTestCount;
 
-        naturalPersonRepository.save(naturalPersonEntity);
-        naturalPersonEntity.setId(0L);  // New personal Entity - ID = 0
-        naturalPersonEntity.setPhoneNo("555"); // UNIQUE PHONE_NO
-        naturalPersonRepository.save(naturalPersonEntity);
+        naturalPersonRepository.save(naturalPerson);
+        naturalPerson.setId(0L);  // New personal Entity - ID = 0
+        naturalPerson.setPhoneNo("555"); // UNIQUE PHONE_NO
+        naturalPersonRepository.save(naturalPerson);
 
         Assert.assertEquals(expected, naturalPersonRepository.count());
     }
@@ -84,10 +84,10 @@ public class NaturalPersonRepositoryTest {
     @Test
     public void testFindingByPhoneNo(){
 
-       naturalPersonEntity.setId(1L);
-       naturalPersonRepository.save(naturalPersonEntity);
+       naturalPerson.setId(1L);
+       naturalPersonRepository.save(naturalPerson);
 
-        Assert.assertEquals(naturalPersonEntity, naturalPersonRepository.findByPhoneNo(phoneNo));
+        Assert.assertEquals(naturalPerson, naturalPersonRepository.findByPhoneNo(phoneNo));
     }
 
 

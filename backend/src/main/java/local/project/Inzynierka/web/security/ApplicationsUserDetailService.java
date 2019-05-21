@@ -1,10 +1,8 @@
 package local.project.Inzynierka.web.security;
 
-import local.project.Inzynierka.domain.model.EmailAddress;
-import local.project.Inzynierka.domain.model.User;
 import local.project.Inzynierka.orchestration.services.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import local.project.Inzynierka.persistence.entity.EmailAddress;
+import local.project.Inzynierka.persistence.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

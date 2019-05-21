@@ -1,7 +1,7 @@
 package local.project.Inzynierka.orchestration.services;
 
-import local.project.Inzynierka.domain.model.EmailAddress;
-import local.project.Inzynierka.domain.model.User;
+import local.project.Inzynierka.persistence.entity.EmailAddress;
+import local.project.Inzynierka.persistence.entity.User;
 
 public interface UserService {
 
@@ -10,4 +10,6 @@ public interface UserService {
     User findByEmailAddress(EmailAddress emailAddress);
 
     User createNewUser(User user);
+
+    void createVerificationTokenForUser(User user, final String token);
 }

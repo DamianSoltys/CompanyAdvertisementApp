@@ -1,14 +1,14 @@
 package local.project.Inzynierka.persistence.repository;
 
-import local.project.Inzynierka.persistence.entity.UserEntity;
+import local.project.Inzynierka.persistence.entity.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 
-public interface UserRepository extends ApplicationBigRepository<UserEntity> {
+public interface UserRepository extends ApplicationBigRepository<User> {
 
-    UserEntity findByName(String name);
+    User findByName(String name);
 
-    @Query("SELECT u FROM UserEntity u INNER JOIN u.emailAddressEntity e WHERE e.email = :email")
-    UserEntity getByAddressEmail(@Param("email") String email);
+    @Query("SELECT u FROM User u INNER JOIN u.emailAddressEntity e WHERE e.email = :email")
+    User getByAddressEmail(@Param("email") String email);
 }

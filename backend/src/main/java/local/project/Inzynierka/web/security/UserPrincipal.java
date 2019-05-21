@@ -1,6 +1,6 @@
 package local.project.Inzynierka.web.security;
 
-import local.project.Inzynierka.domain.model.User;
+import local.project.Inzynierka.persistence.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,7 +26,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return user.getPasswordHash();
     }
 
     @Override
@@ -34,7 +34,7 @@ public class UserPrincipal implements UserDetails {
         /*
         *  Using email address instead of username to log in.
         * */
-        return user.getEmailAddress().getEmail();
+        return user.getEmailAddressEntity().getEmail();
     }
 
     @Override

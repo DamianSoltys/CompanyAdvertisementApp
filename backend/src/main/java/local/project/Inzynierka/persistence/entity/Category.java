@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "categories")
-public class CategoryEntity implements IEntity<Long>{
+public class Category implements IEntity<Long>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

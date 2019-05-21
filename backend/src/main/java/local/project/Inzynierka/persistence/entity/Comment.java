@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "comments")
-public class CommentEntity implements IEntity<Long>{
+public class Comment implements IEntity<Long>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,11 +25,11 @@ public class CommentEntity implements IEntity<Long>{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "commenting_user_FK"))
-    private UserEntity userEntity;
+    private User user;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "branch_id", nullable = false, foreignKey = @ForeignKey(name = "commentend_branch_FK"))
-    private BranchEntity branchEntity;
+    private Branch branch;
 
 
 }

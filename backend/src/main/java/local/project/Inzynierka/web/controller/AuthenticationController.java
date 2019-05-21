@@ -1,7 +1,7 @@
 package local.project.Inzynierka.web.controller;
 
 
-import local.project.Inzynierka.domain.model.User;
+import local.project.Inzynierka.persistence.entity.User;
 import local.project.Inzynierka.web.dto.LoginDto;
 import local.project.Inzynierka.web.dto.UserRegistrationDto;
 import local.project.Inzynierka.web.errors.BadLoginDataException;
@@ -10,8 +10,6 @@ import local.project.Inzynierka.web.errors.UserAlreadyExistsException;
 import local.project.Inzynierka.web.mapper.UserDtoMapper;
 import local.project.Inzynierka.web.registration.event.OnRegistrationEvent;
 import local.project.Inzynierka.web.security.UserAuthenticationService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;

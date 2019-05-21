@@ -13,7 +13,7 @@ export class LoginService {
 
    Login(User_Data: UserLog):Observable<any> {
     return this.http.post('http://localhost:8090/user/login',
-    {'email': User_Data.email, 'password': User_Data.password});
+    {'email': User_Data.email, 'password': User_Data.password}, {observe: 'response'});
   }
 
 }

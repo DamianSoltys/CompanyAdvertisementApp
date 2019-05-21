@@ -11,6 +11,8 @@ import { LoginService } from '../services/login.service';
 export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
+  login_error = false;
+  error_message: string;
   constructor(private fb: FormBuilder, private lgservice: LoginService) { }
 
   ngOnInit() {
@@ -27,9 +29,12 @@ get logForm(){
     User_data.email = this.loginForm.get('email').value;
     User_data.password = this.loginForm.get('password').value;
     this.lgservice.Login(User_data).subscribe((data) => {
+        this.login_error = false;
         console.log(data);
     }, (error) => {
-      console.log(error);
+      this.error_message = error.error;
+      this.login_error = true;
+      console.log(error.error);
     });
   }
 

@@ -20,6 +20,9 @@
       </div> 
     </div>
       <button class="btn btn-primary" [disabled]="!loginForm.valid" type="submit">Zaloguj</button>
+      <div *ngIf="login_error">
+        <p class="text-danger">{{error_message}}</p>
+      </div>
 
       <p>Nie posiadasz jeszcze konta?</p>
       <a class="link" routerLink="/register">ZAREJESTRUJ SIĘ</a>

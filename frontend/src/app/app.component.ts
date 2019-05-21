@@ -8,7 +8,7 @@ import * as $ from 'jquery';
 })
 export class AppComponent implements OnInit {
   nearby_toggle = false;
-
+  logged = false;
 ngOnInit(): void {
 }
 

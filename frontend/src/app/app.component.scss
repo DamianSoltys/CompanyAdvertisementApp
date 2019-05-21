@@ -39,7 +39,7 @@ body,html{
     .btn:first-child{
     border-start-start-radius: 20px;
     }
-    .btn:nth-child(3){
+    .btn:last-child{
         border-end-end-radius: 20px;
     }
 }
@@ -80,11 +80,11 @@ left:-5%;
     width:70%;
     max-width: 150px;
     @include tablet{
-        width:35%;
+        width:65%;
         
     }
     @include desktop{
-        width:25%;
+        width:55%;
         max-width: 200px;
        
     }
@@ -133,7 +133,10 @@ left:-5%;
     position: relative;
     left: 50%;
     transform: translate(-50%);
-    border-radius: 50px;
+    border:0;
+    width:200px;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
 }
 .nearby-text{
     margin-top:100px;

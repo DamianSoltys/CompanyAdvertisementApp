@@ -29,6 +29,9 @@ public class FavouriteBranch implements IEntity<FavouriteBranch.PK> {
     @Column(name = "modified_at",  columnDefinition = "TIMESTAMP")
     private Timestamp modifiedAt;
 
+    public FavouriteBranch() {
+    }
+
     @Embeddable
     @Data
     public class PK implements Serializable{

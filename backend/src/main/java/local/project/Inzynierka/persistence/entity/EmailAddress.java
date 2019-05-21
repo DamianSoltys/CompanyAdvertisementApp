@@ -24,4 +24,7 @@ public class EmailAddress implements IEntity<Long> {
     public EmailAddress(String email) {
         this.email = email;
     }
+
+    public EmailAddress() {
+    }
 }

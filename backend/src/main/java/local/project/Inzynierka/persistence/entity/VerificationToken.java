@@ -24,4 +24,7 @@ public class VerificationToken implements IEntity<Long> {
     public VerificationToken(String token) {
         this.token = token;
     }
+
+    public VerificationToken() {
+    }
 }

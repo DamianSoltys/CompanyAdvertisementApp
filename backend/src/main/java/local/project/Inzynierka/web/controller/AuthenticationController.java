@@ -1,6 +1,7 @@
 package local.project.Inzynierka.web.controller;
 
 
+import local.project.Inzynierka.orchestration.services.UserService;
 import local.project.Inzynierka.persistence.entity.User;
 import local.project.Inzynierka.web.dto.LoginDto;
 import local.project.Inzynierka.web.dto.UserRegistrationDto;
@@ -30,6 +31,9 @@ public class AuthenticationController {
     private UserDtoMapper mapper;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private ApplicationEventPublisher eventPublisher;
 
     @RequestMapping(value = "/user/registration", method = RequestMethod.POST)
@@ -39,6 +43,7 @@ public class AuthenticationController {
         User user = mapper.map(userRegistrationDto);
         try {
             authenticationService.registerNewUser(user);
+            user = userService.findByName(user.getName());
             eventPublisher.publishEvent(new OnRegistrationEvent(user, request.getHeader("Origin")));
 
             return ResponseEntity.ok().body("");

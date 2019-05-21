@@ -54,9 +54,7 @@ public class UserServiceImpl implements UserService {
         user.setModifiedAt(now);
         user.setCreatedAt(now);
 
-        user = userRepository.save(user);
-
-        return user;
+        return userRepository.save(user);
 
     }
 
@@ -68,10 +66,8 @@ public class UserServiceImpl implements UserService {
         myToken.setId(0L);
 
         VerificationToken createdToken = verificationTokenRepository.save(myToken);
-
-
-
-
+        user.setVerificationToken(createdToken);
+        userRepository.save(user);
 
     }
 }

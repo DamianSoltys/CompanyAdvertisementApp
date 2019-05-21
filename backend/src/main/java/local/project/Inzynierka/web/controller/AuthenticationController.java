@@ -1,6 +1,8 @@
 package local.project.Inzynierka.web.controller;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import local.project.Inzynierka.orchestration.services.UserService;
 import local.project.Inzynierka.persistence.entity.User;
 import local.project.Inzynierka.web.dto.LoginDto;
@@ -53,12 +55,12 @@ public class AuthenticationController {
     }
 
     @RequestMapping(value = "/user/login", method = RequestMethod.POST)
-    public ResponseEntity login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<String> login(@RequestBody LoginDto loginDto){
 
         User user = mapper.map(loginDto);
         try {
             authenticationService.login(user);
-            return ResponseEntity.ok().body("OK");
+            return ResponseEntity.ok().body("{\"data\":\"OK\"}");
         } catch (BadLoginDataException e) {
             return ResponseEntity.status(e.getStatus()).body(e.getMessage());
         }

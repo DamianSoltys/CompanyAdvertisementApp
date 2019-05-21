@@ -9,23 +9,19 @@ import * as $ from 'jquery';
 export class AppComponent implements OnInit {
   nearby_toggle = false;
   logged = false;
-ngOnInit(): void {
-}
+  ngOnInit(): void {}
 
-menuAnimation() {
-  $('.dropdown-menu').slideToggle( 'slow' , () => {
-   $(document).ready(() => {
-     $(document).on('click', () => {
-      $('.dropdown-menu').slideUp('slow', () => {
-
+  menuAnimation() {
+    $('.dropdown-menu').slideToggle('slow', () => {
+      $(document).ready(() => {
+        $(document).on('click', () => {
+          $('.dropdown-menu').slideUp('slow', () => {});
+        });
       });
-     });
-   });
-  });
-}
-toggleNearby() {
-  this.nearby_toggle = !this.nearby_toggle;
-  $('.nearby').slideToggle('slow');
-}
-
+    });
+  }
+  toggleNearby() {
+    this.nearby_toggle = !this.nearby_toggle;
+    $('.nearby').slideToggle('slow');
+  }
 }

@@ -13,6 +13,6 @@ export class RegisterService {
 
   Register(User_Data: UserReg):Observable<any> {
     return this.http.post('http://localhost:8090/user/registration',
-    {'name': User_Data.name, 'email': User_Data.email, 'password': User_Data.password});
+    {'name': User_Data.name, 'email': User_Data.email, 'password': User_Data.password}, {observe: 'response'});
   }
 }

@@ -30,7 +30,7 @@ get logForm(){
     User_data.password = this.loginForm.get('password').value;
     this.lgservice.Login(User_data).subscribe((data) => {
         this.login_error = false;
-        console.log(JSON.parse(data));
+        console.log(data);
     }, (error) => {
       this.error_message = error.error;
       this.login_error = true;

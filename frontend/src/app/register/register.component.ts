@@ -12,6 +12,9 @@ export class RegisterComponent implements OnInit {
 
   registerForm: FormGroup;
   passwordMatch = false;
+  register_error: boolean;
+  error_message: string;
+  success_message = '';
   constructor(private fb: FormBuilder, private regService: RegisterService) { }
 
   ngOnInit() {
@@ -39,9 +42,15 @@ export class RegisterComponent implements OnInit {
     User_Data.email = this.registerForm.get('email').value;
     User_Data.password = this.registerForm.get('password').value;
    this.regService.Register(User_Data).subscribe((data) => {
-     console.log(data);
+     if(data.status===200){
+      this.register_error = false;
+      this.success_message = 'Użytkownik został zarejestrowany';
+       console.log('Użytkownik został zarejestrowany');
+     }
    }, (error) => {
-     console.log(error);
+    this.error_message = error.error.text;
+    this.register_error = true;
+    console.log(error.error.text);
    });
   } else {
     this.passwordMatch = true;

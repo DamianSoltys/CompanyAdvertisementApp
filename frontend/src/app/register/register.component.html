@@ -39,6 +39,12 @@
       <div class="text-center" *ngIf="passwordMatch">
       <p class="text-danger">Hasła muszą być identyczne!</p>
     </div>
+    <div *ngIf="register_error">
+      <p class="text-danger">{{error_message}}</p>
+    </div>
+    <div *ngIf="!register_error">
+      <p class="text-success">{{success_message}}</p>
+    </div>
       <p>Masz już konto?</p>
     <a class="link" routerLink="/login">ZALOGUJ SIĘ</a>
     </div>

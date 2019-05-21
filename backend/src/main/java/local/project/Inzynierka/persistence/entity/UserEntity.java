@@ -39,6 +39,10 @@ public class UserEntity implements IEntity<Long> {
     @Column(nullable = false, name = "account_type")
     private int accountType;
 
+    @OneToOne(optional = false)
+    @JoinColumn(name = "id_token",referencedColumnName = "token_id", unique = true, nullable = false, foreignKey = @ForeignKey(name = "verify_user_token_FK"))
+    private VerificationTokenEntity verificationTokenEntity;
+
     public UserEntity() {
     }
 

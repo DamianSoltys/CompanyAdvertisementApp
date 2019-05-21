@@ -31,4 +31,9 @@ public class NewsletterSubscriptionEntity implements IEntity<Long> {
     @Column(nullable = false, name = "modified_at", columnDefinition = "TIMESTAMP")
     private Timestamp modifiedAt;
 
+    @OneToOne
+    @JoinColumn(name = "id_token",referencedColumnName = "token_id", unique = true, nullable = false, foreignKey = @ForeignKey(name = "verify_newsletter_token_FK"))
+    private VerificationTokenEntity verificationTokenEntity;
+
+
 }

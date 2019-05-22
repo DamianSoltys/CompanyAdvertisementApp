@@ -20,7 +20,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     this.registerForm = this.fb.group({
       name: ['',
-      [Validators.required, Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
+      [Validators.required, Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9]+$/))]],
 
       email: ['',
       // tslint:disable-next-line:max-line-length
@@ -42,7 +42,7 @@ export class RegisterComponent implements OnInit {
     User_Data.email = this.registerForm.get('email').value;
     User_Data.password = this.registerForm.get('password').value;
    this.regService.Register(User_Data).subscribe((data) => {
-     if(data.status===200){
+     if (data.status === 200) {
       this.register_error = false;
       this.success_message = 'Użytkownik został zarejestrowany';
        console.log('Użytkownik został zarejestrowany');

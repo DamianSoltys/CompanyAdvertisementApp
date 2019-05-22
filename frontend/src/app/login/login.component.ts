@@ -21,8 +21,11 @@ export class LoginComponent implements OnInit {
       password: ['', [Validators.required]]
     });
   }
+
+
   get logForm() {
     return this.loginForm.controls;
+
   }
   onSubmit() {
     const User_data = new UserLog();

@@ -45,7 +45,7 @@ public class AuthenticationController {
         User user = mapper.map(userRegistrationDto);
         try {
             authenticationService.registerNewUser(user);
-            user = userService.findByName(user.getName());
+            user = userService.findByEmailAddress(user.getEmailAddressEntity());
             eventPublisher.publishEvent(new OnRegistrationEvent(user, request.getHeader("Origin")));
 
             return ResponseEntity.ok().body("");

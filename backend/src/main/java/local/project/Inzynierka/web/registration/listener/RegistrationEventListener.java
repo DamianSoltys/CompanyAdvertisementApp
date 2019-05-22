@@ -19,9 +19,8 @@ public class RegistrationEventListener {
 
     Logger logger = LoggerFactory.getLogger(RegistrationEventListener.class);
 
-    /*@Autowired
+   @Autowired
     private JavaMailSender javaMailSender;
-    */
 
     @Autowired
     private UserService userService;
@@ -40,19 +39,22 @@ public class RegistrationEventListener {
 
         final SimpleMailMessage mailMessage = constructEmailMessage(event, user, token);
         logger.info(String.valueOf(mailMessage));
+        javaMailSender.send(mailMessage);
+
     }
 
     private SimpleMailMessage constructEmailMessage(OnRegistrationEvent event, User user, String token) {
 
         final String recipientAddress = user.getEmailAddressEntity().getEmail();
         final String subject = "Potwierdzenie rejestracji";
-        final String confirmationUrl = event.getAppUrl() + "/user/registrationConfirm?token=" + token;
-        final String message = "Kliknij w link, aby potwierdzić rejestrację ";
+        final String confirmationUrl = event.getAppUrl() + "/registerConfirm/" + token;
+        final String message = "Cześć, dziękujemy za założenie konta.\r\n" +
+                "Kliknij teraz w link, aby potwierdzić rejestrację ";
         final SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipientAddress);
         email.setSubject(subject);
         email.setText(message + " \r\n" + confirmationUrl);
-        email.setFrom("example@example.com");
+        email.setFrom("test@example.com");
         return email;
     }
 }

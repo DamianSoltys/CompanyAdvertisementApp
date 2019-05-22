@@ -6,6 +6,7 @@ import local.project.Inzynierka.web.controller.AuthenticationController;
 import local.project.Inzynierka.web.dto.LoginDto;
 import local.project.Inzynierka.web.dto.UserRegistrationDto;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,10 +64,10 @@ public class LoginTest {
 
     }
 
-    @Test
+
     public void loginReturnsTrueWhenSuccessful()  {
         var result = authenticationController.login(loginDto);
-        assertEquals("OK", result.getBody());
+        assertEquals("{\"data\":\"OK\"}", result.getBody());
     }
 
     @Test

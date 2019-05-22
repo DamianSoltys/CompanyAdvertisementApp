@@ -12,4 +12,6 @@ public interface UserService {
     User createNewUser(User user);
 
     void createVerificationTokenForUser(User user, final String token);
+
+    boolean verifyToken(String token);
 }

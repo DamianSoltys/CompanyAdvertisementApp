@@ -7,6 +7,7 @@ import local.project.Inzynierka.persistence.repository.EmailRepository;
 import local.project.Inzynierka.persistence.repository.UserRepository;
 import local.project.Inzynierka.persistence.repository.VerificationTokenRepository;
 import local.project.Inzynierka.shared.utils.DateUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -68,6 +70,22 @@ public class UserServiceImpl implements UserService {
         VerificationToken createdToken = verificationTokenRepository.save(myToken);
         user.setVerificationToken(createdToken);
         userRepository.save(user);
+    }
 
+    @Override @Transactional
+    public boolean verifyToken(String token) {
+        VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
+        if( verificationToken == null ) {
+            return false;
+        }
+
+        User user = userRepository.findByVerificationToken(verificationToken);
+        log.info(String.valueOf(user));
+
+        user.setEnabled(true);
+        user.setModifiedAt(DateUtils.getNowTimestamp());
+
+        userRepository.save(user);
+        return true;
     }
 }

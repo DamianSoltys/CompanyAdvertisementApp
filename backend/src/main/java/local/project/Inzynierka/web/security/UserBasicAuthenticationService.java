@@ -33,6 +33,9 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    AuthenticationFacade authenticationFacade;
+
     @Override @Transactional
     public void registerNewUser(User user)  {
 
@@ -56,6 +59,9 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
 
     @Override
     public String login(User user)  {
+        if( authenticationFacade.getAuthentication() != null ) {
+            throw new IllegalStateException("Użytkownik już jest zalogowany.");
+        }
         try{
             UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(
                     new UserPrincipal(user), user.getPasswordHash());
@@ -68,5 +74,8 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
         return "OK";
     }
 
-
+    @Override
+    public boolean confirmUser(String token) {
+        return userService.verifyToken(token);
+    }
 }

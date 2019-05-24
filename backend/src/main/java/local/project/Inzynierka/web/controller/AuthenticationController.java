@@ -35,7 +35,7 @@ public class AuthenticationController {
     @Autowired
     private ApplicationEventPublisher eventPublisher;
 
-    @RequestMapping(value = "/user/registration", method = RequestMethod.POST)
+    @RequestMapping(value = "/auth/registration", method = RequestMethod.POST)
     public ResponseEntity registerNewUser(@RequestBody final UserRegistrationDto userRegistrationDto,
                                           final HttpServletRequest request) {
 
@@ -51,7 +51,7 @@ public class AuthenticationController {
         }
     }
 
-    @RequestMapping(value = "/user/login", method = RequestMethod.POST)
+    @RequestMapping(value = "/auth/login", method = RequestMethod.POST)
     public ResponseEntity<String> login(@RequestBody LoginDto loginDto){
 
         User user = mapper.map(loginDto);
@@ -65,12 +65,12 @@ public class AuthenticationController {
         }
 
     }
-    @RequestMapping(value = "/user/logout", method = RequestMethod.POST)
+    @RequestMapping(value = "/auth/logout", method = RequestMethod.POST)
     public String logout() {
         return "LOGGED OUT";
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/user/registration/confirm")
+    @RequestMapping(method = RequestMethod.GET, value = "/auth/registration/confirm")
     public ResponseEntity<String> confirmRegistration(@RequestParam(name = "token") String token ) {
         if( authenticationService.confirmUser(token)) {
             return ResponseEntity.ok().body("{\"data\":\"Twoje konto zostało potwiedzone\"}");

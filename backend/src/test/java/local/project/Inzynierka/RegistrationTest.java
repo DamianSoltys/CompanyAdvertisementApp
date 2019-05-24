@@ -45,7 +45,7 @@ public class RegistrationTest {
         String someToken="abcedf";
 
         mockMvc.perform(
-                get("/user/registration/confirm?token="+someToken));
+                get("/auth/registration/confirm?token="+someToken));
 
         verify(mock).confirmUser(argumentCaptor.capture());
         assertEquals(someToken, argumentCaptor.getValue());

@@ -1,4 +1,4 @@
-package local.project.Inzynierka.web.security;
+package local.project.Inzynierka.shared;
 
 import org.springframework.security.core.Authentication;
 

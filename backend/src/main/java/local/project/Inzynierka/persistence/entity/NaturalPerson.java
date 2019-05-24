@@ -23,7 +23,7 @@ public class NaturalPerson implements IEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "voivodeship_id", nullable = false, foreignKey = @ForeignKey(name = "natural_person_voivodeship_FK"))
-    private Voivoideship voivodeship_id;
+    private Voivoideship voivodeship;
 
     @Column(nullable = false, length = 30)
     private String city;

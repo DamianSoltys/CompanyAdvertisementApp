@@ -53,7 +53,7 @@ public class NaturalPersonRepositoryTest {
         /*
          *
          * */
-        naturalPerson.setVoivodeship_id(voivodeshipEntity);
+        naturalPerson.setVoivodeship(voivodeshipEntity);
 
         naturalPerson.setBuildingNo(buildNo);
         naturalPerson.setCity(city);

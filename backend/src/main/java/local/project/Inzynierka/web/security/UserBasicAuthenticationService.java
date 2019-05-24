@@ -4,6 +4,7 @@ import local.project.Inzynierka.orchestration.services.EmailService;
 import local.project.Inzynierka.orchestration.services.UserService;
 import local.project.Inzynierka.persistence.entity.EmailAddress;
 import local.project.Inzynierka.persistence.entity.User;
+import local.project.Inzynierka.shared.AuthenticationFacade;
 import local.project.Inzynierka.web.errors.BadLoginDataException;
 import local.project.Inzynierka.web.errors.EmailAlreadyTakenException;
 import local.project.Inzynierka.web.errors.UserAlreadyExistsException;
@@ -33,6 +34,9 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    AuthenticationFacade authenticationFacade;
+
     @Override @Transactional
     public void registerNewUser(User user)  {
 
@@ -56,6 +60,9 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
 
     @Override
     public String login(User user)  {
+        if( authenticationFacade.getAuthentication() != null ) {
+            throw new IllegalStateException("Użytkownik już jest zalogowany.");
+        }
         try{
             UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(
                     new UserPrincipal(user), user.getPasswordHash());
@@ -68,5 +75,8 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
         return "OK";
     }
 
-
+    @Override
+    public boolean confirmUser(String token) {
+        return userService.verifyToken(token);
+    }
 }

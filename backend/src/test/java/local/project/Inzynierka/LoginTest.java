@@ -56,7 +56,7 @@ public class LoginTest {
         String json = mapper.writeValueAsString(userRegistrationDto);
 
         mockMvc.perform(
-                    post("/user/registration")
+                    post("/auth/registration")
                             .content(json).
                     contentType("application/json")).
                 andExpect(status().isOk());

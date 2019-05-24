@@ -19,4 +19,11 @@ public class Voivoideship implements IEntity<Short>{
 
     @Column(nullable = false, unique = true, length = 25)
     private String name;
+
+    public Voivoideship(String name) {
+        this.name = name;
+    }
+
+    public Voivoideship() {
+    }
 }

@@ -1,5 +1,6 @@
 package local.project.Inzynierka.persistence.entity;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "users")
+@Builder(toBuilder = true)
 public class User implements IEntity<Long> {
 
 
@@ -22,10 +24,10 @@ public class User implements IEntity<Long> {
     @Column(nullable = false, name = "password_hash")
     private String passwordHash;
 
-    @Column(nullable = false, name = "modified_at", columnDefinition = "TIMESTAMP")
+    @Column(nullable = false, name = "modified_at")
     private Timestamp modifiedAt;
 
-    @Column(nullable = false, name = "created_at", columnDefinition = "TIMESTAMP")
+    @Column(nullable = false, name = "created_at")
     private Timestamp createdAt;
 
     @OneToOne
@@ -43,16 +45,30 @@ public class User implements IEntity<Long> {
     @JoinColumn(name = "id_token",referencedColumnName = "token_id", unique = true, foreignKey = @ForeignKey(name = "verify_user_token_FK"))
     private VerificationToken verificationToken;
 
+
+    @Column(name = "is_enabled")
+    private boolean isEnabled;
+
     public User() {
     }
 
-    public User(long id, String name, String passwordHash, NaturalPerson naturalPerson, EmailAddress emailAddressEntity, int accountType) {
+    /*
+    *  The parameters order has to match the order of field's declarations in the class for lombok builder to work.
+    * */
+    public User(long id, String name, String passwordHash,Timestamp modifiedAt,
+                Timestamp createdAt, NaturalPerson naturalPerson,
+                EmailAddress emailAddressEntity, int accountType,
+                VerificationToken verificationToken,boolean isEnabled ) {
         this.id = id;
         this.name = name;
         this.passwordHash = passwordHash;
         this.naturalPerson = naturalPerson;
         this.emailAddressEntity = emailAddressEntity;
         this.accountType = accountType;
+        this.isEnabled = isEnabled;
+        this.verificationToken = verificationToken;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
     }
 
     public User(String name, String passwordHash, EmailAddress emailAddressEntity) {
@@ -61,46 +77,5 @@ public class User implements IEntity<Long> {
         this.emailAddressEntity = emailAddressEntity;
     }
 
-    public static class UserBuilder {
-        private long id;
-        private String name;
-        private String passwordHash;
-        private NaturalPerson naturalPerson;
-        private EmailAddress emailAddressEntity;
-        private int accountType;
 
-        public UserBuilder setId(long id) {
-            this.id = id;
-            return this;
-        }
-
-        public UserBuilder setName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public UserBuilder setPasswordHash(String passwordHash) {
-            this.passwordHash = passwordHash;
-            return this;
-        }
-
-        public UserBuilder setNaturalPerson(NaturalPerson naturalPerson) {
-            this.naturalPerson = naturalPerson;
-            return this;
-        }
-
-        public UserBuilder setEmailAddressEntity(EmailAddress emailAddressEntity) {
-            this.emailAddressEntity = emailAddressEntity;
-            return this;
-        }
-
-        public UserBuilder setAccountType(int accountType) {
-            this.accountType = accountType;
-            return this;
-        }
-
-        public User createUser() {
-            return new User(id, name, passwordHash, naturalPerson, emailAddressEntity, accountType);
-        }
-    }
 }

@@ -1,7 +1,7 @@
-$bgcolor:rgb(37, 159, 246);
-$bgcolor1:rgb(14, 130, 212);
+$bgcolor:#2980b9;
+$bgcolor1:#3498db;
 
-$btcolor:#007bff;
+$btborder:#00BCD4;
 
 $phone-width:250px;
 $tablet-width:768px;
@@ -80,10 +80,11 @@ html {
 
 .menu {
   button {
-    background-color: rgb(54, 142, 204);
-    border: 1px solid rgb(15, 114, 185);
+    background-color: $bgcolor1;
+    border: 1px solid $btborder;
 
     &:hover {
+      background-color: $bgcolor;
       opacity: 0.8;
       transition: 0.5s;
     }
@@ -153,8 +154,8 @@ html {
   }
 
   .buttmenu {
-    background-color: rgb(54, 142, 204);
-    border: 1px solid rgb(15, 114, 185);
+    background-color: $bgcolor1;
+    border: 1px solid $btborder;
     width:130px;
     &:hover{
       opacity:0.8;
@@ -170,14 +171,20 @@ html {
 }
 
 .toggleNearby {
-  background: linear-gradient(-20deg, $bgcolor1, $bgcolor);
+  background-color: $bgcolor;
+  border:1px solid $btborder;
   position: relative;
   left: 50%;
   transform: translate(-50%);
-  border: 0;
   width: 200px;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
+  transition: 0.5s;
+  &:hover{
+    background-color: $bgcolor1;
+    opacity: 0.8;
+   
+  }
 }
 
 .nearby-text {

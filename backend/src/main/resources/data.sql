@@ -24,13 +24,15 @@ apartment_no, building_no, phone_no, created_at, modified_at) VALUES
 (8, 'Karol', 'Maciejak',7, 'Warszawa', 'Głośna','2a', '25', '555222222', NOW(), NOW()),
 (9, 'Marcin', 'Lewandowski',3, 'Lublin', 'Sklepowa','116', '24', '111111222', NOW(), NOW());
 
+
+--password - Haslo1
 INSERT INTO USERS(user_id, user_name, password_hash, modified_at,created_at, id_natural_person, id_email_address, account_type) VALUES
-(1, 'biedronka', '$2b$10$R4xBTkdcmT.qmYbP1BlJ3OrD.IgK6xl/mMASuM63grKL45u42atlO', NOW(), NOW(), 3, 1, 0 ),
-(2, 'kurczak5', '$2b$10$R4xBTkdcmT.qmYbP1BlJ3OrD.IgK6xl/mMASuM63grKL45u42atlO', NOW(), NOW(), NULL, 2, 0 ),
-(3, 'magicznyKrzystof', '$2b$10$R4xBTkdcmT.qmYbP1BlJ3OrD.IgK6xl/mMASuM63grKL45u42atlO', NOW(), NOW(), NULL, 3, 0 ),
-(4, 'Gacek', '$2b$10$R4xBTkdcmT.qmYbP1BlJ3OrD.IgK6xl/mMASuM63grKL45u42atlO', NOW(), NOW(), NULL, 4, 0 ),
-(5, 'maciejowicz', '$2b$10$R4xBTkdcmT.qmYbP1BlJ3OrD.IgK6xl/mMASuM63grKL45u42atlO', NOW(), NOW(), NULL, 5, 0 ),
-(6, 'jezyk', '$2b$10$R4xBTkdcmT.qmYbP1BlJ3OrD.IgK6xl/mMASuM63grKL45u42atlO', NOW(), NOW(), 5, 6, 0 );
+(1, 'biedronka', '$2a$10$lb/zKrT4Pey1JCYdGbWKn.Nn61spi./CT/rSdoSOKO/ChBoaLHhtu', NOW(), NOW(), 3, 1, 0 ),
+(2, 'kurczak5', '$2a$10$lb/zKrT4Pey1JCYdGbWKn.Nn61spi./CT/rSdoSOKO/ChBoaLHhtu', NOW(), NOW(), NULL, 2, 0 ),
+(3, 'magicznyKrzystof', '$2a$10$lb/zKrT4Pey1JCYdGbWKn.Nn61spi./CT/rSdoSOKO/ChBoaLHhtu', NOW(), NOW(), NULL, 3, 0 ),
+(4, 'Gacek', '$2a$10$lb/zKrT4Pey1JCYdGbWKn.Nn61spi./CT/rSdoSOKO/ChBoaLHhtu', NOW(), NOW(), NULL, 4, 0 ),
+(5, 'maciejowicz', '$2a$10$lb/zKrT4Pey1JCYdGbWKn.Nn61spi./CT/rSdoSOKO/ChBoaLHhtu', NOW(), NOW(), NULL, 5, 0 ),
+(6, 'jezyk', '$2a$10$lb/zKrT4Pey1JCYdGbWKn.Nn61spi./CT/rSdoSOKO/ChBoaLHhtu', NOW(), NOW(), 5, 6, 0 );
 
 INSERT INTO CATEGORIES(id, name, created_at, modified_at) VALUES
 (1, 'Motoryzacja', NOW(), NOW()),

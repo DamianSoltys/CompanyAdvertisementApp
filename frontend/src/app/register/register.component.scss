@@ -73,6 +73,9 @@ $desktop-width:1024px;
     width: 50vw;
 
   }
+  @include desktop{
+    min-width:450px;
+  }
 }
 
 .inputs {

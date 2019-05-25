@@ -120,9 +120,10 @@ $desktop-width:1024px;
   -moz-background-clip: text;
   background-clip: text;
   text-shadow: 0px 3px 3px rgba(255, 255, 255, 0.5);
+  transition: 0.5s;
   &:hover{
     color: $bgcolor1;
-    transition: 0.5s;
+    
   }
 }
 

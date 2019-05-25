@@ -1,10 +1,9 @@
 <div class="container-fluid main-container">
 
   <div class="row navbar" *ngIf="!logged">
-    <div class="col-6">
-
-      <img routerLink="/home" src="../assets/Img/logo1.png" class="img_logo" alt="Logo">
-
+    <div class="col-6 logodiv">
+        <span routerLink="/home" class="linkspan"></span>
+        <img src="../assets/Img/logo_transparent.png" class="img_logo" alt="Logo">
     </div>
     <div class="btn-group menu">
       <button routerLink="/search" type="button" class="btn btn-primary">Szukaj</button>
@@ -27,9 +26,8 @@
   <!--MENU FOR LOGGED USER-->
   <div class="row navbar" *ngIf="logged">
     <div class="col-3 col-xl-6">
-
-      <img routerLink="/home" src="../assets/Img/logo1.png" class="img_logo" alt="Logo">
-
+      <span routerLink="/home" class="linkspan"></span>
+      <img src="../assets/Img/logo_transparent.png" class="img_logo" alt="Logo">
     </div>
     <div class="btn-group menu">
       <button routerLink="/search" type="button" class="btn btn-primary">Szukaj</button>
@@ -67,5 +65,5 @@
 </div>
 
 <div class="row footer">
-  <p>Footer</p>
+  <p><i class="fa fa-copyright" aria-hidden="true"></i>Damian Sołtysiuk,Mateusz Szałkowski</p>
 </div>

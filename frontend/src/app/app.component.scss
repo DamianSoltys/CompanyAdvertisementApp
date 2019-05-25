@@ -13,6 +13,7 @@ html {
   margin: 0;
   padding: 0;
 }
+
 @mixin boxShadow($property) {
   -webkit-box-shadow: $property;
   -moz-box-shadow: $property;
@@ -29,6 +30,14 @@ html {
 @mixin tablet() {
 
   @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width}) {
+    @content;
+  }
+
+}
+
+@mixin tabletbig() {
+
+  @media (min-width: #{$tablet-width}) and (max-width: #{$tablet-width+132}) {
     @content;
   }
 
@@ -104,45 +113,86 @@ html {
   left:-5%;
 }
 
+.fa-copyright {
+  margin-right: 5px;
+}
+
 .img_logo {
-  width: 70%;
   max-width: 150px;
+  left: -10px;
 
   @include tablet {
-    width: 65%;
+    max-width: 300px;
+    top: -120px;
+
+  }
+
+  @include tabletbig {
+    max-width: 220px;
+    left: -20px;
+    top: -80px;
 
   }
 
   @include desktop {
-    width: 55%;
-    max-width: 200px;
+
+    max-width: 350px;
+    top: -140px;
 
   }
 
   position: absolute;
-  top:8px;
+  top:-70px;
 
 
 }
 
-.img_logo:hover {
-
-  cursor: pointer;
-  opacity: 0.8;
-  transition: 0.5s;
-
+.logodiv {
+  padding: 0;
 }
+
+.linkspan {
+  position: absolute;
+  z-index: 1;
+  width: 295px;
+  height: 50px;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:hover+img {
+    opacity: 0.8;
+    transition: 0.5s;
+  }
+
+  @include phone {
+    top: -10px;
+    left: 3px;
+    width: 122px;
+    height: 20px;
+  }
+
+  @include tabletbig {
+    width: 180px;
+    height: 30px;
+    left: 2px;
+    top: 8px;
+  }
+}
+
+
 
 .dropdown-menu {
-    left: -50px;
-    width: 180px;
-    text-align: center;
-    border:1px solid $bgcolor;
-    @include boxShadow(0px 4px 5px 0px rgba(187, 185, 191, 1));
+  left: -50px;
+  width: 180px;
+  text-align: center;
+  border: 1px solid $bgcolor;
+  @include boxShadow(0px 4px 5px 0px rgba(187, 185, 191, 1));
 
   button:hover {
     background-color: whitesmoke;
-    color:$linkcolor;
+    color: $linkcolor;
     transition: 1s;
   }
 
@@ -163,9 +213,10 @@ html {
   .buttmenu {
     background-color: $bgcolor1;
     border: 1px solid $btborder;
-    width:130px;
-    &:hover{
-      opacity:0.8;
+    width: 130px;
+
+    &:hover {
+      opacity: 0.8;
       background-color: $bgcolor;
     }
   }
@@ -180,7 +231,7 @@ html {
 
 .toggleNearby {
   background-color: $bgcolor;
-  border:1px solid $btborder;
+  border: 1px solid $btborder;
   position: relative;
   left: 50%;
   transform: translate(-50%);
@@ -189,10 +240,11 @@ html {
   border-top-right-radius: 20px;
   transition: 0.5s;
   padding: 0;
-  &:hover{
+
+  &:hover {
     background-color: $bgcolor1;
     opacity: 0.8;
-   
+
   }
 }
 

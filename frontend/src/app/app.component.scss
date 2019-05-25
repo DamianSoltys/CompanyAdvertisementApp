@@ -181,6 +181,7 @@ html {
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   transition: 0.5s;
+  padding: 0;
   &:hover{
     background-color: $bgcolor1;
     opacity: 0.8;

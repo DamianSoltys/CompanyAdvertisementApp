@@ -2,7 +2,7 @@ $bgcolor:#2980b9;
 $bgcolor1:#3498db;
 
 $btborder:#00BCD4;
-
+$linkcolor:#00a8ff;
 $phone-width:250px;
 $tablet-width:768px;
 $desktop-width:1024px;
@@ -12,6 +12,11 @@ html {
   height: 100%;
   margin: 0;
   padding: 0;
+}
+@mixin boxShadow($property) {
+  -webkit-box-shadow: $property;
+  -moz-box-shadow: $property;
+  box-shadow: $property;
 }
 
 @mixin phone() {
@@ -133,10 +138,13 @@ html {
     left: -50px;
     width: 180px;
     text-align: center;
+    border:1px solid $bgcolor;
+    @include boxShadow(0px 4px 5px 0px rgba(187, 185, 191, 1));
 
   button:hover {
     background-color: whitesmoke;
-    transition: background-color 1s;
+    color:$linkcolor;
+    transition: 1s;
   }
 
 }

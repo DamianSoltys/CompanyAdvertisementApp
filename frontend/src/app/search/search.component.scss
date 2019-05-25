@@ -98,10 +98,11 @@ $desktop-width:1024px;
 .search_but{
     background-color: $bgcolor;
     border:0;
+    transition: 0.5s;
     &:hover{
         opacity:0.8;
         background-color: $bgcolor1;
-        transition: 0.5s;
+        
     }
 }
 .fa-search{

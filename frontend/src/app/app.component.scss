@@ -95,11 +95,12 @@ html {
   button {
     background-color: $bgcolor1;
     border: 1px solid $btborder;
+    transition: 0.5s;
 
     &:hover {
       background-color: $bgcolor;
       opacity: 0.8;
-      transition: 0.5s;
+      
     }
   }
 
@@ -120,6 +121,7 @@ html {
 .img_logo {
   max-width: 150px;
   left: -10px;
+  transition: 0.5s;
 
   @include tablet {
     max-width: 300px;
@@ -163,7 +165,7 @@ html {
 
   &:hover+img {
     opacity: 0.8;
-    transition: 0.5s;
+    
   }
 
   @include phone {

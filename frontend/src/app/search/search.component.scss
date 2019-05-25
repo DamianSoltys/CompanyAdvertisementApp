@@ -1,3 +1,7 @@
+$bgcolor:#2980b9;
+$bgcolor1:#3498db;
+
+$btborder:#00BCD4;
 
 $phone-width:250px;
 $tablet-width:768px;
@@ -90,4 +94,16 @@ $desktop-width:1024px;
     
 
 
+}
+.search_but{
+    background-color: $bgcolor;
+    border:0;
+    &:hover{
+        opacity:0.8;
+        background-color: $bgcolor1;
+        transition: 0.5s;
+    }
+}
+.fa-search{
+    color:$bgcolor;
 }

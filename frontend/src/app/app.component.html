@@ -36,16 +36,15 @@
       <button routerLink="" type="button" class="btn btn-primary">Wyloguj</button>
     </div>
     <div class="dropdown">
-      <button (click)="menuAnimation()" class="btn btn-secondary dropdown-toggle buttmenu" type="button"
-        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button (click)="toggleMenu()" class="btn btn-secondary dropdown-toggle buttmenu" type="button" id="menuId">
         Menu
       </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <button routerLink="/search" class="dropdown-item">Szukaj</button>
-        <button routerLink="" class="dropdown-item">Twoje firmy</button>
-        <button routerLink="" class="dropdown-item">Dane osobowe</button>
-        <button routerLink="" class="dropdown-item">Ulubione zakłady</button>
-        <button routerLink="" class="dropdown-item">Wyloguj</button>
+      <div [@showHideMenu] = "displayMenu.value ? 'visible':'hidden'" class="dropdown-menua">
+        <button routerLink="/search" class="dropdown-itema" (click)="toggleMenu()">Szukaj</button>
+        <button routerLink="" class="dropdown-itema" (click)="toggleMenu()">Twoje firmy</button>
+        <button routerLink="" class="dropdown-itema" (click)="toggleMenu()">Dane osobowe</button>
+        <button routerLink="" class="dropdown-itema" (click)="toggleMenu()">Ulubione zakłady</button>
+        <button routerLink="" class="dropdown-itema" (click)="toggleMenu()">Wyloguj</button>
       </div>
 
     </div>

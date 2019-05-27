@@ -183,7 +183,38 @@ html {
   }
 }
 
-
+.dropdown-menua{
+  position: absolute;
+  @include boxShadow(0px 4px 5px 0px rgba(187, 185, 191, 1));
+  border: 1px solid $bgcolor;
+  margin-top:10px;
+  border-radius: 10px;
+  z-index: 1;
+  button{
+    float:right;
+    width:100%;
+    background-color:white;
+    border:0;
+    transition: 1s;
+    padding:5px;
+    &:first-child{
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+    &:last-child{
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+    &:hover{
+      background-color: whitesmoke;
+    color: $linkcolor;
+    
+    }
+    &:focus{
+      outline: none;
+    }
+  }
+}
 
 .dropdown-menu {
   left: -50px;
@@ -240,7 +271,6 @@ html {
   width: 200px;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
-  transition: 0.5s;
   padding: 0;
 
   &:hover {

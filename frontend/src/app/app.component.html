@@ -11,14 +11,13 @@
       <button routerLink="/register" type="button" class="btn btn-primary">Rejestracja</button>
     </div>
     <div class="dropdown">
-      <button (click)="menuAnimation()" class="btn btn-secondary dropdown-toggle buttmenu" type="button"
-        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button (click)="toggleMenu()" class="btn btn-secondary dropdown-toggle buttmenu" type="button" id="menuId">
         Menu
       </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <button routerLink="/search" class="dropdown-item">Szukaj</button>
-        <button routerLink="/login" class="dropdown-item">Logowanie</button>
-        <button routerLink="/register" class="dropdown-item">Rejestracja</button>
+      <div [@showHideMenu] = "displayMenu.value ? 'visible':'hidden'" class="dropdown-menua">
+        <button routerLink="/search" (click)="toggleMenu()" class="dropdown-itema">Szukaj</button>
+        <button routerLink="/login" (click)="toggleMenu()" class="dropdown-itema">Logowanie</button>
+        <button routerLink="/register" (click)="toggleMenu()" class="dropdown-itema">Rejestracja</button>
       </div>
 
     </div>
@@ -57,8 +56,8 @@
 
   <div class="container-fluid">
     <h5 class="text-center nearby-text">Obok ciebie</h5>
-    <button (click)="toggleNearby()" class="toggleNearby btn btn-primary">{{nearby_toggle ?'Pokaż':'Schowaj'}}</button>
-    <div class="row nearby">
+    <button (click)="toggleNearbyBlock()" class="toggleNearby btn btn-primary">{{nearby_toggle ?'Pokaż':'Schowaj'}}</button>
+    <div [@showHide] = "visible ? 'visible':'hidden'" class="row nearby">
       <div>Dane firmy</div>
     </div>
   </div>

@@ -31,9 +31,9 @@
     <div class="btn-group menu">
       <button routerLink="/search" type="button" class="btn btn-primary">Szukaj</button>
       <button routerLink="" type="button" class="btn btn-primary">Twoje firmy</button>
-      <button routerLink="" type="button" class="btn btn-primary">Dane osobowe</button>
+      <button routerLink="user/personalData" type="button" class="btn btn-primary">Dane osobowe</button>
       <button routerLink="" type="button" class="btn btn-primary">Ulubione zakłady</button>
-      <button routerLink="" type="button" class="btn btn-primary">Wyloguj</button>
+      <button type="button" class="btn btn-primary" (click)="logOut()">Wyloguj</button>
     </div>
     <div class="dropdown">
       <button (click)="toggleMenu()" class="btn btn-secondary dropdown-toggle buttmenu" type="button" id="menuId">
@@ -42,9 +42,9 @@
       <div [@showHideMenu] = "displayMenu.value ? 'visible':'hidden'" class="dropdown-menua">
         <button routerLink="/search" class="dropdown-itema" (click)="toggleMenu()">Szukaj</button>
         <button routerLink="" class="dropdown-itema" (click)="toggleMenu()">Twoje firmy</button>
-        <button routerLink="" class="dropdown-itema" (click)="toggleMenu()">Dane osobowe</button>
+        <button routerLink="user/personalData" class="dropdown-itema" (click)="toggleMenu()">Dane osobowe</button>
         <button routerLink="" class="dropdown-itema" (click)="toggleMenu()">Ulubione zakłady</button>
-        <button routerLink="" class="dropdown-itema" (click)="toggleMenu()">Wyloguj</button>
+        <button class="dropdown-itema" (click)="toggleMenu(); logOut()">Wyloguj</button>
       </div>
 
     </div>

@@ -65,4 +65,7 @@ export class AppComponent implements OnInit {
   toggleMenu() {
     this.displayMenu.next(!this.displayMenu.value);
   }
+  logOut(){
+    console.log('wylogowany');
+  }
 }

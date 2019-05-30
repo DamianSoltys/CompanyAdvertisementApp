@@ -106,7 +106,7 @@ public class UserBecomeNaturalPersonIntegrationTest {
         String uri = "http://localhost:"+randomServerPort;
 
         var result= testRestTemplate.withBasicAuth(email,password)
-                .postForEntity(uri+"/user/naturalperson",becomeNaturalPersonDto, String.class);
+                .postForEntity(uri+"api/user/naturalperson",becomeNaturalPersonDto, String.class);
 
         assertEquals(HttpStatus.CREATED,result.getStatusCode() );
         assertEquals("OK", result.getBody());

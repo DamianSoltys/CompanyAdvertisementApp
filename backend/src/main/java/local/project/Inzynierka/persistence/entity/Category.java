@@ -23,5 +23,7 @@ public class Category implements IEntity<Long>{
     @Column(name = "modified_at", nullable = false, columnDefinition = "TIMESTAMP")
     private Timestamp modifiedAt;
 
-
+    public Category(String name) {
+        this.name = name;
+    }
 }

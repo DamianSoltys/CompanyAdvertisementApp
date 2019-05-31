@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UserLog } from '../classes/User';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, observable } from 'rxjs';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -22,6 +23,13 @@ export class LoginService {
   }
   ChangeLogged() {
     this.Logged.next(!this.Logged.value);
+  }
+  CheckLogged() {
+    if (localStorage.getItem('token')) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 }

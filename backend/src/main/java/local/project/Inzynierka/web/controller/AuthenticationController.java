@@ -10,10 +10,12 @@ import local.project.Inzynierka.web.errors.EmailAlreadyTakenException;
 import local.project.Inzynierka.web.errors.UserAlreadyExistsException;
 import local.project.Inzynierka.web.mapper.UserDtoMapper;
 import local.project.Inzynierka.web.registration.event.OnRegistrationEvent;
+import local.project.Inzynierka.web.security.AuthorizationHeader;
 import local.project.Inzynierka.web.security.UserAuthenticationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,12 +59,18 @@ public class AuthenticationController {
         User user = mapper.map(loginDto);
         try {
             authenticationService.login(user);
-            return ResponseEntity.ok().body("{\"data\":\"OK\"}");
+
         } catch (BadLoginDataException e) {
             return ResponseEntity.status(e.getStatus()).body(e.getMessage());
         } catch (IllegalStateException e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
+
+        AuthorizationHeader authorizationHeader = new AuthorizationHeader(loginDto.getEmail(), loginDto.getPassword());
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, authorizationHeader.getAuthorizationHeaderValue());
+
+        return ResponseEntity.ok().headers(headers).body("{\"data\":\"OK\"}");
 
     }
     @RequestMapping(value = "/auth/logout", method = RequestMethod.POST)

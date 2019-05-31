@@ -1,6 +1,7 @@
 package local.project.Inzynierka.persistence.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -8,6 +9,7 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "categories")
+@NoArgsConstructor
 public class Category implements IEntity<Long>{
 
     @Id
@@ -23,5 +25,7 @@ public class Category implements IEntity<Long>{
     @Column(name = "modified_at", nullable = false, columnDefinition = "TIMESTAMP")
     private Timestamp modifiedAt;
 
-
+    public Category(String name) {
+        this.name = name;
+    }
 }

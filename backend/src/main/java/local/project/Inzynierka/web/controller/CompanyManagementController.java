@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -31,7 +32,7 @@ public class CompanyManagementController {
     }
 
     @RequestMapping(value = "/companies", method = RequestMethod.POST)
-    public ResponseEntity<String> addCompany(@RequestBody final AddCompanyDto addCompanyDto){
+    public ResponseEntity<String> addCompany(@Valid @RequestBody final AddCompanyDto addCompanyDto){
 
 
         if( !companyManagementPermissionService.hasRegisteringAuthority()) {

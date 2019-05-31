@@ -1,19 +1,27 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UserLog } from '../classes/User';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
 
+  Logged = new BehaviorSubject(false);
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    observe: 'response' as 'response'
+  };
   constructor(private http: HttpClient) {
 
    }
 
-   Login(User_Data: UserLog):Observable<any> {
+   Login(User_Data: UserLog): Observable<any> {
     return this.http.post('http://localhost:8090/auth/login',
-    {'email': User_Data.email, 'password': User_Data.password}, {observe: 'response'});
+    {'email': User_Data.email, 'password': User_Data.password}, this.httpOptions);
+  }
+  ChangeLogged() {
+    this.Logged.next(!this.Logged.value);
   }
 
 }

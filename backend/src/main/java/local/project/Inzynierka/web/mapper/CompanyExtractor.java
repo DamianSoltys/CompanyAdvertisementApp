@@ -90,8 +90,26 @@ public class CompanyExtractor {
                         addCompanyDto.getName() :
                         addCompanyDto.getBranches().get(0).getName()
         );
-        branch.setCity(addCompanyDto.getAddress().getCity());
-        branch.setBuildingNo(addCompanyDto.getAddress().getBuildingNo());
+        branch.setCity(
+                addCompanyDto.getBranches().get(0).getAddress().getCity() == null ?
+                        addCompanyDto.getAddress().getCity():
+                        addCompanyDto.getBranches().get(0).getAddress().getCity()
+        );
+        branch.setVoivodeship_id(
+                addCompanyDto.getBranches().get(0).getAddress().getVoivodeship() == null ?
+                        new Voivoideship(addCompanyDto.getAddress().getVoivodeship().toString()) :
+                        new Voivoideship(addCompanyDto.getBranches().get(0).getAddress().getVoivodeship().toString())
+                );
+        branch.setBuildingNo(
+                addCompanyDto.getBranches().get(0).getAddress().getBuildingNo() == null ?
+                addCompanyDto.getAddress().getBuildingNo() :
+                addCompanyDto.getBranches().get(0).getAddress().getBuildingNo()
+        );
+        branch.setStreet(
+                addCompanyDto.getBranches().get(0).getAddress().getStreet() == null ?
+                        addCompanyDto.getAddress().getStreet() :
+                        addCompanyDto.getBranches().get(0).getAddress().getStreet()
+        );
         branch.setCompany(company);
         branch.setGeoX(addCompanyDto.getBranches().get(0).getGeoX());
         branch.setGeoY(addCompanyDto.getBranches().get(0).getGeoY());

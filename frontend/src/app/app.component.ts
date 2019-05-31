@@ -1,6 +1,8 @@
 import { Component, OnInit, AfterContentChecked } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { LoginService } from './services/login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -48,7 +50,7 @@ export class AppComponent implements OnInit {
   logged = false;
   visible = true;
   displayMenu = new BehaviorSubject(false);
-  constructor() {
+  constructor(private lgservice: LoginService, private router: Router) {
     document.body.addEventListener('click', (e) => {
      if ((<HTMLElement>e.target).id !== 'menuId') {
        this.displayMenu.next(false);
@@ -56,7 +58,11 @@ export class AppComponent implements OnInit {
 
     });
   }
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.lgservice.Logged.subscribe(value => {
+    this.logged = value;
+    });
+  }
 
   toggleNearbyBlock() {
     this.nearby_toggle = !this.nearby_toggle;
@@ -65,7 +71,11 @@ export class AppComponent implements OnInit {
   toggleMenu() {
     this.displayMenu.next(!this.displayMenu.value);
   }
-  logOut(){
+  logOut() {
+    console.log(localStorage.getItem('token'));
+    localStorage.removeItem('token');
+    this.lgservice.ChangeLogged();
+    this.router.navigate(['']);
     console.log('wylogowany');
   }
 }

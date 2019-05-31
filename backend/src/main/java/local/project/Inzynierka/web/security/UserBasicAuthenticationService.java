@@ -59,10 +59,7 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
     }
 
     @Override
-    public String login(User user)  {
-        if( authenticationFacade.getAuthentication() != null ) {
-            throw new IllegalStateException("Użytkownik już jest zalogowany.");
-        }
+    public void login(User user)  {
         try{
             UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(
                     new UserPrincipal(user), user.getPasswordHash());
@@ -72,7 +69,6 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
         } catch (AuthenticationException  e) {
             throw new BadLoginDataException();
         }
-        return "OK";
     }
 
     @Override

@@ -3,6 +3,7 @@ package local.project.Inzynierka.web.controller;
 import local.project.Inzynierka.orchestration.services.CompanyManagementService;
 import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.persistence.entity.Company;
+import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
 import local.project.Inzynierka.web.dto.AddCompanyDto;
 import local.project.Inzynierka.web.mapper.CompanyExtractor;
 import local.project.Inzynierka.web.security.CompanyManagementPermissionService;
@@ -36,7 +37,7 @@ public class CompanyManagementController {
 
 
         if( !companyManagementPermissionService.hasRegisteringAuthority()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Użytkownik nie ma pozwolenia na dodawanie firm.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(SimpleJsonFromStringCreator.toJson("Użytkownik nie ma pozwolenia na dodawanie firm."));
         }
 
         CompanyExtractor companyExtractor = new CompanyExtractor(addCompanyDto);
@@ -45,10 +46,10 @@ public class CompanyManagementController {
 
         try {
             this.companyManagementService.registerCompany(company, branches);
-            return ResponseEntity.ok().body("OK");
+            return ResponseEntity.ok().body(SimpleJsonFromStringCreator.toJson("Użytkownik nie ma pozwolenia na dodawanie firm."));
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("COŚ POSZŁO NIE TAK");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(SimpleJsonFromStringCreator.toJson("Użytkownik nie ma pozwolenia na dodawanie firm."));
         }
 
     }

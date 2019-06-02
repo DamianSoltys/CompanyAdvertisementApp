@@ -1,3 +1,28 @@
 <div class="container-fluid">
-  Witam
+  <div class="row form_container">
+    <form class="row col-4 personaldataForm" [formGroup]="personalDataForm">
+      <div class="header col-12 text-center"><p>Dane personalne</p></div>
+      <div class="form-group col-12 col-xl-6">
+        <label for="firstName">Imie</label>
+        <input type="text"  name="firstName" class="form-control" formControlName='firstName'>
+        <label for="lastName">Nazwisko</label>
+        <input type="text"  name="lastName" class="form-control" formControlName='lastName'>
+        <label for="voivodeship">Województwo</label>
+        <input type="text"  name="voivodeship" class="form-control" formControlName='voivodeship'>
+        <label for="city">Miasto</label>
+        <input type="text"  name="city" class="form-control" formControlName='city'>
+      </div>
+      <div class="form-group col-12 col-xl-6">
+        <label for="street">Ulica</label>
+        <input type="text"  name="street" class="form-control" formControlName='street'>
+        <label for="apartmentNo">Numer Mieszkania</label>
+        <input type="text"  name="apartmentNo" class="form-control" formControlName='apartmentNo'>
+        <label for="buildingNo">Numer Domu</label>
+        <input type="text"  name="buildingNo" class="form-control" formControlName='buildingNo'>
+        <label for="phoneNo">Telefon</label>
+        <input type="text"  name="phoneNo" class="form-control" formControlName='phoneNo'>
+      </div>
+      <button class="btn btn-primary" type="submit">Dodaj dane</button>
+    </form>
+  </div>
 </div>

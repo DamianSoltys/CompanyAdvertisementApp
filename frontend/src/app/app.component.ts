@@ -11,14 +11,14 @@ import { Router } from '@angular/router';
   animations: [
     trigger('showHide', [
       state('visible', style({
+        height: '100px',
         opacity: '1',
-        display: 'block'
-
+        visibility: 'visible'
       })),
       state('hidden', style({
-        opacity: '0',
-        display: 'none'
-
+       height: '0',
+       opacity: '0',
+       visibility: 'hidden'
       })),
       transition('visible <=> hidden', [
         animate('1s')
@@ -28,13 +28,13 @@ import { Router } from '@angular/router';
     trigger('showHideMenu', [
       state('visible', style({
       opacity: '1',
-      display: 'block'
+      visibility: 'visible'
 
 
       })),
       state('hidden', style({
         opacity: '0',
-        display: 'none'
+        visibility: 'hidden'
 
 
       })),

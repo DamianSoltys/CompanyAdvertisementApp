@@ -1,26 +1,42 @@
 <div class="container-fluid">
   <div class="row form_container">
-    <form class="row col-4 personaldataForm" [formGroup]="personalDataForm">
+    <form (ngSubmit)="onSubmit()" class="row col-8 col-xl-4 col-md-6 personaldataForm" [formGroup]="personalDataForm">
       <div class="header col-12 text-center"><p>Dane personalne</p></div>
-      <div class="form-group col-12 col-xl-6">
+      <div class="form-group_main col-12 col-xl-6 col-md-6">
+        <div class="form-group">
         <label for="firstName">Imie</label>
         <input type="text"  name="firstName" class="form-control" formControlName='firstName'>
+        </div>
+        <div class="form-group">
         <label for="lastName">Nazwisko</label>
         <input type="text"  name="lastName" class="form-control" formControlName='lastName'>
+      </div>
+      <div class="form-group">
         <label for="voivodeship">Województwo</label>
         <input type="text"  name="voivodeship" class="form-control" formControlName='voivodeship'>
+      </div>
+        <div class="form-group">
         <label for="city">Miasto</label>
         <input type="text"  name="city" class="form-control" formControlName='city'>
       </div>
-      <div class="form-group col-12 col-xl-6">
+      </div>
+      <div class="form-group_main col-12 col-xl-6 col-md-6">
+          <div class="form-group">
         <label for="street">Ulica</label>
         <input type="text"  name="street" class="form-control" formControlName='street'>
+      </div>
+        <div class="form-group">
         <label for="apartmentNo">Numer Mieszkania</label>
         <input type="text"  name="apartmentNo" class="form-control" formControlName='apartmentNo'>
+      </div>
+        <div class="form-group">
         <label for="buildingNo">Numer Domu</label>
         <input type="text"  name="buildingNo" class="form-control" formControlName='buildingNo'>
+      </div>
+        <div class="form-group">
         <label for="phoneNo">Telefon</label>
         <input type="text"  name="phoneNo" class="form-control" formControlName='phoneNo'>
+      </div>
       </div>
       <button class="btn btn-primary" type="submit">Dodaj dane</button>
     </form>

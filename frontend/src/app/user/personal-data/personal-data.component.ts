@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { group } from '@angular/animations';
+import { PersonalData } from 'src/app/classes/User';
+import { PersonalDataService } from 'src/app/services/personal-data.service';
+
 
 @Component({
   selector: 'app-personal-data',
@@ -9,7 +11,7 @@ import { group } from '@angular/animations';
 })
 export class PersonalDataComponent implements OnInit {
   personalDataForm: FormGroup;
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private pdataService: PersonalDataService) { }
 
   ngOnInit() {
     this.personalDataForm = this.fb.group({
@@ -22,6 +24,12 @@ export class PersonalDataComponent implements OnInit {
      buildingNo: [''],
      phoneNo: ['']
     });
+  }
+  get form() {
+    return this.personalDataForm.controls;
+  }
+  onSubmit() {
+    this.pdataService.sendPersonalData(this.personalDataForm.value as PersonalData);
   }
 
 }

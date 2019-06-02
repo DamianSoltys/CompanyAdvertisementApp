@@ -40,7 +40,6 @@ $desktop-width:1024px;
 
 .form_container{
     
-    border:1px solid green;
     margin-top:5%;
 }
 .header{
@@ -61,13 +60,14 @@ $desktop-width:1024px;
       font-size: 1.2em;
     }
 }
-.form-group{
+.form-group_main{
     padding:3%;
     margin-top:2%;
     input{
         padding:0;
-        
+      
     }
+    
 }
 .personaldataForm{
     @include boxShadow(0px 4px 5px 0px rgba(187, 185, 191, 1));
@@ -92,6 +92,13 @@ $desktop-width:1024px;
           width: 75%;
         }
       }
+      
+}
+.form-group{
+  @include phone {
+    width: 80%;
+    margin:auto;
+  }
 }
 @keyframes anime {
     0% {

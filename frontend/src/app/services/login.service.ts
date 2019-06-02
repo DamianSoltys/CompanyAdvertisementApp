@@ -8,7 +8,7 @@ import { Observable, BehaviorSubject, observable } from 'rxjs';
 })
 export class LoginService {
 
-  Logged = new BehaviorSubject(false);
+  Logged = new BehaviorSubject(true);
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     observe: 'response' as 'response'

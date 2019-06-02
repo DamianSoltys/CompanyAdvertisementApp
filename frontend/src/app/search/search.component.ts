@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import * as $ from 'jquery';
 import { SearchService } from '../services/search.service';
-
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -10,7 +9,7 @@ import { SearchService } from '../services/search.service';
 })
 export class SearchComponent implements OnInit {
 searchform: FormGroup;
-  constructor(private fb: FormBuilder, private searchS: SearchService) {
+  constructor(private fb: FormBuilder,private searchS:SearchService) {
   this.searchform = fb.group({
    search: [''],
   });

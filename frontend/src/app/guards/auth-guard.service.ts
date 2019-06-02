@@ -15,8 +15,8 @@ export class AuthGuard implements CanActivate {
         if (this.lgservice.CheckLogged()) {
           return true;
         }
-        //this.router.navigate(['']);
-        return true;
+        this.router.navigate(['']);
+        return false;
     }
   }
 

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-personal-data',
@@ -7,12 +6,10 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
   styleUrls: ['./personal-data.component.scss']
 })
 export class PersonalDataComponent implements OnInit {
-  personalDataForm:FormGroup;
-  
-  constructor(private fb:FormBuilder) { }
+
+  constructor() { }
 
   ngOnInit() {
-    
   }
 
 }

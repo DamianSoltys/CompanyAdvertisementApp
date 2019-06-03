@@ -46,10 +46,10 @@ public class CompanyManagementController {
 
         try {
             this.companyManagementService.registerCompany(company, branches);
-            return ResponseEntity.ok().body(SimpleJsonFromStringCreator.toJson("Użytkownik nie ma pozwolenia na dodawanie firm."));
+            return ResponseEntity.ok().body(SimpleJsonFromStringCreator.toJson("Dodano firmę."));
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(SimpleJsonFromStringCreator.toJson("Użytkownik nie ma pozwolenia na dodawanie firm."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(SimpleJsonFromStringCreator.toJson("Wystąpił błąd. Firma nie została dodana."));
         }
 
     }

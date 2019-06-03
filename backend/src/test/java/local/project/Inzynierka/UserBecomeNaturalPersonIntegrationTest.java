@@ -3,6 +3,7 @@ package local.project.Inzynierka;
 
 import local.project.Inzynierka.orchestration.services.UserService;
 import local.project.Inzynierka.persistence.entity.User;
+import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
 import local.project.Inzynierka.web.controller.AccountController;
 import local.project.Inzynierka.web.controller.AuthenticationController;
 import local.project.Inzynierka.web.dto.BecomeNaturalPersonDto;
@@ -109,6 +110,6 @@ public class UserBecomeNaturalPersonIntegrationTest {
                 .postForEntity(uri+"api/user/naturalperson",becomeNaturalPersonDto, String.class);
 
         assertEquals(HttpStatus.CREATED,result.getStatusCode() );
-        assertEquals("OK", result.getBody());
+        assertEquals(SimpleJsonFromStringCreator.toJson("OK"), result.getBody());
     }
 }

@@ -32,8 +32,12 @@ public class NewsletterSubscription implements IEntity<Long> {
     private Timestamp modifiedAt;
 
     @OneToOne
-    @JoinColumn(name = "id_token",referencedColumnName = "token_id", unique = true, foreignKey = @ForeignKey(name = "verify_newsletter_token_FK"))
+    @JoinColumn(name = "id_verification_token",referencedColumnName = "token_id", unique = true, foreignKey = @ForeignKey(name = "verify_newsletter_token_FK"))
     private VerificationToken verificationToken;
+
+    @OneToOne
+    @JoinColumn(name = "id_unsubscribe_token",referencedColumnName = "token_id", unique = true, foreignKey = @ForeignKey(name = "unsubscribe_newsletter_token_FK"))
+    private VerificationToken unsubscribeToken;
 
 
 }

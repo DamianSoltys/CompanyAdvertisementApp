@@ -17,7 +17,7 @@ import { map, catchError } from 'rxjs/operators';
         const token: string = localStorage.getItem('token');
         if (token) {
             request = request.clone(
-                {headers: request.headers.set('Authorization', token)});
+                {headers: request.headers.set('Authorization', 'Basic ' + token)});
         }
         if (!request.headers.has('Content-Type')) {
             request = request.clone({ headers: request.headers.set('Content-Type', 'application/json') });

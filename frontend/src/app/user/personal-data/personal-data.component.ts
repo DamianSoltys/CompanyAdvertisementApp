@@ -35,6 +35,7 @@ export class PersonalDataComponent implements OnInit {
     subscribe(response => {
       console.log(response);
       this.successMessage = 'Twoje dane zostały zapisane';
+      this.personalDataForm.reset();
     }, error => {
       console.log(error);
       this.errorMessage = 'Nie udało się zapisać danych';

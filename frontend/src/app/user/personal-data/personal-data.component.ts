@@ -11,18 +11,20 @@ import { PersonalDataService } from 'src/app/services/personal-data.service';
 })
 export class PersonalDataComponent implements OnInit {
   personalDataForm: FormGroup;
+  successMessage = '';
+  errorMessage = '';
   constructor(private fb: FormBuilder, private pdataService: PersonalDataService) { }
 
   ngOnInit() {
     this.personalDataForm = this.fb.group({
-     firstName: ['', [Validators.required]],
-     lastName: ['', [Validators.required]],
-     voivodeship: ['', [Validators.required]],
-     city: ['', [Validators.required]],
-     street: ['', [Validators.required]],
-     apartmentNo: ['', [Validators.required]],
-     buildingNo: ['', [Validators.required]],
-     phoneNo: ['', [Validators.required]]
+     firstName: ['', [Validators.required, Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
+     lastName: ['', [Validators.required, Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
+     voivodeship: ['', [Validators.required, Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
+     city: ['', [Validators.required, Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
+     street: ['', [Validators.required, Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
+     apartmentNo: ['', [Validators.required, Validators.pattern(new RegExp(/^[0-9]+$/))]],
+     buildingNo: ['', [Validators.required, Validators.pattern(new RegExp(/^[0-9]+$/))]],
+     phoneNo: ['', [Validators.required, Validators.pattern(new RegExp(/^[0-9]+$/))]]
     });
   }
   get form() {
@@ -30,7 +32,6 @@ export class PersonalDataComponent implements OnInit {
   }
   onSubmit() {
     this.pdataService.sendPersonalData(this.personalDataForm.value as PersonalData);
-    console.log(this.form.firstName.errors);
   }
 
 }

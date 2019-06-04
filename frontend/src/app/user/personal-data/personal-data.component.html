@@ -8,7 +8,7 @@
         <input type="text"  name="firstName" class="form-control" formControlName='firstName'>
         <div *ngIf="(this.form.firstName.touched || this.form.firstName.dirty) && this.form.firstName.errors">
           <p *ngIf="this.form.firstName.errors.required" class="text-danger">Pole nie może być puste</p>
-          <p class="text-danger"></p>
+          <p *ngIf="this.form.firstName.errors.pattern" class="text-danger">Proszę poprawnie uzupełnić pole</p>
         </div>
         </div>
         <div class="form-group">
@@ -16,7 +16,7 @@
         <input type="text"  name="lastName" class="form-control" formControlName='lastName'>
         <div *ngIf="(this.form.lastName.touched || this.form.lastName.dirty) && this.form.lastName.errors">
           <p *ngIf="this.form.lastName.errors.required" class="text-danger">Pole nie może być puste</p>
-          <p class="text-danger"></p>
+          <p *ngIf="this.form.lastName.errors.pattern" class="text-danger">Proszę poprawnie uzupełnić pole</p>
         </div>
       </div>
       <div class="form-group">
@@ -24,7 +24,7 @@
         <input type="text"  name="voivodeship" class="form-control" formControlName='voivodeship'>
         <div *ngIf="(this.form.voivodeship.touched || this.form.voivodeship.dirty) && this.form.voivodeship.errors">
           <p *ngIf="this.form.voivodeship.errors.required" class="text-danger">Pole nie może być puste</p>
-          <p class="text-danger"></p>
+          <p *ngIf="this.form.voivodeship.errors.pattern" class="text-danger">Proszę poprawnie uzupełnić pole</p>
         </div>
       </div>
         <div class="form-group">
@@ -32,7 +32,7 @@
         <input type="text"  name="city" class="form-control" formControlName='city'>
         <div *ngIf="(this.form.city.touched || this.form.city.dirty) && this.form.city.errors">
           <p *ngIf="this.form.city.errors.required" class="text-danger">Pole nie może być puste</p>
-          <p class="text-danger"></p>
+          <p *ngIf="this.form.city.errors.pattern" class="text-danger">Proszę poprawnie uzupełnić pole</p>
         </div>
       </div>
       </div>
@@ -42,7 +42,7 @@
         <input type="text"  name="street" class="form-control" formControlName='street'>
         <div *ngIf="(this.form.street.touched || this.form.street.dirty) && this.form.street.errors">
           <p *ngIf="this.form.street.errors.required" class="text-danger">Pole nie może być puste</p>
-          <p class="text-danger"></p>
+          <p *ngIf="this.form.street.errors.pattern" class="text-danger">Proszę poprawnie uzupełnić pole</p>
         </div>
       </div>
         <div class="form-group">
@@ -50,7 +50,7 @@
         <input type="text"  name="apartmentNo" class="form-control" formControlName='apartmentNo'>
         <div *ngIf="(this.form.apartmentNo.touched || this.form.apartmentNo.dirty) && this.form.apartmentNo.errors">
           <p *ngIf="this.form.apartmentNo.errors.required" class="text-danger">Pole nie może być puste</p>
-          <p class="text-danger"></p>
+          <p *ngIf="this.form.apartmentNo.errors.pattern" class="text-danger">Proszę poprawnie uzupełnić pole</p>
         </div>
       </div>
         <div class="form-group">
@@ -58,7 +58,7 @@
         <input type="text"  name="buildingNo" class="form-control" formControlName='buildingNo'>
         <div *ngIf="(this.form.buildingNo.touched || this.form.buildingNo.dirty) && this.form.buildingNo.errors">
           <p *ngIf="this.form.buildingNo.errors.required" class="text-danger">Pole nie może być puste</p>
-          <p class="text-danger"></p>
+          <p *ngIf="this.form.buildingNo.errors.pattern" class="text-danger">Proszę poprawnie uzupełnić pole</p>
         </div>
       </div>
         <div class="form-group">
@@ -66,11 +66,16 @@
         <input type="text"  name="phoneNo" class="form-control" formControlName='phoneNo'>
         <div *ngIf="(this.form.phoneNo.touched || this.form.phoneNo.dirty) && this.form.phoneNo.errors">
           <p *ngIf="this.form.phoneNo.errors.required" class="text-danger">Pole nie może być puste</p>
-          <p class="text-danger"></p>
+          <p *ngIf="this.form.phoneNo.errors.pattern" class="text-danger">Proszę poprawnie uzupełnić pole</p>
         </div>
       </div>
       </div>
+      <div class="text-center col-12">
+        <p *ngIf="successMessage" class="text-success">{{successMessage}}</p>
+        <p *ngIf="errorMessage" class="text-danger">{{errorMessage}}</p>
+      </div>
       <button class="btn btn-primary" [disabled]="!this.personalDataForm.valid" type="submit">Dodaj dane</button>
+      
     </form>
   </div>
 </div>

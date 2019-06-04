@@ -85,4 +85,42 @@ public class NewsletterServiceImpl implements NewsletterService {
 
         newsletterSubscriptionRepository.save(newsletterSubscription);
     }
+
+    @Override @Transactional
+    public boolean confirmEmail(String token) {
+        VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
+        if( verificationToken == null ) {
+            return false;
+        }
+
+        NewsletterSubscription newsletterSubscription =
+                newsletterSubscriptionRepository.findByVerificationToken(verificationToken);
+
+        if(newsletterSubscription == null) {
+            return false;
+        }
+        newsletterSubscription.setVerified(true);
+        newsletterSubscriptionRepository.save(newsletterSubscription);
+
+        return true;
+    }
+
+    @Override
+    public boolean confirmSigningOut(String token) {
+        VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
+        if( verificationToken == null ) {
+            return false;
+        }
+
+        NewsletterSubscription newsletterSubscription =
+                newsletterSubscriptionRepository.findByUnsubscribeToken(verificationToken);
+
+        if(newsletterSubscription == null) {
+            return false;
+        }
+        newsletterSubscription.setVerified(false);
+        newsletterSubscriptionRepository.save(newsletterSubscription);
+
+        return true;
+    }
 }

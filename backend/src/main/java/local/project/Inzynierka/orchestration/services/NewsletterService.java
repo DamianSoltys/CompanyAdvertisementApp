@@ -10,4 +10,8 @@ public interface NewsletterService {
 
     void createVerificationTokens(NewsletterSubscription newsletterSubscription, String signUpToken,
                                   String signOutToken);
+
+    boolean confirmEmail(String token);
+
+    boolean confirmSigningOut(String token);
 }

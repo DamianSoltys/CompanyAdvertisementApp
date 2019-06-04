@@ -12,10 +12,8 @@ import local.project.Inzynierka.web.newsletter.event.OnNewsletterSignUpEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -60,7 +58,21 @@ public class NewsletterController {
         }
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/signup")
+    public ResponseEntity<String> confirmSigningUp(@RequestParam(name = "token") String token ) {
+        if( newsletterService.confirmEmail(token)) {
+            return ResponseEntity.ok().body("{\"data\":\"Twój e-mail został potwiedzony\"}");
+        }
+        return ResponseEntity.ok().body("{\"data\":\"Nieprawidłowy token\"}");
+    }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/signout")
+    public ResponseEntity<String> confirmSigningOut(@RequestParam(name = "token") String token ) {
+        if( newsletterService.confirmSigningOut(token)) {
+            return ResponseEntity.ok().body("{\"data\":\"Zostałe/aś wypisany z listy newslettera.\"}");
+        }
+        return ResponseEntity.ok().body("{\"data\":\"Nieprawidłowy token\"}");
+    }
 
 
 

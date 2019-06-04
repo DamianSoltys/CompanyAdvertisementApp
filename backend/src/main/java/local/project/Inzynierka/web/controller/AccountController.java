@@ -2,17 +2,16 @@ package local.project.Inzynierka.web.controller;
 
 import local.project.Inzynierka.orchestration.services.UserService;
 import local.project.Inzynierka.persistence.entity.NaturalPerson;
+import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
 import local.project.Inzynierka.web.dto.BecomeNaturalPersonDto;
 import local.project.Inzynierka.web.mapper.NaturalPersonDtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping(value = "/api")
 public class AccountController {
 
 
@@ -28,12 +27,12 @@ public class AccountController {
         NaturalPerson naturalPerson = naturalPersonDtoMapper.map(naturalPersonDto);
 
         if( userService.becomeNaturalPerson(naturalPerson)) {
-            return ResponseEntity.status(HttpStatus.CREATED).body("OK");
+            return ResponseEntity.status(HttpStatus.CREATED).body(SimpleJsonFromStringCreator.toJson("OK"));
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("COŚ NIE TAK");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(SimpleJsonFromStringCreator.toJson("COŚ NIE TAK"));
         }
-
-
-
     }
+
+
+
 }

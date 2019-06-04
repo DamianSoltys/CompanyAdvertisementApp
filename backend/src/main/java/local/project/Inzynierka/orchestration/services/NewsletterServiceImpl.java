@@ -10,11 +10,11 @@ import local.project.Inzynierka.persistence.repository.NewsletterSubscriptionRep
 import local.project.Inzynierka.persistence.repository.VerificationTokenRepository;
 import local.project.Inzynierka.shared.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.util.UUID;
 
 @Service
 @Slf4j
@@ -28,6 +28,7 @@ public class NewsletterServiceImpl implements NewsletterService {
 
     private final CompanyRepository companyRepository;
 
+    @Autowired
     public NewsletterServiceImpl(NewsletterSubscriptionRepository newsletterSubscriptionRepository, VerificationTokenRepository verificationTokenRepository, EmailRepository emailRepository, CompanyRepository companyRepository) {
         this.newsletterSubscriptionRepository = newsletterSubscriptionRepository;
         this.verificationTokenRepository = verificationTokenRepository;
@@ -36,12 +37,15 @@ public class NewsletterServiceImpl implements NewsletterService {
     }
 
     @Override @Transactional
-    public void signUpForNewsletter(EmailAddress emailAddress, Company company) {
+    public NewsletterSubscription signUpForNewsletter(EmailAddress emailAddress, Company company,
+                                                      boolean verified) {
         NewsletterSubscription newsletterSubscription = new NewsletterSubscription();
 
         Timestamp now = DateUtils.getNowTimestamp();
         newsletterSubscription.setCreatedAt(now);
         newsletterSubscription.setModifiedAt(now);
+
+        newsletterSubscription.setVerified(verified);
 
         Company foundCompany = companyRepository.getByCompanyId(company.getId());
         newsletterSubscription.setCompany(foundCompany);
@@ -58,16 +62,21 @@ public class NewsletterServiceImpl implements NewsletterService {
         newsletterSubscription.setId(0L);
         newsletterSubscription.setVerified(false);
 
-        final String verificationUUID = UUID.randomUUID().toString();
-        VerificationToken verificationToken = new VerificationToken(verificationUUID);
+        return newsletterSubscriptionRepository.save(newsletterSubscription);
+    }
+
+    @Override @Transactional
+    public void createVerificationTokens(NewsletterSubscription newsletterSubscription, String signUpToken, String signOutToken){
+
+        Timestamp now = DateUtils.getNowTimestamp();
+        VerificationToken verificationToken = new VerificationToken(signUpToken);
         verificationToken.setCreatedAt(now);
         verificationToken.setId(0L);
         verificationToken = verificationTokenRepository.save(verificationToken);
 
         newsletterSubscription.setVerificationToken(verificationToken);
 
-        final String unsubscribeUUI = UUID.randomUUID().toString();
-        VerificationToken unsubscribeToken = new VerificationToken(unsubscribeUUI);
+        VerificationToken unsubscribeToken = new VerificationToken(signOutToken);
         unsubscribeToken.setCreatedAt(now);
         unsubscribeToken.setId(0L);
         unsubscribeToken = verificationTokenRepository.save(unsubscribeToken);

@@ -7,9 +7,9 @@ import { PersonalData } from '../classes/User';
 })
 export class PersonalDataService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   sendPersonalData(personalData: PersonalData) {
-    console.log(personalData);
+    return this.http.post('http://localhost:8090/user/naturalperson', personalData);
   }
 }

@@ -15,14 +15,14 @@ export class PersonalDataComponent implements OnInit {
 
   ngOnInit() {
     this.personalDataForm = this.fb.group({
-      firstName: [''],
-     lastName: [''],
-     voivodeship: [''],
-     city: [''],
-     street: [''],
-     apartmentNo: [''],
-     buildingNo: [''],
-     phoneNo: ['']
+     firstName: ['', [Validators.required]],
+     lastName: ['', [Validators.required]],
+     voivodeship: ['', [Validators.required]],
+     city: ['', [Validators.required]],
+     street: ['', [Validators.required]],
+     apartmentNo: ['', [Validators.required]],
+     buildingNo: ['', [Validators.required]],
+     phoneNo: ['', [Validators.required]]
     });
   }
   get form() {
@@ -30,6 +30,7 @@ export class PersonalDataComponent implements OnInit {
   }
   onSubmit() {
     this.pdataService.sendPersonalData(this.personalDataForm.value as PersonalData);
+    console.log(this.form.firstName.errors);
   }
 
 }

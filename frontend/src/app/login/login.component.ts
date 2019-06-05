@@ -14,6 +14,8 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
   login_error = false;
+  login_success = false;
+  success_message: string;
   error_message: string;
   constructor(private fb: FormBuilder, private lgservice: LoginService,
      private router: Router) { }
@@ -37,11 +39,16 @@ export class LoginComponent implements OnInit {
     this.lgservice.Login(User_data).subscribe((data: HttpResponse<any>) => {
       console.log(data.headers.get('Authorization'));
       if (data.body.data === 'OK') {
-        localStorage.setItem('token', data.headers.get('Authorization'));
-        this.lgservice.ChangeLogged();
-        this.login_error = false;
-        this.router.navigate(['']);
-        console.log('Użytkownik został zalogowany');
+        this.success_message = 'Pomyślnie zalogowano';
+        this.login_success = true;
+        setTimeout(() => {
+          localStorage.setItem('token', data.headers.get('Authorization'));
+          this.lgservice.ChangeLogged();
+          this.login_error = false;
+          this.router.navigate(['']);
+          console.log('Użytkownik został zalogowany');
+        }, 500);
+
       }
     }, (error) => {
       console.log(error);

@@ -23,7 +23,9 @@
       <div *ngIf="login_error">
         <p class="text-danger">{{error_message}}</p>
       </div>
-
+      <div *ngIf="login_success">
+        <p class="text-success">{{success_message}}</p>
+      </div>
       <p>Nie posiadasz jeszcze konta?</p>
       <a class="link" routerLink="/register">ZAREJESTRUJ SIĘ</a>
     </div>

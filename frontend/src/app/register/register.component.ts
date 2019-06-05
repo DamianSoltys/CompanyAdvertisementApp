@@ -44,8 +44,8 @@ export class RegisterComponent implements OnInit {
    this.regService.Register(User_Data).subscribe((data) => {
      if (data.status === 200) {
       this.register_error = false;
-      this.success_message = 'Użytkownik został zarejestrowany';
-       console.log('Użytkownik został zarejestrowany');
+      this.success_message = 'Proszę potwierdzić swoje konto linkiem wysłanym na podany adres email';
+       console.log('Proszę potwierdzić swoje konto linkiem wysłanym na podany email');
      }
    }, (error) => {
     this.error_message = error.error.text;

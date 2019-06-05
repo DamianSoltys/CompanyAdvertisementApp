@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService {
 
         naturalPerson.setVoivodeship(voivoideship);
         naturalPerson = naturalPersonRepository.save(naturalPerson);
-
+        System.out.println(authenticationFacade.getAuthentication().getName());
         User user = userRepository.getByAddressEmail(authenticationFacade.getAuthentication().getName());
 
         user.setNaturalPerson(naturalPerson);

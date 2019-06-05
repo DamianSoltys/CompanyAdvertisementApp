@@ -50,7 +50,7 @@
     </div>
   </div>
 
-
+  <div  #logOutMessage [@showHideMenu] = "logOut_success ? 'visible':'hidden'" class="text-center logOut_message"><p class="text-success">Pomyślnie wylogowano</p></div>
   <router-outlet class="outlet"></router-outlet>
 
   <div class="container-fluid">

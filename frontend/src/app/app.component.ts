@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterContentChecked } from '@angular/core';
+import { Component, OnInit, AfterContentChecked, Renderer2 , ViewChild, ElementRef } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LoginService } from './services/login.service';
@@ -11,46 +11,48 @@ import { Router } from '@angular/router';
   animations: [
     trigger('showHide', [
       state('visible', style({
+        height: '100px',
         opacity: '1',
-        display: 'block'
-
+        visibility: 'visible'
       })),
       state('hidden', style({
-        opacity: '0',
-        display: 'none'
-
-      })),
-      transition('visible <=> hidden', [
-        animate('1s')
-      ]),
-
-    ]),
-    trigger('showHideMenu', [
-      state('visible', style({
-      opacity: '1',
-      display: 'block'
-
-
-      })),
-      state('hidden', style({
-        opacity: '0',
-        display: 'none'
-
-
+       height: '0',
+       opacity: '0',
+       visibility: 'hidden'
       })),
       transition('visible <=> hidden', [
         animate('0.5s')
       ]),
 
     ]),
+    trigger('showHideMenu', [
+      state('visible', style({
+      opacity: '1',
+      visibility: 'visible'
+
+
+      })),
+      state('hidden', style({
+        opacity: '0',
+        visibility: 'hidden'
+
+
+      })),
+      transition('visible <=> hidden', [
+        animate('0.4s')
+      ]),
+
+    ]),
   ],
 })
 export class AppComponent implements OnInit {
+  @ViewChild('logOutMessage', {static: false}) logOutMessage: ElementRef;
   nearby_toggle = false;
   logged = false;
   visible = true;
+  logOut_success = false;
   displayMenu = new BehaviorSubject(false);
-  constructor(private lgservice: LoginService, private router: Router) {
+  constructor(private lgservice: LoginService, private router: Router, private renderer: Renderer2) {
     document.body.addEventListener('click', (e) => {
      if ((<HTMLElement>e.target).id !== 'menuId') {
        this.displayMenu.next(false);
@@ -73,6 +75,12 @@ export class AppComponent implements OnInit {
   }
   logOut() {
     console.log(localStorage.getItem('token'));
+    this.logOut_success = true;
+    this.renderer.setStyle(this.logOutMessage.nativeElement, 'display', 'block');
+    setTimeout(() => {
+      this.logOut_success = false;
+      this.renderer.setStyle(this.logOutMessage.nativeElement, 'display', 'none');
+    }, 1000);
     localStorage.removeItem('token');
     this.lgservice.ChangeLogged();
     this.router.navigate(['']);

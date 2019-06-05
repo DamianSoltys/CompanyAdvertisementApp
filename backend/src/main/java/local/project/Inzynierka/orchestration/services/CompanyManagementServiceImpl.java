@@ -92,4 +92,9 @@ public class CompanyManagementServiceImpl implements CompanyManagementService {
 
         branchRepository.saveAll(branches);
     }
+
+    @Override
+    public Company getThroughBranch(Long id) {
+        return companyRepository.getByCompanyId(id);
+    }
 }

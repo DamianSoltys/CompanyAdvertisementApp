@@ -39,12 +39,12 @@ export class LoginComponent implements OnInit {
     this.lgservice.Login(User_data).subscribe((data: HttpResponse<any>) => {
       console.log(data.headers.get('Authorization'));
       if (data.body.data === 'OK') {
+        this.login_error = false;
         this.success_message = 'Pomyślnie zalogowano';
         this.login_success = true;
         setTimeout(() => {
           localStorage.setItem('token', data.headers.get('Authorization'));
           this.lgservice.ChangeLogged();
-          this.login_error = false;
           this.router.navigate(['']);
           console.log('Użytkownik został zalogowany');
         }, 500);

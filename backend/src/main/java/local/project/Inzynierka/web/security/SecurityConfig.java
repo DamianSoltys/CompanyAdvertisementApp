@@ -31,6 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth/logout").authenticated()
                 .antMatchers("/user/naturalperson").authenticated()
                 .antMatchers("/api/newsletter*").permitAll()
+                .antMatchers("/api/companies*").authenticated()
                 .antMatchers("/test-cors").permitAll()
                 .antMatchers("/test-cors-methods").permitAll()
                 .and()

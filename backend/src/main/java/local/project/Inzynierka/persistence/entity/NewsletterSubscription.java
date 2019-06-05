@@ -18,7 +18,7 @@ public class NewsletterSubscription implements IEntity<Long> {
     @JoinColumn(name = "company_id", foreignKey = @ForeignKey(name = "newsletter_company_FK"), nullable = false)
     private Company company;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_email", foreignKey = @ForeignKey(name = "newsletter_email_FK"), nullable = false)
     private EmailAddress emailAddressEntity;
 
@@ -35,7 +35,7 @@ public class NewsletterSubscription implements IEntity<Long> {
     @JoinColumn(name = "id_verification_token",referencedColumnName = "token_id", unique = true, foreignKey = @ForeignKey(name = "verify_newsletter_token_FK"))
     private VerificationToken verificationToken;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_unsubscribe_token",referencedColumnName = "token_id", unique = true, foreignKey = @ForeignKey(name = "unsubscribe_newsletter_token_FK"))
     private VerificationToken unsubscribeToken;
 

@@ -52,10 +52,10 @@ public class NewsletterController {
         Company company = this.companyManagementService.getThroughBranch(newSubscriptionDto.getId());
         NewsletterSubscription newsletterSubscription =
                 this.newsletterService.signUpForNewsletter(new EmailAddress(emailToSignUp), company, verified );
-        if(!verified) {
-            applicationEventPublisher.publishEvent(
-                    new OnNewsletterSignUpEvent(newsletterSubscription, request.getHeader("Origin")));
-        }
+
+        applicationEventPublisher.publishEvent(
+                new OnNewsletterSignUpEvent(newsletterSubscription, request.getHeader("Origin"), verified));
+
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/signup")

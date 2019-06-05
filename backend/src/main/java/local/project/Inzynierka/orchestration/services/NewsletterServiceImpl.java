@@ -60,7 +60,6 @@ public class NewsletterServiceImpl implements NewsletterService {
         newsletterSubscription.setEmailAddressEntity(foundEmail);
 
         newsletterSubscription.setId(0L);
-        newsletterSubscription.setVerified(false);
 
         return newsletterSubscriptionRepository.save(newsletterSubscription);
     }

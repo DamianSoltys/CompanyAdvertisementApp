@@ -35,9 +35,11 @@ public class NewsletterSignUpEventListener {
         final String signOutToken = UUID.randomUUID().toString();
         newsletterService.createVerificationTokens(event.getNewsletterSubscription(), signUpToken, signOutToken);
 
-        final SimpleMailMessage mailMessage = constructEmailMessage(event, signUpToken, signOutToken);
-        log.info(String.valueOf(mailMessage));
-        javaMailSender.send(mailMessage);
+        if( !event.isVerified()) {
+            final SimpleMailMessage mailMessage = constructEmailMessage(event, signUpToken, signOutToken);
+            log.info(String.valueOf(mailMessage));
+            javaMailSender.send(mailMessage);
+        }
     }
 
     private SimpleMailMessage constructEmailMessage(OnNewsletterSignUpEvent onNewsletterSignUpEvent,

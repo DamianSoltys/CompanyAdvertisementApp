@@ -9,10 +9,12 @@ public class OnNewsletterSignUpEvent {
 
     private final NewsletterSubscription newsletterSubscription;
     private final String appUrl;
+    private final boolean verified;
 
-    public OnNewsletterSignUpEvent(NewsletterSubscription newsletterSubscription, String appUrl) {
+    public OnNewsletterSignUpEvent(NewsletterSubscription newsletterSubscription, String appUrl, boolean verified) {
         this.appUrl = appUrl;
         this.newsletterSubscription = newsletterSubscription;
+        this.verified = verified;
     }
 
     public NewsletterSubscription getNewsletterSubscription() {
@@ -23,4 +25,7 @@ public class OnNewsletterSignUpEvent {
         return appUrl;
     }
 
+    public boolean isVerified() {
+        return verified;
+    }
 }

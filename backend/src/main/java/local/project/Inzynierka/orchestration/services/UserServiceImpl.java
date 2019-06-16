@@ -95,12 +95,12 @@ public class UserServiceImpl implements UserService {
         naturalPerson.setModifiedAt(now);
         naturalPerson.setId(0L);
 
-        Voivoideship voivoideship = voivodeshipRepository.findByName(naturalPerson.getVoivodeship().getName());
+        Voivoideship voivoideship = voivodeshipRepository.findByName(naturalPerson.getAddress().getVoivodeship_id().getName());
         if(voivoideship == null ) {
             return false;
         }
 
-        naturalPerson.setVoivodeship(voivoideship);
+        naturalPerson.getAddress().setVoivodeship_id(voivoideship);
         naturalPerson = naturalPersonRepository.save(naturalPerson);
         System.out.println(authenticationFacade.getAuthentication().getName());
         User user = userRepository.getByAddressEmail(authenticationFacade.getAuthentication().getName());

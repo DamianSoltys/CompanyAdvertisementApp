@@ -10,11 +10,11 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "categories")
 @NoArgsConstructor
-public class Category implements IEntity<Long>{
+public class Category implements IEntity<Short>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Short id;
 
     @Column(nullable = false, length = 30)
     private String name;

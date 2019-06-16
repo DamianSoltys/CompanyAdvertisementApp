@@ -45,18 +45,22 @@ public class CompanyManagementServiceImpl implements CompanyManagementService {
             soughtCategory = company.getCategory();
             soughtCategory.setCreatedAt(now);
             soughtCategory.setName(company.getCategory().getName());
-            soughtCategory.setId(0L);
+            soughtCategory.setId((short)0);
         }
 
         soughtCategory.setModifiedAt(now);
         Category category = categoryRepository.save(soughtCategory);
 
-        Voivoideship voivoideship = voivodeshipRepository.findByName(company.getVoivodeship_id().getName());
+        Voivoideship voivoideship = voivodeshipRepository.findByName(company.getAddress().getVoivodeship_id().getName());
 
         Company companyInCreation = Company.builder()
-                .buildingNo(company.getBuildingNo())
+                .address(Address.builder()
+                        .buildingNo(company.getAddress().getBuildingNo())
+                        .city(company.getAddress().getCity())
+                        .street(company.getAddress().getStreet())
+                        .voivodeship_id(voivoideship)
+                        .build())
                 .category(category)
-                .city(company.getCity())
                 .createdAt(now)
                 .modifiedAt(now)
                 .description(company.getDescription())
@@ -65,9 +69,7 @@ public class CompanyManagementServiceImpl implements CompanyManagementService {
                 .name(company.getName())
                 .NIP(company.getNIP())
                 .registerer(naturalPerson)
-                .photoPath(company.getPhotoPath())
-                .voivodeship_id(voivoideship)
-                .street(company.getStreet())
+                .logoPath(company.getLogoPath())
                 .REGON(company.getREGON())
                 .build();
 
@@ -84,8 +86,8 @@ public class CompanyManagementServiceImpl implements CompanyManagementService {
             branch.setCompany(createdCompany);
             branch.setRegisterer(naturalPerson);
             branch.setId(0L);
-            Voivoideship branchVoivodeship = voivodeshipRepository.findByName(branch.getVoivodeship_id().getName());
-            branch.setVoivodeship_id(branchVoivodeship);
+            Voivoideship branchVoivodeship = voivodeshipRepository.findByName(branch.getAddress().getVoivodeship_id().getName());
+            branch.getAddress().setVoivodeship_id(branchVoivodeship);
 
             branches.set(i, branch);
         }

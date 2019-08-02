@@ -46,7 +46,7 @@ import { Router } from '@angular/router';
   ],
 })
 export class AppComponent implements OnInit {
-  @ViewChild('logOutMessage', {read: ElementRef, static: false}) logOutMessage: ElementRef;
+  @ViewChild('logOutMessage', {read: ElementRef}) logOutMessage: ElementRef;
   nearby_toggle = false;
   logged = false;
   visible = true;

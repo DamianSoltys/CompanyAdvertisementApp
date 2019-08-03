@@ -1,67 +1,67 @@
 <div class="container-fluid main-container">
 
-  <div class="row navbar" *ngIf="!logged">
-    <div class="col-6 logodiv">
-        <span routerLink="/home" class="linkspan"></span>
-        <img src="../assets/Img/logo_transparent.png" class="img_logo" alt="Logo">
+  <div class="row main-container__navbar" *ngIf="!logged">
+    <div class="col-6 navbar__logo-container">
+        <span routerLink="/home" class="navbar__link-span"></span>
+        <img src="../assets/Img/logo_transparent.png" class="navbar__logo-img" alt="Logo">
     </div>
-    <div class="btn-group menu">
-      <button routerLink="/search" type="button" class="btn btn-primary">Szukaj</button>
-      <button routerLink="/login" type="button" class="btn btn-primary">Logowanie</button>
-      <button routerLink="/register" type="button" class="btn btn-primary">Rejestracja</button>
+    <div class="btn-group navbar__button-group">
+      <button routerLink="/search" type="button" class="navbar__button-link btn btn-primary">Szukaj</button>
+      <button routerLink="/login" type="button" class="navbar__button-link btn btn-primary">Logowanie</button>
+      <button routerLink="/register" type="button" class="navbar__button-link btn btn-primary">Rejestracja</button>
     </div>
-    <div class="dropdown">
-      <button (click)="toggleMenu()" class="btn btn-secondary dropdown-toggle buttmenu" type="button" id="menuId">
+    <div class="navbar__dropdown">
+      <button (click)="toggleMenu()" class="btn btn-secondary dropdown-toggle dropdown__button" type="button" id="menuId">
         Menu
       </button>
-      <div [@showHideMenu] = "displayMenu.value ? 'visible':'hidden'" class="dropdown-menua">
-        <button routerLink="/search" (click)="toggleMenu()" class="dropdown-itema">Szukaj</button>
-        <button routerLink="/login" (click)="toggleMenu()" class="dropdown-itema">Logowanie</button>
-        <button routerLink="/register" (click)="toggleMenu()" class="dropdown-itema">Rejestracja</button>
+      <div [@showHideMenu] = "displayMenu.value ? 'visible':'hidden'" class="dropdown__menu">
+        <button routerLink="/search" (click)="toggleMenu()" class="dropdown__item">Szukaj</button>
+        <button routerLink="/login" (click)="toggleMenu()" class="dropdown__item">Logowanie</button>
+        <button routerLink="/register" (click)="toggleMenu()" class="dropdown__item">Rejestracja</button>
       </div>
 
     </div>
   </div>
   <!--MENU FOR LOGGED USER-->
-  <div class="row navbar" *ngIf="logged">
+  <div class="row main-container__navbar" *ngIf="logged">
     <div class="col-3 col-xl-6">
-      <span routerLink="/home" class="linkspan"></span>
-      <img src="../assets/Img/logo_transparent.png" class="img_logo" alt="Logo">
+      <span routerLink="/home" class="navbar__link-span"></span>
+      <img src="../assets/Img/logo_transparent.png" class="navbar__logo-img" alt="Logo">
     </div>
-    <div class="btn-group menu">
-      <button routerLink="/search" type="button" class="btn btn-primary">Szukaj</button>
-      <button routerLink="" type="button" class="btn btn-primary">Twoje firmy</button>
-      <button routerLink="user/personalData" type="button" class="btn btn-primary">Dane osobowe</button>
-      <button routerLink="" type="button" class="btn btn-primary">Ulubione zakłady</button>
-      <button type="button" class="btn btn-primary" (click)="logOut()">Wyloguj</button>
+    <div class="btn-group navbar__button-group">
+      <button routerLink="/search" type="button" class="navbar__button-link btn btn-primary">Szukaj</button>
+      <button routerLink="" type="button" class="navbar__button-link btn btn-primary">Twoje firmy</button>
+      <button routerLink="user/personalData" type="button" class="navbar__button-link btn btn-primary">Dane osobowe</button>
+      <button routerLink="" type="button" class="navbar__button-link btn btn-primary">Ulubione zakłady</button>
+      <button type="button" class="navbar__button-link btn btn-primary" (click)="logOut()">Wyloguj</button>
     </div>
-    <div class="dropdown">
-      <button (click)="toggleMenu()" class="btn btn-secondary dropdown-toggle buttmenu" type="button" id="menuId">
+    <div class="navbar__dropdown">
+      <button (click)="toggleMenu()" class="btn btn-secondary dropdown-toggle dropdown__button" type="button" id="menuId">
         Menu
       </button>
-      <div [@showHideMenu] = "displayMenu.value ? 'visible':'hidden'" class="dropdown-menua">
-        <button routerLink="/search" class="dropdown-itema" (click)="toggleMenu()">Szukaj</button>
-        <button routerLink="" class="dropdown-itema" (click)="toggleMenu()">Twoje firmy</button>
-        <button routerLink="user/personalData" class="dropdown-itema" (click)="toggleMenu()">Dane osobowe</button>
-        <button routerLink="" class="dropdown-itema" (click)="toggleMenu()">Ulubione zakłady</button>
-        <button class="dropdown-itema" (click)="toggleMenu(); logOut()">Wyloguj</button>
+      <div [@showHideMenu] = "displayMenu.value ? 'visible':'hidden'" class="dropdown__menu">
+        <button routerLink="/search" class="dropdown__item" (click)="toggleMenu()">Szukaj</button>
+        <button routerLink="" class="dropdown__item" (click)="toggleMenu()">Twoje firmy</button>
+        <button routerLink="user/personalData" class="dropdown__item" (click)="toggleMenu()">Dane osobowe</button>
+        <button routerLink="" class="dropdown__item" (click)="toggleMenu()">Ulubione zakłady</button>
+        <button class="dropdown__item" (click)="toggleMenu(); logOut()">Wyloguj</button>
       </div>
 
     </div>
   </div>
 
-  <div  #logOutMessage [@showHideMenu] = "logOut_success ? 'visible':'hidden'" class="text-center logOut_message"><p class="text-success">Pomyślnie wylogowano</p></div>
-  <router-outlet class="outlet"></router-outlet>
+  <div  #logOutMessage [@showHideMenu] = "logOut_success ? 'visible':'hidden'" class="text-center main-container__logout-message"><p class="logout-message__success text-success">Pomyślnie wylogowano</p></div>
+  <router-outlet class="main-container__outlet"></router-outlet>
 
-  <div class="container-fluid">
-    <h5 class="text-center nearby-text">Obok ciebie</h5>
-    <button (click)="toggleNearbyBlock()" class="toggleNearby btn btn-primary">{{nearby_toggle ?'Pokaż':'Schowaj'}}</button>
-    <div [@showHide] = "visible ? 'visible':'hidden'" class="row nearby">
+  <div class="main-container__nearby-container container-fluid">
+    <h5 class="text-center nearby_container__text">Obok ciebie</h5>
+    <button (click)="toggleNearbyBlock()" class="nearby-container__toggle btn btn-primary">{{nearby_toggle ?'Pokaż':'Schowaj'}}</button>
+    <div [@showHide] = "visible ? 'visible':'hidden'" class="row nearby-container__data-container">
       <div>Dane firmy</div>
     </div>
   </div>
 </div>
 
-<div class="row footer">
-  <p><i class="fa fa-copyright" aria-hidden="true"></i>Damian Sołtysiuk,Mateusz Szałkowski</p>
+<div class="row main-container__footer">
+  <p class="footer__text"><i class="fa fa-copyright" aria-hidden="true"></i>Damian Sołtysiuk,Mateusz Szałkowski</p>
 </div>

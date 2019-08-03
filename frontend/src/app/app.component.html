@@ -2,8 +2,8 @@
 
   <div class="row main-container__navbar" *ngIf="!logged">
     <div class="col-6 navbar__logo-container">
-        <span routerLink="/home" class="navbar__link-span"></span>
-        <img src="../assets/Img/logo_transparent.png" class="navbar__logo-img" alt="Logo">
+        <span routerLink="/home" class="logo-container__link-span"></span>
+        <img src="../assets/Img/logo_transparent.png" class="logo-container__logo-img" alt="Logo">
     </div>
     <div class="btn-group navbar__button-group">
       <button routerLink="/search" type="button" class="navbar__button-link btn btn-primary">Szukaj</button>
@@ -25,8 +25,8 @@
   <!--MENU FOR LOGGED USER-->
   <div class="row main-container__navbar" *ngIf="logged">
     <div class="col-3 col-xl-6">
-      <span routerLink="/home" class="navbar__link-span"></span>
-      <img src="../assets/Img/logo_transparent.png" class="navbar__logo-img" alt="Logo">
+      <span routerLink="/home" class="logo-container__link-span"></span>
+      <img src="../assets/Img/logo_transparent.png" class="logo-container__logo-img" alt="Logo">
     </div>
     <div class="btn-group navbar__button-group">
       <button routerLink="/search" type="button" class="navbar__button-link btn btn-primary">Szukaj</button>

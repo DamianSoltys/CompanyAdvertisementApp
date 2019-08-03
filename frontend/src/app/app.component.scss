@@ -8,7 +8,7 @@ html {
 }
 
 .main-container {
-  min-height: calc(100vh - 50px);
+  min-height: calc(100vh - 60px);
 }
 
 .main-container__navbar {
@@ -24,22 +24,22 @@ html {
 
 .main-container__footer {
   height: 40px;
-
-  .footer__text {
-    margin: auto;
-  }
-
   margin:0;
   color:white;
-  margin-top:2%;
+  margin-top:20px;
   background:linear-gradient(-50deg, $bgcolor1, $bgcolor);
   width:100%;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
+
+  .footer__text {
+    margin: auto;
+  }
 }
 .main-container__logout-message{
   display:none;
 }
+
 .navbar__button-group {
     position: relative;
     left:-5%;
@@ -72,7 +72,7 @@ html {
   margin-right: 5px;
 }
 
-.navbar__logo-img {
+.logo-container__logo-img {
   max-width: 150px;
   left: -10px;
   transition: 0.5s;
@@ -82,21 +82,17 @@ html {
   @include tablet {
     max-width: 300px;
     top: -120px;
-
   }
 
   @include tabletbig {
     max-width: 220px;
     left: -20px;
     top: -80px;
-
   }
 
   @include desktop {
-
     max-width: 350px;
     top: -140px;
-
   }
 }
 
@@ -104,7 +100,7 @@ html {
   padding: 0;
 }
 
-.navbar__link-span {
+.logo-container__link-span {
   position: absolute;
   z-index: 1;
   width: 295px;
@@ -114,9 +110,12 @@ html {
     cursor: pointer;
   }
 
-  &:hover+.navbar__logo-img {
-    opacity: 0.8;
-    
+  &:focus {
+    outline:none;
+  }
+
+  &:hover+.logo-container__logo-img {
+    opacity: 0.8;  
   }
 
   @include phone {
@@ -171,21 +170,6 @@ html {
   }
 }
 
-.dropdown-menu {
-  left: -50px;
-  width: 180px;
-  text-align: center;
-  border: 1px solid $bgcolor;
-  @include boxShadow(0px 4px 5px 0px rgba(187, 185, 191, 1));
-
-  .dropdown__item:hover {
-    background-color: whitesmoke;
-    color: $linkcolor;
-    transition: 1s;
-  }
-
-}
-
 .navbar__dropdown {
   position: relative;
   left: -5%;
@@ -208,7 +192,6 @@ html {
       background-color: $bgcolor;
     }
   }
-
 }
 
 .nearby-container__data-container {

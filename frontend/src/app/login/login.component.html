@@ -1,34 +1,79 @@
-<div class="container-fluid">
-
-  <div class="row login_Form">
-    <form class="login_form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <div class="header"><p><i class="fas fa-sign-in-alt"></i>Formularz logowania</p></div>
-      <div class="inputs">
-        <div class="form-group">
-        <label for="email">Adres email</label>
-      <input class="form-control" type="text" id="email" name="email" formControlName="email" placeholder="Adres Email"> 
-      <div  class="text-center" *ngIf="(logForm.email.dirty || logForm.email.touched) && logForm.email.invalid">
-        <p class="text-danger" *ngIf="logForm.email.errors.email">Proszę uzupełnić poprawnie email</p>
-        <p class="text-danger" *ngIf="logForm.email.errors.required">Pole nie może być puste</p>
-      </div> 
-    </div>
-        <div class="form-group">
-      <label for="password">Hasło</label>
-      <input class="form-control" type="password" id="password" name="password" formControlName="password" placeholder="Hasło">
-      <div  class="text-center" *ngIf="(logForm.password.dirty || logForm.password.touched) && logForm.password.invalid">
-        <p class="text-danger" *ngIf="logForm.password.errors.required">Pole nie może być puste</p>
-      </div> 
-    </div>
-      <button class="btn btn-primary" [disabled]="!loginForm.valid" type="submit">Zaloguj</button>
-      <div *ngIf="login_error">
-        <p class="text-danger">{{error_message}}</p>
+<div class="container-fluid login-component">
+  <div class="row login-component__form">
+    <form
+      class="form__login-form"
+      [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
+    >
+      <div class="login-form__header">
+        <p class="header__text"><i class="fas fa-sign-in-alt"></i>Formularz logowania</p>
       </div>
-      <div *ngIf="login_success">
-        <p class="text-success">{{success_message}}</p>
+      <div class="login-form__input-group">
+        <div class="form-group input-group__container">
+          <label for="email" class="input-group__label">Adres email</label>
+          <input
+            class="form-control input-group__input"
+            type="text"
+            id="email"
+            name="email"
+            formControlName="email"
+            placeholder="Adres Email"
+          />
+          <div
+            class="text-center input-group__error-container"
+            *ngIf="
+              (logForm.email.dirty || logForm.email.touched) &&
+              logForm.email.invalid
+            "
+          >
+            <p class="text-danger error-container__error-text" *ngIf="logForm.email.errors.email">
+              Proszę uzupełnić poprawnie email
+            </p>
+            <p class="text-danger error-container__error-text" *ngIf="logForm.email.errors.required">
+              Pole nie może być puste
+            </p>
+          </div>
+        </div>
+        <div class="form-group input-group__container">
+          <label for="password" class="input-group__label">Hasło</label>
+          <input
+            class="form-control input-group__input"
+            type="password"
+            id="password"
+            name="password"
+            formControlName="password"
+            placeholder="Hasło"
+          />
+          <div
+            class="text-center input-group__error-container"
+            *ngIf="
+              (logForm.password.dirty || logForm.password.touched) &&
+              logForm.password.invalid
+            "
+          >
+            <p class="text-danger error-container__error-text" *ngIf="logForm.password.errors.required">
+              Pole nie może być puste
+            </p>
+          </div>
+        </div>
+        <button
+          class="btn btn-primary form__button-submit"
+          [disabled]="!loginForm.valid"
+          type="submit"
+        >
+          Zaloguj
+        </button>
+        <div class = "input-group__error-container">
+        <div *ngIf="login_error">
+          <p class="text-danger error-container__error-text">{{ error_message }}</p>
+        </div>
+        <div *ngIf="login_success">
+          <p class="text-success error-container__success-text">{{ success_message }}</p>
+        </div>
+        </div>
+        <p>Nie posiadasz jeszcze konta?</p>
+        <a class="input-group__register-link" routerLink="/register">ZAREJESTRUJ SIĘ</a>
       </div>
-      <p>Nie posiadasz jeszcze konta?</p>
-      <a class="link" routerLink="/register">ZAREJESTRUJ SIĘ</a>
-    </div>
     </form>
   </div>
 </div>

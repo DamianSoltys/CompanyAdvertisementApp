@@ -26,10 +26,10 @@
               logForm.email.invalid
             "
           >
-            <p class="text-danger error-container__error-text" *ngIf="logForm.email.errors.email">
+            <p class="text-danger error-container__text--danger" *ngIf="logForm.email.errors.email">
               Proszę uzupełnić poprawnie email
             </p>
-            <p class="text-danger error-container__error-text" *ngIf="logForm.email.errors.required">
+            <p class="text-danger error-container__text--danger" *ngIf="logForm.email.errors.required">
               Pole nie może być puste
             </p>
           </div>
@@ -64,14 +64,14 @@
           Zaloguj
         </button>
         <div class = "input-group__error-container">
-        <div *ngIf="login_error">
-          <p class="text-danger error-container__error-text">{{ error_message }}</p>
+        <div *ngIf="login_error" class="error_container__login-error">
+          <p class="text-danger error-container__text--danger">{{ error_message }}</p>
         </div>
-        <div *ngIf="login_success">
-          <p class="text-success error-container__success-text">{{ success_message }}</p>
+        <div *ngIf="login_success" class="error_container__login-success">
+          <p class="text-success error-container__text--success">{{ success_message }}</p>
         </div>
         </div>
-        <p>Nie posiadasz jeszcze konta?</p>
+        <p class="input-group__text--question">Nie posiadasz jeszcze konta?</p>
         <a class="input-group__register-link" routerLink="/register">ZAREJESTRUJ SIĘ</a>
       </div>
     </form>

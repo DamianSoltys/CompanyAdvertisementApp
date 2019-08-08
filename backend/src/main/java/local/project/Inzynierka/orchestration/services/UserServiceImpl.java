@@ -53,6 +53,7 @@ public class UserServiceImpl implements UserService {
         Timestamp now = DateUtils.getNowTimestamp();
         user.setModifiedAt(now);
         user.setCreatedAt(now);
+        user.setAccountType((short)0);
 
         return userRepository.save(user);
 

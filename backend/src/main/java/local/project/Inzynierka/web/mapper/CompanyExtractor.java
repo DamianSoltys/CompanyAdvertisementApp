@@ -1,6 +1,10 @@
 package local.project.Inzynierka.web.mapper;
 
-import local.project.Inzynierka.persistence.entity.*;
+import local.project.Inzynierka.persistence.entity.Address;
+import local.project.Inzynierka.persistence.entity.Branch;
+import local.project.Inzynierka.persistence.entity.Category;
+import local.project.Inzynierka.persistence.entity.Company;
+import local.project.Inzynierka.persistence.entity.Voivoideship;
 import local.project.Inzynierka.web.dto.AddCompanyDto;
 import local.project.Inzynierka.web.dto.CompanyBranchDto;
 
@@ -8,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CompanyExtractor {
+
     private final Company company = new Company();
     private final List<Branch> branches;
 
@@ -35,6 +40,8 @@ public class CompanyExtractor {
             Branch branch = Branch.builder()
                     .address(Address.builder()
                             .city(companyBranchDto.getAddress().getCity())
+                            .buildingNo(companyBranchDto.getAddress().getBuildingNo())
+                            .street(companyBranchDto.getAddress().getStreet())
                             .voivodeship_id(new Voivoideship(companyBranchDto.getAddress().getVoivodeship().toString()))
                             .build()
                     )
@@ -68,6 +75,7 @@ public class CompanyExtractor {
                 .street(addCompanyDto.getAddress().getStreet())
                 .voivodeship_id(new Voivoideship(addCompanyDto.getAddress().getVoivodeship().toString()))
                 .street(addCompanyDto.getAddress().getCity())
+                .city(addCompanyDto.getAddress().getCity())
                 .build());
         company.setCategory(new Category(addCompanyDto.getCategory()));
         company.setDescription(addCompanyDto.getDescription());

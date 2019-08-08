@@ -1,7 +1,18 @@
 package local.project.Inzynierka.orchestration.services;
 
-import local.project.Inzynierka.persistence.entity.*;
-import local.project.Inzynierka.persistence.repository.*;
+import local.project.Inzynierka.persistence.entity.Address;
+import local.project.Inzynierka.persistence.entity.Branch;
+import local.project.Inzynierka.persistence.entity.Category;
+import local.project.Inzynierka.persistence.entity.Company;
+import local.project.Inzynierka.persistence.entity.NaturalPerson;
+import local.project.Inzynierka.persistence.entity.User;
+import local.project.Inzynierka.persistence.entity.Voivoideship;
+import local.project.Inzynierka.persistence.repository.AddressRepository;
+import local.project.Inzynierka.persistence.repository.BranchRepository;
+import local.project.Inzynierka.persistence.repository.CategoryRepository;
+import local.project.Inzynierka.persistence.repository.CompanyRepository;
+import local.project.Inzynierka.persistence.repository.UserRepository;
+import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
 import local.project.Inzynierka.shared.AuthenticationFacade;
 import local.project.Inzynierka.shared.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +43,11 @@ public class CompanyManagementServiceImpl implements CompanyManagementService {
     @Autowired
     private VoivodeshipRepository voivodeshipRepository;
 
+    @Autowired
+    private AddressRepository addressRepository;
 
-    @Override @Transactional
+    @Override
+    @Transactional
     public void registerCompany(Company company, List<Branch> branches) {
         User user = userRepository.getByAddressEmail(authenticationFacade.getAuthentication().getName());
         NaturalPerson naturalPerson = user.getNaturalPerson();
@@ -41,11 +55,11 @@ public class CompanyManagementServiceImpl implements CompanyManagementService {
         Timestamp now = DateUtils.getNowTimestamp();
 
         Category soughtCategory = categoryRepository.findByName(company.getCategory().getName());
-        if(soughtCategory == null ) {
+        if (soughtCategory == null) {
             soughtCategory = company.getCategory();
             soughtCategory.setCreatedAt(now);
             soughtCategory.setName(company.getCategory().getName());
-            soughtCategory.setId((short)0);
+            soughtCategory.setId((short) 0);
         }
 
         soughtCategory.setModifiedAt(now);
@@ -53,13 +67,19 @@ public class CompanyManagementServiceImpl implements CompanyManagementService {
 
         Voivoideship voivoideship = voivodeshipRepository.findByName(company.getAddress().getVoivodeship_id().getName());
 
+        Address address = Address.builder()
+                .apartmentNo(company.getAddress().getApartmentNo())
+                .buildingNo(company.getAddress().getBuildingNo())
+                .id(0L)
+                .city(company.getAddress().getCity())
+                .voivodeship_id(voivoideship)
+                .street(company.getAddress().getStreet())
+                .build();
+
+        address = addressRepository.save(address);
+
         Company companyInCreation = Company.builder()
-                .address(Address.builder()
-                        .buildingNo(company.getAddress().getBuildingNo())
-                        .city(company.getAddress().getCity())
-                        .street(company.getAddress().getStreet())
-                        .voivodeship_id(voivoideship)
-                        .build())
+                .address(address)
                 .category(category)
                 .createdAt(now)
                 .modifiedAt(now)
@@ -75,11 +95,11 @@ public class CompanyManagementServiceImpl implements CompanyManagementService {
 
         Company createdCompany = companyRepository.save(companyInCreation);
 
-        if( !companyInCreation.isHasBranch()) {
+        if (!companyInCreation.isHasBranch()) {
             return;
         }
 
-        for(int i=0; i< branches.size();i++) {
+        for (int i = 0; i < branches.size(); i++) {
             Branch branch = branches.get(i);
             branch.setCreatedAt(now);
             branch.setModifiedAt(now);
@@ -88,6 +108,8 @@ public class CompanyManagementServiceImpl implements CompanyManagementService {
             branch.setId(0L);
             Voivoideship branchVoivodeship = voivodeshipRepository.findByName(branch.getAddress().getVoivodeship_id().getName());
             branch.getAddress().setVoivodeship_id(branchVoivodeship);
+            Address branchAddress = addressRepository.save(branch.getAddress());
+            branch.setAddress(branchAddress);
 
             branches.set(i, branch);
         }

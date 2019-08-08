@@ -33,6 +33,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private AuthenticationFacade authenticationFacade;
 
+    @Autowired
+    private AddressRepository addressRepository;
+
     @Override
     public User findByName(String name) {
 
@@ -101,7 +104,18 @@ public class UserServiceImpl implements UserService {
             return false;
         }
 
-        naturalPerson.getAddress().setVoivodeship_id(voivoideship);
+        Address address = Address.builder()
+                .apartmentNo(naturalPerson.getAddress().getApartmentNo())
+                .buildingNo(naturalPerson.getAddress().getApartmentNo())
+                .id(0L)
+                .city(naturalPerson.getAddress().getCity())
+                .voivodeship_id(voivoideship)
+                .street(naturalPerson.getAddress().getStreet())
+                .build();
+
+        address = addressRepository.save(address);
+        naturalPerson.setAddress(address);
+
         naturalPerson = naturalPersonRepository.save(naturalPerson);
         System.out.println(authenticationFacade.getAuthentication().getName());
         User user = userRepository.getByAddressEmail(authenticationFacade.getAuthentication().getName());

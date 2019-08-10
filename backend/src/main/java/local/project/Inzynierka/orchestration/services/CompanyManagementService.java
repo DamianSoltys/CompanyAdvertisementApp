@@ -4,7 +4,6 @@ import local.project.Inzynierka.persistence.entity.Address;
 import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.persistence.entity.Category;
 import local.project.Inzynierka.persistence.entity.Company;
-import local.project.Inzynierka.persistence.entity.NaturalPerson;
 import local.project.Inzynierka.persistence.entity.User;
 import local.project.Inzynierka.persistence.entity.Voivoideship;
 import local.project.Inzynierka.persistence.repository.AddressRepository;
@@ -48,19 +47,50 @@ public class CompanyManagementService {
 
     @Transactional
     public void registerCompany(Company company, List<Branch> branches) {
-        User user = userRepository.getByAddressEmail(authenticationFacade.getAuthentication().getName());
-        NaturalPerson naturalPerson = user.getNaturalPerson();
 
-        Category soughtCategory = categoryRepository.findByName(company.getCategory().getName());
-        if (soughtCategory == null) {
-            soughtCategory = company.getCategory();
-            soughtCategory.setName(company.getCategory().getName());
-            soughtCategory.setId((short) 0);
+        Company createdCompany = this.getPersistedCompany(company);
+
+        if (!createdCompany.isHasBranch()) {
+            return;
         }
 
-        Category category = categoryRepository.save(soughtCategory);
+        this.buildAllCompanyBranches(branches, createdCompany);
 
-        Voivoideship voivoideship = voivodeshipRepository.findByName(company.getAddress().getVoivodeship_id().getName());
+        this.branchRepository.saveAll(branches);
+    }
+
+    private Company getPersistedCompany(Company company) {
+
+        User user = this.userRepository.getByAddressEmail(this.authenticationFacade.getAuthentication().getName());
+
+        return this.companyRepository.save(Company.builder()
+                .address(this.getPersistedAddress(company))
+                .category(this.getPersistedCategory(company))
+                .description(company.getDescription())
+                .hasBranch(company.isHasBranch())
+                .id(0L)
+                .name(company.getName())
+                .NIP(company.getNIP())
+                .registerer(user.getNaturalPerson())
+                .logoPath(company.getLogoPath())
+                .REGON(company.getREGON())
+                .build());
+    }
+
+    private void buildAllCompanyBranches(List<Branch> branches, Company createdCompany) {
+        branches.forEach(branch -> {
+            branch.setCompany(createdCompany);
+            branch.setRegisterer(createdCompany.getRegisterer());
+            branch.setId(0L);
+            Voivoideship branchVoivodeship = this.voivodeshipRepository.findByName(branch.getAddress().getVoivodeship_id().getName());
+            branch.getAddress().setVoivodeship_id(branchVoivodeship);
+            Address branchAddress = this.addressRepository.save(branch.getAddress());
+            branch.setAddress(branchAddress);
+        });
+    }
+
+    private Address getPersistedAddress(Company company) {
+        Voivoideship voivoideship = this.voivodeshipRepository.findByName(company.getAddress().getVoivodeship_id().getName());
 
         Address address = Address.builder()
                 .apartmentNo(company.getAddress().getApartmentNo())
@@ -71,44 +101,22 @@ public class CompanyManagementService {
                 .street(company.getAddress().getStreet())
                 .build();
 
-        address = addressRepository.save(address);
+        return this.addressRepository.save(address);
+    }
 
-        Company companyInCreation = Company.builder()
-                .address(address)
-                .category(category)
-                .description(company.getDescription())
-                .hasBranch(company.isHasBranch())
-                .id(0L)
-                .name(company.getName())
-                .NIP(company.getNIP())
-                .registerer(naturalPerson)
-                .logoPath(company.getLogoPath())
-                .REGON(company.getREGON())
-                .build();
-
-        Company createdCompany = companyRepository.save(companyInCreation);
-
-        if (!companyInCreation.isHasBranch()) {
-            return;
+    private Category getPersistedCategory(Company company) {
+        Category soughtCategory = this.categoryRepository.findByName(company.getCategory().getName());
+        if (soughtCategory == null) {
+            soughtCategory = company.getCategory();
+            soughtCategory.setName(company.getCategory().getName());
+            soughtCategory.setId((short) 0);
+            this.categoryRepository.save(soughtCategory);
         }
 
-        for (int i = 0; i < branches.size(); i++) {
-            Branch branch = branches.get(i);
-            branch.setCompany(createdCompany);
-            branch.setRegisterer(naturalPerson);
-            branch.setId(0L);
-            Voivoideship branchVoivodeship = voivodeshipRepository.findByName(branch.getAddress().getVoivodeship_id().getName());
-            branch.getAddress().setVoivodeship_id(branchVoivodeship);
-            Address branchAddress = addressRepository.save(branch.getAddress());
-            branch.setAddress(branchAddress);
-
-            branches.set(i, branch);
-        }
-
-        branchRepository.saveAll(branches);
+        return soughtCategory;
     }
 
     public Company getThroughBranch(Long id) {
-        return companyRepository.getByCompanyId(id);
+        return this.companyRepository.getByCompanyId(id);
     }
 }

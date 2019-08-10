@@ -177,6 +177,11 @@ Copy to clipboard following xml and choose option showed above with pointing arr
 </connection-configurations>
 ```
 
+Find the select `Execute Sql Script` option.
+Configure it like this and run: 
+
+![Alt text](./docs/file6.png)
+
 
 
 ***

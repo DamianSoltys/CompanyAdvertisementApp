@@ -1,3 +1,5 @@
+use inzynierka;
+
 create or replace table categories
 (
     id          smallint(6) auto_increment

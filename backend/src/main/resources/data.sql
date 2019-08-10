@@ -1,11 +1,11 @@
+use inzynierka;
+
 DELIMITER |
 CREATE OR REPLACE PROCEDURE insert_voivoideships()
-BEGIN
-
 INSERT IGNORE INTO voivodeships(name) VALUES ('dolnośląskie'),('kujawsko-pomorskie'),('lubelskie'), ('lubuskie'),
 ('łódzkie'), ('małopolskie'), ('mazowieckie'), ('opolskie'), ('podkarpackie'), ('podlaskie'), ('pomorskie'), ('śląskie'),
 ('świętokrzyskie'), ('warmińsko-mazurskie'), ('wielkopolskie'),('zachodniopomorskie');
-END |
+|
 
 DELIMITER ;
 CALL inzynierka.insert_voivoideships();
@@ -13,7 +13,6 @@ CALL inzynierka.insert_voivoideships();
 
 DELIMITER |
 CREATE OR REPLACE PROCEDURE insert_emails()
-BEGIN
 INSERT IGNORE INTO email_addresses(email_id, email, created_at) VALUES
 (1, 'example@example.com', NOW()),
 (2, 'example2@example.com', NOW()),
@@ -23,28 +22,28 @@ INSERT IGNORE INTO email_addresses(email_id, email, created_at) VALUES
 (6, 'example6@example.com', NOW()),
 (7, 'example7@example.com', NOW()),
 (8, 'example8@example.com', NOW());
-END |
+|
+
 DELIMITER ;
 
 CALL insert_emails();
 
 DELIMITER |
 CREATE OR REPLACE PROCEDURE insert_addresses()
-BEGIN
 INSERT IGNORE INTO addresses(apartment_no, building_no, city, created_at, modified_at, street, voivodeship_id)  VALUES
 ('5', '43','Kraków', NOW(), NOW(), 'Swojska', 1),
 ('2', '23','Lublin', NOW(), NOW(), 'Wasza', 2),
 ('5', '23','Szczebrzeszyn', NOW(), NOW(), 'Koziołka Matołka', 3),
 ('5', '4','Kraków', NOW(), NOW(), 'Makówkowa', 4),
 ('5', '2','Warszawa', NOW(), NOW(), 'Ichniejsza', 5);
-END |
+|
+
 DELIMITER ;
 
 CALL insert_addresses();
 
 DELIMITER |
 CREATE OR REPLACE PROCEDURE insert_natural_persons()
-BEGIN
 INSERT IGNORE INTO natural_persons(id_natural_person, first_name, last_name, phone_no, created_at, modified_at, address_id) VALUES
 (1, 'Karol', 'Karolak', '555111222', NOW(), NOW(), 1 ),
 (2, 'Maciej', 'Kozidrak', '535411222', NOW(), NOW(), 2),
@@ -55,15 +54,15 @@ INSERT IGNORE INTO natural_persons(id_natural_person, first_name, last_name, pho
 (7, 'Konrad', 'Pęczarski', '555111111', NOW(), NOW(),2),
 (8, 'Karol', 'Maciejak', '555222222', NOW(), NOW(),3),
 (9, 'Marcin', 'Lewandowski', '111111222', NOW(), NOW(),4);
-END |
+|
 
+DELIMITER ;
 CALL insert_natural_persons();
 
 DELIMITER |
 
 CREATE OR REPLACE PROCEDURE insert_users()
-BEGIN
-# --password - Haslo1
+-- password - Haslo1
 INSERT IGNORE INTO users( user_name, password_hash, modified_at,created_at, id_natural_person, id_email_address, account_type, is_enabled) VALUES
 ( 'biedronka', '$2a$10$lb/zKrT4Pey1JCYdGbWKn.Nn61spi./CT/rSdoSOKO/ChBoaLHhtu', NOW(), NOW(), 3, 1, 0, true ),
 ( 'kurczak5', '$2a$10$lb/zKrT4Pey1JCYdGbWKn.Nn61spi./CT/rSdoSOKO/ChBoaLHhtu', NOW(), NOW(), NULL, 2, 0 , true),
@@ -71,14 +70,14 @@ INSERT IGNORE INTO users( user_name, password_hash, modified_at,created_at, id_n
 ( 'Gacek', '$2a$10$lb/zKrT4Pey1JCYdGbWKn.Nn61spi./CT/rSdoSOKO/ChBoaLHhtu', NOW(), NOW(), NULL, 4, 0, false ),
 ( 'maciejowicz', '$2a$10$lb/zKrT4Pey1JCYdGbWKn.Nn61spi./CT/rSdoSOKO/ChBoaLHhtu', NOW(), NOW(), NULL, 5, 0, false ),
 ( 'jezyk', '$2a$10$lb/zKrT4Pey1JCYdGbWKn.Nn61spi./CT/rSdoSOKO/ChBoaLHhtu', NOW(), NOW(), 5, 6, 0, true );
-END |
+|
 
+DELIMITER ;
 CALL insert_users();
 
 DELIMITER |
 
 CREATE OR REPLACE PROCEDURE insert_categories()
-BEGIN
 INSERT IGNORE INTO categories(id, name, created_at, modified_at) VALUES
 (1, 'Motoryzacja', NOW(), NOW()),
 (2, 'Technologia', NOW(), NOW()),
@@ -86,8 +85,9 @@ INSERT IGNORE INTO categories(id, name, created_at, modified_at) VALUES
 (4, 'Fotografia', NOW(), NOW()),
 (5, 'Restauracje', NOW(), NOW()),
 (6, 'Uroda', NOW(), NOW());
-END |
+|
 
+DELIMITER ;
 CALL insert_categories();
 
 DELIMITER |
@@ -106,13 +106,13 @@ CALL insert_companies();
 
 DELIMITER  |
 CREATE OR REPLACE PROCEDURE insert_branches()
-BEGIN
 INSERT IGNORE INTO
 branches(branch_id, registerer_id, company_id, name, created_at, modified_at, x_geo_coordinate, y_geo_coordinate, address_id) VALUES
 (1, 2, 1, 'Mechanikex', NOW(), NOW(), 51.1079, 17.0385, 1),
 (2, 2, 1, 'Mechanikex', NOW(), NOW(), 51.1071, 17.0383, 2),
 (3, 3, 2, 'Urodex', NOW(), NOW(), 51.2167, 22.734,3 );
-END |
+|
+
 DELIMITER ;
 
 CALL insert_branches();
@@ -120,10 +120,10 @@ CALL insert_branches();
 DELIMITER |
 
 CREATE OR REPLACE PROCEDURE insert_newsletter_subscriptions()
-BEGIN
 INSERT IGNORE INTO newsletter_subscriptions(id, company_id,id_email, verified, created_at, modified_at) VALUES
 (1, 1,7, FALSE, NOW(), NOW()),
 (2, 1,8, FALSE, NOW(), NOW());
-END |
+|
+
 DELIMITER ;
 CALL insert_newsletter_subscriptions();

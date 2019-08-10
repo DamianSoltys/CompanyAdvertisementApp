@@ -4,17 +4,13 @@ import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.EmailAddress;
 import local.project.Inzynierka.persistence.entity.NewsletterSubscription;
 import local.project.Inzynierka.persistence.entity.VerificationToken;
-import local.project.Inzynierka.persistence.repository.CompanyRepository;
 import local.project.Inzynierka.persistence.repository.EmailRepository;
 import local.project.Inzynierka.persistence.repository.NewsletterSubscriptionRepository;
 import local.project.Inzynierka.persistence.repository.VerificationTokenRepository;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Slf4j
 public class NewsletterService {
 
     private final NewsletterSubscriptionRepository newsletterSubscriptionRepository;
@@ -23,25 +19,26 @@ public class NewsletterService {
 
     private final EmailRepository emailRepository;
 
-    private final CompanyRepository companyRepository;
-
-    @Autowired
-    public NewsletterService(NewsletterSubscriptionRepository newsletterSubscriptionRepository, VerificationTokenRepository verificationTokenRepository, EmailRepository emailRepository, CompanyRepository companyRepository) {
+    public NewsletterService(NewsletterSubscriptionRepository newsletterSubscriptionRepository, VerificationTokenRepository verificationTokenRepository, EmailRepository emailRepository) {
         this.newsletterSubscriptionRepository = newsletterSubscriptionRepository;
         this.verificationTokenRepository = verificationTokenRepository;
         this.emailRepository = emailRepository;
-        this.companyRepository = companyRepository;
     }
 
     @Transactional
-    public NewsletterSubscription signUpForNewsletter(EmailAddress emailAddress, Company company,
-                                                      boolean verified) {
-        NewsletterSubscription newsletterSubscription = new NewsletterSubscription();
+    public NewsletterSubscription signUpForNewsletter(EmailAddress emailAddress, Company company, boolean verified) {
 
-        newsletterSubscription.setVerified(verified);
+        NewsletterSubscription newsletterSubscription = NewsletterSubscription.builder()
+                .company(company)
+                .emailAddressEntity(getPersistedEmailAddress(emailAddress))
+                .id(0L)
+                .verified(verified)
+                .build();
 
-        Company foundCompany = companyRepository.getByCompanyId(company.getId());
-        newsletterSubscription.setCompany(foundCompany);
+        return newsletterSubscriptionRepository.save(newsletterSubscription);
+    }
+
+    private EmailAddress getPersistedEmailAddress(EmailAddress emailAddress) {
         EmailAddress foundEmail = emailRepository.findByEmail(emailAddress.getEmail());
         if (foundEmail == null) {
             foundEmail = new EmailAddress(emailAddress.getEmail());
@@ -49,29 +46,23 @@ public class NewsletterService {
 
             foundEmail = emailRepository.save(foundEmail);
         }
-        newsletterSubscription.setEmailAddressEntity(foundEmail);
-
-        newsletterSubscription.setId(0L);
-
-        return newsletterSubscriptionRepository.save(newsletterSubscription);
+        return foundEmail;
     }
 
     @Transactional
     public void createVerificationTokens(NewsletterSubscription newsletterSubscription, String signUpToken, String signOutToken) {
 
-        VerificationToken verificationToken = new VerificationToken(signUpToken);
-        verificationToken.setId(0L);
-        verificationToken = verificationTokenRepository.save(verificationToken);
-
-        newsletterSubscription.setVerificationToken(verificationToken);
-
-        VerificationToken unsubscribeToken = new VerificationToken(signOutToken);
-        unsubscribeToken.setId(0L);
-        unsubscribeToken = verificationTokenRepository.save(unsubscribeToken);
-
-        newsletterSubscription.setUnsubscribeToken(unsubscribeToken);
+        newsletterSubscription.setVerificationToken(this.getPersistedToken(signUpToken));
+        newsletterSubscription.setUnsubscribeToken(this.getPersistedToken(signOutToken));
 
         newsletterSubscriptionRepository.save(newsletterSubscription);
+    }
+
+    private VerificationToken getPersistedToken(String token) {
+        VerificationToken verificationToken = new VerificationToken(token);
+        verificationToken.setId(0L);
+        verificationToken = verificationTokenRepository.save(verificationToken);
+        return verificationToken;
     }
 
     @Transactional

@@ -1,7 +1,6 @@
 package local.project.Inzynierka.web.controller;
 
 import local.project.Inzynierka.web.dto.FieldValidationErrorDto;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -21,7 +20,6 @@ public class ControllerErrorHandler {
 
     private MessageSource messageSource;
 
-    @Autowired
     public ControllerErrorHandler(MessageSource messageSource) {
         this.messageSource = messageSource;
     }

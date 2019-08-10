@@ -13,7 +13,6 @@ import local.project.Inzynierka.persistence.repository.VerificationTokenReposito
 import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
 import local.project.Inzynierka.shared.AuthenticationFacade;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,23 +20,26 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private VerificationTokenRepository verificationTokenRepository;
+    private final VerificationTokenRepository verificationTokenRepository;
 
-    @Autowired
-    private VoivodeshipRepository voivodeshipRepository;
+    private final VoivodeshipRepository voivodeshipRepository;
 
-    @Autowired
-    private NaturalPersonRepository naturalPersonRepository;
+    private final NaturalPersonRepository naturalPersonRepository;
 
-    @Autowired
-    private AuthenticationFacade authenticationFacade;
+    private final AuthenticationFacade authenticationFacade;
 
-    @Autowired
-    private AddressRepository addressRepository;
+    private final AddressRepository addressRepository;
+
+    public UserService(UserRepository userRepository, VerificationTokenRepository verificationTokenRepository, VoivodeshipRepository voivodeshipRepository, NaturalPersonRepository naturalPersonRepository, AuthenticationFacade authenticationFacade, AddressRepository addressRepository) {
+        this.userRepository = userRepository;
+        this.verificationTokenRepository = verificationTokenRepository;
+        this.voivodeshipRepository = voivodeshipRepository;
+        this.naturalPersonRepository = naturalPersonRepository;
+        this.authenticationFacade = authenticationFacade;
+        this.addressRepository = addressRepository;
+    }
 
     public User findByName(String name) {
 
@@ -56,7 +58,6 @@ public class UserService {
         user.setAccountType((short) 0);
 
         return userRepository.save(user);
-
     }
 
     @Transactional

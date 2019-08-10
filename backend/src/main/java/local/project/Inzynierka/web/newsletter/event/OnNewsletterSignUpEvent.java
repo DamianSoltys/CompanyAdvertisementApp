@@ -6,7 +6,6 @@ import lombok.ToString;
 @ToString
 public class OnNewsletterSignUpEvent {
 
-
     private final NewsletterSubscription newsletterSubscription;
     private final String appUrl;
     private final boolean verified;

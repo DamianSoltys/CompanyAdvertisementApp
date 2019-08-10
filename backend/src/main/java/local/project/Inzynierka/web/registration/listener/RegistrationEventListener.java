@@ -5,7 +5,6 @@ import local.project.Inzynierka.persistence.entity.User;
 import local.project.Inzynierka.web.registration.event.OnRegistrationEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -17,13 +16,16 @@ import java.util.UUID;
 @Component
 public class RegistrationEventListener {
 
-    Logger logger = LoggerFactory.getLogger(RegistrationEventListener.class);
+    private Logger logger = LoggerFactory.getLogger(RegistrationEventListener.class);
 
-   @Autowired
-    private JavaMailSender javaMailSender;
+    private final JavaMailSender javaMailSender;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public RegistrationEventListener(JavaMailSender javaMailSender, UserService userService) {
+        this.javaMailSender = javaMailSender;
+        this.userService = userService;
+    }
 
     @Async
     @EventListener

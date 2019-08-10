@@ -1,6 +1,5 @@
 package local.project.Inzynierka.persistence.entity;
 
-
 import local.project.Inzynierka.persistence.common.FullTimestampingAudit;
 import lombok.Data;
 

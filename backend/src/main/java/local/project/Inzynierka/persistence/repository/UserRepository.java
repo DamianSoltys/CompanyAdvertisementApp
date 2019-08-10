@@ -5,7 +5,6 @@ import local.project.Inzynierka.persistence.entity.VerificationToken;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-
 public interface UserRepository extends ApplicationBigRepository<User> {
 
     User findByName(String name);

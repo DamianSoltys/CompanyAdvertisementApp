@@ -16,11 +16,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private ApplicationsUserDetailService applicationsUserDetailService;
+    private final ApplicationsUserDetailService applicationsUserDetailService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+
+    public SecurityConfig(ApplicationsUserDetailService applicationsUserDetailService, PasswordEncoder passwordEncoder) {
+        this.applicationsUserDetailService = applicationsUserDetailService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

@@ -14,7 +14,6 @@ import local.project.Inzynierka.persistence.repository.CompanyRepository;
 import local.project.Inzynierka.persistence.repository.UserRepository;
 import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
 import local.project.Inzynierka.shared.AuthenticationFacade;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,26 +22,29 @@ import java.util.List;
 @Service
 public class CompanyManagementService {
 
-    @Autowired
-    private CompanyRepository companyRepository;
+    private final CompanyRepository companyRepository;
 
-    @Autowired
-    private BranchRepository branchRepository;
+    private final BranchRepository branchRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private AuthenticationFacade authenticationFacade;
+    private final AuthenticationFacade authenticationFacade;
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
-    @Autowired
-    private VoivodeshipRepository voivodeshipRepository;
+    private final VoivodeshipRepository voivodeshipRepository;
 
-    @Autowired
-    private AddressRepository addressRepository;
+    private final AddressRepository addressRepository;
+
+    public CompanyManagementService(CompanyRepository companyRepository, BranchRepository branchRepository, UserRepository userRepository, AuthenticationFacade authenticationFacade, CategoryRepository categoryRepository, VoivodeshipRepository voivodeshipRepository, AddressRepository addressRepository) {
+        this.companyRepository = companyRepository;
+        this.branchRepository = branchRepository;
+        this.userRepository = userRepository;
+        this.authenticationFacade = authenticationFacade;
+        this.categoryRepository = categoryRepository;
+        this.voivodeshipRepository = voivodeshipRepository;
+        this.addressRepository = addressRepository;
+    }
 
     @Transactional
     public void registerCompany(Company company, List<Branch> branches) {

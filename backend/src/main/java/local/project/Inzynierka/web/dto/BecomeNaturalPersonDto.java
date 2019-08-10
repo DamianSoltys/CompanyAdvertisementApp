@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class BecomeNaturalPersonDto {
+
     String firstName;
     String lastName;
     String voivodeship;

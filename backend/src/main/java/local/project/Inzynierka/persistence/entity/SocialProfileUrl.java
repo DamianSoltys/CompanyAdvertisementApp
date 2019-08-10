@@ -43,5 +43,4 @@ public class SocialProfileUrl extends FullTimestampingAudit implements IEntity<S
         private Short platformId;
     }
 
-
 }

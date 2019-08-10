@@ -35,5 +35,4 @@ public class Comment extends FullTimestampingAudit implements IEntity<Long> {
     @JoinColumn(name = "branch_id", nullable = false, foreignKey = @ForeignKey(name = "commentend_branch_FK"))
     private Branch branch;
 
-
 }

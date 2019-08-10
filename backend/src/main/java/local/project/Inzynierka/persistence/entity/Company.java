@@ -29,6 +29,7 @@ public class Company implements IEntity<Long>{
     @Column(unique = true, nullable = false, length = 14)
     private String REGON;
 
+    /*
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "voivodeship_id", nullable = false, foreignKey = @ForeignKey(name = "company_voivodeship_FK"))
     private Voivoideship voivodeship_id;
@@ -40,7 +41,11 @@ public class Company implements IEntity<Long>{
     private String street;
 
     @Column(name = "building_no", nullable = false, length = 5)
-    private String buildingNo;
+    private String buildingNo;*/
+
+    @ManyToOne
+    @JoinColumn(name = "address_id", nullable = false, foreignKey = @ForeignKey(name = "address_company_FK"))
+    private Address address;
 
     /*
     *  columnDefinition = "Text" --- NOT PORTABLE
@@ -62,8 +67,11 @@ public class Company implements IEntity<Long>{
     @Column(name = "modified_at", nullable = false, columnDefinition = "TIMESTAMP")
     private Timestamp modifiedAt;
 
-    @Column(name = "photo_path", length = 50)
-    private String photoPath;
+    @Column(name = "logo_path")
+    private String logoPath;
+
+    @Column(name = "company_website")
+    private String companyWebsiteLink;
 
     @Column(name = "has_branch", nullable = false)
     private boolean hasBranch;

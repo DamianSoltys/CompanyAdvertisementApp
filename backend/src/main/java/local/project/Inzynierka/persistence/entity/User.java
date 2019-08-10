@@ -39,10 +39,10 @@ public class User implements IEntity<Long> {
     private EmailAddress emailAddressEntity;
 
     @Column(nullable = false, name = "account_type")
-    private int accountType;
+    private Short accountType;
 
     @OneToOne
-    @JoinColumn(name = "id_token",referencedColumnName = "token_id", unique = true, foreignKey = @ForeignKey(name = "verify_user_token_FK"))
+    @JoinColumn(name = "verification_token_id",referencedColumnName = "token_id", unique = true, foreignKey = @ForeignKey(name = "verify_user_token_FK"))
     private VerificationToken verificationToken;
 
 
@@ -57,7 +57,7 @@ public class User implements IEntity<Long> {
     * */
     public User(long id, String name, String passwordHash,Timestamp modifiedAt,
                 Timestamp createdAt, NaturalPerson naturalPerson,
-                EmailAddress emailAddressEntity, int accountType,
+                EmailAddress emailAddressEntity, Short accountType,
                 VerificationToken verificationToken,boolean isEnabled ) {
         this.id = id;
         this.name = name;

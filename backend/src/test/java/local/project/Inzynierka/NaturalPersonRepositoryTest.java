@@ -1,5 +1,6 @@
 package local.project.Inzynierka;
 
+import local.project.Inzynierka.persistence.entity.Address;
 import local.project.Inzynierka.persistence.entity.NaturalPerson;
 import local.project.Inzynierka.persistence.entity.Voivoideship;
 import local.project.Inzynierka.persistence.repository.NaturalPersonRepository;
@@ -43,7 +44,9 @@ public class NaturalPersonRepositoryTest {
         naturalPerson = new NaturalPerson();
         naturalPerson.setFirstName(firstName);
         naturalPerson.setLastName(lastName);
-        naturalPerson.setApartmentNo(appNo);
+        naturalPerson.setAddress(Address.builder()
+                .apartmentNo(appNo)
+                .build());
         naturalPerson.setId(0L);
 
         /*
@@ -53,17 +56,18 @@ public class NaturalPersonRepositoryTest {
         /*
          *
          * */
-        naturalPerson.setVoivodeship(voivodeshipEntity);
-
-        naturalPerson.setBuildingNo(buildNo);
-        naturalPerson.setCity(city);
 
         Timestamp now = DateUtils.getNowTimestamp();
         naturalPerson.setCreatedAt(now);
         naturalPerson.setModifiedAt(now);
 
         naturalPerson.setPhoneNo(phoneNo);
-        naturalPerson.setStreet(street);
+        naturalPerson.setAddress(Address.builder()
+                .voivodeship_id(voivodeshipEntity)
+                .buildingNo(buildNo)
+                .city(city)
+                .street(street)
+                .build());
     }
 
     @Test

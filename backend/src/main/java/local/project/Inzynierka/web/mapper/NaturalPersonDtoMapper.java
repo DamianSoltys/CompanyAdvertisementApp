@@ -1,6 +1,7 @@
 package local.project.Inzynierka.web.mapper;
 
 
+import local.project.Inzynierka.persistence.entity.Address;
 import local.project.Inzynierka.persistence.entity.NaturalPerson;
 import local.project.Inzynierka.persistence.entity.Voivoideship;
 import local.project.Inzynierka.web.dto.BecomeNaturalPersonDto;
@@ -16,12 +17,14 @@ public class NaturalPersonDtoMapper {
         NaturalPerson naturalPerson = new NaturalPerson();
 
         naturalPerson.setPhoneNo(becomeNaturalPersonDto.getPhoneNo());
-        naturalPerson.setApartmentNo(becomeNaturalPersonDto.getApartmentNo());
-        naturalPerson.setBuildingNo(becomeNaturalPersonDto.getBuildingNo());
-        naturalPerson.setCity(becomeNaturalPersonDto.getCity());
+        naturalPerson.setAddress(Address.builder()
+                    .apartmentNo(becomeNaturalPersonDto.getApartmentNo())
+                    .buildingNo(becomeNaturalPersonDto.getApartmentNo())
+                    .city(becomeNaturalPersonDto.getCity())
+                    .voivodeship_id(new Voivoideship((becomeNaturalPersonDto.getVoivodeship())))
+                    .build());
         naturalPerson.setFirstName(becomeNaturalPersonDto.getFirstName());
         naturalPerson.setLastName(becomeNaturalPersonDto.getLastName());
-        naturalPerson.setVoivodeship(new Voivoideship(becomeNaturalPersonDto.getVoivodeship()));
 
         return naturalPerson;
     }

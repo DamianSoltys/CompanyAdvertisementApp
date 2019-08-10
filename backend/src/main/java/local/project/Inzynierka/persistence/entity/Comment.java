@@ -14,7 +14,7 @@ public class Comment implements IEntity<Long>{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 5000)
+    @Column(nullable = false, length = 500)
     private String comment;
 
     @Column(nullable = false, columnDefinition = "TIMESTAMP", name = "created_at")

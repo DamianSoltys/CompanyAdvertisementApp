@@ -1,11 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 *{
+    //Application styles
     font-family: 'Source Sans Pro', sans-serif;
     //font-family: 'Montserrat', sans-serif;
     
     
 
 }
+//Styles from other sources
 @import '~bootstrap/dist/css/bootstrap.min.css';
 @import url('https://fonts.googleapis.com/css?family=Montserrat|Source+Sans+Pro');
 @import '~@fortawesome/fontawesome-free/css/all.css';
+
+

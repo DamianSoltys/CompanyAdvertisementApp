@@ -22,8 +22,8 @@ export class PersonalDataComponent implements OnInit {
      voivodeship: ['', [Validators.required, Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
      city: ['', [Validators.required, Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
      street: ['', [Validators.required, Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
-     apartmentNo: ['', [Validators.required, Validators.pattern(new RegExp(/^[0-9]+$/))]],
-     buildingNo: ['', [Validators.required, Validators.pattern(new RegExp(/^[0-9]+$/))]],
+     apartmentNo: ['', [Validators.required, Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/))]],
+     buildingNo: ['', [Validators.required, Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/))]],
      phoneNo: ['', [Validators.required, Validators.pattern(new RegExp(/^[0-9]+$/))]]
     });
   }

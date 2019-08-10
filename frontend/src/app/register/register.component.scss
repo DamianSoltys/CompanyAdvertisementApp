@@ -1,41 +1,4 @@
-$bgcolor:#2980b9;
-$bgcolor1:#3498db;
-
-$btborder:#00BCD4;
-
-
-$phone-width:250px;
-$tablet-width:768px;
-$desktop-width:1024px;
-
-@mixin phone() {
-  @media (min-width: #{$phone-width}) and (max-width: #{$tablet-width}) {
-    @content;
-  }
-
-}
-
-@mixin tablet() {
-
-  @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width}) {
-    @content;
-  }
-
-}
-
-@mixin desktop() {
-
-  @media (min-width: #{$desktop-width}) {
-    @content;
-  }
-
-}
-
-@mixin boxShadow($property) {
-  -webkit-box-shadow: $property;
-  -moz-box-shadow: $property;
-  box-shadow: $property;
-}
+@import '../../commonStyles/shared';
 
 .register_form {
   text-align: center;
@@ -55,7 +18,7 @@ $desktop-width:1024px;
     border-radius: 50px;
     border: 0;
     background: linear-gradient(-45deg, #FFA63D, #FF3D77, #338AFF, #3CF0C5);
-    animation: anime 16s linear infinite;
+    animation: button-background-animation 16s linear infinite;
     background-size: 600%;
     margin-top: 4%;
 
@@ -108,20 +71,6 @@ $desktop-width:1024px;
 .form-control {
   width: 100%;
   margin: auto;
-}
-
-@keyframes anime {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
 }
 
 .header {

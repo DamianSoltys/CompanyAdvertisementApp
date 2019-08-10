@@ -29,7 +29,6 @@ public class NewsletterSignUpEventListener {
     @Async
     @EventListener
     public void handleNewsletterSignUp(OnNewsletterSignUpEvent event) {
-        log.info("PROCCESSING EVENT");
 
         final String signUpToken = UUID.randomUUID().toString();
         final String signOutToken = UUID.randomUUID().toString();
@@ -37,7 +36,6 @@ public class NewsletterSignUpEventListener {
 
         if( !event.isVerified()) {
             final SimpleMailMessage mailMessage = constructEmailMessage(event, signUpToken, signOutToken);
-            log.info(String.valueOf(mailMessage));
             javaMailSender.send(mailMessage);
         }
     }

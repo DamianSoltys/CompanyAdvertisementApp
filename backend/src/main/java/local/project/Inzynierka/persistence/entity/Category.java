@@ -1,16 +1,21 @@
 package local.project.Inzynierka.persistence.entity;
 
+import local.project.Inzynierka.persistence.common.FullTimestampingAudit;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import java.sql.Timestamp;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Data
 @Entity
 @Table(name = "categories")
 @NoArgsConstructor
-public class Category implements IEntity<Short>{
+public class Category extends FullTimestampingAudit implements IEntity<Short> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,12 +23,6 @@ public class Category implements IEntity<Short>{
 
     @Column(nullable = false, length = 30)
     private String name;
-
-    @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP")
-    private Timestamp createdAt;
-
-    @Column(name = "modified_at", nullable = false, columnDefinition = "TIMESTAMP")
-    private Timestamp modifiedAt;
 
     public Category(String name) {
         this.name = name;

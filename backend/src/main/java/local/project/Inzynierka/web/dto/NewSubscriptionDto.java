@@ -1,6 +1,5 @@
 package local.project.Inzynierka.web.dto;
 
-
 import local.project.Inzynierka.shared.NullOrNotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

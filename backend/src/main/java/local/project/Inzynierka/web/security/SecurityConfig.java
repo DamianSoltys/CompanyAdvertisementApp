@@ -16,22 +16,21 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private ApplicationsUserDetailService applicationsUserDetailService;
+    private final ApplicationsUserDetailService applicationsUserDetailService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+
+    public SecurityConfig(ApplicationsUserDetailService applicationsUserDetailService, PasswordEncoder passwordEncoder) {
+        this.applicationsUserDetailService = applicationsUserDetailService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/test").authenticated()
                 .antMatchers("/auth/registration*").permitAll()
                 .antMatchers("/auth/login").permitAll()
-                .antMatchers("/auth/logout").authenticated()
-                .antMatchers("/user/naturalperson").authenticated()
                 .antMatchers("/api/newsletter*").permitAll()
-                .antMatchers("/api/companies*").authenticated()
                 .antMatchers("/test-cors").permitAll()
                 .antMatchers("/test-cors-methods").permitAll()
                 .and()
@@ -43,8 +42,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(applicationsUserDetailService).passwordEncoder(passwordEncoder);
     }
-
-
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {

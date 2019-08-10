@@ -73,7 +73,7 @@ public class CompanyManagementController {
 
         if( !companyManagementPermissionService.hasManagingAuthority(id)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(SimpleJsonFromStringCreator.toJson("Użytkownik nie ma pozwolenia na zarządzenia firmą"));
+                    .body(SimpleJsonFromStringCreator.toJson("Użytkownik nie ma pozwolenia na zarządzenie firmą"));
         }
 
         applicationEventPublisher.publishEvent(

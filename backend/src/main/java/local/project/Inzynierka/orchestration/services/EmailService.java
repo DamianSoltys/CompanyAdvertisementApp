@@ -1,10 +1,25 @@
 package local.project.Inzynierka.orchestration.services;
 
 import local.project.Inzynierka.persistence.entity.EmailAddress;
+import local.project.Inzynierka.persistence.repository.EmailRepository;
+import org.springframework.stereotype.Service;
 
-public interface EmailService {
+@Service
+public class EmailService {
 
-    EmailAddress findByEmail(EmailAddress email);
+    private final EmailRepository emailRepository;
 
-    EmailAddress saveEmailAddress(EmailAddress emailAddress);
+    public EmailService(EmailRepository emailRepository) {
+        this.emailRepository = emailRepository;
+    }
+
+    public EmailAddress findByEmail(EmailAddress email) {
+
+        return emailRepository.findByEmail(email.getEmail());
+    }
+
+    public EmailAddress saveEmailAddress(EmailAddress emailAddress) {
+
+        return emailRepository.save(emailAddress);
+    }
 }

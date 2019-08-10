@@ -1,15 +1,22 @@
 package local.project.Inzynierka.persistence.entity;
 
+import local.project.Inzynierka.persistence.common.FullTimestampingAudit;
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 @Data
 @Entity
 @Table(name = "social_profiles")
-public class SocialProfileUrl implements IEntity<SocialProfileUrl.PK> {
+public class SocialProfileUrl extends FullTimestampingAudit implements IEntity<SocialProfileUrl.PK> {
 
     @EmbeddedId
     private PK id;
@@ -25,12 +32,6 @@ public class SocialProfileUrl implements IEntity<SocialProfileUrl.PK> {
     @Column(name = "social_profile_url", nullable = false)
     private String URL;
 
-    @Column(nullable = false, name = "created_at", columnDefinition = "TIMESTAMP")
-    private Timestamp createdAt;
-
-    @Column(nullable = false, name = "modified_at", columnDefinition = "TIMESTAMP")
-    private Timestamp modifiedAt;
-
     @Embeddable
     @Data
     public class PK implements Serializable {
@@ -41,6 +42,5 @@ public class SocialProfileUrl implements IEntity<SocialProfileUrl.PK> {
         @Column(name = "platform_id")
         private Short platformId;
     }
-
 
 }

@@ -1,6 +1,5 @@
 package local.project.Inzynierka.shared;
 
-
 import org.hibernate.validator.constraints.CompositionType;
 import org.hibernate.validator.constraints.ConstraintComposition;
 

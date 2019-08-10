@@ -1,12 +1,21 @@
 package local.project.Inzynierka.persistence.entity;
 
+import local.project.Inzynierka.persistence.common.FullTimestampingAudit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import java.sql.Timestamp;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Data
 @Entity
@@ -14,7 +23,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "companies")
-public class Company implements IEntity<Long>{
+public class Company extends FullTimestampingAudit implements IEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,27 +38,10 @@ public class Company implements IEntity<Long>{
     @Column(unique = true, nullable = false, length = 14)
     private String REGON;
 
-    /*
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "voivodeship_id", nullable = false, foreignKey = @ForeignKey(name = "company_voivodeship_FK"))
-    private Voivoideship voivodeship_id;
-
-    @Column(nullable = false, length = 40)
-    private String city;
-
-    @Column(length = 30)
-    private String street;
-
-    @Column(name = "building_no", nullable = false, length = 5)
-    private String buildingNo;*/
-
     @ManyToOne
     @JoinColumn(name = "address_id", nullable = false, foreignKey = @ForeignKey(name = "address_company_FK"))
     private Address address;
 
-    /*
-    *  columnDefinition = "Text" --- NOT PORTABLE
-    * */
     @Column(nullable = false, length = 10000)
     private String description;
 
@@ -60,12 +52,6 @@ public class Company implements IEntity<Long>{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false, foreignKey = @ForeignKey(name = "company_category_FK"))
     private Category category;
-
-    @Column(name = "created_at", nullable = false,  columnDefinition = "TIMESTAMP")
-    private Timestamp createdAt;
-
-    @Column(name = "modified_at", nullable = false, columnDefinition = "TIMESTAMP")
-    private Timestamp modifiedAt;
 
     @Column(name = "logo_path")
     private String logoPath;

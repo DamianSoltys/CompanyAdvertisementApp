@@ -4,11 +4,9 @@ import local.project.Inzynierka.orchestration.services.EmailService;
 import local.project.Inzynierka.orchestration.services.UserService;
 import local.project.Inzynierka.persistence.entity.EmailAddress;
 import local.project.Inzynierka.persistence.entity.User;
-import local.project.Inzynierka.shared.AuthenticationFacade;
 import local.project.Inzynierka.web.errors.BadLoginDataException;
 import local.project.Inzynierka.web.errors.EmailAlreadyTakenException;
 import local.project.Inzynierka.web.errors.UserAlreadyExistsException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,20 +20,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserBasicAuthenticationService implements UserAuthenticationService {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private EmailService emailService;
+    private final EmailService emailService;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    AuthenticationFacade authenticationFacade;
+    public UserBasicAuthenticationService(UserService userService, EmailService emailService, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder) {
+        this.userService = userService;
+        this.emailService = emailService;
+        this.authenticationManager = authenticationManager;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override @Transactional
     public void registerNewUser(User user)  {

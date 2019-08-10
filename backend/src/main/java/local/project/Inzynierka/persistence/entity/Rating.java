@@ -15,6 +15,7 @@ public class Rating implements IEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "rating_id")
     private Long id;
 
     @Min(1) @Max(5)

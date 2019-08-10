@@ -33,6 +33,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private AuthenticationFacade authenticationFacade;
 
+    @Autowired
+    private AddressRepository addressRepository;
+
     @Override
     public User findByName(String name) {
 
@@ -53,6 +56,7 @@ public class UserServiceImpl implements UserService {
         Timestamp now = DateUtils.getNowTimestamp();
         user.setModifiedAt(now);
         user.setCreatedAt(now);
+        user.setAccountType((short)0);
 
         return userRepository.save(user);
 
@@ -95,12 +99,23 @@ public class UserServiceImpl implements UserService {
         naturalPerson.setModifiedAt(now);
         naturalPerson.setId(0L);
 
-        Voivoideship voivoideship = voivodeshipRepository.findByName(naturalPerson.getVoivodeship().getName());
+        Voivoideship voivoideship = voivodeshipRepository.findByName(naturalPerson.getAddress().getVoivodeship_id().getName());
         if(voivoideship == null ) {
             return false;
         }
 
-        naturalPerson.setVoivodeship(voivoideship);
+        Address address = Address.builder()
+                .apartmentNo(naturalPerson.getAddress().getApartmentNo())
+                .buildingNo(naturalPerson.getAddress().getApartmentNo())
+                .id(0L)
+                .city(naturalPerson.getAddress().getCity())
+                .voivodeship_id(voivoideship)
+                .street(naturalPerson.getAddress().getStreet())
+                .build();
+
+        address = addressRepository.save(address);
+        naturalPerson.setAddress(address);
+
         naturalPerson = naturalPersonRepository.save(naturalPerson);
         System.out.println(authenticationFacade.getAuthentication().getName());
         User user = userRepository.getByAddressEmail(authenticationFacade.getAuthentication().getName());

@@ -15,13 +15,16 @@ public class NaturalPerson implements IEntity<Long> {
     @Column(name = "id_natural_person")
     private Long id;
 
-    @Column(nullable = false, name = "first_name", length = 20)
+    @Column(nullable = false, name = "first_name", length = 30)
     private String firstName;
+
+    @Column(name = "second_first_name", length = 30)
+    private String secondFirstName;
 
     @Column(nullable = false, name = "last_name", length = 30)
     private String lastName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    /*@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "voivodeship_id", nullable = false, foreignKey = @ForeignKey(name = "natural_person_voivodeship_FK"))
     private Voivoideship voivodeship;
 
@@ -36,6 +39,12 @@ public class NaturalPerson implements IEntity<Long> {
 
     @Column(nullable = false, name = "building_no", length = 5)
     private String buildingNo;
+    */
+
+    @ManyToOne
+    @JoinColumn(name = "address_id", nullable = false, foreignKey = @ForeignKey(name = "address_natural_person_FK"))
+    private Address address;
+
 
     @Column(nullable = false, name = "phone_no", unique = true, length = 13)
     private String phoneNo;

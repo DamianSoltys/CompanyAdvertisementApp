@@ -106,7 +106,6 @@ public class UserService {
         naturalPerson.setAddress(address);
 
         naturalPerson = naturalPersonRepository.save(naturalPerson);
-        System.out.println(authenticationFacade.getAuthentication().getName());
         User user = userRepository.getByAddressEmail(authenticationFacade.getAuthentication().getName());
 
         user.setNaturalPerson(naturalPerson);

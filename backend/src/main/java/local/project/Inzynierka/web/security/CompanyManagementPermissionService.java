@@ -30,8 +30,6 @@ public class CompanyManagementPermissionService {
     public boolean hasRegisteringAuthority(){
         User user = userRepository.getByAddressEmail(authenticationFacade.getAuthentication().getName());
 
-        System.out.println(user);
-
         if(user == null) {
             return false;
         }

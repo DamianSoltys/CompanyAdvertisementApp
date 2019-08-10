@@ -25,13 +25,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/test").authenticated()
                 .antMatchers("/auth/registration*").permitAll()
                 .antMatchers("/auth/login").permitAll()
-                .antMatchers("/auth/logout").authenticated()
-                .antMatchers("/user/naturalperson").authenticated()
                 .antMatchers("/api/newsletter*").permitAll()
-                .antMatchers("/api/companies*").authenticated()
                 .antMatchers("/test-cors").permitAll()
                 .antMatchers("/test-cors-methods").permitAll()
                 .and()
@@ -43,8 +39,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(applicationsUserDetailService).passwordEncoder(passwordEncoder);
     }
-
-
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {

@@ -1,14 +1,19 @@
 package local.project.Inzynierka.persistence.entity;
 
+import local.project.Inzynierka.persistence.common.CreationTimestampingAudit;
 import lombok.Data;
 
-import javax.persistence.*;
-import java.sql.Timestamp;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Data
 @Table(name = "tokens")
-public class VerificationToken implements IEntity<Long> {
+public class VerificationToken extends CreationTimestampingAudit implements IEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,9 +22,6 @@ public class VerificationToken implements IEntity<Long> {
 
     @Column(unique = true, nullable = false)
     private String token;
-
-    @Column(name = "created_at")
-   private Timestamp createdAt;
 
     public VerificationToken(String token) {
         this.token = token;

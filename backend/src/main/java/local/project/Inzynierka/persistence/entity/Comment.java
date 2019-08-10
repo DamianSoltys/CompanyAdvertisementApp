@@ -1,14 +1,24 @@
 package local.project.Inzynierka.persistence.entity;
 
+import local.project.Inzynierka.persistence.common.FullTimestampingAudit;
 import lombok.Data;
 
-import javax.persistence.*;
-import java.sql.Timestamp;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Data
 @Entity
 @Table(name = "comments")
-public class Comment implements IEntity<Long>{
+public class Comment extends FullTimestampingAudit implements IEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,12 +26,6 @@ public class Comment implements IEntity<Long>{
 
     @Column(nullable = false, length = 500)
     private String comment;
-
-    @Column(nullable = false, columnDefinition = "TIMESTAMP", name = "created_at")
-    private Timestamp createdAt;
-
-    @Column(nullable = false,  columnDefinition = "TIMESTAMP", name = "modified_at")
-    private Timestamp modifiedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "commenting_user_FK"))

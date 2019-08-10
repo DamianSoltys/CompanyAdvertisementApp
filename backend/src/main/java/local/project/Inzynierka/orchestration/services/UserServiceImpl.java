@@ -1,9 +1,19 @@
 package local.project.Inzynierka.orchestration.services;
 
-import local.project.Inzynierka.persistence.entity.*;
-import local.project.Inzynierka.persistence.repository.*;
-import local.project.Inzynierka.shared.utils.DateUtils;
+import local.project.Inzynierka.persistence.entity.Address;
+import local.project.Inzynierka.persistence.entity.EmailAddress;
+import local.project.Inzynierka.persistence.entity.NaturalPerson;
+import local.project.Inzynierka.persistence.entity.User;
+import local.project.Inzynierka.persistence.entity.VerificationToken;
+import local.project.Inzynierka.persistence.entity.Voivoideship;
+import local.project.Inzynierka.persistence.repository.AddressRepository;
+import local.project.Inzynierka.persistence.repository.EmailRepository;
+import local.project.Inzynierka.persistence.repository.NaturalPersonRepository;
+import local.project.Inzynierka.persistence.repository.UserRepository;
+import local.project.Inzynierka.persistence.repository.VerificationTokenRepository;
+import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
 import local.project.Inzynierka.shared.AuthenticationFacade;
+import local.project.Inzynierka.shared.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,8 +64,6 @@ public class UserServiceImpl implements UserService {
     public User createNewUser(User user) {
 
         Timestamp now = DateUtils.getNowTimestamp();
-        user.setModifiedAt(now);
-        user.setCreatedAt(now);
         user.setAccountType((short)0);
 
         return userRepository.save(user);
@@ -66,7 +74,6 @@ public class UserServiceImpl implements UserService {
     public void createVerificationTokenForUser(User user, final String token) {
         Timestamp now = DateUtils.getNowTimestamp();
         VerificationToken myToken = new VerificationToken(token);
-        myToken.setCreatedAt(now);
         myToken.setId(0L);
 
         VerificationToken createdToken = verificationTokenRepository.save(myToken);
@@ -85,7 +92,6 @@ public class UserServiceImpl implements UserService {
         log.info(String.valueOf(user));
 
         user.setEnabled(true);
-        user.setModifiedAt(DateUtils.getNowTimestamp());
 
         userRepository.save(user);
         return true;
@@ -94,9 +100,6 @@ public class UserServiceImpl implements UserService {
     @Override @Transactional
     public boolean becomeNaturalPerson(NaturalPerson naturalPerson) {
 
-        Timestamp now = DateUtils.getNowTimestamp();
-        naturalPerson.setCreatedAt(now);
-        naturalPerson.setModifiedAt(now);
         naturalPerson.setId(0L);
 
         Voivoideship voivoideship = voivodeshipRepository.findByName(naturalPerson.getAddress().getVoivodeship_id().getName());
@@ -121,7 +124,6 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.getByAddressEmail(authenticationFacade.getAuthentication().getName());
 
         user.setNaturalPerson(naturalPerson);
-        user.setModifiedAt(now);
         userRepository.save(user);
 
         return true;

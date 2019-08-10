@@ -1,6 +1,7 @@
 package local.project.Inzynierka.persistence.entity;
 
 
+import local.project.Inzynierka.persistence.common.FullTimestampingAudit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +17,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.sql.Timestamp;
 
 @Data
 @Entity
@@ -24,7 +24,7 @@ import java.sql.Timestamp;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Address implements IEntity<Long>{
+public class Address extends FullTimestampingAudit implements IEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,9 +46,4 @@ public class Address implements IEntity<Long>{
     @Column(nullable = false, length = 5, name = "building_no")
     private String buildingNo;
 
-    @Column(nullable = false, columnDefinition = "TIMESTAMP", name = "created_at")
-    private Timestamp createdAt;
-
-    @Column(nullable = false, name = "modified_at", columnDefinition = "TIMESTAMP")
-    private Timestamp modifiedAt;
 }

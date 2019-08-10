@@ -1,15 +1,24 @@
 package local.project.Inzynierka.persistence.entity;
 
 
+import local.project.Inzynierka.persistence.common.FullTimestampingAudit;
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.sql.Timestamp;
 
 @Data
 @Entity
 @Table(name = "promotion_items")
-public class PromotionItem implements IEntity<Long> {
+public class PromotionItem extends FullTimestampingAudit implements IEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,9 +48,4 @@ public class PromotionItem implements IEntity<Long> {
     @Column(nullable = false, name = "valid_to", columnDefinition = "TIMESTAMP")
     private Timestamp validTo;
 
-    @Column(nullable = false, name = "created_at", columnDefinition = "TIMESTAMP")
-    private Timestamp createdAt;
-
-    @Column(nullable = false, name = "modified_at", columnDefinition = "TIMESTAMP")
-    private Timestamp modifiedAt;
 }

@@ -1,15 +1,22 @@
 package local.project.Inzynierka.persistence.entity;
 
+import local.project.Inzynierka.persistence.common.FullTimestampingAudit;
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 @Data
 @Entity
 @Table(name = "favourite_branches")
-public class FavouriteBranch implements IEntity<FavouriteBranch.PK> {
+public class FavouriteBranch extends FullTimestampingAudit implements IEntity<FavouriteBranch.PK> {
 
 
    @EmbeddedId
@@ -22,12 +29,6 @@ public class FavouriteBranch implements IEntity<FavouriteBranch.PK> {
    @OneToOne
    @JoinColumns({@JoinColumn(name = "branch_id", referencedColumnName = "branch_id", insertable = false, updatable = false)})
    private Branch branch;
-
-    @Column(name = "created_at",  columnDefinition = "TIMESTAMP")
-    private Timestamp createdAt;
-
-    @Column(name = "modified_at",  columnDefinition = "TIMESTAMP")
-    private Timestamp modifiedAt;
 
     public FavouriteBranch() {
     }

@@ -57,12 +57,10 @@ public class CompanyManagementServiceImpl implements CompanyManagementService {
         Category soughtCategory = categoryRepository.findByName(company.getCategory().getName());
         if (soughtCategory == null) {
             soughtCategory = company.getCategory();
-            soughtCategory.setCreatedAt(now);
             soughtCategory.setName(company.getCategory().getName());
             soughtCategory.setId((short) 0);
         }
 
-        soughtCategory.setModifiedAt(now);
         Category category = categoryRepository.save(soughtCategory);
 
         Voivoideship voivoideship = voivodeshipRepository.findByName(company.getAddress().getVoivodeship_id().getName());
@@ -81,8 +79,6 @@ public class CompanyManagementServiceImpl implements CompanyManagementService {
         Company companyInCreation = Company.builder()
                 .address(address)
                 .category(category)
-                .createdAt(now)
-                .modifiedAt(now)
                 .description(company.getDescription())
                 .hasBranch(company.isHasBranch())
                 .id(0L)
@@ -101,8 +97,6 @@ public class CompanyManagementServiceImpl implements CompanyManagementService {
 
         for (int i = 0; i < branches.size(); i++) {
             Branch branch = branches.get(i);
-            branch.setCreatedAt(now);
-            branch.setModifiedAt(now);
             branch.setCompany(createdCompany);
             branch.setRegisterer(naturalPerson);
             branch.setId(0L);

@@ -1,12 +1,21 @@
 package local.project.Inzynierka.persistence.entity;
 
+import local.project.Inzynierka.persistence.common.FullTimestampingAudit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import java.sql.Timestamp;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Data
 @Entity
@@ -14,7 +23,7 @@ import java.sql.Timestamp;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Branch implements IEntity<Long> {
+public class Branch extends FullTimestampingAudit implements IEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,30 +41,9 @@ public class Branch implements IEntity<Long> {
     @Column(nullable = false, length = 50)
     private String name;
 
-    /*@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "voivodeship_id", nullable = false, foreignKey = @ForeignKey(name = "branch_voivodeship_FK"))
-    private Voivoideship voivodeship_id;
-
-    @Column(nullable = false, length = 30)
-    private String city;
-
-    @Column(length = 30)
-    private String street;
-
-    @Column(nullable = false, length = 5, name = "building_no")
-    private String buildingNo;
-    */
-
     @ManyToOne
     @JoinColumn(name = "address_id", nullable = false, foreignKey = @ForeignKey(name = "address_branch_FK"))
     private Address address;
-
-    @Column(nullable = false, columnDefinition = "TIMESTAMP", name = "created_at")
-    private Timestamp createdAt;
-
-    @Column(nullable = false, name = "modified_at", columnDefinition = "TIMESTAMP")
-    private Timestamp modifiedAt;
-
 
     @Column(name = "photo_path")
     private String photoPath;
@@ -65,5 +53,4 @@ public class Branch implements IEntity<Long> {
 
     @Column(name = "y_geo_coordinate")
     private float geoY;
-
 }

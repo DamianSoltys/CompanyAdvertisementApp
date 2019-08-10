@@ -5,7 +5,6 @@ import local.project.Inzynierka.persistence.entity.NaturalPerson;
 import local.project.Inzynierka.persistence.entity.Voivoideship;
 import local.project.Inzynierka.persistence.repository.NaturalPersonRepository;
 import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
-import local.project.Inzynierka.shared.utils.DateUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,8 +12,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.sql.Timestamp;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -57,10 +54,6 @@ public class NaturalPersonRepositoryTest {
          *
          * */
 
-        Timestamp now = DateUtils.getNowTimestamp();
-        naturalPerson.setCreatedAt(now);
-        naturalPerson.setModifiedAt(now);
-
         naturalPerson.setPhoneNo(phoneNo);
         naturalPerson.setAddress(Address.builder()
                 .voivodeship_id(voivodeshipEntity)
@@ -93,8 +86,4 @@ public class NaturalPersonRepositoryTest {
 
         Assert.assertEquals(naturalPerson, naturalPersonRepository.findByPhoneNo(phoneNo));
     }
-
-
-
-
 }

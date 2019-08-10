@@ -7,11 +7,11 @@ html {
   padding: 0;
 }
 
-.main-container {
+.app-component {
   min-height: calc(100vh - 60px);
 }
 
-.main-container__navbar {
+.app-component__navbar {
   background: linear-gradient(-50deg, $bgcolor, $bgcolor1);
   border-bottom: 2px solid whitesmoke;
   position: relative; 
@@ -22,7 +22,7 @@ html {
   padding: .5rem 1rem;
 }
 
-.main-container__footer {
+.app-component__footer {
   height: 40px;
   margin:0;
   color:white;
@@ -36,7 +36,7 @@ html {
     margin: auto;
   }
 }
-.main-container__logout-message{
+.app-component__logout-message{
   display:none;
 }
 

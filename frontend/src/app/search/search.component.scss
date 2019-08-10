@@ -1,83 +1,89 @@
 @import '../../commonStyles/shared';
 
-.main{
+.search-component {
     height:450px;
     border:1px solid red;
     margin-top:5%;
 }
-.search_form{
+
+.search-component__form {
     width:50%;
     position: relative;
     top:50%;
     left:50%;
     transform: translate(-50%,-50%);
     text-align: center;
-    p{
+
+    .form__text-node {
         font-size: 2em;
     }
 
-    .search_div{
-        
+    .form_main-container {        
         display:flex;
-     i{
-       position: relative;
-       left:50%;
-       top:50%;
-       transform: translate(-50%,-50%);
-       font-size: 1.5em;
-       
-     }
-     input{
-        margin-left:2%;
-        margin-right:2%;
-     }
-     button{
-        width:30%;
+
+        .main-container__icon {
+            position: relative;
+            left:50%;
+            top:45%;
+            transform: translate(-50%,-50%);
+            font-size: 1.5em;   
+            color:$bgcolor;   
+        }
+
+        .main-container__input {
+            margin-left:2%;
+            margin-right:2%;
+        }
         
-     }
-     span{
-         height: 38px;
-     }
+        .main-container__button-search {
+            width:30%;
+            background-color: $bgcolor;
+            border:0;
+            transition: 0.5s;
+            
+            &:hover{
+                opacity:0.8;
+                background-color: $bgcolor1;     
+            }  
+
+            @include phone() {
+                width:50%;
+                position: relative;
+                top: 80px;
+            }
+        }
+
+        .main-container__span-icon {
+            height: 38px;
+        }
+
+        .main-container__popover {
+            display:none;
+        }               
     }
 }
 
-@include phone(){
-    
-    .search_form{
+@include phone(){  
+    .search-component__form {
         width:100%;
-        p{
-            font-size: 1em;
+
+        .form__text-node {
+            font-size: 1.5rem;
         }
     }
-        .search_div{
-            flex-wrap: wrap;
-         span{
-           margin:auto;
-         }
-         input{
-        
-         }
-         button{
+
+    .form_main-container {
+        flex-wrap: wrap;
+
+        .main-container__span-icon {
+            margin:auto;
+        }
+
+        .main-container__button-search {
             margin:auto;
             margin-top:5%;
-            width:40%;
-            
-         }
+            width:40%;   
         }
-    
-
-
-}
-.search_but{
-    background-color: $bgcolor;
-    border:0;
-    transition: 0.5s;
-    &:hover{
-        opacity:0.8;
-        background-color: $bgcolor1;
-        
     }
 }
-.fa-search{
-    color:$bgcolor;
-}
+

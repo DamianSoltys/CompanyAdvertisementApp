@@ -1,6 +1,6 @@
-<div class="container-fluid main-container">
+<div class="container-fluid app-component">
 
-  <div class="row main-container__navbar" *ngIf="!logged">
+  <div class="row app-component__navbar" *ngIf="!logged">
     <div class="col-6 navbar__logo-container">
         <span routerLink="/home" class="logo-container__link-span"></span>
         <img src="../assets/Img/logo_transparent.png" class="logo-container__logo-img" alt="Logo">
@@ -23,7 +23,7 @@
     </div>
   </div>
   <!--MENU FOR LOGGED USER-->
-  <div class="row main-container__navbar" *ngIf="logged">
+  <div class="row app-component__navbar" *ngIf="logged">
     <div class="col-3 col-xl-6">
       <span routerLink="/home" class="logo-container__link-span"></span>
       <img src="../assets/Img/logo_transparent.png" class="logo-container__logo-img" alt="Logo">
@@ -50,10 +50,10 @@
     </div>
   </div>
 
-  <div  #logOutMessage [@showHideMenu] = "logOut_success ? 'visible':'hidden'" class="text-center main-container__logout-message"><p class="logout-message__success text-success">Pomyślnie wylogowano</p></div>
-  <router-outlet class="main-container__outlet"></router-outlet>
+  <div  #logOutMessage [@showHideMenu] = "logOut_success ? 'visible':'hidden'" class="text-center app-component__logout-message"><p class="logout-message__success text-success">Pomyślnie wylogowano</p></div>
+  <router-outlet class="app-component__outlet"></router-outlet>
 
-  <div class="main-container__nearby-container container-fluid">
+  <div class="app-component__nearby-container container-fluid">
     <h5 class="text-center nearby_container__text">Obok ciebie</h5>
     <button (click)="toggleNearbyBlock()" class="nearby-container__toggle btn btn-primary">{{nearby_toggle ?'Pokaż':'Schowaj'}}</button>
     <div [@showHide] = "visible ? 'visible':'hidden'" class="row nearby-container__data-container">
@@ -62,6 +62,6 @@
   </div>
 </div>
 
-<div class="row main-container__footer">
+<div class="row app-component__footer">
   <p class="footer__text"><i class="fa fa-copyright" aria-hidden="true"></i>Damian Sołtysiuk,Mateusz Szałkowski</p>
 </div>

@@ -1,17 +1,17 @@
-<div class="container-fluid main">  
-  <form class="search_form" [formGroup]="searchform" (ngSubmit)="onSubmit()">
-      <p>Znajdz swoją wymarzoną firmę!</p>
-   <div class="search_div">
-    <span><i class="fas fa-search"></i></span>
-    <input formControlName="search" type="text" class="form-control" 
+<div class="container-fluid search-component">  
+  <form class="search-component__form" [formGroup]="searchform" (ngSubmit)="onSubmit()">
+      <p class="form__text-node">Znajdz swoją wymarzoną firmę!</p>
+   <div class="form_main-container">
+    <span class="main-container__span-icon"><i class="fas fa-search main-container__icon"></i></span>
+    <input formControlName="search" autocomplete="off" type="text" class="form-control main-container__input" 
     name="search-input" placeholder="nazwa,kategoria,miasto"
     data-popover-content="#popoverHelp" data-toggle="popover" data-placement="bottom">
-    <div id="popoverHelp" style="display:none;">
-      <div class="popover-body">
-        <p>Wyrazy powinny być oddzielone przecinkiem!</p>
+    <div id="popoverHelp" class="main-container__popover">
+      <div class="popover-body popover__popover-container">
+        <p class="popover-container__text-node">Wyrazy powinny być oddzielone przecinkiem!</p>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary pull-right search_but" >Szukaj</button>
+    <button type="submit" class="btn btn-primary pull-right main-container__button-search" >Szukaj</button>
     </div>
   </form>
 </div>

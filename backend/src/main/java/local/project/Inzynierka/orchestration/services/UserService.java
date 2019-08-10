@@ -12,12 +12,10 @@ import local.project.Inzynierka.persistence.repository.UserRepository;
 import local.project.Inzynierka.persistence.repository.VerificationTokenRepository;
 import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
 import local.project.Inzynierka.shared.AuthenticationFacade;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
@@ -43,14 +41,12 @@ public class UserService {
 
     public User findByName(String name) {
 
-        User user = userRepository.findByName(name);
-        return user;
+        return userRepository.findByName(name);
     }
 
     public User findByEmailAddress(EmailAddress emailAddress) {
-        User user = userRepository.getByAddressEmail(emailAddress.getEmail());
 
-        return user;
+        return userRepository.getByAddressEmail(emailAddress.getEmail());
     }
 
     public User createNewUser(User user) {
@@ -87,24 +83,16 @@ public class UserService {
     @Transactional
     public boolean becomeNaturalPerson(NaturalPerson naturalPerson) {
 
-        naturalPerson.setId(0L);
-
         Voivoideship voivoideship = voivodeshipRepository.findByName(naturalPerson.getAddress().getVoivodeship_id().getName());
         if (voivoideship == null) {
             return false;
         }
 
-        Address address = Address.builder()
-                .apartmentNo(naturalPerson.getAddress().getApartmentNo())
-                .buildingNo(naturalPerson.getAddress().getApartmentNo())
-                .id(0L)
-                .city(naturalPerson.getAddress().getCity())
-                .voivodeship_id(voivoideship)
-                .street(naturalPerson.getAddress().getStreet())
-                .build();
+        Address address = this.buildAddress(naturalPerson, voivoideship);
 
         address = addressRepository.save(address);
         naturalPerson.setAddress(address);
+        naturalPerson.setId(0L);
 
         naturalPerson = naturalPersonRepository.save(naturalPerson);
         User user = userRepository.getByAddressEmail(authenticationFacade.getAuthentication().getName());
@@ -113,5 +101,17 @@ public class UserService {
         userRepository.save(user);
 
         return true;
+    }
+
+    private Address buildAddress(NaturalPerson naturalPerson, Voivoideship voivoideship) {
+
+        return Address.builder()
+                .apartmentNo(naturalPerson.getAddress().getApartmentNo())
+                .buildingNo(naturalPerson.getAddress().getBuildingNo())
+                .id(0L)
+                .city(naturalPerson.getAddress().getCity())
+                .voivodeship_id(voivoideship)
+                .street(naturalPerson.getAddress().getStreet())
+                .build();
     }
 }

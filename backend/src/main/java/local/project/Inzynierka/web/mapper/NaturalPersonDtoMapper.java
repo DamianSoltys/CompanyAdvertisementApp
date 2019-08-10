@@ -19,7 +19,7 @@ public class NaturalPersonDtoMapper {
         naturalPerson.setPhoneNo(becomeNaturalPersonDto.getPhoneNo());
         naturalPerson.setAddress(Address.builder()
                     .apartmentNo(becomeNaturalPersonDto.getApartmentNo())
-                    .buildingNo(becomeNaturalPersonDto.getApartmentNo())
+                .buildingNo(becomeNaturalPersonDto.getBuildingNo())
                     .city(becomeNaturalPersonDto.getCity())
                     .voivodeship_id(new Voivoideship((becomeNaturalPersonDto.getVoivodeship())))
                     .build());

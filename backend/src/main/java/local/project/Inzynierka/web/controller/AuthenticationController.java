@@ -2,6 +2,7 @@ package local.project.Inzynierka.web.controller;
 
 import local.project.Inzynierka.orchestration.services.UserService;
 import local.project.Inzynierka.persistence.entity.User;
+import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
 import local.project.Inzynierka.web.dto.LoginDto;
 import local.project.Inzynierka.web.dto.UserRegistrationDto;
 import local.project.Inzynierka.web.errors.BadLoginDataException;
@@ -62,8 +63,10 @@ public class AuthenticationController {
     public ResponseEntity<String> login(@RequestBody LoginDto loginDto){
 
         User user = mapper.map(loginDto);
+        Long userId;
+
         try {
-            authenticationService.login(user);
+            userId = authenticationService.login(user);
 
         } catch (BadLoginDataException e) {
             return ResponseEntity.status(e.getStatus()).body(e.getMessage());
@@ -71,13 +74,18 @@ public class AuthenticationController {
             return ResponseEntity.status(400).body(e.getMessage());
         }
 
+        return ResponseEntity.ok().headers(this.createAuthorizationHTTPHeader(loginDto))
+                .body(SimpleJsonFromStringCreator.toJson(userId.toString()));
+
+    }
+
+    private HttpHeaders createAuthorizationHTTPHeader(@RequestBody LoginDto loginDto) {
         AuthorizationHeader authorizationHeader = new AuthorizationHeader(loginDto.getEmail(), loginDto.getPassword());
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, authorizationHeader.getAuthorizationHeaderValue());
-
-        return ResponseEntity.ok().headers(headers).body("{\"data\":\"OK\"}");
-
+        return headers;
     }
+
     @RequestMapping(value = "/auth/logout", method = RequestMethod.POST)
     public String logout() {
         return "LOGGED OUT";

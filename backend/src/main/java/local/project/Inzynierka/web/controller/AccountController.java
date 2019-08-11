@@ -2,11 +2,13 @@ package local.project.Inzynierka.web.controller;
 
 import local.project.Inzynierka.orchestration.services.UserService;
 import local.project.Inzynierka.persistence.entity.NaturalPerson;
+import local.project.Inzynierka.persistence.entity.User;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
 import local.project.Inzynierka.web.dto.BecomeNaturalPersonDto;
 import local.project.Inzynierka.web.mapper.NaturalPersonDtoMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,6 +39,11 @@ public class AccountController {
         }
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}")
+    public ResponseEntity<User> getUser(@PathVariable(value = "id") Long id) {
 
+        User user = this.userService.getUserData(id);
 
+        return ResponseEntity.ok(user);
+    }
 }

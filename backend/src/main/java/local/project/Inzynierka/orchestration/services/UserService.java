@@ -114,4 +114,10 @@ public class UserService {
                 .street(naturalPerson.getAddress().getStreet())
                 .build();
     }
+
+    public User getUserData(Long id) {
+        User authenticatedUser = this.userRepository.getByAddressEmail(authenticationFacade.getAuthentication().getName());
+
+        return authenticatedUser;
+    }
 }

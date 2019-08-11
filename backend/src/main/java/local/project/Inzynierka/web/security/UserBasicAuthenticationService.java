@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 public class UserBasicAuthenticationService implements UserAuthenticationService {
 
@@ -57,13 +56,15 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
     }
 
     @Override
-    public void login(User user)  {
+    public Long login(User user) {
         try{
             UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(
                     new UserPrincipal(user), user.getPasswordHash());
 
             Authentication authenticatedUser = authenticationManager.authenticate(loginToken);
             SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+
+            return ((UserPrincipal) authenticatedUser.getPrincipal()).getUser().getId();
         } catch (AuthenticationException  e) {
             throw new BadLoginDataException();
         }

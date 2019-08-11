@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
     User_data.password = this.loginForm.get('password').value;
     this.lgservice.Login(User_data).subscribe((data: HttpResponse<any>) => {
       console.log(data.headers.get('Authorization'));
-      if (data.body.data === 'OK') {
+      if (data.status === 200) {
         this.login_error = false;
         this.success_message = 'Pomyślnie zalogowano';
         this.login_success = true;

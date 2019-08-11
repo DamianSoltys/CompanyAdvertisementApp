@@ -5,7 +5,6 @@ import local.project.Inzynierka.persistence.entity.NewsletterSubscription;
 import local.project.Inzynierka.persistence.repository.CompanyRepository;
 import local.project.Inzynierka.persistence.repository.NewsletterSubscriptionRepository;
 import local.project.Inzynierka.web.newsletter.event.OnCreatingNewsletterMailEvent;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.mail.SimpleMailMessage;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-@Slf4j
 public class CreatingNewsletterMailEventListener {
 
     private final JavaMailSender javaMailSender;
@@ -37,8 +35,6 @@ public class CreatingNewsletterMailEventListener {
     @Async
     @EventListener
     public void handleSendingNewsletterOut(OnCreatingNewsletterMailEvent event) {
-        log.info("PROCESSING EVENT");
-
         Company company = companyRepository.findById(event.getCompanyId()).
                 orElseThrow(IllegalArgumentException::new);
 
@@ -47,7 +43,6 @@ public class CreatingNewsletterMailEventListener {
 
         newsletterSubscriptions.forEach(e -> {
             final SimpleMailMessage mailMessage = constructEmailMessage(event, e, company);
-            log.info(String.valueOf(mailMessage));
             javaMailSender.send(mailMessage);
         });
 

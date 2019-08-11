@@ -1,16 +1,25 @@
 package local.project.Inzynierka.persistence.entity;
 
+import local.project.Inzynierka.persistence.common.FullTimestampingAudit;
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.sql.Timestamp;
 
 @Data
 @Entity
 @Table(name = "ratings")
-public class Rating implements IEntity<Long> {
+public class Rating extends FullTimestampingAudit implements IEntity<Long> {
 
 
     @Id
@@ -29,12 +38,5 @@ public class Rating implements IEntity<Long> {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "branch_id", nullable = false, foreignKey = @ForeignKey(name = "rated_FK"))
     private Branch branch;
-
-    @Column(nullable = false, name = "created_at", columnDefinition = "TIMESTAMP")
-    private Timestamp createdAt;
-
-    @Column(nullable = false, name = "modified_at", columnDefinition = "TIMESTAMP")
-    private Timestamp modifiedAt;
-
 
 }

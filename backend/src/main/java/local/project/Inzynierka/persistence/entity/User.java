@@ -1,17 +1,24 @@
 package local.project.Inzynierka.persistence.entity;
 
+import local.project.Inzynierka.persistence.common.FullTimestampingAudit;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.*;
-import java.sql.Timestamp;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Data
 @Entity
 @Table(name = "users")
 @Builder(toBuilder = true)
-public class User implements IEntity<Long> {
-
+public class User extends FullTimestampingAudit implements IEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,12 +30,6 @@ public class User implements IEntity<Long> {
 
     @Column(nullable = false, name = "password_hash")
     private String passwordHash;
-
-    @Column(nullable = false, name = "modified_at")
-    private Timestamp modifiedAt;
-
-    @Column(nullable = false, name = "created_at")
-    private Timestamp createdAt;
 
     @OneToOne
     @JoinColumn(name = "id_natural_person", referencedColumnName = "id_natural_person",foreignKey = @ForeignKey(name = "natural_person_FK"))
@@ -45,7 +46,6 @@ public class User implements IEntity<Long> {
     @JoinColumn(name = "verification_token_id",referencedColumnName = "token_id", unique = true, foreignKey = @ForeignKey(name = "verify_user_token_FK"))
     private VerificationToken verificationToken;
 
-
     @Column(name = "is_enabled")
     private boolean isEnabled;
 
@@ -55,10 +55,9 @@ public class User implements IEntity<Long> {
     /*
     *  The parameters order has to match the order of field's declarations in the class for lombok builder to work.
     * */
-    public User(long id, String name, String passwordHash,Timestamp modifiedAt,
-                Timestamp createdAt, NaturalPerson naturalPerson,
+    public User(long id, String name, String passwordHash, NaturalPerson naturalPerson,
                 EmailAddress emailAddressEntity, Short accountType,
-                VerificationToken verificationToken,boolean isEnabled ) {
+                VerificationToken verificationToken, boolean isEnabled ) {
         this.id = id;
         this.name = name;
         this.passwordHash = passwordHash;
@@ -67,8 +66,6 @@ public class User implements IEntity<Long> {
         this.accountType = accountType;
         this.isEnabled = isEnabled;
         this.verificationToken = verificationToken;
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
     }
 
     public User(String name, String passwordHash, EmailAddress emailAddressEntity) {
@@ -76,6 +73,4 @@ public class User implements IEntity<Long> {
         this.passwordHash = passwordHash;
         this.emailAddressEntity = emailAddressEntity;
     }
-
-
 }

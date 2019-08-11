@@ -1,6 +1,5 @@
 package local.project.Inzynierka.web.controller;
 
-
 import local.project.Inzynierka.orchestration.services.UserService;
 import local.project.Inzynierka.persistence.entity.User;
 import local.project.Inzynierka.web.dto.LoginDto;
@@ -13,11 +12,14 @@ import local.project.Inzynierka.web.registration.event.OnRegistrationEvent;
 import local.project.Inzynierka.web.security.AuthorizationHeader;
 import local.project.Inzynierka.web.security.UserAuthenticationService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,17 +27,20 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class AuthenticationController {
 
-    @Autowired
-    private UserAuthenticationService authenticationService;
+    private final UserAuthenticationService authenticationService;
 
-    @Autowired
-    private UserDtoMapper mapper;
+    private final UserDtoMapper mapper;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private ApplicationEventPublisher eventPublisher;
+    private final ApplicationEventPublisher eventPublisher;
+
+    public AuthenticationController(UserAuthenticationService authenticationService, UserDtoMapper mapper, UserService userService, ApplicationEventPublisher eventPublisher) {
+        this.authenticationService = authenticationService;
+        this.mapper = mapper;
+        this.userService = userService;
+        this.eventPublisher = eventPublisher;
+    }
 
     @RequestMapping(value = "/auth/registration", method = RequestMethod.POST)
     public ResponseEntity registerNewUser(@RequestBody final UserRegistrationDto userRegistrationDto,

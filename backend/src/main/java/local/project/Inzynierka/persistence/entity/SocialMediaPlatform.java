@@ -1,15 +1,19 @@
 package local.project.Inzynierka.persistence.entity;
 
-
+import local.project.Inzynierka.persistence.common.FullTimestampingAudit;
 import lombok.Data;
 
-import javax.persistence.*;
-import java.sql.Timestamp;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Data
 @Entity
 @Table(name = "social_platforms")
-public class SocialMediaPlatform implements IEntity<Short> {
+public class SocialMediaPlatform extends FullTimestampingAudit implements IEntity<Short> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,9 +23,4 @@ public class SocialMediaPlatform implements IEntity<Short> {
     @Column(name = "social_media_platform", nullable = false)
     private String socialMediaPlatform;
 
-    @Column(nullable = false, name = "created_at", columnDefinition = "TIMESTAMP")
-    private Timestamp createdAt;
-
-    @Column(nullable = false, name = "modified_at", columnDefinition = "TIMESTAMP")
-    private Timestamp modifiedAt;
 }

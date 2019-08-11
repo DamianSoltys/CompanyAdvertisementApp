@@ -3,6 +3,7 @@ package local.project.Inzynierka.web.registration.event;
 import local.project.Inzynierka.persistence.entity.User;
 
 public class OnRegistrationEvent {
+
     private final User user;
     private final String appUrl;
 
@@ -18,6 +19,5 @@ public class OnRegistrationEvent {
     public String getAppUrl() {
         return appUrl;
     }
-
 
 }

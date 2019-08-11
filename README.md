@@ -184,6 +184,21 @@ Configure it like this and run:
 
 
 
+**Database operations**
+--
+To `create tables` (it might be also used to clear data)  
+
+{mariadb-executable} --user=user --password=Admin123 -e "call inzynierka.create_database"
+
+To `clear data`  
+
+{mariadb-executable} --user=user --password=Admin123 -e "call inzynierka.clear_data"
+
+To `refresh data` (after execution the database will only contain data that were added with inserts procedures)  
+
+{mariadb-executable} --user=user --password=Admin123 -e "call inzynierka.refresh_data"
+
+
 ***
 
 Navigate to root folder and run:

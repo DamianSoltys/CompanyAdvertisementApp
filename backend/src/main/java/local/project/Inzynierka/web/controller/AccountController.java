@@ -5,21 +5,25 @@ import local.project.Inzynierka.persistence.entity.NaturalPerson;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
 import local.project.Inzynierka.web.dto.BecomeNaturalPersonDto;
 import local.project.Inzynierka.web.mapper.NaturalPersonDtoMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api")
 public class AccountController {
 
+    private final UserService userService;
 
-    @Autowired
-    private UserService userService;
+    private final NaturalPersonDtoMapper naturalPersonDtoMapper;
 
-    @Autowired
-    private NaturalPersonDtoMapper naturalPersonDtoMapper;
+    public AccountController(UserService userService, NaturalPersonDtoMapper naturalPersonDtoMapper) {
+        this.userService = userService;
+        this.naturalPersonDtoMapper = naturalPersonDtoMapper;
+    }
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/naturalperson")
     public ResponseEntity<String> createNaturalPerson(@RequestBody final BecomeNaturalPersonDto naturalPersonDto) {

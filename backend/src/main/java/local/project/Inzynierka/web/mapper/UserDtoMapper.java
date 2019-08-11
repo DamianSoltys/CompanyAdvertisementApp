@@ -6,7 +6,6 @@ import local.project.Inzynierka.web.dto.LoginDto;
 import local.project.Inzynierka.web.dto.UserRegistrationDto;
 import org.springframework.stereotype.Component;
 
-
 @Component
 public class UserDtoMapper {
 

@@ -10,7 +10,6 @@ import local.project.Inzynierka.shared.AuthenticationFacade;
 import local.project.Inzynierka.web.dto.NewSubscriptionDto;
 import local.project.Inzynierka.web.newsletter.event.OnNewsletterSignUpEvent;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,14 +34,12 @@ public class NewsletterController {
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    @Autowired
     public NewsletterController(AuthenticationFacade authenticationFacade, NewsletterService newsletterService, CompanyManagementService companyManagementService, ApplicationEventPublisher applicationEventPublisher) {
         this.authenticationFacade = authenticationFacade;
         this.newsletterService = newsletterService;
         this.companyManagementService = companyManagementService;
         this.applicationEventPublisher = applicationEventPublisher;
     }
-
 
     @RequestMapping(method = RequestMethod.POST, name = "/" )
     public ResponseEntity<String> subscribeToNewsletter(@Valid @RequestBody final NewSubscriptionDto newSubscriptionDto,
@@ -82,7 +79,4 @@ public class NewsletterController {
         }
         return ResponseEntity.ok().body("{\"data\":\"Nieprawidłowy token\"}");
     }
-
-
-
 }

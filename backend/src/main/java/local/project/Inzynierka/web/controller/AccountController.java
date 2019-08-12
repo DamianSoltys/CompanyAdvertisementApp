@@ -4,6 +4,7 @@ import local.project.Inzynierka.orchestration.services.UserService;
 import local.project.Inzynierka.persistence.entity.NaturalPerson;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
 import local.project.Inzynierka.web.dto.AuthenticatedUserInfoDto;
+import local.project.Inzynierka.web.dto.AuthenticatedUserPersonalDataDto;
 import local.project.Inzynierka.web.dto.BecomeNaturalPersonDto;
 import local.project.Inzynierka.web.mapper.NaturalPersonDtoMapper;
 import org.springframework.http.HttpStatus;
@@ -34,17 +35,18 @@ public class AccountController {
 
         NaturalPerson naturalPerson = this.naturalPersonDtoMapper.map(naturalPersonDto);
 
-        if( userService.becomeNaturalPerson(naturalPerson)) {
+        if (userService.becomeNaturalPerson(naturalPerson)) {
             return ResponseEntity.status(HttpStatus.CREATED).body(SimpleJsonFromStringCreator.toJson("OK"));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(SimpleJsonFromStringCreator.toJson("COŚ NIE TAK"));
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/naturalperson")
-    public ResponseEntity<AuthenticatedUserInfoDto> getUser(@PathVariable(value = "id") Long id) {
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/naturalperson/{naturalPersonId}")
+    public ResponseEntity<AuthenticatedUserPersonalDataDto> getNaturalPerson(@PathVariable(value = "id") Long id,
+                                                                             @PathVariable(value = "naturalPersonId") Long personId) {
 
-        Optional<NaturalPerson> person = this.userService.getUsersPersonalData(id);
+        Optional<NaturalPerson> person = this.userService.getUsersPersonalData(id, personId);
 
         if (person.isPresent()) {
             return ResponseEntity.ok(this.naturalPersonDtoMapper.map(person.get()));

@@ -117,11 +117,13 @@ public class UserService {
                 .build();
     }
 
-    public Optional<NaturalPerson> getUsersPersonalData(Long id) {
+    public Optional<NaturalPerson> getUsersPersonalData(Long id, Long personID) {
         User authenticatedUser = this.userRepository.getByAddressEmail(authenticationFacade.getAuthentication().getName());
         User requestedUser = this.userRepository.findById(id).orElse(new User());
 
-        if (authenticatedUser.equals(requestedUser) && authenticatedUser.hasRegisteredNaturalPerson()) {
+        if (authenticatedUser.equals(requestedUser) &&
+                authenticatedUser.hasRegisteredNaturalPerson() &&
+                authenticatedUser.getNaturalPerson().getId().equals(personID)) {
             return Optional.of(authenticatedUser.getNaturalPerson());
         } else {
             return Optional.empty();

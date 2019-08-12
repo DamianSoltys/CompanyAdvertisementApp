@@ -2,8 +2,8 @@ package local.project.Inzynierka.web.controller;
 
 import local.project.Inzynierka.orchestration.services.UserService;
 import local.project.Inzynierka.persistence.entity.NaturalPerson;
-import local.project.Inzynierka.persistence.entity.User;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
+import local.project.Inzynierka.web.dto.AuthenticatedUserInfoDto;
 import local.project.Inzynierka.web.dto.BecomeNaturalPersonDto;
 import local.project.Inzynierka.web.mapper.NaturalPersonDtoMapper;
 import org.springframework.http.HttpStatus;
@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -30,7 +32,7 @@ public class AccountController {
     @RequestMapping(method = RequestMethod.POST, value = "/user/naturalperson")
     public ResponseEntity<String> createNaturalPerson(@RequestBody final BecomeNaturalPersonDto naturalPersonDto) {
 
-        NaturalPerson naturalPerson = naturalPersonDtoMapper.map(naturalPersonDto);
+        NaturalPerson naturalPerson = this.naturalPersonDtoMapper.map(naturalPersonDto);
 
         if( userService.becomeNaturalPerson(naturalPerson)) {
             return ResponseEntity.status(HttpStatus.CREATED).body(SimpleJsonFromStringCreator.toJson("OK"));
@@ -39,11 +41,15 @@ public class AccountController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}")
-    public ResponseEntity<User> getUser(@PathVariable(value = "id") Long id) {
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{id}/naturalperson")
+    public ResponseEntity<AuthenticatedUserInfoDto> getUser(@PathVariable(value = "id") Long id) {
 
-        User user = this.userService.getUserData(id);
+        Optional<NaturalPerson> person = this.userService.getUsersPersonalData(id);
 
-        return ResponseEntity.ok(user);
+        if (person.isPresent()) {
+            return ResponseEntity.ok(this.naturalPersonDtoMapper.map(person.get()));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }

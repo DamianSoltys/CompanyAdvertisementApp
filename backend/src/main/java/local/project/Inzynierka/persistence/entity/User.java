@@ -52,6 +52,10 @@ public class User extends FullTimestampingAudit implements IEntity<Long> {
     public User() {
     }
 
+    public boolean hasRegisteredNaturalPerson() {
+        return this.getNaturalPerson() != null;
+    }
+
     /*
     *  The parameters order has to match the order of field's declarations in the class for lombok builder to work.
     * */

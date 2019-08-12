@@ -15,6 +15,8 @@ import local.project.Inzynierka.shared.AuthenticationFacade;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -115,9 +117,14 @@ public class UserService {
                 .build();
     }
 
-    public User getUserData(Long id) {
+    public Optional<NaturalPerson> getUsersPersonalData(Long id) {
         User authenticatedUser = this.userRepository.getByAddressEmail(authenticationFacade.getAuthentication().getName());
+        User requestedUser = this.userRepository.findById(id).orElse(new User());
 
-        return authenticatedUser;
+        if (authenticatedUser.equals(requestedUser) && authenticatedUser.hasRegisteredNaturalPerson()) {
+            return Optional.of(authenticatedUser.getNaturalPerson());
+        } else {
+            return Optional.empty();
+        }
     }
 }

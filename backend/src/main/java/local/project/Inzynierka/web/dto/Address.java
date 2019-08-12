@@ -24,4 +24,6 @@ public class Address {
 
     @NotEmpty
     private String buildingNo;
+
+    String apartmentNo;
 }

@@ -1,16 +1,22 @@
 @import '../../commonStyles/shared';
 
-.login_form {
+.form__login-form {
   text-align: center;
   margin: auto;
   width: 30vw;
   @include boxShadow(0px 4px 5px 0px rgba(187, 185, 191, 1));
-  min-height: 450px;
+  min-height: 400px;
   border: 0;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
+  margin-top: 5%;
+  height: 100%;
 
-  button {
+  .error-container__text--danger {
+    margin:5px;
+  }
+
+  .form__button-submit {
     width: 60%;
     margin-bottom: 2%;
     border-radius: 50px;
@@ -38,46 +44,39 @@
   }
 }
 
-.inputs {
+.login-form__input-group {
   margin-top: 8%;
-
-  p {
+  margin-bottom: 5%;
+  .input-group__register-link {
     margin: 0;
   }
 
   @include phone() {
-    margin-top: 18%;
+    margin-top: 10%;  
   }
 
 
 }
 
-.form-group {
+.input-group__container {
   width: 60%;
   margin: auto;
   text-align: left;
 
   @include phone {
-    width: 75%;
+    width: 85%;
   }
 
 }
 
-.login_Form {
-  margin-top: 5%;
-  height: 100%;
-
-
-}
-
-.form-control {
+.input-group__input {
   width: 100%;
   margin: auto;
 
 
 }
 
-.link {
+.input-group__register-link {
   color: transparent;
   background: #666666;
   -webkit-background-clip: text;
@@ -87,15 +86,12 @@
   transition: 0.5s;
   &:hover{
     color: $bgcolor1;
+    opacity: 0.8;
     
   }
 }
 
-.link:hover {
-  opacity: 0.8;
-}
-
-.header {
+.login-form__header {
   position: relative;
   min-height: 30px;
   height: 6vh;
@@ -105,7 +101,7 @@
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
 
-  p {
+  .header__text{
     color: white;
     position: relative;
     top: 50%;
@@ -113,7 +109,8 @@
     font-size: 1.2em;
   }
 
+  .fa-sign-in-alt{
+    margin-right: 5px;
+  }
 }
-.fa-sign-in-alt{
-margin-right: 5px;
-}
+

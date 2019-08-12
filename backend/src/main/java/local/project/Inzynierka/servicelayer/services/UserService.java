@@ -1,21 +1,25 @@
 package local.project.Inzynierka.servicelayer.services;
 
 import local.project.Inzynierka.persistence.entity.Address;
+import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.EmailAddress;
 import local.project.Inzynierka.persistence.entity.NaturalPerson;
 import local.project.Inzynierka.persistence.entity.User;
 import local.project.Inzynierka.persistence.entity.VerificationToken;
 import local.project.Inzynierka.persistence.entity.Voivoideship;
 import local.project.Inzynierka.persistence.repository.AddressRepository;
+import local.project.Inzynierka.persistence.repository.CompanyRepository;
 import local.project.Inzynierka.persistence.repository.NaturalPersonRepository;
 import local.project.Inzynierka.persistence.repository.UserRepository;
 import local.project.Inzynierka.persistence.repository.VerificationTokenRepository;
 import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
+import local.project.Inzynierka.servicelayer.dto.AuthenticatedUserInfoDto;
 import local.project.Inzynierka.shared.AuthenticationFacade;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -32,13 +36,16 @@ public class UserService {
 
     private final AddressRepository addressRepository;
 
-    public UserService(UserRepository userRepository, VerificationTokenRepository verificationTokenRepository, VoivodeshipRepository voivodeshipRepository, NaturalPersonRepository naturalPersonRepository, AuthenticationFacade authenticationFacade, AddressRepository addressRepository) {
+    private final CompanyRepository companyRepository;
+
+    public UserService(UserRepository userRepository, VerificationTokenRepository verificationTokenRepository, VoivodeshipRepository voivodeshipRepository, NaturalPersonRepository naturalPersonRepository, AuthenticationFacade authenticationFacade, AddressRepository addressRepository, CompanyRepository companyRepository) {
         this.userRepository = userRepository;
         this.verificationTokenRepository = verificationTokenRepository;
         this.voivodeshipRepository = voivodeshipRepository;
         this.naturalPersonRepository = naturalPersonRepository;
         this.authenticationFacade = authenticationFacade;
         this.addressRepository = addressRepository;
+        this.companyRepository = companyRepository;
     }
 
     public User findByName(String name) {
@@ -130,9 +137,25 @@ public class UserService {
         }
     }
 
-    public Optional<User> getUser(Long id) {
+    public Optional<AuthenticatedUserInfoDto> getUser(Long id) {
+        User authenticatedUser = this.userRepository.getByAddressEmail(authenticationFacade.getAuthentication().getName());
+        User requestedUser = this.userRepository.findById(id).orElse(new User());
+
+        if (authenticatedUser.equals(requestedUser)) {
+            AuthenticatedUserInfoDto authenticatedUserInfoDto = new AuthenticatedUserInfoDto();
+            if (authenticatedUser.hasRegisteredNaturalPerson()) {
+                authenticatedUserInfoDto.setNaturalPersonID(authenticatedUser.getNaturalPerson().getId());
+                authenticatedUserInfoDto.setCompaniesIDs(this.companyRepository
+                                                                 .findByRegisterer(authenticatedUser.getNaturalPerson())
+                                                                 .stream().map(Company::getId)
+                                                                 .collect(Collectors.toList()));
+            }
+            authenticatedUserInfoDto.setEmailAddress(authenticatedUser.getEmailAddressEntity().getEmail());
+            authenticatedUserInfoDto.setLoginName(authenticatedUser.getName());
+
+            return Optional.of(authenticatedUserInfoDto);
+        }
 
         return Optional.empty();
-
     }
 }

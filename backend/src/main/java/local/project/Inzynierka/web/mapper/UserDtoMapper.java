@@ -2,8 +2,8 @@ package local.project.Inzynierka.web.mapper;
 
 import local.project.Inzynierka.persistence.entity.EmailAddress;
 import local.project.Inzynierka.persistence.entity.User;
-import local.project.Inzynierka.web.dto.LoginDto;
-import local.project.Inzynierka.web.dto.UserRegistrationDto;
+import local.project.Inzynierka.servicelayer.dto.LoginDto;
+import local.project.Inzynierka.servicelayer.dto.UserRegistrationDto;
 import org.springframework.stereotype.Component;
 
 @Component

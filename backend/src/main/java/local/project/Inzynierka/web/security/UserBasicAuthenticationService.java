@@ -1,9 +1,9 @@
 package local.project.Inzynierka.web.security;
 
-import local.project.Inzynierka.orchestration.services.EmailService;
-import local.project.Inzynierka.orchestration.services.UserService;
 import local.project.Inzynierka.persistence.entity.EmailAddress;
 import local.project.Inzynierka.persistence.entity.User;
+import local.project.Inzynierka.servicelayer.services.EmailService;
+import local.project.Inzynierka.servicelayer.services.UserService;
 import local.project.Inzynierka.web.errors.BadLoginDataException;
 import local.project.Inzynierka.web.errors.EmailAlreadyTakenException;
 import local.project.Inzynierka.web.errors.UserAlreadyExistsException;

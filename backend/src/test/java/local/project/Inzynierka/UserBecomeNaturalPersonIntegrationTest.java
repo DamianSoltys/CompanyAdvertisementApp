@@ -1,13 +1,13 @@
 package local.project.Inzynierka;
 
 
-import local.project.Inzynierka.orchestration.services.UserService;
 import local.project.Inzynierka.persistence.entity.User;
+import local.project.Inzynierka.servicelayer.dto.BecomeNaturalPersonDto;
+import local.project.Inzynierka.servicelayer.dto.UserRegistrationDto;
+import local.project.Inzynierka.servicelayer.services.UserService;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
 import local.project.Inzynierka.web.controller.AccountController;
 import local.project.Inzynierka.web.controller.AuthenticationController;
-import local.project.Inzynierka.web.dto.BecomeNaturalPersonDto;
-import local.project.Inzynierka.web.dto.UserRegistrationDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 

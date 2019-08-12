@@ -1,4 +1,4 @@
-package local.project.Inzynierka.orchestration.errors;
+package local.project.Inzynierka.servicelayer.errors;
 
 public class MappingException extends RuntimeException {
 }

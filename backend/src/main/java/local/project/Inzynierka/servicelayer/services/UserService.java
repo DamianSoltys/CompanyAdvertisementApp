@@ -1,4 +1,4 @@
-package local.project.Inzynierka.orchestration.services;
+package local.project.Inzynierka.servicelayer.services;
 
 import local.project.Inzynierka.persistence.entity.Address;
 import local.project.Inzynierka.persistence.entity.EmailAddress;
@@ -128,5 +128,11 @@ public class UserService {
         } else {
             return Optional.empty();
         }
+    }
+
+    public Optional<User> getUser(Long id) {
+
+        return Optional.empty();
+
     }
 }

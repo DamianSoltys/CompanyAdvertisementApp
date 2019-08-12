@@ -1,11 +1,13 @@
 package local.project.Inzynierka.web.controller;
 
-import local.project.Inzynierka.orchestration.services.UserService;
 import local.project.Inzynierka.persistence.entity.NaturalPerson;
+import local.project.Inzynierka.persistence.entity.User;
+import local.project.Inzynierka.servicelayer.dto.AuthenticatedUserInfoDto;
+import local.project.Inzynierka.servicelayer.dto.AuthenticatedUserPersonalDataDto;
+import local.project.Inzynierka.servicelayer.dto.BecomeNaturalPersonDto;
+import local.project.Inzynierka.servicelayer.dto.UpdateUserDto;
+import local.project.Inzynierka.servicelayer.services.UserService;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
-import local.project.Inzynierka.web.dto.AuthenticatedUserInfoDto;
-import local.project.Inzynierka.web.dto.AuthenticatedUserPersonalDataDto;
-import local.project.Inzynierka.web.dto.BecomeNaturalPersonDto;
 import local.project.Inzynierka.web.mapper.NaturalPersonDtoMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

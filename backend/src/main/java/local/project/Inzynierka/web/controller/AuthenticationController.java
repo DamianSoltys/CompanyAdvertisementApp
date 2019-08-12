@@ -1,10 +1,10 @@
 package local.project.Inzynierka.web.controller;
 
-import local.project.Inzynierka.orchestration.services.UserService;
 import local.project.Inzynierka.persistence.entity.User;
+import local.project.Inzynierka.servicelayer.dto.LoginDto;
+import local.project.Inzynierka.servicelayer.dto.UserRegistrationDto;
+import local.project.Inzynierka.servicelayer.services.UserService;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
-import local.project.Inzynierka.web.dto.LoginDto;
-import local.project.Inzynierka.web.dto.UserRegistrationDto;
 import local.project.Inzynierka.web.errors.BadLoginDataException;
 import local.project.Inzynierka.web.errors.EmailAlreadyTakenException;
 import local.project.Inzynierka.web.errors.UserAlreadyExistsException;

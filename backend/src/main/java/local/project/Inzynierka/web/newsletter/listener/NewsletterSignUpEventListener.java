@@ -1,6 +1,6 @@
 package local.project.Inzynierka.web.newsletter.listener;
 
-import local.project.Inzynierka.orchestration.services.NewsletterService;
+import local.project.Inzynierka.servicelayer.services.NewsletterService;
 import local.project.Inzynierka.web.newsletter.event.OnNewsletterSignUpEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

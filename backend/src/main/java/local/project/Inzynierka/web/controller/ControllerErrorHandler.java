@@ -1,6 +1,6 @@
 package local.project.Inzynierka.web.controller;
 
-import local.project.Inzynierka.web.dto.FieldValidationErrorDto;
+import local.project.Inzynierka.servicelayer.dto.FieldValidationErrorDto;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;

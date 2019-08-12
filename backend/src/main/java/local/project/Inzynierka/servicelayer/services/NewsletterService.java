@@ -1,4 +1,4 @@
-package local.project.Inzynierka.orchestration.services;
+package local.project.Inzynierka.servicelayer.services;
 
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.EmailAddress;

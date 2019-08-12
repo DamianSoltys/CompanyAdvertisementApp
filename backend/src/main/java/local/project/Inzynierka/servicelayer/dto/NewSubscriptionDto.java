@@ -1,4 +1,4 @@
-package local.project.Inzynierka.web.dto;
+package local.project.Inzynierka.servicelayer.dto;
 
 import local.project.Inzynierka.shared.NullOrNotBlank;
 import lombok.AllArgsConstructor;

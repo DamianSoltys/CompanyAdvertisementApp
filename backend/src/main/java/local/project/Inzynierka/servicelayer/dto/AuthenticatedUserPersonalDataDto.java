@@ -1,9 +1,9 @@
-package local.project.Inzynierka.web.dto;
+package local.project.Inzynierka.servicelayer.dto;
 
 import lombok.Data;
 
 @Data
-public class AuthenticatedUserInfoDto {
+public class AuthenticatedUserPersonalDataDto {
 
     String firstName;
     String lastName;

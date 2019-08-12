@@ -1,4 +1,4 @@
-package local.project.Inzynierka.web.dto;
+package local.project.Inzynierka.servicelayer.dto;
 
 import java.util.ArrayList;
 import java.util.List;

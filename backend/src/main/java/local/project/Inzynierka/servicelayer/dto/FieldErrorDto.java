@@ -1,4 +1,4 @@
-package local.project.Inzynierka.web.dto;
+package local.project.Inzynierka.servicelayer.dto;
 
 public class FieldErrorDto {
 

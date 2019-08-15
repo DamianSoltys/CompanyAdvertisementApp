@@ -15,6 +15,7 @@ import local.project.Inzynierka.persistence.repository.VerificationTokenReposito
 import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
 import local.project.Inzynierka.servicelayer.dto.AuthenticatedUserInfoDto;
 import local.project.Inzynierka.servicelayer.dto.AuthenticatedUserPersonalDataDto;
+import local.project.Inzynierka.servicelayer.dto.BecomeNaturalPersonDto;
 import local.project.Inzynierka.servicelayer.dto.UpdatePersonalDataDto;
 import local.project.Inzynierka.servicelayer.dto.UpdateUserDto;
 import local.project.Inzynierka.servicelayer.errors.IllegalPasswordException;
@@ -108,26 +109,29 @@ public class UserService {
     }
 
     @Transactional
-    public boolean becomeNaturalPerson(NaturalPerson naturalPerson) {
+    public Optional<AuthenticatedUserPersonalDataDto> becomeNaturalPerson(BecomeNaturalPersonDto naturalPersonDto) {
 
-        Voivoideship voivoideship = voivodeshipRepository.findByName(naturalPerson.getAddress().getVoivodeship_id().getName());
+
+        NaturalPerson naturalPerson = this.naturalPersonDtoMapper.map(naturalPersonDto);
+
+        Voivoideship voivoideship = this.voivodeshipRepository.findByName(naturalPerson.getAddress().getVoivodeship_id().getName());
         if (voivoideship == null) {
-            return false;
+            return Optional.empty();
         }
 
         Address address = this.buildAddress(naturalPerson, voivoideship);
 
-        address = addressRepository.save(address);
+        address = this.addressRepository.save(address);
         naturalPerson.setAddress(address);
         naturalPerson.setId(0L);
 
-        naturalPerson = naturalPersonRepository.save(naturalPerson);
-        User user = userRepository.getByAddressEmail(authenticationFacade.getAuthentication().getName());
+        naturalPerson = this.naturalPersonRepository.save(naturalPerson);
+        User user = this.authenticationFacade.getAuthenticatedUser();
 
         user.setNaturalPerson(naturalPerson);
-        userRepository.save(user);
+        this.userRepository.save(user);
 
-        return true;
+        return Optional.of(this.naturalPersonDtoMapper.map(naturalPerson));
     }
 
     private Address buildAddress(NaturalPerson naturalPerson, Voivoideship voivoideship) {
@@ -142,13 +146,13 @@ public class UserService {
                 .build();
     }
 
-    public Optional<NaturalPerson> getUsersPersonalData(Long id, Long personID) {
+    public Optional<AuthenticatedUserPersonalDataDto> getUsersPersonalData(Long id, Long personID) {
         User authenticatedUser = this.authenticationFacade.getAuthenticatedUser();
 
         if (this.accessPermissionService.hasPrincipalHavePermissionToUserResource(id)) {
             if (authenticatedUser.hasRegisteredNaturalPerson() &&
                     authenticatedUser.getNaturalPerson().getId().equals(personID)) {
-                return Optional.of(authenticatedUser.getNaturalPerson());
+                return Optional.of(this.naturalPersonDtoMapper.map(authenticatedUser.getNaturalPerson()));
             }
         }
 

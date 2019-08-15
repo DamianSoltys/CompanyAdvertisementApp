@@ -1,6 +1,5 @@
 package local.project.Inzynierka.web.controller;
 
-import local.project.Inzynierka.persistence.entity.NaturalPerson;
 import local.project.Inzynierka.servicelayer.dto.AuthenticatedUserInfoDto;
 import local.project.Inzynierka.servicelayer.dto.AuthenticatedUserPersonalDataDto;
 import local.project.Inzynierka.servicelayer.dto.BecomeNaturalPersonDto;
@@ -8,7 +7,6 @@ import local.project.Inzynierka.servicelayer.dto.UpdatePersonalDataDto;
 import local.project.Inzynierka.servicelayer.dto.UpdateUserDto;
 import local.project.Inzynierka.servicelayer.services.UserService;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
-import local.project.Inzynierka.web.mapper.NaturalPersonDtoMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,22 +23,18 @@ public class AccountController {
 
     private final UserService userService;
 
-    private final NaturalPersonDtoMapper naturalPersonDtoMapper;
-
-    public AccountController(UserService userService, NaturalPersonDtoMapper naturalPersonDtoMapper) {
+    public AccountController(UserService userService) {
         this.userService = userService;
-        this.naturalPersonDtoMapper = naturalPersonDtoMapper;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/naturalperson")
-    public ResponseEntity<String> createNaturalPerson(@RequestBody final BecomeNaturalPersonDto naturalPersonDto) {
+    public ResponseEntity<AuthenticatedUserPersonalDataDto> createNaturalPerson(@RequestBody final BecomeNaturalPersonDto naturalPersonDto) {
 
-        NaturalPerson naturalPerson = this.naturalPersonDtoMapper.map(naturalPersonDto);
-
-        if (userService.becomeNaturalPerson(naturalPerson)) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(SimpleJsonFromStringCreator.toJson("OK"));
+        Optional<AuthenticatedUserPersonalDataDto> person = userService.becomeNaturalPerson(naturalPersonDto);
+        if (person.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(person.get());
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(SimpleJsonFromStringCreator.toJson("COŚ NIE TAK"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 
@@ -48,10 +42,10 @@ public class AccountController {
     public ResponseEntity<AuthenticatedUserPersonalDataDto> getNaturalPerson(@PathVariable(value = "id") Long id,
                                                                              @PathVariable(value = "naturalPersonId") Long personId) {
 
-        Optional<NaturalPerson> person = this.userService.getUsersPersonalData(id, personId);
+        Optional<AuthenticatedUserPersonalDataDto> person = this.userService.getUsersPersonalData(id, personId);
 
         if (person.isPresent()) {
-            return ResponseEntity.ok(this.naturalPersonDtoMapper.map(person.get()));
+            return ResponseEntity.ok(person.get());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

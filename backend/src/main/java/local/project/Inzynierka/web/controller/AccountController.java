@@ -4,6 +4,7 @@ import local.project.Inzynierka.persistence.entity.NaturalPerson;
 import local.project.Inzynierka.servicelayer.dto.AuthenticatedUserInfoDto;
 import local.project.Inzynierka.servicelayer.dto.AuthenticatedUserPersonalDataDto;
 import local.project.Inzynierka.servicelayer.dto.BecomeNaturalPersonDto;
+import local.project.Inzynierka.servicelayer.dto.UpdatePersonalDataDto;
 import local.project.Inzynierka.servicelayer.dto.UpdateUserDto;
 import local.project.Inzynierka.servicelayer.services.UserService;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
@@ -73,6 +74,19 @@ public class AccountController {
 
         if (this.userService.changePassword(updateUserDto, id)) {
             return ResponseEntity.ok(SimpleJsonFromStringCreator.toJson("PASSWORD CHANGED"));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.PATCH, value = "/user/{id}/naturalperson/{naturalPersonId}")
+    public ResponseEntity<AuthenticatedUserPersonalDataDto> updatePersonalData(@RequestBody final UpdatePersonalDataDto updatePersonalDataDto,
+                                                                               @PathVariable(value = "id") final Long userId,
+                                                                               @PathVariable(value = "naturalPersonId") final Long personId) {
+
+        Optional<AuthenticatedUserPersonalDataDto> person = this.userService.updatePersonalData(updatePersonalDataDto, userId, personId);
+        if (person.isPresent()) {
+            return ResponseEntity.ok(person.get());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

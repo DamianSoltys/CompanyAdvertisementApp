@@ -24,4 +24,9 @@ public class AccessPermissionService {
         return authenticatedUser != null && authenticatedUser.equals(requestedUser);
     }
 
+    public boolean hasPrincipalHavePermissionToNaturalPersonResource(Long userId, Long personId) {
+        User authenticatedUser = this.userRepository.getByAddressEmail(authenticationFacade.getAuthentication().getName());
+        return authenticatedUser.hasRegisteredNaturalPerson() &&
+                authenticatedUser.getNaturalPerson().getId().equals(personId);
+    }
 }

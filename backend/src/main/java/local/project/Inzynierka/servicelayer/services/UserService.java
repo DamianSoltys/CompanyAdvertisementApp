@@ -14,11 +14,14 @@ import local.project.Inzynierka.persistence.repository.UserRepository;
 import local.project.Inzynierka.persistence.repository.VerificationTokenRepository;
 import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
 import local.project.Inzynierka.servicelayer.dto.AuthenticatedUserInfoDto;
+import local.project.Inzynierka.servicelayer.dto.AuthenticatedUserPersonalDataDto;
+import local.project.Inzynierka.servicelayer.dto.UpdatePersonalDataDto;
 import local.project.Inzynierka.servicelayer.dto.UpdateUserDto;
 import local.project.Inzynierka.servicelayer.errors.IllegalPasswordException;
 import local.project.Inzynierka.servicelayer.errors.PasswordsNotMatchingException;
 import local.project.Inzynierka.servicelayer.validation.PasswordCreatorService;
 import local.project.Inzynierka.shared.AuthenticationFacade;
+import local.project.Inzynierka.web.mapper.NaturalPersonDtoMapper;
 import local.project.Inzynierka.web.security.AccessPermissionService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -48,7 +51,9 @@ public class UserService {
 
     private final AccessPermissionService accessPermissionService;
 
-    public UserService(UserRepository userRepository, VerificationTokenRepository verificationTokenRepository, VoivodeshipRepository voivodeshipRepository, NaturalPersonRepository naturalPersonRepository, AuthenticationFacade authenticationFacade, AddressRepository addressRepository, CompanyRepository companyRepository, PasswordEncoder passwordEncoder, PasswordCreatorService passwordCreatorService, AccessPermissionService accessPermissionService) {
+    private final NaturalPersonDtoMapper naturalPersonDtoMapper;
+
+    public UserService(UserRepository userRepository, VerificationTokenRepository verificationTokenRepository, VoivodeshipRepository voivodeshipRepository, NaturalPersonRepository naturalPersonRepository, AuthenticationFacade authenticationFacade, AddressRepository addressRepository, CompanyRepository companyRepository, PasswordEncoder passwordEncoder, PasswordCreatorService passwordCreatorService, AccessPermissionService accessPermissionService, NaturalPersonDtoMapper naturalPersonDtoMapper) {
         this.userRepository = userRepository;
         this.verificationTokenRepository = verificationTokenRepository;
         this.voivodeshipRepository = voivodeshipRepository;
@@ -58,6 +63,7 @@ public class UserService {
         this.companyRepository = companyRepository;
         this.passwordCreatorService = passwordCreatorService;
         this.accessPermissionService = accessPermissionService;
+        this.naturalPersonDtoMapper = naturalPersonDtoMapper;
     }
 
     public User findByName(String name) {
@@ -197,4 +203,69 @@ public class UserService {
         }
     }
 
+    public Optional<AuthenticatedUserPersonalDataDto> updatePersonalData(UpdatePersonalDataDto updatePersonalDataDto, Long userId, Long personId) {
+        if (this.accessPermissionService.hasPrincipalHavePermissionToUserResource(userId)) {
+            if (this.accessPermissionService.hasPrincipalHavePermissionToNaturalPersonResource(userId, personId)) {
+                NaturalPerson person = this.authenticationFacade.getAuthenticatedUser().getNaturalPerson();
+                NaturalPerson updatedPerson = this.naturalPersonRepository.save(this.getUpdatedPerson(person, updatePersonalDataDto));
+
+                return Optional.of(this.naturalPersonDtoMapper.map(updatedPerson));
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    private NaturalPerson getUpdatedPerson(NaturalPerson person, UpdatePersonalDataDto updatePersonalDataDto) {
+        if (updatePersonalDataDto.getFirstName() != null) {
+            if (!person.getFirstName().equals(updatePersonalDataDto.getFirstName())) {
+                person.setFirstName(updatePersonalDataDto.getFirstName());
+            }
+        }
+        if (updatePersonalDataDto.getLastName() != null) {
+            if (!person.getLastName().equals(updatePersonalDataDto.getLastName())) {
+                person.setLastName(updatePersonalDataDto.getLastName());
+            }
+        }
+        if (updatePersonalDataDto.getPhoneNo() != null) {
+            if (!person.getPhoneNo().equals(updatePersonalDataDto.getPhoneNo())) {
+                person.setPhoneNo(updatePersonalDataDto.getPhoneNo());
+            }
+        }
+        local.project.Inzynierka.servicelayer.dto.Address addressDto = updatePersonalDataDto.getAddress();
+        if (addressDto != null) {
+            Address address = person.getAddress();
+            if (addressDto.getApartmentNo() != null) {
+                if (!addressDto.getApartmentNo().equals(address.getApartmentNo())) {
+                    address.setApartmentNo(addressDto.getApartmentNo());
+                }
+            }
+            if (addressDto.getBuildingNo() != null) {
+                if (!addressDto.getBuildingNo().equals(address.getBuildingNo())) {
+                    address.setBuildingNo(addressDto.getApartmentNo());
+                }
+            }
+            if (addressDto.getCity() != null) {
+                if (!addressDto.getCity().equals(address.getCity())) {
+                    address.setCity(addressDto.getCity());
+                }
+            }
+            if (addressDto.getStreet() != null) {
+                if (!addressDto.getStreet().equals(address.getStreet())) {
+                    address.setStreet(addressDto.getStreet());
+                }
+            }
+            if (addressDto.getVoivodeship() != null) {
+                if (!addressDto.getVoivodeship().toString().equals(address.getVoivodeship_id().getName())) {
+                    Voivoideship voivoideship = this.voivodeshipRepository.findByName(addressDto.getVoivodeship().toString());
+                    address.setVoivodeship_id(voivoideship);
+                }
+            }
+            if (!address.equals(person.getAddress())) {
+                person.setAddress(address);
+            }
+        }
+
+        return person;
+    }
 }

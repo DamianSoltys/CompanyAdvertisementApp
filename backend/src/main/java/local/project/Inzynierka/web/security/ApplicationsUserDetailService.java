@@ -1,6 +1,5 @@
 package local.project.Inzynierka.web.security;
 
-import local.project.Inzynierka.persistence.entity.EmailAddress;
 import local.project.Inzynierka.persistence.entity.User;
 import local.project.Inzynierka.servicelayer.services.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +23,7 @@ public class ApplicationsUserDetailService implements UserDetailsService {
          TODO Add logging in using also name option.
         **/
 
-        User user = userService.findByEmailAddress(new EmailAddress(email));
+        User user = userService.findByEmailAddress(email);
         if(user == null ){
             throw new NullPointerException();
         }

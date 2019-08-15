@@ -13,9 +13,9 @@ public class EmailService {
         this.emailRepository = emailRepository;
     }
 
-    public EmailAddress findByEmail(EmailAddress email) {
+    public EmailAddress findByEmail(String email) {
 
-        return emailRepository.findByEmail(email.getEmail());
+        return emailRepository.findByEmail(email);
     }
 
     public EmailAddress saveEmailAddress(EmailAddress emailAddress) {

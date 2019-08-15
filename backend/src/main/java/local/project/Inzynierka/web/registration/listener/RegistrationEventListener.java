@@ -1,6 +1,5 @@
 package local.project.Inzynierka.web.registration.listener;
 
-import local.project.Inzynierka.persistence.entity.User;
 import local.project.Inzynierka.servicelayer.services.UserService;
 import local.project.Inzynierka.web.registration.event.OnRegistrationEvent;
 import org.springframework.context.event.EventListener;
@@ -27,24 +26,23 @@ public class RegistrationEventListener {
     @EventListener
     public void handleRegistrationEvent(OnRegistrationEvent event) {
 
-        final User user = event.getUser();
+        final String userEmail = event.getUserEmail();
         final String token = UUID.randomUUID().toString();
 
-        userService.createVerificationTokenForUser(user,token);
+        userService.createVerificationTokenForUser(userEmail, token);
 
-        final SimpleMailMessage mailMessage = constructEmailMessage(event, user, token);
+        final SimpleMailMessage mailMessage = constructEmailMessage(event, userEmail, token);
         javaMailSender.send(mailMessage);
     }
 
-    private SimpleMailMessage constructEmailMessage(OnRegistrationEvent event, User user, String token) {
+    private SimpleMailMessage constructEmailMessage(OnRegistrationEvent event, String userEmail, String token) {
 
-        final String recipientAddress = user.getEmailAddressEntity().getEmail();
         final String subject = "Potwierdzenie rejestracji";
         final String confirmationUrl = event.getAppUrl() + "/registerConfirm/" + token;
         final String message = "Cześć, dziękujemy za założenie konta.\r\n" +
                 "Kliknij teraz w link, aby potwierdzić rejestrację ";
         final SimpleMailMessage email = new SimpleMailMessage();
-        email.setTo(recipientAddress);
+        email.setTo(userEmail);
         email.setSubject(subject);
         email.setText(message + " \r\n" + confirmationUrl);
         email.setFrom("test@example.com");

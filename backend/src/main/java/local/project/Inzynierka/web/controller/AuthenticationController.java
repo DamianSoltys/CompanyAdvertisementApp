@@ -3,7 +3,6 @@ package local.project.Inzynierka.web.controller;
 import local.project.Inzynierka.persistence.entity.User;
 import local.project.Inzynierka.servicelayer.dto.LoginDto;
 import local.project.Inzynierka.servicelayer.dto.UserRegistrationDto;
-import local.project.Inzynierka.servicelayer.services.UserService;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
 import local.project.Inzynierka.web.errors.BadLoginDataException;
 import local.project.Inzynierka.web.errors.EmailAlreadyTakenException;
@@ -28,18 +27,19 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class AuthenticationController {
 
+    private static final String ORIGIN_HEADER = "Origin";
+    private static final String CONFIRMATION_MESSAGE = "Twoje konto zostało potwiedzone";
+    private static final String WRONG_TOKEN = "Nieprawidłowy token";
+
     private final UserAuthenticationService authenticationService;
 
     private final UserDtoMapper mapper;
 
-    private final UserService userService;
-
     private final ApplicationEventPublisher eventPublisher;
 
-    public AuthenticationController(UserAuthenticationService authenticationService, UserDtoMapper mapper, UserService userService, ApplicationEventPublisher eventPublisher) {
+    public AuthenticationController(UserAuthenticationService authenticationService, UserDtoMapper mapper, ApplicationEventPublisher eventPublisher) {
         this.authenticationService = authenticationService;
         this.mapper = mapper;
-        this.userService = userService;
         this.eventPublisher = eventPublisher;
     }
 
@@ -47,11 +47,9 @@ public class AuthenticationController {
     public ResponseEntity registerNewUser(@RequestBody final UserRegistrationDto userRegistrationDto,
                                           final HttpServletRequest request) {
 
-        User user = mapper.map(userRegistrationDto);
         try {
-            authenticationService.registerNewUser(user);
-            user = userService.findByEmailAddress(user.getEmailAddressEntity());
-            eventPublisher.publishEvent(new OnRegistrationEvent(user, request.getHeader("Origin")));
+            authenticationService.registerNewUser(userRegistrationDto);
+            eventPublisher.publishEvent(new OnRegistrationEvent(userRegistrationDto.getEmail(), request.getHeader(ORIGIN_HEADER)));
 
             return ResponseEntity.ok().body("");
         } catch (UserAlreadyExistsException | EmailAlreadyTakenException e) {
@@ -86,17 +84,12 @@ public class AuthenticationController {
         return headers;
     }
 
-    @RequestMapping(value = "/auth/logout", method = RequestMethod.POST)
-    public String logout() {
-        return "LOGGED OUT";
-    }
-
     @RequestMapping(method = RequestMethod.GET, value = "/auth/registration/confirm")
     public ResponseEntity<String> confirmRegistration(@RequestParam(name = "token") String token ) {
         if( authenticationService.confirmUser(token)) {
-            return ResponseEntity.ok().body("{\"data\":\"Twoje konto zostało potwiedzone\"}");
+            return ResponseEntity.ok().body(SimpleJsonFromStringCreator.toJson(CONFIRMATION_MESSAGE));
         }
-        return ResponseEntity.ok().body("{\"data\":\"Nieprawidłowy token\"}");
+        return ResponseEntity.ok().body(SimpleJsonFromStringCreator.toJson(WRONG_TOKEN));
     }
 
 }

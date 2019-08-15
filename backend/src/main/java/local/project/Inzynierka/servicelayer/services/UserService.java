@@ -2,7 +2,6 @@ package local.project.Inzynierka.servicelayer.services;
 
 import local.project.Inzynierka.persistence.entity.Address;
 import local.project.Inzynierka.persistence.entity.Company;
-import local.project.Inzynierka.persistence.entity.EmailAddress;
 import local.project.Inzynierka.persistence.entity.NaturalPerson;
 import local.project.Inzynierka.persistence.entity.User;
 import local.project.Inzynierka.persistence.entity.VerificationToken;
@@ -72,9 +71,9 @@ public class UserService {
         return userRepository.findByName(name);
     }
 
-    public User findByEmailAddress(EmailAddress emailAddress) {
+    public User findByEmailAddress(String emailAddress) {
 
-        return userRepository.getByAddressEmail(emailAddress.getEmail());
+        return userRepository.getByAddressEmail(emailAddress);
     }
 
     public User createNewUser(User user) {
@@ -85,10 +84,11 @@ public class UserService {
     }
 
     @Transactional
-    public void createVerificationTokenForUser(User user, final String token) {
+    public void createVerificationTokenForUser(String userEmail, final String token) {
         VerificationToken myToken = new VerificationToken(token);
         myToken.setId(0L);
 
+        User user = this.userRepository.getByAddressEmail(userEmail);
         VerificationToken createdToken = verificationTokenRepository.save(myToken);
         user.setVerificationToken(createdToken);
         userRepository.save(user);

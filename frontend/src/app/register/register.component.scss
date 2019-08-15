@@ -66,6 +66,10 @@
   @include phone {
     width: 85%;
   }
+
+  &:focus-within {
+    color: $bgcolor;
+  }
 }
 
 .input-group__input {
@@ -83,12 +87,16 @@
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
 
-  .header__text {
-    color: white;
+  .header__text-node {
+    color: #fff;
     position: relative;
     top: 50%;
     transform: translate(0, -50%);
     font-size: 1.2em;
+
+    .fa-file-signature {
+      margin-right:5px;
+    }
   }
 }
 
@@ -105,8 +113,4 @@
     color: $bgcolor1;
     opacity: 0.8;
   }
-}
-
-.fa-id-card{
-  margin-right:5px;
 }

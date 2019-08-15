@@ -63,6 +63,10 @@
   margin: auto;
   text-align: left;
 
+  &:focus-within {
+    color: $bgcolor;
+  }
+
   @include phone {
     width: 85%;
   }

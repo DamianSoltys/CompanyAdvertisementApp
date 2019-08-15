@@ -58,6 +58,10 @@
           font-size:1.1rem;
           margin: 0 15px;
           color:darken($bgcolor,10);
+
+          .text-node__icon {
+            padding-right: 5px;
+          }
         }
       }
    
@@ -80,6 +84,9 @@
       
         .section-container__container {
           margin:0 1rem;
+          position: relative;
+          left:0px;
+          transition: all .2s ease-in-out;
 
           .section-container__input {
             padding:0;    
@@ -87,9 +94,22 @@
           
           &:focus-within {
             color: $bgcolor;
-          }
-          .section-container__label {
-            transition: color .2s ease-in-out;
+
+            @include tablet() {
+              left:-15px;
+              
+              .section-container__input {
+                width:calc(100% + 30px);
+              }
+            }
+
+            @include desktop() {
+              left:-25px;
+
+              .section-container__input {
+                width:calc(100% + 50px);
+              }
+            }
           }
 
           @include phone {

@@ -34,10 +34,12 @@ export class PersonalDataComponent implements OnInit {
     this.pdataService.sendPersonalData(this.personalDataForm.value as PersonalData).
     subscribe(response => {
       console.log(response);
+      this.errorMessage='';
       this.successMessage = 'Twoje dane zostały zapisane';
       this.personalDataForm.reset();
     }, error => {
       console.log(error);
+      this.successMessage='';
       this.errorMessage = 'Nie udało się zapisać danych';
     });
   }

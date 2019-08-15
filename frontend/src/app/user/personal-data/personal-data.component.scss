@@ -26,7 +26,7 @@
     padding:3%;
     margin-top:2%;
 
-    .input-group__input {
+    .section-container__input {
         padding:0;
       
     }
@@ -41,7 +41,7 @@
     margin: auto;
     padding:0;
     
-    .personal-data-form__button-submit {
+    .personal-data-form__button--submit {
         width: 60%;
         margin:auto;
         margin-bottom:10%;
@@ -56,13 +56,32 @@
           width: 75%;
         }
       }
+
+      .section-container__container {
+        margin-right: 2rem;
+        
+        &:focus-within {
+          color: $bgcolor;
+        }
+        .section-container__label {
+          transition: color .2s ease-in-out;
+        }
+
+        @include phone {
+          width: 100%;
+          margin:auto;
+        }
+      }
+
+      .input-group__section-container {
+        border:1px solid red;
+        padding:5px;
+        margin:auto;
+        margin-bottom:20px;
+        justify-content: space-evenly;
+      }
       
 }
-.input-group__container {
-  @include phone {
-    width: 80%;
-    margin:auto;
-  }
-}
+
 
   

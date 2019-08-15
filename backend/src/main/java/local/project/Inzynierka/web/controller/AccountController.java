@@ -27,10 +27,11 @@ public class AccountController {
         this.userService = userService;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/user/naturalperson")
-    public ResponseEntity<AuthenticatedUserPersonalDataDto> createNaturalPerson(@RequestBody final BecomeNaturalPersonDto naturalPersonDto) {
+    @RequestMapping(method = RequestMethod.POST, value = "/user/{id}/naturalperson")
+    public ResponseEntity<AuthenticatedUserPersonalDataDto> createNaturalPerson(@RequestBody final BecomeNaturalPersonDto naturalPersonDto,
+                                                                                @PathVariable(value = "id") Long userId) {
 
-        Optional<AuthenticatedUserPersonalDataDto> person = userService.becomeNaturalPerson(naturalPersonDto);
+        Optional<AuthenticatedUserPersonalDataDto> person = userService.becomeNaturalPerson(naturalPersonDto, userId);
         if (person.isPresent()) {
             return ResponseEntity.status(HttpStatus.CREATED).body(person.get());
         } else {

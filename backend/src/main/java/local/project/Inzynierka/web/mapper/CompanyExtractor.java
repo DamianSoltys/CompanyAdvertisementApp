@@ -5,8 +5,8 @@ import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.persistence.entity.Category;
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.Voivoideship;
-import local.project.Inzynierka.web.dto.AddCompanyDto;
-import local.project.Inzynierka.web.dto.CompanyBranchDto;
+import local.project.Inzynierka.servicelayer.dto.AddCompanyDto;
+import local.project.Inzynierka.servicelayer.dto.CompanyBranchDto;
 
 import java.util.ArrayList;
 import java.util.List;

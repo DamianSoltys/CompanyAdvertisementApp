@@ -2,9 +2,7 @@ HELP.md
 **/target/
 !.mvn/wrapper/maven-wrapper.jar
 
-### DB CONFIG ###
-/backend/src/main/resources/application-prod.properties
-/backend/src/main/resources/application-dev.properties
+
 
 ### STS ###
 .apt_generated

@@ -1,13 +1,13 @@
 package local.project.Inzynierka.web.controller;
 
 
-import local.project.Inzynierka.orchestration.services.CompanyManagementService;
-import local.project.Inzynierka.orchestration.services.NewsletterService;
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.EmailAddress;
 import local.project.Inzynierka.persistence.entity.NewsletterSubscription;
+import local.project.Inzynierka.servicelayer.dto.NewSubscriptionDto;
+import local.project.Inzynierka.servicelayer.services.CompanyManagementService;
+import local.project.Inzynierka.servicelayer.services.NewsletterService;
 import local.project.Inzynierka.shared.AuthenticationFacade;
-import local.project.Inzynierka.web.dto.NewSubscriptionDto;
 import local.project.Inzynierka.web.newsletter.event.OnNewsletterSignUpEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;

@@ -1,9 +1,9 @@
 package local.project.Inzynierka.web.security;
 
-import local.project.Inzynierka.orchestration.services.EmailService;
-import local.project.Inzynierka.orchestration.services.UserService;
 import local.project.Inzynierka.persistence.entity.EmailAddress;
 import local.project.Inzynierka.persistence.entity.User;
+import local.project.Inzynierka.servicelayer.services.EmailService;
+import local.project.Inzynierka.servicelayer.services.UserService;
 import local.project.Inzynierka.web.errors.BadLoginDataException;
 import local.project.Inzynierka.web.errors.EmailAlreadyTakenException;
 import local.project.Inzynierka.web.errors.UserAlreadyExistsException;
@@ -15,7 +15,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 @Service
 public class UserBasicAuthenticationService implements UserAuthenticationService {
@@ -57,13 +56,15 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
     }
 
     @Override
-    public void login(User user)  {
+    public Long login(User user) {
         try{
             UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(
                     new UserPrincipal(user), user.getPasswordHash());
 
             Authentication authenticatedUser = authenticationManager.authenticate(loginToken);
             SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+
+            return ((UserPrincipal) authenticatedUser.getPrincipal()).getUser().getId();
         } catch (AuthenticationException  e) {
             throw new BadLoginDataException();
         }

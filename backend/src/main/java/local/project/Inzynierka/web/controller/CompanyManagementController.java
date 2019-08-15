@@ -1,11 +1,11 @@
 package local.project.Inzynierka.web.controller;
 
-import local.project.Inzynierka.orchestration.services.CompanyManagementService;
 import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.persistence.entity.Company;
+import local.project.Inzynierka.servicelayer.dto.AddCompanyDto;
+import local.project.Inzynierka.servicelayer.dto.NewsletterItemDto;
+import local.project.Inzynierka.servicelayer.services.CompanyManagementService;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
-import local.project.Inzynierka.web.dto.AddCompanyDto;
-import local.project.Inzynierka.web.dto.NewsletterItemDto;
 import local.project.Inzynierka.web.mapper.CompanyExtractor;
 import local.project.Inzynierka.web.newsletter.event.OnCreatingNewsletterMailEvent;
 import local.project.Inzynierka.web.security.CompanyManagementPermissionService;

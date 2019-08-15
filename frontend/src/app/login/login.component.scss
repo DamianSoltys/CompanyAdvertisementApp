@@ -1,4 +1,4 @@
-@import '../../commonStyles/shared';
+@import "../../commonStyles/shared";
 
 .form__login-form {
   text-align: center;
@@ -12,22 +12,108 @@
   margin-top: 5%;
   height: 100%;
 
-  .error-container__text--danger {
-    margin:5px;
+  .login-form__header {
+    position: relative;
+    min-height: 30px;
+    height: 6vh;
+    max-height: 60px;
+    background-color: $bgcolor;
+    border: 0;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+
+    .header__text {
+      color: white;
+      position: relative;
+      top: 50%;
+      transform: translate(0, -50%);
+      font-size: 1.2em;
+    }
+
+    .fa-sign-in-alt {
+      margin-right: 5px;
+    }
   }
 
-  .form__button--submit {
-    width: 60%;
-    margin-bottom: 2%;
-    border-radius: 50px;
-    border: 0;
-    background: linear-gradient(-45deg, #FFA63D, #FF3D77, #338AFF, #3CF0C5);
-    animation: button-background-animation 16s linear infinite;
-    background-size: 600%;
-    margin-top: 4%;
+  .login-form__input-group {
+    margin-top: 8%;
+    margin-bottom: 5%;
 
-    @include phone {
-      width: 75%;
+    .input-group__container {
+      width: 60%;
+      margin: auto;
+      text-align: left;
+      transition: all .2s ease-in-out;
+
+      .input-group__input {
+        width: 100%;
+        margin: auto;
+      }
+
+      &:focus-within {
+        color: $bgcolor;
+
+        @include tablet() {
+          transform: translate(-25px);
+
+          .input-group__input {
+            width:calc(100% + 50px);
+          }
+        }
+        
+        @include desktop() {
+          transform: translate(-25px);
+
+          .input-group__input {
+            width:calc(100% + 50px);
+          }
+        }
+      }
+
+      @include phone {
+        width: 85%;
+      }
+    }
+
+    .input-group__register-link {
+      margin: 0;
+    }
+
+    @include phone() {
+      margin-top: 10%;
+    }
+
+    .error-container__text--danger {
+      margin: 5px;
+    }
+
+    .form__button--submit {
+      width: 60%;
+      margin-bottom: 2%;
+      border-radius: 50px;
+      border: 0;
+      background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
+      animation: button-background-animation 16s linear infinite;
+      background-size: 600%;
+      margin-top: 4%;
+
+      @include phone {
+        width: 75%;
+      }
+    }
+
+    .input-group__register-link {
+      color: transparent;
+      background: #666666;
+      -webkit-background-clip: text;
+      -moz-background-clip: text;
+      background-clip: text;
+      text-shadow: 0px 3px 3px rgba(255, 255, 255, 0.5);
+      transition: 0.5s;
+      &:hover {
+        color: $bgcolor1;
+        opacity: 0.8;
+      }
     }
   }
 
@@ -39,82 +125,7 @@
   @include tablet {
     width: 50vw;
   }
-  @include desktop{
-    min-width:450px;
+  @include desktop {
+    min-width: 450px;
   }
 }
-
-.login-form__input-group {
-  margin-top: 8%;
-  margin-bottom: 5%;
-  .input-group__register-link {
-    margin: 0;
-  }
-
-  @include phone() {
-    margin-top: 10%;  
-  }
-
-
-}
-
-.input-group__container {
-  width: 60%;
-  margin: auto;
-  text-align: left;
-
-  &:focus-within {
-    color: $bgcolor;
-  }
-
-  @include phone {
-    width: 85%;
-  }
-
-}
-
-.input-group__input {
-  width: 100%;
-  margin: auto;
-
-
-}
-
-.input-group__register-link {
-  color: transparent;
-  background: #666666;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  background-clip: text;
-  text-shadow: 0px 3px 3px rgba(255, 255, 255, 0.5);
-  transition: 0.5s;
-  &:hover{
-    color: $bgcolor1;
-    opacity: 0.8;
-    
-  }
-}
-
-.login-form__header {
-  position: relative;
-  min-height: 30px;
-  height: 6vh;
-  max-height: 60px;
-  background-color: $bgcolor;
-  border: 0;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
-
-  .header__text{
-    color: white;
-    position: relative;
-    top: 50%;
-    transform: translate(0, -50%);
-    font-size: 1.2em;
-  }
-
-  .fa-sign-in-alt{
-    margin-right: 5px;
-  }
-}
-

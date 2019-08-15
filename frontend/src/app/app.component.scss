@@ -7,111 +7,100 @@ html {
   padding: 0;
 }
 
-.main-container {
-  min-height: calc(100vh - 50px);
+.app-component {
+  min-height: calc(100vh - 60px);
 }
 
-.menu {
-  .btn:first-child {
-    border-top-left-radius: 20px;
-  }
-
-  .btn:last-child {
-    border-bottom-right-radius: 20px;
-  }
-}
-
-
-.navbar {
+.app-component__navbar {
   background: linear-gradient(-50deg, $bgcolor, $bgcolor1);
   border-bottom: 2px solid whitesmoke;
-
-
-
+  position: relative; 
+  display: flex;   
+  flex-wrap: wrap;  
+  align-items: center;   
+  justify-content: space-between;  
+  padding: .5rem 1rem;
 }
 
-
-.footer {
+.app-component__footer {
   height: 40px;
-
-  p {
-    margin: auto;
-  }
-
   margin:0;
   color:white;
-  margin-top:2%;
+  margin-top:20px;
   background:linear-gradient(-50deg, $bgcolor1, $bgcolor);
   width:100%;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
+
+  .footer__text {
+    margin: auto;
+  }
 }
-.logOut_message{
+.app-component__logout-message{
   display:none;
 }
-.menu {
-  button {
+
+.navbar__button-group {
+    position: relative;
+    left:-5%;
+    
+  .navbar__button-link {
     background-color: $bgcolor1;
     border: 1px solid $btborder;
     transition: 0.5s;
-
+    
     &:hover {
       background-color: $bgcolor;
-      opacity: 0.8;
-      
+      opacity: 0.8;     
+    }
+
+    &:first-child {
+      border-top-left-radius: 20px;
+    }
+  
+    &:last-child {
+      border-bottom-right-radius: 20px;
+    }
+
+    @include phone {     
+      display: none;      
     }
   }
-
-  @include phone {
-    button {
-      display: none;
-    }
-  }
-
-  position: relative;
-  left:-5%;
 }
 
 .fa-copyright {
   margin-right: 5px;
 }
 
-.img_logo {
+.logo-container__logo-img {
   max-width: 150px;
   left: -10px;
   transition: 0.5s;
+  position: absolute;
+  top:-70px;
 
   @include tablet {
     max-width: 300px;
     top: -120px;
-
   }
 
   @include tabletbig {
     max-width: 220px;
     left: -20px;
     top: -80px;
-
   }
 
   @include desktop {
-
     max-width: 350px;
     top: -140px;
-
   }
-
-  position: absolute;
-  top:-70px;
-
-
 }
 
-.logodiv {
+.navbar__logo-container {
   padding: 0;
 }
 
-.linkspan {
+.logo-container__link-span {
   position: absolute;
   z-index: 1;
   width: 295px;
@@ -121,9 +110,12 @@ html {
     cursor: pointer;
   }
 
-  &:hover+img {
-    opacity: 0.8;
-    
+  &:focus {
+    outline:none;
+  }
+
+  &:hover+.logo-container__logo-img {
+    opacity: 0.8;  
   }
 
   @include phone {
@@ -141,55 +133,44 @@ html {
   }
 }
 
-.dropdown-menua{
+.dropdown__menu {
   position: absolute;
   @include boxShadow(0px 4px 5px 0px rgba(187, 185, 191, 1));
   border: 1px solid $bgcolor;
   margin-top:10px;
   border-radius: 10px;
   z-index: 1;
-  button{
+
+  .dropdown__item {
     float:right;
     width:100%;
     background-color:white;
     border:0;
     transition: 1s;
     padding:5px;
-    &:first-child{
+
+    &:first-child {
       border-top-left-radius: 10px;
       border-top-right-radius: 10px;
     }
-    &:last-child{
+
+    &:last-child {
       border-bottom-left-radius: 10px;
       border-bottom-right-radius: 10px;
     }
-    &:hover{
+
+    &:hover {
       background-color: whitesmoke;
-    color: $linkcolor;
-    
+      color: $linkcolor;  
     }
+
     &:focus{
       outline: none;
     }
   }
 }
 
-.dropdown-menu {
-  left: -50px;
-  width: 180px;
-  text-align: center;
-  border: 1px solid $bgcolor;
-  @include boxShadow(0px 4px 5px 0px rgba(187, 185, 191, 1));
-
-  button:hover {
-    background-color: whitesmoke;
-    color: $linkcolor;
-    transition: 1s;
-  }
-
-}
-
-.dropdown {
+.navbar__dropdown {
   position: relative;
   left: -5%;
 
@@ -201,7 +182,7 @@ html {
     display: none;
   }
 
-  .buttmenu {
+  .dropdown__button {
     background-color: $bgcolor1;
     border: 1px solid $btborder;
     width: 130px;
@@ -211,16 +192,15 @@ html {
       background-color: $bgcolor;
     }
   }
-
 }
 
-.nearby {
+.nearby-container__data-container {
   margin: auto;
   width: 80vw;
   border: 1px solid red;
 }
 
-.toggleNearby {
+.nearby-container__toggle {
   background-color: $bgcolor;
   border: 1px solid $btborder;
   position: relative;
@@ -238,6 +218,6 @@ html {
   }
 }
 
-.nearby-text {
+.nearby_container__text {
   margin-top: 100px;
 }

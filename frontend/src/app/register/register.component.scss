@@ -1,6 +1,6 @@
 @import '../../commonStyles/shared';
 
-.register_form {
+.form__register-form {
   text-align: center;
   margin: auto;
 
@@ -12,7 +12,7 @@
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
 
-  button {
+  .register-form__button-submit {
     width: 60%;
     margin-bottom: 2%;
     border-radius: 50px;
@@ -41,39 +41,39 @@
   }
 }
 
-.inputs {
+.register-form__input-group {
 
   margin-top: 8%;
 
-  p {
-    margin: 0;
+  .error-container__text-danger {
+    margin: 5px;
   }
 
   padding-bottom: 5%;
 }
 
-.Register_Form {
+.register-component__form {
   margin-top: 5%;
   height: 100%;
 
 }
 
-.form-group {
+.input-group__container {
   width: 60%;
   margin: auto;
   text-align: left;
 
   @include phone {
-    width: 75%;
+    width: 85%;
   }
 }
 
-.form-control {
+.input-group__input {
   width: 100%;
   margin: auto;
 }
 
-.header {
+.register-form__header {
   position: relative;
   min-height: 30px;
   height: 6vh;
@@ -83,7 +83,7 @@
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
 
-  p {
+  .header__text {
     color: white;
     position: relative;
     top: 50%;
@@ -92,7 +92,7 @@
   }
 }
 
-.link {
+.input-group__register-link {
   color: transparent;
   background: #666666;
   -webkit-background-clip: text;
@@ -100,15 +100,13 @@
   background-clip: text;
   text-shadow: 0px 3px 3px rgba(255, 255, 255, 0.5);
   transition: 0.5s;
+
   &:hover{
     color: $bgcolor1;
-    
+    opacity: 0.8;
   }
 }
 
-.link:hover {
-  opacity: 0.8;
-}
 .fa-id-card{
   margin-right:5px;
 }

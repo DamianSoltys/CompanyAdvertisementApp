@@ -12,7 +12,9 @@ import local.project.Inzynierka.persistence.repository.CategoryRepository;
 import local.project.Inzynierka.persistence.repository.CompanyRepository;
 import local.project.Inzynierka.persistence.repository.UserRepository;
 import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
+import local.project.Inzynierka.servicelayer.dto.AddCompanyDto;
 import local.project.Inzynierka.shared.AuthenticationFacade;
+import local.project.Inzynierka.web.mapper.CompanyExtractor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,7 +48,11 @@ public class CompanyManagementService {
     }
 
     @Transactional
-    public void registerCompany(Company company, List<Branch> branches) {
+    public void registerCompany(AddCompanyDto addCompanyDto) {
+
+        CompanyExtractor companyExtractor = new CompanyExtractor(addCompanyDto);
+        List<Branch> branches = companyExtractor.getBranches();
+        Company company = companyExtractor.getCompany();
 
         Company createdCompany = this.getPersistedCompany(company);
 

@@ -1,7 +1,7 @@
 package local.project.Inzynierka.web.registration.listener;
 
-import local.project.Inzynierka.orchestration.services.UserService;
 import local.project.Inzynierka.persistence.entity.User;
+import local.project.Inzynierka.servicelayer.services.UserService;
 import local.project.Inzynierka.web.registration.event.OnRegistrationEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.mail.SimpleMailMessage;

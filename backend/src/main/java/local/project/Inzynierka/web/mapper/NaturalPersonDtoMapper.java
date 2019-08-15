@@ -4,7 +4,9 @@ package local.project.Inzynierka.web.mapper;
 import local.project.Inzynierka.persistence.entity.Address;
 import local.project.Inzynierka.persistence.entity.NaturalPerson;
 import local.project.Inzynierka.persistence.entity.Voivoideship;
-import local.project.Inzynierka.web.dto.BecomeNaturalPersonDto;
+import local.project.Inzynierka.servicelayer.dto.AuthenticatedUserPersonalDataDto;
+import local.project.Inzynierka.servicelayer.dto.BecomeNaturalPersonDto;
+import local.project.Inzynierka.servicelayer.dto.Voivodeship;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -27,5 +29,22 @@ public class NaturalPersonDtoMapper {
         naturalPerson.setLastName(becomeNaturalPersonDto.getLastName());
 
         return naturalPerson;
+    }
+
+    public AuthenticatedUserPersonalDataDto map(NaturalPerson person) {
+
+        AuthenticatedUserPersonalDataDto personDto = new AuthenticatedUserPersonalDataDto();
+        personDto.setAddress(new local.project.Inzynierka.servicelayer.dto.Address(
+                Voivodeship.fromVoivodeship(person.getAddress().getVoivodeship_id().getName()),
+                person.getAddress().getCity(),
+                person.getAddress().getStreet(),
+                person.getAddress().getBuildingNo(),
+                person.getAddress().getApartmentNo()
+        ));
+        personDto.setFirstName(person.getFirstName());
+        personDto.setLastName(person.getLastName());
+        personDto.setPhoneNo(person.getPhoneNo());
+
+        return personDto;
     }
 }

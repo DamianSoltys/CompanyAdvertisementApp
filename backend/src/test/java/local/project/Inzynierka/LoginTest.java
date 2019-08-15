@@ -2,11 +2,10 @@ package local.project.Inzynierka;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import local.project.Inzynierka.servicelayer.dto.LoginDto;
+import local.project.Inzynierka.servicelayer.dto.UserRegistrationDto;
 import local.project.Inzynierka.web.controller.AuthenticationController;
-import local.project.Inzynierka.web.dto.LoginDto;
-import local.project.Inzynierka.web.dto.UserRegistrationDto;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

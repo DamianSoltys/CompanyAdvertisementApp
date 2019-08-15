@@ -5,10 +5,10 @@ import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.persistence.entity.Category;
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.Voivoideship;
-import local.project.Inzynierka.web.dto.AddCompanyDto;
-import local.project.Inzynierka.web.dto.Address;
-import local.project.Inzynierka.web.dto.CompanyBranchDto;
-import local.project.Inzynierka.web.dto.Voivodeship;
+import local.project.Inzynierka.servicelayer.dto.AddCompanyDto;
+import local.project.Inzynierka.servicelayer.dto.Address;
+import local.project.Inzynierka.servicelayer.dto.CompanyBranchDto;
+import local.project.Inzynierka.servicelayer.dto.Voivodeship;
 import local.project.Inzynierka.web.mapper.CompanyExtractor;
 import org.junit.Assert;
 import org.junit.Test;
@@ -61,7 +61,7 @@ public class CompanyExtractorTest {
 
     private static AddCompanyDto buildAddCompanyDtoWithoutBranches() {
         return AddCompanyDto.builder()
-                .address(new Address(Voivodeship.LUBELSKIE,"Lublin","Lubelska", "5"))
+                .address(new Address(Voivodeship.LUBELSKIE, "Lublin", "Lubelska", "5", "54"))
                 .branches(null)
                 .category("Motoryzacja")
                 .name("Firma 1")
@@ -76,6 +76,7 @@ public class CompanyExtractorTest {
                         .city("Lublin")
                         .street("Lubelska")
                         .buildingNo("5")
+                        .apartmentNo("54")
                         .build())
             .category(new Category("Motoryzacja"))
             .description("Jakis opis")
@@ -87,10 +88,10 @@ public class CompanyExtractorTest {
     }
     private static AddCompanyDto buildAddCompanyDtoWithSingleBranch() {
             return AddCompanyDto.builder()
-                .address(new Address(Voivodeship.LUBELSKIE,"Lublin","Lubelska", "5"))
+                    .address(new Address(Voivodeship.LUBELSKIE, "Lublin", "Lubelska", "5", "23"))
                 .branches(Arrays.asList(
                         CompanyBranchDto.builder()
-                                .address(new Address(Voivodeship.LUBELSKIE,"Lublin","Polska", "12"))
+                                .address(new Address(Voivodeship.LUBELSKIE, "Lublin", "Polska", "12", "11"))
                                 .geoX(54.3F)
                                 .geoY(52.3F)
                                 .name("Firma 1 zaklad1")

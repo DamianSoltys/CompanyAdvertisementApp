@@ -14,7 +14,13 @@ import local.project.Inzynierka.persistence.repository.UserRepository;
 import local.project.Inzynierka.persistence.repository.VerificationTokenRepository;
 import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
 import local.project.Inzynierka.servicelayer.dto.AuthenticatedUserInfoDto;
+import local.project.Inzynierka.servicelayer.dto.UpdateUserDto;
+import local.project.Inzynierka.servicelayer.errors.IllegalPasswordException;
+import local.project.Inzynierka.servicelayer.errors.PasswordsNotMatchingException;
+import local.project.Inzynierka.servicelayer.validation.PasswordCreatorService;
 import local.project.Inzynierka.shared.AuthenticationFacade;
+import local.project.Inzynierka.web.security.AccessPermissionService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +44,11 @@ public class UserService {
 
     private final CompanyRepository companyRepository;
 
-    public UserService(UserRepository userRepository, VerificationTokenRepository verificationTokenRepository, VoivodeshipRepository voivodeshipRepository, NaturalPersonRepository naturalPersonRepository, AuthenticationFacade authenticationFacade, AddressRepository addressRepository, CompanyRepository companyRepository) {
+    private final PasswordCreatorService passwordCreatorService;
+
+    private final AccessPermissionService accessPermissionService;
+
+    public UserService(UserRepository userRepository, VerificationTokenRepository verificationTokenRepository, VoivodeshipRepository voivodeshipRepository, NaturalPersonRepository naturalPersonRepository, AuthenticationFacade authenticationFacade, AddressRepository addressRepository, CompanyRepository companyRepository, PasswordEncoder passwordEncoder, PasswordCreatorService passwordCreatorService, AccessPermissionService accessPermissionService) {
         this.userRepository = userRepository;
         this.verificationTokenRepository = verificationTokenRepository;
         this.voivodeshipRepository = voivodeshipRepository;
@@ -46,6 +56,8 @@ public class UserService {
         this.authenticationFacade = authenticationFacade;
         this.addressRepository = addressRepository;
         this.companyRepository = companyRepository;
+        this.passwordCreatorService = passwordCreatorService;
+        this.accessPermissionService = accessPermissionService;
     }
 
     public User findByName(String name) {
@@ -125,23 +137,22 @@ public class UserService {
     }
 
     public Optional<NaturalPerson> getUsersPersonalData(Long id, Long personID) {
-        User authenticatedUser = this.userRepository.getByAddressEmail(authenticationFacade.getAuthentication().getName());
-        User requestedUser = this.userRepository.findById(id).orElse(new User());
+        User authenticatedUser = this.authenticationFacade.getAuthenticatedUser();
 
-        if (authenticatedUser.equals(requestedUser) &&
-                authenticatedUser.hasRegisteredNaturalPerson() &&
-                authenticatedUser.getNaturalPerson().getId().equals(personID)) {
-            return Optional.of(authenticatedUser.getNaturalPerson());
-        } else {
-            return Optional.empty();
+        if (this.accessPermissionService.hasPrincipalHavePermissionToUserResource(id)) {
+            if (authenticatedUser.hasRegisteredNaturalPerson() &&
+                    authenticatedUser.getNaturalPerson().getId().equals(personID)) {
+                return Optional.of(authenticatedUser.getNaturalPerson());
+            }
         }
+
+        return Optional.empty();
     }
 
     public Optional<AuthenticatedUserInfoDto> getUser(Long id) {
-        User authenticatedUser = this.userRepository.getByAddressEmail(authenticationFacade.getAuthentication().getName());
-        User requestedUser = this.userRepository.findById(id).orElse(new User());
 
-        if (authenticatedUser.equals(requestedUser)) {
+        if (accessPermissionService.hasPrincipalHavePermissionToUserResource(id)) {
+            User authenticatedUser = authenticationFacade.getAuthenticatedUser();
             AuthenticatedUserInfoDto authenticatedUserInfoDto = new AuthenticatedUserInfoDto();
             if (authenticatedUser.hasRegisteredNaturalPerson()) {
                 authenticatedUserInfoDto.setNaturalPersonID(authenticatedUser.getNaturalPerson().getId());
@@ -158,4 +169,32 @@ public class UserService {
 
         return Optional.empty();
     }
+
+    public boolean changePassword(UpdateUserDto updateUserDto, Long userId) {
+
+        if (accessPermissionService.hasPrincipalHavePermissionToUserResource(userId)) {
+            User user = this.authenticationFacade.getAuthenticatedUser();
+
+            this.validatePasswordChange(updateUserDto, user);
+
+            user.setPasswordHash(this.passwordCreatorService.encodePassword(updateUserDto.getNewPassword()));
+            this.userRepository.save(user);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private void validatePasswordChange(UpdateUserDto updateUserDto, User user) {
+        if (!this.passwordCreatorService.comparePasswordHashes(
+                updateUserDto.getCurrentPassword(), user.getPasswordHash())) {
+            throw new PasswordsNotMatchingException("Provided password does not match your old password");
+        }
+
+        if (!this.passwordCreatorService.isPasswordValid(updateUserDto.getNewPassword())) {
+            throw new IllegalPasswordException("Provided password has not passed the validation");
+        }
+    }
+
 }

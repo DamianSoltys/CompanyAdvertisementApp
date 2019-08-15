@@ -1,10 +1,9 @@
 @import '../../../commonStyles/shared';
 
-.personal-data-component__form {
-    
+.personal-data-component__form { 
     margin-top:5%;
-}
-.personal-data-form__header {
+
+  .personal-data-form__header {
     position: relative;
     min-height: 30px;
     height: 6vh;
@@ -25,18 +24,9 @@
     .fa-id-card {
       margin-right: 5px;
     }
-}
-.personal-data-form__input-group{
-    padding:3%;
-    margin-top:2%;
+  }
 
-    .section-container__input {
-        padding:0;
-      
-    }
-    
-}
-.form__personal-data-form {
+  .form__personal-data-form {
     @include boxShadow(0px 4px 5px 0px rgba(187, 185, 191, 1));
     border: 0;
     border-bottom-left-radius: 20px;
@@ -44,48 +34,74 @@
     align-self: center;
     margin: auto;
     padding:0;
-    
+
     .personal-data-form__button--submit {
-        width: 60%;
-        margin:auto;
-        margin-bottom:10%;
-        border-radius: 50px;
-        border: 0;
-        background: linear-gradient(-45deg, #FFA63D, #FF3D77, #338AFF, #3CF0C5);
-        animation: button-background-animation 16s linear infinite;
-        background-size: 600%;
-        margin-top: 4%;
-    
-        @include phone {
-          width: 75%;
+      width: 60%;
+      margin-bottom:5%;
+      border-radius: 50px;
+      border: 0;
+      background: linear-gradient(-45deg, #FFA63D, #FF3D77, #338AFF, #3CF0C5);
+      animation: button-background-animation 16s linear infinite;
+      background-size: 600%;
+  
+      @include phone {
+        width: 75%;
+      }
+    }
+
+    .personal-data-form__input-group {
+      padding:3%;
+      margin-top:2%;
+
+      .input_group__group-label {
+        .group-label__text-node {
+          font-size:1.1rem;
+          margin: 0 15px;
+          color:darken($bgcolor,10);
         }
       }
-
-      .section-container__container {
-        margin-right: 2rem;
-        
-        &:focus-within {
-          color: $bgcolor;
-        }
-        .section-container__label {
-          transition: color .2s ease-in-out;
-        }
-
-        @include phone {
-          width: 100%;
-          margin:auto;
-        }
-      }
-
+   
       .input-group__section-container {
-        border:1px solid red;
-        padding:5px;
+        border:1px solid darken($bgcolor,10);
+        border-width: 1px 0 0 0;
+        border-radius: 6px;
+        padding:20px;
         margin:auto;
-        margin-bottom:20px;
+        margin-bottom:5px;
         justify-content: space-evenly;
-      }
+        z-index: 1;
+        @include boxShadow(inset 0px 15px 8px -15px rgba(32, 99, 143, 0.66));
+
+        .section-container__error-container {
+          .error-container__text--danger,.error-container__text--success {
+            margin-bottom:0;
+          }
+        }
       
+        .section-container__container {
+          margin:0 1rem;
+
+          .section-container__input {
+            padding:0;    
+          }   
+          
+          &:focus-within {
+            color: $bgcolor;
+          }
+          .section-container__label {
+            transition: color .2s ease-in-out;
+          }
+
+          @include phone {
+            width: 100%;
+            margin:auto;
+          }
+        }
+      }
+    }    
+  }     
 }
+
 
 
   

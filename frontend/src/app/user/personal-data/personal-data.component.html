@@ -1,13 +1,13 @@
 <div class="container-fluid personal-data-component">
   <div class="row personal-data-component__form">
-    <form (ngSubmit)="onSubmit()" class=" col-12 col-xl-6 col-md-8 form__personal-data-form"
+    <form (ngSubmit)="onSubmit()" class=" col-12 col-xl-6 col-md-9 form__personal-data-form"
       [formGroup]="personalDataForm">
       <div class="personal-data-form__header col-12 text-center">
-        <p class="header__text-node"><i class="fas fa-file-signature"></i>Dane personalne</p>
+        <p class="header__text-node"><i class="fas fa-id-card"></i>Dane personalne</p>
       </div>
       <div class="personal-data-form__input-group col-12">
         <div class="input_group__group-label">
-            <p class="grou-label__text-node">Dane osobowe</p>
+            <p class="group-label__text-node">Dane osobowe</p>
         </div>
         <div class="input-group__section-container row col-12">
           <div class="form-group section-container__container">
@@ -44,9 +44,9 @@
           </div>
         </div>
         <div class="input_group__group-label">
-            <p class="grou-label__text-node">Dane adresowe</p>
+            <p class="group-label__text-node">Dane adresowe</p>
         </div>
-        <div class="input-group__section-container row col-12 col-xl-12">
+        <div class="input-group__section-container row col-12">
           <div class="form-group section-container__container">
             <label class="section-container__label" for="street">Ulica</label>
             <input type="text" name="street" class="form-control section-container__input" formControlName="street" />
@@ -129,7 +129,7 @@
           </div>
         </div>
         <div class="input_group__group-label">
-            <p class="grou-label__text-node">Dane kontaktowe</p>
+            <p class="group-label__text-node">Dane kontaktowe</p>
         </div>
         <div class="input-group__section-container row col-12">
             <div class="form-group section-container__container">

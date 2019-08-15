@@ -2,6 +2,7 @@ package local.project.Inzynierka.web.security;
 
 import local.project.Inzynierka.persistence.entity.EmailAddress;
 import local.project.Inzynierka.persistence.entity.User;
+import local.project.Inzynierka.servicelayer.dto.LoginDto;
 import local.project.Inzynierka.servicelayer.dto.UserRegistrationDto;
 import local.project.Inzynierka.servicelayer.services.EmailService;
 import local.project.Inzynierka.servicelayer.services.UserService;
@@ -62,8 +63,9 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
     }
 
     @Override
-    public Long login(User user) {
+    public Long login(LoginDto loginDto) {
         try{
+            User user = mapper.map(loginDto);
             UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(
                     new UserPrincipal(user), user.getPasswordHash());
 

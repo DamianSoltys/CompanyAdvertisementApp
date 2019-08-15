@@ -1,13 +1,11 @@
 package local.project.Inzynierka.web.controller;
 
-import local.project.Inzynierka.persistence.entity.User;
 import local.project.Inzynierka.servicelayer.dto.LoginDto;
 import local.project.Inzynierka.servicelayer.dto.UserRegistrationDto;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
 import local.project.Inzynierka.web.errors.BadLoginDataException;
 import local.project.Inzynierka.web.errors.EmailAlreadyTakenException;
 import local.project.Inzynierka.web.errors.UserAlreadyExistsException;
-import local.project.Inzynierka.web.mapper.UserDtoMapper;
 import local.project.Inzynierka.web.registration.event.OnRegistrationEvent;
 import local.project.Inzynierka.web.security.AuthorizationHeader;
 import local.project.Inzynierka.web.security.UserAuthenticationService;
@@ -33,13 +31,10 @@ public class AuthenticationController {
 
     private final UserAuthenticationService authenticationService;
 
-    private final UserDtoMapper mapper;
-
     private final ApplicationEventPublisher eventPublisher;
 
-    public AuthenticationController(UserAuthenticationService authenticationService, UserDtoMapper mapper, ApplicationEventPublisher eventPublisher) {
+    public AuthenticationController(UserAuthenticationService authenticationService, ApplicationEventPublisher eventPublisher) {
         this.authenticationService = authenticationService;
-        this.mapper = mapper;
         this.eventPublisher = eventPublisher;
     }
 
@@ -60,11 +55,10 @@ public class AuthenticationController {
     @RequestMapping(value = "/auth/login", method = RequestMethod.POST)
     public ResponseEntity<String> login(@RequestBody LoginDto loginDto){
 
-        User user = mapper.map(loginDto);
         Long userId;
 
         try {
-            userId = authenticationService.login(user);
+            userId = authenticationService.login(loginDto);
 
         } catch (BadLoginDataException e) {
             return ResponseEntity.status(e.getStatus()).body(e.getMessage());

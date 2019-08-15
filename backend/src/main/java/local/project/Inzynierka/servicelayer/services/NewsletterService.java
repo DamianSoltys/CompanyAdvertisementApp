@@ -4,9 +4,13 @@ import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.EmailAddress;
 import local.project.Inzynierka.persistence.entity.NewsletterSubscription;
 import local.project.Inzynierka.persistence.entity.VerificationToken;
+import local.project.Inzynierka.persistence.repository.CompanyRepository;
 import local.project.Inzynierka.persistence.repository.EmailRepository;
 import local.project.Inzynierka.persistence.repository.NewsletterSubscriptionRepository;
 import local.project.Inzynierka.persistence.repository.VerificationTokenRepository;
+import local.project.Inzynierka.servicelayer.dto.SubscriptionToCreateDto;
+import local.project.Inzynierka.web.newsletter.event.OnNewsletterSignUpEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,29 +23,40 @@ public class NewsletterService {
 
     private final EmailRepository emailRepository;
 
-    public NewsletterService(NewsletterSubscriptionRepository newsletterSubscriptionRepository, VerificationTokenRepository verificationTokenRepository, EmailRepository emailRepository) {
+    private final CompanyRepository companyRepository;
+
+    private final ApplicationEventPublisher applicationEventPublisher;
+
+    public NewsletterService(NewsletterSubscriptionRepository newsletterSubscriptionRepository, VerificationTokenRepository verificationTokenRepository, EmailRepository emailRepository, CompanyRepository companyRepository, ApplicationEventPublisher applicationEventPublisher) {
         this.newsletterSubscriptionRepository = newsletterSubscriptionRepository;
         this.verificationTokenRepository = verificationTokenRepository;
         this.emailRepository = emailRepository;
+        this.companyRepository = companyRepository;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Transactional
-    public NewsletterSubscription signUpForNewsletter(EmailAddress emailAddress, Company company, boolean verified) {
+    public void signUpForNewsletter(SubscriptionToCreateDto subscriptionToCreateDto, String originHeader) {
+
+        Company company = this.companyRepository.findById(subscriptionToCreateDto.getId()).get();
 
         NewsletterSubscription newsletterSubscription = NewsletterSubscription.builder()
                 .company(company)
-                .emailAddressEntity(getPersistedEmailAddress(emailAddress))
+                .emailAddressEntity(getPersistedEmailAddress(subscriptionToCreateDto.getEmailToSignUp()))
                 .id(0L)
-                .verified(verified)
+                .verified(subscriptionToCreateDto.isVerified())
                 .build();
 
-        return newsletterSubscriptionRepository.save(newsletterSubscription);
+        newsletterSubscription = newsletterSubscriptionRepository.save(newsletterSubscription);
+
+        applicationEventPublisher.publishEvent(
+                new OnNewsletterSignUpEvent(newsletterSubscription, originHeader, subscriptionToCreateDto.isVerified()));
     }
 
-    private EmailAddress getPersistedEmailAddress(EmailAddress emailAddress) {
-        EmailAddress foundEmail = emailRepository.findByEmail(emailAddress.getEmail());
+    private EmailAddress getPersistedEmailAddress(String emailAddress) {
+        EmailAddress foundEmail = emailRepository.findByEmail(emailAddress);
         if (foundEmail == null) {
-            foundEmail = new EmailAddress(emailAddress.getEmail());
+            foundEmail = new EmailAddress(emailAddress);
             foundEmail.setId(0L);
 
             foundEmail = emailRepository.save(foundEmail);

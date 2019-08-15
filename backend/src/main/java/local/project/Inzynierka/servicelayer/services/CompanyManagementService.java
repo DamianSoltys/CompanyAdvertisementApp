@@ -122,7 +122,7 @@ public class CompanyManagementService {
         return soughtCategory;
     }
 
-    public Company getThroughBranch(Long id) {
-        return this.companyRepository.getByCompanyId(id);
+    public boolean companyExists(Long id) {
+        return this.companyRepository.getByCompanyId(id) != null;
     }
 }

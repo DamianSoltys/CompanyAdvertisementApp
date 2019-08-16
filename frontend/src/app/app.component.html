@@ -15,9 +15,9 @@
         Menu
       </button>
       <div [@showHideMenu] = "displayMenu.value ? 'visible':'hidden'" class="dropdown__menu">
-        <button routerLink="/search" (click)="toggleMenu()" class="dropdown__item">Szukaj</button>
-        <button routerLink="/login" (click)="toggleMenu()" class="dropdown__item">Logowanie</button>
-        <button routerLink="/register" (click)="toggleMenu()" class="dropdown__item">Rejestracja</button>
+        <button routerLink="/search" (click)="toggleMenu()" class="dropdown__item"><i class="fas fa-search item__icon"></i>Szukaj</button>
+        <button routerLink="/login" (click)="toggleMenu()" class="dropdown__item"><i class="fas fa-sign-in-alt item__icon"></i>Logowanie</button>
+        <button routerLink="/register" (click)="toggleMenu()" class="dropdown__item"><i class="fas fa-file-signature item__icon"></i>Rejestracja</button>
       </div>
 
     </div>
@@ -35,12 +35,12 @@
       <button routerLink="" type="button" class="navbar__button-link btn btn-primary">Ulubione zakłady</button>
       <button type="button" class="navbar__button-link btn btn-primary" (click)="logOut()">Wyloguj</button>
     </div>
-    <div class="navbar__dropdown">
+    <div class="navbar__dropdown col-9">
       <button (click)="toggleMenu()" class="btn btn-secondary dropdown-toggle dropdown__button" type="button" id="menuId">
         Menu
       </button>
       <div [@showHideMenu] = "displayMenu.value ? 'visible':'hidden'" class="dropdown__menu">
-        <button routerLink="/search" class="dropdown__item" (click)="toggleMenu()">Szukaj</button>
+        <button routerLink="/search" class="dropdown__item" (click)="toggleMenu()"><i class="fas fa-search"></i>Szukaj</button>
         <button routerLink="" class="dropdown__item" (click)="toggleMenu()">Twoje firmy</button>
         <button routerLink="user/personalData" class="dropdown__item" (click)="toggleMenu()">Dane osobowe</button>
         <button routerLink="" class="dropdown__item" (click)="toggleMenu()">Ulubione zakłady</button>

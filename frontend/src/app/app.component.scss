@@ -9,6 +9,7 @@ html {
 
 .app-component {
   min-height: calc(100vh - 60px);
+  overflow-x: hidden;
 }
 
 .app-component__navbar {
@@ -42,7 +43,6 @@ html {
 
 .navbar__button-group {
     position: relative;
-    left:-5%;
     
   .navbar__button-link {
     background-color: $bgcolor1;
@@ -137,17 +137,24 @@ html {
   position: absolute;
   @include boxShadow(0px 4px 5px 0px rgba(187, 185, 191, 1));
   border: 1px solid $bgcolor;
-  margin-top:10px;
-  border-radius: 10px;
-  z-index: 1;
+  z-index: 10;
+  right: -20px;
+  width: calc(100vw + 10px);
+  background: #fff;
 
   .dropdown__item {
     float:right;
     width:100%;
-    background-color:white;
+    background-color:transparent;
     border:0;
-    transition: 1s;
     padding:5px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    color:$bgcolor;
+    
+    .item__icon {
+      margin-right: 5px;
+    }
 
     &:first-child {
       border-top-left-radius: 10px;
@@ -172,7 +179,6 @@ html {
 
 .navbar__dropdown {
   position: relative;
-  left: -5%;
 
   @include tablet {
     display: none;
@@ -186,6 +192,7 @@ html {
     background-color: $bgcolor1;
     border: 1px solid $btborder;
     width: 130px;
+    float:right;
 
     &:hover {
       opacity: 0.8;

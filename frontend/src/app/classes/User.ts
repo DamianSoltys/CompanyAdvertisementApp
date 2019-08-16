@@ -8,6 +8,10 @@ export class UserLog {
   password: string;
 }
 
+export class UserREST {
+  
+}
+
 export class PersonalData {
   address:{
     voivodeship: string;

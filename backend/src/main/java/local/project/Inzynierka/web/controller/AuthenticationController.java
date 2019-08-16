@@ -1,6 +1,7 @@
 package local.project.Inzynierka.web.controller;
 
 import local.project.Inzynierka.servicelayer.dto.LoginDto;
+import local.project.Inzynierka.servicelayer.dto.UserInfoDto;
 import local.project.Inzynierka.servicelayer.dto.UserRegistrationDto;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
 import local.project.Inzynierka.web.errors.BadLoginDataException;
@@ -53,12 +54,12 @@ public class AuthenticationController {
     }
 
     @RequestMapping(value = "/auth/login", method = RequestMethod.POST)
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto){
+    public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
 
-        Long userId;
+        UserInfoDto userInfo;
 
         try {
-            userId = authenticationService.login(loginDto);
+            userInfo = authenticationService.login(loginDto);
 
         } catch (BadLoginDataException e) {
             return ResponseEntity.status(e.getStatus()).body(e.getMessage());
@@ -67,8 +68,7 @@ public class AuthenticationController {
         }
 
         return ResponseEntity.ok().headers(this.createAuthorizationHTTPHeader(loginDto))
-                .body(SimpleJsonFromStringCreator.toJson(userId.toString()));
-
+                .body(userInfo);
     }
 
     private HttpHeaders createAuthorizationHTTPHeader(@RequestBody LoginDto loginDto) {

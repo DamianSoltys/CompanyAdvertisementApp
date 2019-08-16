@@ -3,9 +3,11 @@ package local.project.Inzynierka.web.security;
 import local.project.Inzynierka.persistence.entity.EmailAddress;
 import local.project.Inzynierka.persistence.entity.User;
 import local.project.Inzynierka.servicelayer.dto.LoginDto;
+import local.project.Inzynierka.servicelayer.dto.UserInfoDto;
 import local.project.Inzynierka.servicelayer.dto.UserRegistrationDto;
 import local.project.Inzynierka.servicelayer.services.EmailService;
-import local.project.Inzynierka.servicelayer.services.UserService;
+import local.project.Inzynierka.servicelayer.services.UserFacade;
+import local.project.Inzynierka.servicelayer.services.UserPersistenceService;
 import local.project.Inzynierka.web.errors.BadLoginDataException;
 import local.project.Inzynierka.web.errors.EmailAlreadyTakenException;
 import local.project.Inzynierka.web.errors.UserAlreadyExistsException;
@@ -22,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserBasicAuthenticationService implements UserAuthenticationService {
 
-    private final UserService userService;
+    private final UserFacade userFacade;
 
     private final EmailService emailService;
 
@@ -32,19 +34,22 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
 
     private final UserDtoMapper mapper;
 
+    private final UserPersistenceService userPersistenceService;
 
-    public UserBasicAuthenticationService(UserService userService, EmailService emailService, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserDtoMapper mapper) {
-        this.userService = userService;
+
+    public UserBasicAuthenticationService(UserFacade userFacade, EmailService emailService, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserDtoMapper mapper, UserPersistenceService userPersistenceService) {
+        this.userFacade = userFacade;
         this.emailService = emailService;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
         this.mapper = mapper;
+        this.userPersistenceService = userPersistenceService;
     }
 
     @Override @Transactional
     public void registerNewUser(UserRegistrationDto userRegistrationDto) {
 
-        User requestedUser = this.userService.findByName(mapper.map(userRegistrationDto).getName());
+        User requestedUser = this.userFacade.findByName(mapper.map(userRegistrationDto).getName());
         EmailAddress requestedEmail = this.emailService.findByEmail(userRegistrationDto.getEmail());
 
         if(requestedUser != null ){
@@ -58,12 +63,12 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
         requestedEmail = this.emailService.saveEmailAddress(requestedEmail);
 
         requestedUser = new User(userRegistrationDto.getName(), passwordEncoder.encode(userRegistrationDto.getPassword()), requestedEmail);
-        this.userService.createNewUser(requestedUser);
+        this.userFacade.createNewUser(requestedUser);
 
     }
 
     @Override
-    public Long login(LoginDto loginDto) {
+    public UserInfoDto login(LoginDto loginDto) {
         try{
             User user = mapper.map(loginDto);
             UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(
@@ -72,7 +77,11 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
             Authentication authenticatedUser = authenticationManager.authenticate(loginToken);
             SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
 
-            return ((UserPrincipal) authenticatedUser.getPrincipal()).getUser().getId();
+            return this.userPersistenceService.getUserInfo(
+                    ((UserPrincipal) authenticatedUser.getPrincipal())
+                            .getUser()
+                            .getId());
+
         } catch (AuthenticationException  e) {
             throw new BadLoginDataException();
         }
@@ -80,6 +89,6 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
 
     @Override
     public boolean confirmUser(String token) {
-        return userService.verifyToken(token);
+        return userFacade.verifyToken(token);
     }
 }

@@ -18,6 +18,7 @@ import local.project.Inzynierka.servicelayer.dto.BecomeNaturalPersonDto;
 import local.project.Inzynierka.servicelayer.dto.UpdatePersonalDataDto;
 import local.project.Inzynierka.servicelayer.dto.UpdateUserDto;
 import local.project.Inzynierka.servicelayer.errors.IllegalPasswordException;
+import local.project.Inzynierka.servicelayer.errors.NotAuthorizedAccessToResourceException;
 import local.project.Inzynierka.servicelayer.errors.PasswordsNotMatchingException;
 import local.project.Inzynierka.servicelayer.validation.PasswordCreatorService;
 import local.project.Inzynierka.shared.AuthenticationFacade;
@@ -114,7 +115,8 @@ public class UserService {
 
         if (accessPermissionService.hasPrincipalHavePermissionToUserResource(userId)) {
 
-            NaturalPerson naturalPerson = this.naturalPersonDtoMapper.map(naturalPersonDto);
+            NaturalPerson naturalPerson = this.naturalPersonDtoMapper.
+                    map(naturalPersonDto);
 
             Voivoideship voivoideship = this.voivodeshipRepository.findByName(naturalPerson.getAddress().getVoivodeship_id().getName());
             if (voivoideship == null) {
@@ -137,7 +139,7 @@ public class UserService {
 
         }
 
-        return Optional.empty();
+        throw new NotAuthorizedAccessToResourceException("Authenticated user has got no access to this resource.");
     }
 
     private Address buildAddress(NaturalPerson naturalPerson, Voivoideship voivoideship) {

@@ -13,10 +13,6 @@ public class BecomeNaturalPersonDto {
 
     String firstName;
     String lastName;
-    String voivodeship;
-    String city;
-    String street;
-    String apartmentNo;
-    String buildingNo;
+    Address address;
     String phoneNo;
 }

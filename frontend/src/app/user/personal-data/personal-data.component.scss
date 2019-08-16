@@ -90,7 +90,13 @@
 
           .section-container__select-wrapper {
             position: relative;
+            left:-10px;
             width:calc(100% + 20px);
+            
+            @include phone() {
+              left:0;
+              width:100%;
+            }
 
             &:before {
               content: "\f078";
@@ -100,6 +106,10 @@
               top: 8px;
               right: 10px;
               color:$bgcolor;
+
+              @include phone() {
+                transform: rotate(180deg);
+              }
             }
             .section-container__select-input {
               -moz-appearance: none;

@@ -37,9 +37,7 @@ html {
     margin: auto;
   }
 }
-.app-component__logout-message{
-  display:none;
-}
+
 
 .navbar__button-group {
     position: relative;
@@ -191,8 +189,15 @@ html {
   .dropdown__button {
     background-color: $bgcolor1;
     border: 1px solid $btborder;
-    width: 130px;
+    width: 60px;
     float:right;
+
+    &:before {
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 900;
+      content:"\f0c9";
+      font-size:1.2rem;
+    }
 
     &:hover {
       opacity: 0.8;

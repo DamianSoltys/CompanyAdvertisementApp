@@ -74,10 +74,10 @@ export class AppComponent implements OnInit {
   logOut() {
     console.log(localStorage.getItem('token'));
     this.logOut_success = true;
-    this.renderer.setStyle(this.logOutMessage.nativeElement, 'display', 'block');
+    this.renderer.setStyle(this.logOutMessage.nativeElement, 'visibility', 'visible');
     setTimeout(() => {
       this.logOut_success = false;
-      this.renderer.setStyle(this.logOutMessage.nativeElement, 'display', 'none');
+      this.renderer.setStyle(this.logOutMessage.nativeElement, 'visibility', 'hidden');
     }, 1000);
     localStorage.removeItem('token');
     localStorage.removeItem('userId');

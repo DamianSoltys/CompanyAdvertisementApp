@@ -11,8 +11,7 @@
       <button routerLink="/register" type="button" class="navbar__button-link btn btn-primary">Rejestracja</button>
     </div>
     <div class="navbar__dropdown">
-      <button (click)="toggleMenu()" class="btn btn-secondary dropdown-toggle dropdown__button" type="button" id="menuId">
-        Menu
+      <button (click)="toggleMenu()" class="btn btn-secondary dropdown__button" type="button" id="menuId">
       </button>
       <div [@showHideMenu] = "displayMenu.value ? 'visible':'hidden'" class="dropdown__menu">
         <button routerLink="/search" (click)="toggleMenu()" class="dropdown__item"><i class="fas fa-search item__icon"></i>Szukaj</button>
@@ -36,8 +35,7 @@
       <button type="button" class="navbar__button-link btn btn-primary" (click)="logOut()">Wyloguj</button>
     </div>
     <div class="navbar__dropdown col-9">
-      <button (click)="toggleMenu()" class="btn btn-secondary dropdown-toggle dropdown__button" type="button" id="menuId">
-        Menu
+      <button (click)="toggleMenu()" class="btn btn-secondary dropdown__button" type="button" id="menuId">
       </button>
       <div [@showHideMenu] = "displayMenu.value ? 'visible':'hidden'" class="dropdown__menu">
         <button routerLink="/search" class="dropdown__item" (click)="toggleMenu()"><i class="fas fa-search item__icon"></i>Szukaj</button>

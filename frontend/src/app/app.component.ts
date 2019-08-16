@@ -16,9 +16,9 @@ import { Router } from '@angular/router';
         visibility: 'visible'
       })),
       state('hidden', style({
-       height: '0',
-       opacity: '0',
-       visibility: 'hidden'
+        height: '0',
+        opacity: '0',
+        visibility: 'hidden'
       })),
       transition('visible <=> hidden', [
         animate('0.5s')
@@ -27,19 +27,17 @@ import { Router } from '@angular/router';
     ]),
     trigger('showHideMenu', [
       state('visible', style({
-      opacity: '1',
-      visibility: 'visible'
-
-
+        //visibility:'visible',
+        transform:'scaleY(1)',
+        top:'48px'
       })),
       state('hidden', style({
-        opacity: '0',
-        visibility: 'hidden'
-
-
+        //visibility:'hidden',
+        transform:'scaleY(0)',
+        top:'-200px'
       })),
       transition('visible <=> hidden', [
-        animate('0.4s')
+        animate('.2s')
       ]),
 
     ]),
@@ -76,12 +74,13 @@ export class AppComponent implements OnInit {
   logOut() {
     console.log(localStorage.getItem('token'));
     this.logOut_success = true;
-    this.renderer.setStyle(this.logOutMessage.nativeElement, 'display', 'block');
+    this.renderer.setStyle(this.logOutMessage.nativeElement, 'visibility', 'visible');
     setTimeout(() => {
       this.logOut_success = false;
-      this.renderer.setStyle(this.logOutMessage.nativeElement, 'display', 'none');
+      this.renderer.setStyle(this.logOutMessage.nativeElement, 'visibility', 'hidden');
     }, 1000);
     localStorage.removeItem('token');
+    localStorage.removeItem('userREST');
     this.lgservice.ChangeLogged();
     this.router.navigate(['']);
     console.log('wylogowany');

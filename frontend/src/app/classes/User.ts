@@ -8,13 +8,24 @@ export class UserLog {
   password: string;
 }
 
-export class PersonalData {
-  firstName: string;
-   lastName: string;
-   voivodeship: string;
-   city: string;
-  street: string;
-   apartmentNo: string;
-  buildingNo: string;
-   phoneNo: string;
+export class UserREST {
+  companiesIDs: [];
+  emailAddress: string;
+  loginName: string;
+  naturalPersonID: number;
+  userID: number;
 }
+
+export class PersonalData {
+  address:{
+    voivodeship: string;
+    city: string;
+    street: string;
+    apartmentNo: string;
+    buildingNo: string;
+  }
+  firstName: string;
+  lastName: string;
+  phoneNo: string;
+}
+

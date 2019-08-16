@@ -2,7 +2,7 @@
 
   <div class="row register-component__form">
     <form class="form__register-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-      <div class="register-form__header"><p class="header__text"><i class="fas fa-id-card"></i>Formularz rejestracyjny</p></div>
+      <div class="register-form__header"><p class="header__text-node"><i class="fas fa-file-signature"></i>Formularz rejestracyjny</p></div>
       <div class="register-form__input-group">
         <div class="input-group__container">
           <label class="input-group__label" for="name">Nazwa</label>
@@ -35,7 +35,7 @@
       <div  class="text-center input-group__error-container" *ngIf="(regForm.checkpassword.dirty || regForm.checkpassword.touched) && regForm.checkpassword.invalid">
         <p class="text-danger error-container__text-danger" *ngIf="regForm.checkpassword.errors.required">Pole nie może być puste</p>
       </div>    </div>
-      <button class="btn btn-primary register-form__button-submit" type="submit" [disabled]="!registerForm.valid">Zarejestruj</button>
+      <button class="btn btn-primary register-form__button--submit" type="submit" [disabled]="!registerForm.valid">Zarejestruj</button>
       <div class="text-center input-group__error-container" *ngIf="passwordMatch">
       <p class="text-danger error-container__text-danger">Hasła muszą być identyczne!</p>
     </div>

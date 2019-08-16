@@ -35,7 +35,7 @@ public class AccountController {
         if (person.isPresent()) {
             return ResponseEntity.status(HttpStatus.CREATED).body(person.get());
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 

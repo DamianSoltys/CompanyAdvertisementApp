@@ -1,6 +1,6 @@
 package local.project.Inzynierka.web.registration.listener;
 
-import local.project.Inzynierka.servicelayer.services.UserService;
+import local.project.Inzynierka.servicelayer.services.UserFacade;
 import local.project.Inzynierka.web.registration.event.OnRegistrationEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.mail.SimpleMailMessage;
@@ -15,11 +15,11 @@ public class RegistrationEventListener {
 
     private final JavaMailSender javaMailSender;
 
-    private final UserService userService;
+    private final UserFacade userFacade;
 
-    public RegistrationEventListener(JavaMailSender javaMailSender, UserService userService) {
+    public RegistrationEventListener(JavaMailSender javaMailSender, UserFacade userFacade) {
         this.javaMailSender = javaMailSender;
-        this.userService = userService;
+        this.userFacade = userFacade;
     }
 
     @Async
@@ -29,7 +29,7 @@ public class RegistrationEventListener {
         final String userEmail = event.getUserEmail();
         final String token = UUID.randomUUID().toString();
 
-        userService.createVerificationTokenForUser(userEmail, token);
+        userFacade.createVerificationTokenForUser(userEmail, token);
 
         final SimpleMailMessage mailMessage = constructEmailMessage(event, userEmail, token);
         javaMailSender.send(mailMessage);

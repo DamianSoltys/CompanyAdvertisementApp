@@ -1,11 +1,11 @@
 package local.project.Inzynierka.web.controller;
 
-import local.project.Inzynierka.servicelayer.dto.AuthenticatedUserInfoDto;
 import local.project.Inzynierka.servicelayer.dto.AuthenticatedUserPersonalDataDto;
 import local.project.Inzynierka.servicelayer.dto.BecomeNaturalPersonDto;
 import local.project.Inzynierka.servicelayer.dto.UpdatePersonalDataDto;
 import local.project.Inzynierka.servicelayer.dto.UpdateUserDto;
-import local.project.Inzynierka.servicelayer.services.UserService;
+import local.project.Inzynierka.servicelayer.dto.UserInfoDto;
+import local.project.Inzynierka.servicelayer.services.UserFacade;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,17 +21,17 @@ import java.util.Optional;
 @RequestMapping(value = "/api")
 public class AccountController {
 
-    private final UserService userService;
+    private final UserFacade userFacade;
 
-    public AccountController(UserService userService) {
-        this.userService = userService;
+    public AccountController(UserFacade userFacade) {
+        this.userFacade = userFacade;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/{id}/naturalperson")
     public ResponseEntity<AuthenticatedUserPersonalDataDto> createNaturalPerson(@RequestBody final BecomeNaturalPersonDto naturalPersonDto,
                                                                                 @PathVariable(value = "id") Long userId) {
 
-        Optional<AuthenticatedUserPersonalDataDto> person = userService.becomeNaturalPerson(naturalPersonDto, userId);
+        Optional<AuthenticatedUserPersonalDataDto> person = userFacade.becomeNaturalPerson(naturalPersonDto, userId);
         if (person.isPresent()) {
             return ResponseEntity.status(HttpStatus.CREATED).body(person.get());
         } else {
@@ -43,7 +43,7 @@ public class AccountController {
     public ResponseEntity<AuthenticatedUserPersonalDataDto> getNaturalPerson(@PathVariable(value = "id") Long id,
                                                                              @PathVariable(value = "naturalPersonId") Long personId) {
 
-        Optional<AuthenticatedUserPersonalDataDto> person = this.userService.getUsersPersonalData(id, personId);
+        Optional<AuthenticatedUserPersonalDataDto> person = this.userFacade.getUsersPersonalData(id, personId);
 
         if (person.isPresent()) {
             return ResponseEntity.ok(person.get());
@@ -53,9 +53,9 @@ public class AccountController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/user/{id}")
-    public ResponseEntity<AuthenticatedUserInfoDto> getUser(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<UserInfoDto> getUser(@PathVariable(value = "id") Long id) {
 
-        Optional<AuthenticatedUserInfoDto> user = this.userService.getUser(id);
+        Optional<UserInfoDto> user = this.userFacade.getUser(id);
 
         if (user.isPresent()) {
             return ResponseEntity.ok(user.get());
@@ -67,7 +67,7 @@ public class AccountController {
     @RequestMapping(method = RequestMethod.PATCH, value = "/user/{id}")
     public ResponseEntity<String> updateUser(@RequestBody final UpdateUserDto updateUserDto, @PathVariable(value = "id") Long id) {
 
-        if (this.userService.changePassword(updateUserDto, id)) {
+        if (this.userFacade.changePassword(updateUserDto, id)) {
             return ResponseEntity.ok(SimpleJsonFromStringCreator.toJson("PASSWORD CHANGED"));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -79,7 +79,7 @@ public class AccountController {
                                                                                @PathVariable(value = "id") final Long userId,
                                                                                @PathVariable(value = "naturalPersonId") final Long personId) {
 
-        Optional<AuthenticatedUserPersonalDataDto> person = this.userService.updatePersonalData(updatePersonalDataDto, userId, personId);
+        Optional<AuthenticatedUserPersonalDataDto> person = this.userFacade.updatePersonalData(updatePersonalDataDto, userId, personId);
         if (person.isPresent()) {
             return ResponseEntity.ok(person.get());
         } else {

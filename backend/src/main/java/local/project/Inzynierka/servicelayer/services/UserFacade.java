@@ -1,37 +1,34 @@
 package local.project.Inzynierka.servicelayer.services;
 
 import local.project.Inzynierka.persistence.entity.Address;
-import local.project.Inzynierka.persistence.entity.Company;
-import local.project.Inzynierka.persistence.entity.EmailAddress;
 import local.project.Inzynierka.persistence.entity.NaturalPerson;
 import local.project.Inzynierka.persistence.entity.User;
 import local.project.Inzynierka.persistence.entity.VerificationToken;
 import local.project.Inzynierka.persistence.entity.Voivoideship;
 import local.project.Inzynierka.persistence.repository.AddressRepository;
-import local.project.Inzynierka.persistence.repository.CompanyRepository;
 import local.project.Inzynierka.persistence.repository.NaturalPersonRepository;
 import local.project.Inzynierka.persistence.repository.UserRepository;
 import local.project.Inzynierka.persistence.repository.VerificationTokenRepository;
 import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
-import local.project.Inzynierka.servicelayer.dto.AuthenticatedUserInfoDto;
 import local.project.Inzynierka.servicelayer.dto.AuthenticatedUserPersonalDataDto;
+import local.project.Inzynierka.servicelayer.dto.BecomeNaturalPersonDto;
 import local.project.Inzynierka.servicelayer.dto.UpdatePersonalDataDto;
 import local.project.Inzynierka.servicelayer.dto.UpdateUserDto;
+import local.project.Inzynierka.servicelayer.dto.UserInfoDto;
 import local.project.Inzynierka.servicelayer.errors.IllegalPasswordException;
+import local.project.Inzynierka.servicelayer.errors.NotAuthorizedAccessToResourceException;
 import local.project.Inzynierka.servicelayer.errors.PasswordsNotMatchingException;
 import local.project.Inzynierka.servicelayer.validation.PasswordCreatorService;
 import local.project.Inzynierka.shared.AuthenticationFacade;
 import local.project.Inzynierka.web.mapper.NaturalPersonDtoMapper;
 import local.project.Inzynierka.web.security.AccessPermissionService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
-public class UserService {
+public class UserFacade {
 
     private final UserRepository userRepository;
 
@@ -45,7 +42,7 @@ public class UserService {
 
     private final AddressRepository addressRepository;
 
-    private final CompanyRepository companyRepository;
+    private final UserPersistenceService userPersistenceService;
 
     private final PasswordCreatorService passwordCreatorService;
 
@@ -53,14 +50,14 @@ public class UserService {
 
     private final NaturalPersonDtoMapper naturalPersonDtoMapper;
 
-    public UserService(UserRepository userRepository, VerificationTokenRepository verificationTokenRepository, VoivodeshipRepository voivodeshipRepository, NaturalPersonRepository naturalPersonRepository, AuthenticationFacade authenticationFacade, AddressRepository addressRepository, CompanyRepository companyRepository, PasswordEncoder passwordEncoder, PasswordCreatorService passwordCreatorService, AccessPermissionService accessPermissionService, NaturalPersonDtoMapper naturalPersonDtoMapper) {
+    public UserFacade(UserRepository userRepository, VerificationTokenRepository verificationTokenRepository, VoivodeshipRepository voivodeshipRepository, NaturalPersonRepository naturalPersonRepository, AuthenticationFacade authenticationFacade, AddressRepository addressRepository, UserPersistenceService userPersistenceService, PasswordCreatorService passwordCreatorService, AccessPermissionService accessPermissionService, NaturalPersonDtoMapper naturalPersonDtoMapper) {
         this.userRepository = userRepository;
         this.verificationTokenRepository = verificationTokenRepository;
         this.voivodeshipRepository = voivodeshipRepository;
         this.naturalPersonRepository = naturalPersonRepository;
         this.authenticationFacade = authenticationFacade;
         this.addressRepository = addressRepository;
-        this.companyRepository = companyRepository;
+        this.userPersistenceService = userPersistenceService;
         this.passwordCreatorService = passwordCreatorService;
         this.accessPermissionService = accessPermissionService;
         this.naturalPersonDtoMapper = naturalPersonDtoMapper;
@@ -71,9 +68,9 @@ public class UserService {
         return userRepository.findByName(name);
     }
 
-    public User findByEmailAddress(EmailAddress emailAddress) {
+    public User findByEmailAddress(String emailAddress) {
 
-        return userRepository.getByAddressEmail(emailAddress.getEmail());
+        return userRepository.getByAddressEmail(emailAddress);
     }
 
     public User createNewUser(User user) {
@@ -84,10 +81,11 @@ public class UserService {
     }
 
     @Transactional
-    public void createVerificationTokenForUser(User user, final String token) {
+    public void createVerificationTokenForUser(String userEmail, final String token) {
         VerificationToken myToken = new VerificationToken(token);
         myToken.setId(0L);
 
+        User user = this.userRepository.getByAddressEmail(userEmail);
         VerificationToken createdToken = verificationTokenRepository.save(myToken);
         user.setVerificationToken(createdToken);
         userRepository.save(user);
@@ -108,26 +106,36 @@ public class UserService {
     }
 
     @Transactional
-    public boolean becomeNaturalPerson(NaturalPerson naturalPerson) {
+    public Optional<AuthenticatedUserPersonalDataDto> becomeNaturalPerson(BecomeNaturalPersonDto naturalPersonDto,
+                                                                          Long userId) {
 
-        Voivoideship voivoideship = voivodeshipRepository.findByName(naturalPerson.getAddress().getVoivodeship_id().getName());
-        if (voivoideship == null) {
-            return false;
+        if (accessPermissionService.hasPrincipalHavePermissionToUserResource(userId)) {
+
+            NaturalPerson naturalPerson = this.naturalPersonDtoMapper.
+                    map(naturalPersonDto);
+
+            Voivoideship voivoideship = this.voivodeshipRepository.findByName(naturalPerson.getAddress().getVoivodeship_id().getName());
+            if (voivoideship == null) {
+                return Optional.empty();
+            }
+
+            Address address = this.buildAddress(naturalPerson, voivoideship);
+
+            address = this.addressRepository.save(address);
+            naturalPerson.setAddress(address);
+            naturalPerson.setId(0L);
+
+            naturalPerson = this.naturalPersonRepository.save(naturalPerson);
+            User user = this.authenticationFacade.getAuthenticatedUser();
+
+            user.setNaturalPerson(naturalPerson);
+            this.userRepository.save(user);
+
+            return Optional.of(this.naturalPersonDtoMapper.map(naturalPerson));
+
         }
 
-        Address address = this.buildAddress(naturalPerson, voivoideship);
-
-        address = addressRepository.save(address);
-        naturalPerson.setAddress(address);
-        naturalPerson.setId(0L);
-
-        naturalPerson = naturalPersonRepository.save(naturalPerson);
-        User user = userRepository.getByAddressEmail(authenticationFacade.getAuthentication().getName());
-
-        user.setNaturalPerson(naturalPerson);
-        userRepository.save(user);
-
-        return true;
+        throw new NotAuthorizedAccessToResourceException("Authenticated user has got no access to this resource.");
     }
 
     private Address buildAddress(NaturalPerson naturalPerson, Voivoideship voivoideship) {
@@ -142,35 +150,24 @@ public class UserService {
                 .build();
     }
 
-    public Optional<NaturalPerson> getUsersPersonalData(Long id, Long personID) {
+    public Optional<AuthenticatedUserPersonalDataDto> getUsersPersonalData(Long id, Long personID) {
         User authenticatedUser = this.authenticationFacade.getAuthenticatedUser();
 
         if (this.accessPermissionService.hasPrincipalHavePermissionToUserResource(id)) {
             if (authenticatedUser.hasRegisteredNaturalPerson() &&
                     authenticatedUser.getNaturalPerson().getId().equals(personID)) {
-                return Optional.of(authenticatedUser.getNaturalPerson());
+                return Optional.of(this.naturalPersonDtoMapper.map(authenticatedUser.getNaturalPerson()));
             }
         }
 
         return Optional.empty();
     }
 
-    public Optional<AuthenticatedUserInfoDto> getUser(Long id) {
+    public Optional<UserInfoDto> getUser(Long id) {
 
         if (accessPermissionService.hasPrincipalHavePermissionToUserResource(id)) {
-            User authenticatedUser = authenticationFacade.getAuthenticatedUser();
-            AuthenticatedUserInfoDto authenticatedUserInfoDto = new AuthenticatedUserInfoDto();
-            if (authenticatedUser.hasRegisteredNaturalPerson()) {
-                authenticatedUserInfoDto.setNaturalPersonID(authenticatedUser.getNaturalPerson().getId());
-                authenticatedUserInfoDto.setCompaniesIDs(this.companyRepository
-                                                                 .findByRegisterer(authenticatedUser.getNaturalPerson())
-                                                                 .stream().map(Company::getId)
-                                                                 .collect(Collectors.toList()));
-            }
-            authenticatedUserInfoDto.setEmailAddress(authenticatedUser.getEmailAddressEntity().getEmail());
-            authenticatedUserInfoDto.setLoginName(authenticatedUser.getName());
 
-            return Optional.of(authenticatedUserInfoDto);
+            return Optional.of(this.userPersistenceService.getUserInfo(id));
         }
 
         return Optional.empty();

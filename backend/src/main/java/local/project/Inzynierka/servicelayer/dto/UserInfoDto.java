@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Collection;
 
 @Data
-public class AuthenticatedUserInfoDto {
+public class UserInfoDto {
 
     private Long naturalPersonID;
     private String emailAddress;

@@ -1,23 +1,20 @@
 package local.project.Inzynierka.web.registration.event;
 
-import local.project.Inzynierka.persistence.entity.User;
-
 public class OnRegistrationEvent {
 
-    private final User user;
+    private final String userEmail;
     private final String appUrl;
 
-    public OnRegistrationEvent(User user, String appUrl) {
-        this.user = user;
+    public OnRegistrationEvent(String userEmail, String appUrl) {
+        this.userEmail = userEmail;
         this.appUrl = appUrl;
     }
 
-    public User getUser() {
-        return user;
+    public String getUserEmail() {
+        return userEmail;
     }
 
     public String getAppUrl() {
         return appUrl;
     }
-
 }

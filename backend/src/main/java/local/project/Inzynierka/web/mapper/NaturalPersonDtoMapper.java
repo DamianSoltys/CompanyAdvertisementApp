@@ -20,10 +20,11 @@ public class NaturalPersonDtoMapper {
 
         naturalPerson.setPhoneNo(becomeNaturalPersonDto.getPhoneNo());
         naturalPerson.setAddress(Address.builder()
-                    .apartmentNo(becomeNaturalPersonDto.getApartmentNo())
-                .buildingNo(becomeNaturalPersonDto.getBuildingNo())
-                    .city(becomeNaturalPersonDto.getCity())
-                    .voivodeship_id(new Voivoideship((becomeNaturalPersonDto.getVoivodeship())))
+                                         .apartmentNo(becomeNaturalPersonDto.getAddress().getApartmentNo())
+                                         .buildingNo(becomeNaturalPersonDto.getAddress().getBuildingNo())
+                                         .city(becomeNaturalPersonDto.getAddress().getCity())
+                                         .street(becomeNaturalPersonDto.getAddress().getStreet())
+                                         .voivodeship_id(new Voivoideship((becomeNaturalPersonDto.getAddress().getVoivodeship().toString())))
                     .build());
         naturalPerson.setFirstName(becomeNaturalPersonDto.getFirstName());
         naturalPerson.setLastName(becomeNaturalPersonDto.getLastName());

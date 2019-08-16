@@ -1,8 +1,7 @@
 package local.project.Inzynierka.web.security;
 
-import local.project.Inzynierka.persistence.entity.EmailAddress;
 import local.project.Inzynierka.persistence.entity.User;
-import local.project.Inzynierka.servicelayer.services.UserService;
+import local.project.Inzynierka.servicelayer.services.UserFacade;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,10 +10,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class ApplicationsUserDetailService implements UserDetailsService {
 
-    private final UserService userService;
+    private final UserFacade userFacade;
 
-    public ApplicationsUserDetailService(UserService userService) {
-        this.userService = userService;
+    public ApplicationsUserDetailService(UserFacade userFacade) {
+        this.userFacade = userFacade;
     }
 
     @Override
@@ -24,7 +23,7 @@ public class ApplicationsUserDetailService implements UserDetailsService {
          TODO Add logging in using also name option.
         **/
 
-        User user = userService.findByEmailAddress(new EmailAddress(email));
+        User user = userFacade.findByEmailAddress(email);
         if(user == null ){
             throw new NullPointerException();
         }

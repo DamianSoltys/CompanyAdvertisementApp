@@ -2,9 +2,11 @@ package local.project.Inzynierka;
 
 
 import local.project.Inzynierka.persistence.entity.User;
+import local.project.Inzynierka.servicelayer.dto.Address;
 import local.project.Inzynierka.servicelayer.dto.BecomeNaturalPersonDto;
 import local.project.Inzynierka.servicelayer.dto.UserRegistrationDto;
-import local.project.Inzynierka.servicelayer.services.UserService;
+import local.project.Inzynierka.servicelayer.dto.Voivodeship;
+import local.project.Inzynierka.servicelayer.services.UserFacade;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
 import local.project.Inzynierka.web.controller.AccountController;
 import local.project.Inzynierka.web.controller.AuthenticationController;
@@ -41,7 +43,7 @@ public class UserBecomeNaturalPersonIntegrationTest {
     private TestRestTemplate testRestTemplate;
 
     @Autowired
-    private UserService userService;
+    private UserFacade userFacade;
 
     @LocalServerPort
     private int randomServerPort;
@@ -75,14 +77,14 @@ public class UserBecomeNaturalPersonIntegrationTest {
          * */
         countDownLatch.await(1000, TimeUnit.MILLISECONDS);
 
-        User user = userService.findByName(name);
+        User user = userFacade.findByName(name);
         log.info(String.valueOf(user));
         String token = user.getVerificationToken().getToken();
 
         testRestTemplate.getForObject(
                 uri+"/auth/registration/confirm?token="+token, String.class);
 
-        user = userService.findByName(name);
+        user = userFacade.findByName(name);
         log.info(String.valueOf(user));
     }
 
@@ -90,14 +92,10 @@ public class UserBecomeNaturalPersonIntegrationTest {
     public void test(){
 
         BecomeNaturalPersonDto becomeNaturalPersonDto = BecomeNaturalPersonDto.builder()
-                .apartmentNo("5d")
-                .buildingNo("43")
-                .city("Lublin")
+                .address(new Address(Voivodeship.LUBELSKIE, "Lublin", "ulica", "43", "5d"))
                 .firstName("Janek")
                 .lastName("Jankowski")
                 .phoneNo("123456789")
-                .street("ulica")
-                .voivodeship("lubelskie")
                 .build();
 
 

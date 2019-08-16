@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { PersonalData, UserREST } from 'src/app/classes/User';
 import { PersonalDataService } from 'src/app/services/personal-data.service';
+import { voivodeships } from 'src/app/classes/Voivodeship';
 
 
 @Component({
@@ -14,12 +15,13 @@ export class PersonalDataComponent implements OnInit {
   successMessage = '';
   errorMessage = '';
   userObject: UserREST;
-  constructor(private fb: FormBuilder, private pdataService: PersonalDataService) { }
+  _voivodeships = voivodeships;
+  constructor(private fb: FormBuilder, private pdataService: PersonalDataService,private renderer:Renderer2) { }
 
   ngOnInit() {
     this.personalDataForm = this.fb.group({
      address:this.fb.group({
-     voivodeship: ['', [Validators.required, Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
+     voivodeship: ['', [Validators.required]],
      city: ['', [Validators.required, Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
      street: ['', [Validators.required, Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
      apartmentNo: ['', [Validators.required, Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/))]],
@@ -29,6 +31,16 @@ export class PersonalDataComponent implements OnInit {
      lastName: ['', [Validators.required, Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
      phoneNo: ['', [Validators.required, Validators.pattern(new RegExp(/^[0-9]+$/))]]
     });
+
+    let selectInput = this.renderer.selectRootElement('select');
+    this._voivodeships.forEach(value=>{
+      let option = this.renderer.createElement('option');
+      let text = this.renderer.createText(value);
+      this.renderer.appendChild(option,text);
+      this.renderer.appendChild(selectInput,option);
+
+    });
+
     this.userObject = JSON.parse(localStorage.getItem('userREST'));
     this.pdataService.getPersonalData(this.userObject.userID,this.userObject.naturalPersonID).subscribe(response=>{
       console.log(response);

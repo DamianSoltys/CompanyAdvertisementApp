@@ -95,10 +95,13 @@
               </p>
             </div>
           </div>
-          <div class="form-group section-container__container">
+          <div class="form-group section-container__container section-container__with--select">
             <label class="section-container__label" for="voivodeship">Województwo</label>
-            <input type="text" name="voivodeship" class="form-control section-container__input"
-              formControlName="voivodeship" />
+            <div class="section-container__select-wrapper">
+              <select  name="voivodeship" class="form-control section-container__select-input"
+                formControlName="voivodeship">
+              </select>
+            </div>
             <div *ngIf="
                   (this.formAddress.voivodeship.touched ||
                     this.formAddress.voivodeship.dirty) &&
@@ -106,9 +109,6 @@
                 " class="section-container__error-container">
               <p *ngIf="this.formAddress.voivodeship.errors.required" class="text-danger error-container__text--danger">
                 Pole nie może być puste
-              </p>
-              <p *ngIf="this.formAddress.voivodeship.errors.pattern" class="text-danger error-container__text--danger">
-                Proszę poprawnie uzupełnić pole
               </p>
             </div>
           </div>

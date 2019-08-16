@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { PersonalData } from '../classes/User';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,15 +13,19 @@ export class PersonalDataService {
   sendPersonalData(personalData: PersonalData) {
     return this.http.post('http://localhost:8090/api/user/naturalperson',
     {
+      'apartmentNo': personalData.address.apartmentNo,
+      'buildingNo': personalData.address.buildingNo,
+      'street': personalData.address.street,
+      'voivodeship': personalData.address.voivodeship,
+      'city': personalData.address.city,
       'firstName': personalData.firstName,
-      'apartmentNo': personalData.apartmentNo,
-      'buildingNo': personalData.buildingNo,
-      'city': personalData.city,
       'lastName': personalData.lastName,
-      'phoneNo': personalData.phoneNo,
-      'street': personalData.street,
-      'voivodeship': personalData.voivodeship
+      'phoneNo': personalData.phoneNo
     }
     );
+  }
+
+  getPersonalData(userId: number,naturalPersonId: number): Observable<any> {
+    return this.http.get(`http://localhost:8090/api/user/${userId}/naturalperson/${naturalPersonId}`);
   }
 }

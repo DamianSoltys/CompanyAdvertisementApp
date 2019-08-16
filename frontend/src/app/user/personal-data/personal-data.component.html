@@ -46,18 +46,18 @@
         <div class="input_group__group-label">
             <p class="group-label__text-node"><i class="fas fa-home text-node__icon"></i>Dane adresowe</p>
         </div>
-        <div class="input-group__section-container row col-12">
+        <div class="input-group__section-container row col-12" formGroupName="address">
           <div class="form-group section-container__container">
             <label class="section-container__label" for="street">Ulica</label>
             <input type="text" name="street" class="form-control section-container__input" formControlName="street" />
             <div *ngIf="
-                (this.form.street.touched || this.form.street.dirty) &&
-                this.form.street.errors
+                (this.formAddress.street.touched || this.formAddress.street.dirty) &&
+                this.formAddress.street.errors
               " class="section-container__error-container">
-              <p *ngIf="this.form.street.errors.required" class="text-danger error-container__text--danger">
+              <p *ngIf="this.formAddress.street.errors.required" class="text-danger error-container__text--danger">
                 Pole nie może być puste
               </p>
-              <p *ngIf="this.form.street.errors.pattern" class="text-danger error-container__text--danger">
+              <p *ngIf="this.formAddress.street.errors.pattern" class="text-danger error-container__text--danger">
                 Proszę poprawnie uzupełnić pole
               </p>
             </div>
@@ -67,14 +67,14 @@
             <input type="text" name="apartmentNo" class="form-control section-container__input"
               formControlName="apartmentNo" />
             <div *ngIf="
-                (this.form.apartmentNo.touched ||
-                  this.form.apartmentNo.dirty) &&
-                this.form.apartmentNo.errors
+                (this.formAddress.apartmentNo.touched ||
+                  this.formAddress.apartmentNo.dirty) &&
+                this.formAddress.apartmentNo.errors
               " class="section-container__error-container">
-              <p *ngIf="this.form.apartmentNo.errors.required" class="text-danger error-container__text--danger">
+              <p *ngIf="this.formAddress.apartmentNo.errors.required" class="text-danger error-container__text--danger">
                 Pole nie może być puste
               </p>
-              <p *ngIf="this.form.apartmentNo.errors.pattern" class="text-danger error-container__text--danger">
+              <p *ngIf="this.formAddress.apartmentNo.errors.pattern" class="text-danger error-container__text--danger">
                 Proszę poprawnie uzupełnić pole
               </p>
             </div>
@@ -84,13 +84,13 @@
             <input type="text" name="buildingNo" class="form-control section-container__input"
               formControlName="buildingNo" />
             <div *ngIf="
-                (this.form.buildingNo.touched || this.form.buildingNo.dirty) &&
-                this.form.buildingNo.errors
+                (this.formAddress.buildingNo.touched || this.formAddress.buildingNo.dirty) &&
+                this.formAddress.buildingNo.errors
               " class="section-container__error-container">
-              <p *ngIf="this.form.buildingNo.errors.required" class="text-danger error-container__text--danger">
+              <p *ngIf="this.formAddress.buildingNo.errors.required" class="text-danger error-container__text--danger">
                 Pole nie może być puste
               </p>
-              <p *ngIf="this.form.buildingNo.errors.pattern" class="text-danger error-container__text--danger">
+              <p *ngIf="this.formAddress.buildingNo.errors.pattern" class="text-danger error-container__text--danger">
                 Proszę poprawnie uzupełnić pole
               </p>
             </div>
@@ -100,14 +100,14 @@
             <input type="text" name="voivodeship" class="form-control section-container__input"
               formControlName="voivodeship" />
             <div *ngIf="
-                  (this.form.voivodeship.touched ||
-                    this.form.voivodeship.dirty) &&
-                  this.form.voivodeship.errors
+                  (this.formAddress.voivodeship.touched ||
+                    this.formAddress.voivodeship.dirty) &&
+                  this.formAddress.voivodeship.errors
                 " class="section-container__error-container">
-              <p *ngIf="this.form.voivodeship.errors.required" class="text-danger error-container__text--danger">
+              <p *ngIf="this.formAddress.voivodeship.errors.required" class="text-danger error-container__text--danger">
                 Pole nie może być puste
               </p>
-              <p *ngIf="this.form.voivodeship.errors.pattern" class="text-danger error-container__text--danger">
+              <p *ngIf="this.formAddress.voivodeship.errors.pattern" class="text-danger error-container__text--danger">
                 Proszę poprawnie uzupełnić pole
               </p>
             </div>
@@ -116,13 +116,13 @@
             <label class="section-container__label" for="city">Miasto</label>
             <input type="text" name="city" class="form-control section-container__input" formControlName="city" />
             <div *ngIf="
-                  (this.form.city.touched || this.form.city.dirty) &&
-                  this.form.city.errors
+                  (this.formAddress.city.touched || this.formAddress.city.dirty) &&
+                  this.formAddress.city.errors
                 " class="section-container__error-container">
-              <p *ngIf="this.form.city.errors.required" class="text-danger error-container__text--danger">
+              <p *ngIf="this.formAddress.city.errors.required" class="text-danger error-container__text--danger">
                 Pole nie może być puste
               </p>
-              <p *ngIf="this.form.city.errors.pattern" class="text-danger error-container__text--danger">
+              <p *ngIf="this.formAddress.city.errors.pattern" class="text-danger error-container__text--danger">
                 Proszę poprawnie uzupełnić pole
               </p>
             </div>

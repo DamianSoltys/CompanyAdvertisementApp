@@ -9,12 +9,15 @@ export class UserLog {
 }
 
 export class PersonalData {
+  address:{
+    voivodeship: string;
+    city: string;
+    street: string;
+    apartmentNo: string;
+    buildingNo: string;
+  }
   firstName: string;
-   lastName: string;
-   voivodeship: string;
-   city: string;
-  street: string;
-   apartmentNo: string;
-  buildingNo: string;
-   phoneNo: string;
+  lastName: string;
+  phoneNo: string;
 }
+

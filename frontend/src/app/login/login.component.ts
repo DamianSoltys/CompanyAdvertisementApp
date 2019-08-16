@@ -44,6 +44,8 @@ export class LoginComponent implements OnInit {
         this.login_success = true;
         setTimeout(() => {
           localStorage.setItem('token', data.headers.get('Authorization'));
+          localStorage.setItem('userId',data.body.data);
+          console.log(localStorage.getItem('userId'));
           this.lgservice.ChangeLogged();
           this.router.navigate(['']);
           console.log('Użytkownik został zalogowany');

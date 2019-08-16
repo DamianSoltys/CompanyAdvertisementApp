@@ -9,7 +9,11 @@ export class UserLog {
 }
 
 export class UserREST {
-  
+  companiesIDs: [];
+  emailAddress: string;
+  loginName: string;
+  naturalPersonID: number;
+  userID: number;
 }
 
 export class PersonalData {

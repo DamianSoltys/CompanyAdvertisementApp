@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
-import { PersonalData } from 'src/app/classes/User';
+import { PersonalData, UserREST } from 'src/app/classes/User';
 import { PersonalDataService } from 'src/app/services/personal-data.service';
 
 
@@ -13,6 +13,7 @@ export class PersonalDataComponent implements OnInit {
   personalDataForm: FormGroup;
   successMessage = '';
   errorMessage = '';
+  userObject: UserREST;
   constructor(private fb: FormBuilder, private pdataService: PersonalDataService) { }
 
   ngOnInit() {
@@ -28,7 +29,14 @@ export class PersonalDataComponent implements OnInit {
      lastName: ['', [Validators.required, Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
      phoneNo: ['', [Validators.required, Validators.pattern(new RegExp(/^[0-9]+$/))]]
     });
+    this.userObject = JSON.parse(localStorage.getItem('userREST'));
+    this.pdataService.getPersonalData(this.userObject.userID,this.userObject.naturalPersonID).subscribe(response=>{
+      console.log(response);
+    },error=>{
+      console.log(error);
+    });
   }
+
   get form() {
     return this.personalDataForm.controls;
   }
@@ -38,7 +46,7 @@ export class PersonalDataComponent implements OnInit {
   }
 
   onSubmit() {
-    this.pdataService.sendPersonalData(this.personalDataForm.value as PersonalData).
+    this.pdataService.sendPersonalData(this.personalDataForm.value as PersonalData,this.userObject.userID).
     subscribe(response => {
       console.log(response);
       this.errorMessage='';

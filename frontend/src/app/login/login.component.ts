@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { UserLog } from '../classes/User';
+import { UserLog, UserREST } from '../classes/User';
 import { LoginService } from '../services/login.service';
 import { Router } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
@@ -44,8 +44,8 @@ export class LoginComponent implements OnInit {
         this.login_success = true;
         setTimeout(() => {
           localStorage.setItem('token', data.headers.get('Authorization'));
-          localStorage.setItem('userId',data.body.data);
-          console.log(localStorage.getItem('userId'));
+          let userObject:UserREST = data.body;
+          localStorage.setItem('userREST',JSON.stringify(userObject));
           this.lgservice.ChangeLogged();
           this.router.navigate(['']);
           console.log('Użytkownik został zalogowany');

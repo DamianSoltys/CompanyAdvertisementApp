@@ -80,7 +80,7 @@ export class AppComponent implements OnInit {
       this.renderer.setStyle(this.logOutMessage.nativeElement, 'visibility', 'hidden');
     }, 1000);
     localStorage.removeItem('token');
-    localStorage.removeItem('userId');
+    localStorage.removeItem('userREST');
     this.lgservice.ChangeLogged();
     this.router.navigate(['']);
     console.log('wylogowany');

@@ -10,14 +10,16 @@ export class PersonalDataService {
 
   constructor(private http: HttpClient) { }
 
-  sendPersonalData(personalData: PersonalData) {
-    return this.http.post('http://localhost:8090/api/user/naturalperson',
+  sendPersonalData(personalData: PersonalData,userId:number) {
+    return this.http.post(`http://localhost:8090/api/user/${userId}/naturalperson`,
     {
+      'address':{
       'apartmentNo': personalData.address.apartmentNo,
       'buildingNo': personalData.address.buildingNo,
       'street': personalData.address.street,
       'voivodeship': personalData.address.voivodeship,
       'city': personalData.address.city,
+      },
       'firstName': personalData.firstName,
       'lastName': personalData.lastName,
       'phoneNo': personalData.phoneNo

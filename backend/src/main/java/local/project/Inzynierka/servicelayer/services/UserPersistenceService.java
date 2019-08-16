@@ -26,6 +26,7 @@ public class UserPersistenceService {
         User authenticatedUser = this.userRepository.findById(id).orElseThrow(IllegalStateException::new);
         UserInfoDto userInfoDto = new UserInfoDto();
         if (authenticatedUser.hasRegisteredNaturalPerson()) {
+            userInfoDto.setUserID(authenticatedUser.getId());
             userInfoDto.setNaturalPersonID(authenticatedUser.getNaturalPerson().getId());
             userInfoDto.setCompaniesIDs(this.companyRepository
                                                 .findByRegisterer(authenticatedUser.getNaturalPerson())

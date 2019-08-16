@@ -7,6 +7,7 @@ import java.util.Collection;
 @Data
 public class UserInfoDto {
 
+    private Long userID;
     private Long naturalPersonID;
     private String emailAddress;
     private String loginName;

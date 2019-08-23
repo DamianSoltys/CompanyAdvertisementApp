@@ -33,13 +33,7 @@ export class PersonalDataComponent implements OnInit {
     });
 
     this.selectOptionsRender();
-    //TODO
-    this.userObject = JSON.parse(localStorage.getItem('userREST'));
-    this.pdataService.getPersonalData(this.userObject.userID,this.userObject.naturalPersonID).subscribe(response=>{
-      console.log(response);
-    },error=>{
-      console.log(error);
-    });
+    this.getPersonalData();
   }
 
   selectOptionsRender() {
@@ -52,6 +46,23 @@ export class PersonalDataComponent implements OnInit {
     });
   }
 
+    getPersonalData() {
+      this.userObject = JSON.parse(localStorage.getItem('userREST'));
+      this.pdataService.getPersonalData(this.userObject.userID,this.userObject.naturalPersonID+1).subscribe(response=>{
+      console.log(response);
+    },error=>{
+      console.log(error);
+      this.errorMessage = 'Pobranie danych nie powiodło się!';
+    });
+    }
+
+    checkIfPersonalDataExists() {
+
+    }
+
+    setStoragePersonalData() {
+
+    }
 
   get form() {
     return this.personalDataForm.controls;
@@ -62,6 +73,10 @@ export class PersonalDataComponent implements OnInit {
   }
 
   onSubmit() {
+    this.checkIfRequestSuccess();
+  }
+
+  checkIfRequestSuccess() {
     this.pdataService.sendPersonalData(this.personalDataForm.value as PersonalData,this.userObject.userID).
     subscribe(response => {
       console.log(response);

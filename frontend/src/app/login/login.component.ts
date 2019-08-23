@@ -1,9 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { UserLog, UserREST } from '../classes/User';
+import {
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  Validators
+} from '@angular/forms';
+import { UserLog, UserREST, UserReg } from '../classes/User';
 import { LoginService } from '../services/login.service';
 import { Router } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
+import { storage_Avaliable } from '../classes/storage_checker';
 
 @Component({
   selector: 'app-login',
@@ -11,14 +17,16 @@ import { HttpResponse } from '@angular/common/http';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-
   loginForm: FormGroup;
   login_error = false;
   login_success = false;
   success_message: string;
   error_message: string;
-  constructor(private fb: FormBuilder, private lgservice: LoginService,
-     private router: Router) { }
+  constructor(
+    private fb: FormBuilder,
+    private lgservice: LoginService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.loginForm = this.fb.group({
@@ -27,37 +35,57 @@ export class LoginComponent implements OnInit {
     });
   }
 
-
   get logForm() {
     return this.loginForm.controls;
-
   }
+
   onSubmit() {
+    const User_data = this.setUserData();
+    this.checkIfLoginSuccess(User_data);
+  }
+
+  checkIfLoginSuccess(User_data: UserLog) {
+    this.lgservice.Login(User_data).subscribe(
+      (data: HttpResponse<any>) => {
+        console.log(data.headers.get('Authorization'));
+        if (data.status === 200) {
+          this.login_error = false;
+          this.success_message = 'Pomyślnie zalogowano';
+          this.login_success = true;
+
+          setTimeout(() => {
+            this.loginStorageSet(data);
+          }, 500);
+        }
+      },
+      error => {
+        console.log(error);
+        this.error_message = error.error;
+        this.login_error = true;
+      }
+    );
+  }
+
+  setUserData(): UserLog {
     const User_data = new UserLog();
     User_data.email = this.loginForm.get('email').value;
     User_data.password = this.loginForm.get('password').value;
-    this.lgservice.Login(User_data).subscribe((data: HttpResponse<any>) => {
-      console.log(data.headers.get('Authorization'));
-      if (data.status === 200) {
-        this.login_error = false;
-        this.success_message = 'Pomyślnie zalogowano';
-        this.login_success = true;
-        setTimeout(() => {
-          localStorage.setItem('token', data.headers.get('Authorization'));
-          let userObject:UserREST = data.body;
-          localStorage.setItem('userREST',JSON.stringify(userObject));
-          this.lgservice.ChangeLogged();
-          this.router.navigate(['']);
-          console.log('Użytkownik został zalogowany');
-        }, 500);
-
-      }
-    }, (error) => {
-      console.log(error);
-      this.error_message = error.error;
-      this.login_error = true;
-
-    });
+    return User_data;
   }
 
+  loginStorageSet(data: HttpResponse<any>) {
+    if (storage_Avaliable('localStorage')) {
+      let userObject: UserREST = data.body;
+
+      localStorage.setItem('token', data.headers.get('Authorization'));
+      localStorage.setItem('userREST', JSON.stringify(userObject));
+
+      this.lgservice.ChangeLogged();
+      this.router.navigate(['']);
+      console.log('Użytkownik został zalogowany');
+    } else {
+      this.error_message = 'Coś poszło nie tak!';
+      this.login_error = true;
+    }
+  }
 }

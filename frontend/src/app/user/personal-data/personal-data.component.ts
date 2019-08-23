@@ -32,15 +32,8 @@ export class PersonalDataComponent implements OnInit {
      phoneNo: ['', [Validators.required, Validators.pattern(new RegExp(/^[0-9]+$/))]]
     });
 
-    let selectInput = this.renderer.selectRootElement('select');
-    this._voivodeships.forEach(value=>{
-      let option = this.renderer.createElement('option');
-      let text = this.renderer.createText(value);
-      this.renderer.appendChild(option,text);
-      this.renderer.appendChild(selectInput,option);
-
-    });
-
+    this.selectOptionsRender();
+    //TODO
     this.userObject = JSON.parse(localStorage.getItem('userREST'));
     this.pdataService.getPersonalData(this.userObject.userID,this.userObject.naturalPersonID).subscribe(response=>{
       console.log(response);
@@ -48,6 +41,17 @@ export class PersonalDataComponent implements OnInit {
       console.log(error);
     });
   }
+
+  selectOptionsRender() {
+    let selectInput = this.renderer.selectRootElement('select');
+    this._voivodeships.forEach(value=>{
+    let option = this.renderer.createElement('option');
+    let text = this.renderer.createText(value);
+    this.renderer.appendChild(option,text);
+    this.renderer.appendChild(selectInput,option);
+    });
+  }
+
 
   get form() {
     return this.personalDataForm.controls;

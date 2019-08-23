@@ -28,6 +28,6 @@ export class PersonalDataService {
   }
 
   getPersonalData(userId: number,naturalPersonId: number): Observable<any> {
-    return this.http.get(`http://localhost:8090/api/user/${userId}/naturalperson/${naturalPersonId}`);
+    return this.http.get(`http://localhost:8090/api/user/${userId}/naturalperson/${naturalPersonId}`,{observe: 'response'});
   }
 }

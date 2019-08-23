@@ -85,6 +85,7 @@ export class AppComponent implements OnInit {
     if(storage_Avaliable('localStorage')) {
       localStorage.removeItem('token');
       localStorage.removeItem('userREST');
+      localStorage.removeItem('naturalUserData');
     } else {
       console.log('Storage nie jest dostępny')
     }

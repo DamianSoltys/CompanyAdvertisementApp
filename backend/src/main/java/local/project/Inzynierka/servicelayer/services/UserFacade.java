@@ -116,7 +116,7 @@ public class UserFacade {
 
             Voivoideship voivoideship = this.voivodeshipRepository.findByName(naturalPerson.getAddress().getVoivodeship_id().getName());
             if (voivoideship == null) {
-                return Optional.empty();
+                throw new IllegalArgumentException("Voivodeship with that name doesn't exist!");
             }
 
             Address address = this.buildAddress(naturalPerson, voivoideship);

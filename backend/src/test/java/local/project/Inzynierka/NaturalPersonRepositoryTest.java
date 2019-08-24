@@ -3,6 +3,7 @@ package local.project.Inzynierka;
 import local.project.Inzynierka.persistence.entity.Address;
 import local.project.Inzynierka.persistence.entity.NaturalPerson;
 import local.project.Inzynierka.persistence.entity.Voivoideship;
+import local.project.Inzynierka.persistence.repository.AddressRepository;
 import local.project.Inzynierka.persistence.repository.NaturalPersonRepository;
 import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
 import org.junit.Assert;
@@ -11,10 +12,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
+@Sql(scripts = "classpath:test.sql")
 public class NaturalPersonRepositoryTest {
 
     @Autowired
@@ -22,6 +25,9 @@ public class NaturalPersonRepositoryTest {
 
     @Autowired
     private VoivodeshipRepository voivodeshipRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
 
     private NaturalPerson naturalPerson;
 
@@ -49,18 +55,21 @@ public class NaturalPersonRepositoryTest {
         /*
         * FROM THE CONTEXT
         * */
-        Voivoideship voivodeshipEntity = voivodeshipRepository.findById((short)1).get(); // IT RETURNS OPTIONAL
+        Voivoideship voivodeshipEntity = voivodeshipRepository.findByName("lubelskie");
         /*
          *
          * */
 
         naturalPerson.setPhoneNo(phoneNo);
-        naturalPerson.setAddress(Address.builder()
-                .voivodeship_id(voivodeshipEntity)
-                .buildingNo(buildNo)
-                .city(city)
-                .street(street)
-                .build());
+
+        Address address = addressRepository.save(Address.builder()
+                                       .voivodeship_id(voivodeshipEntity)
+                                       .buildingNo(buildNo)
+                                       .city(city)
+                                       .street(street)
+                                       .build());
+
+        naturalPerson.setAddress(address);
     }
 
     @Test

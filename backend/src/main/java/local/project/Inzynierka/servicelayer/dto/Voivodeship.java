@@ -41,7 +41,7 @@ public enum Voivodeship {
         }
 
         return Arrays.stream(Voivodeship.values())
-                .filter(v ->  v.toString().equals(value))
+                .filter(v ->  v.toString().equals(value.toLowerCase()))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
     }

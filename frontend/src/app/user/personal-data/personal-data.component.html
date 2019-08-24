@@ -1,6 +1,6 @@
 <div class="container-fluid personal-data-component">
   <div class="row personal-data-component__form">
-    <form (ngSubmit)="onSubmit()" class=" col-12 col-xl-6 col-md-9 form__personal-data-form" *ngIf = "showAddingForm"
+    <form (ngSubmit)="onSubmit()" class=" col-12 col-xl-6 col-md-9 form__personal-data-form" *ngIf="showAddingForm"
       [formGroup]="personalDataForm">
       <div class="personal-data-form__header col-12 text-center">
         <p class="header__text-node"><i class="fas fa-id-card header__icon"></i>Dane personalne</p>
@@ -164,5 +164,42 @@
       </button>
     </div>
     </form>
+  </div>
+  <div class="row personal-data-component__data-container col-6" *ngIf="showData">
+    <div class="row data-container__data-group col-12">
+      <div class="data-group__header col-12">
+        <span class="header__text-node">Dane osobowe</span>
+      </div>
+      <div class="data-group__container col-12">
+        <ul class="container__data-list">
+          <li class="data-list__item">{{naturalUserDataObject?.firstName}}</li>
+          <li class="data-list__item">{{naturalUserDataObject?.lastName}}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="row data-container__data-group col-12">
+      <div class="data-group__header col-12">
+        <span class="header__text-node">Dane adresowe</span>
+      </div>
+      <div class="data-group__container col-12">
+        <ul #ulList class="container__data-list">
+          <li class="data-list__item">{{naturalUserDataObject?.address.voivodeship}}</li>
+          <li class="data-list__item">{{naturalUserDataObject?.address.city}}</li>
+          <li class="data-list__item">{{naturalUserDataObject?.address.street}}</li>
+          <li class="data-list__item">{{naturalUserDataObject?.address.apartmentNo}}</li>
+          <li class="data-list__item">{{naturalUserDataObject?.address.buildingNo}}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="row data-container__data-group col-12">
+      <div class="data-group__header col-12">
+        <span class="header__text-node">Dane kontaktowe</span>
+      </div>
+      <div class="data-group__container col-12">
+        <ul #ulList class="container__data-list">
+          <li class="data-list__item">{{naturalUserDataObject?.phoneNo}}</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2, ViewChild, ElementRef } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -6,31 +6,39 @@ import {
   Validators,
   FormArray
 } from '@angular/forms';
+import { UrlHandlingStrategy } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
+import { HttpResponse } from '@angular/common/http';
+
 import { PersonalData, UserREST } from 'src/app/classes/User';
 import { PersonalDataService } from 'src/app/services/personal-data.service';
 import { voivodeships } from 'src/app/classes/Voivodeship';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
-import { HttpResponse } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-personal-data',
   templateUrl: './personal-data.component.html',
   styleUrls: ['./personal-data.component.scss']
 })
-export class PersonalDataComponent implements OnInit {
-  personalDataForm: FormGroup;
-  successMessage = '';
-  errorMessage = '';
-  userObject: UserREST;
-  naturalUserDataObject: PersonalData;
-  _voivodeships = voivodeships;
 
-  showData: boolean;
-  showAddingForm: boolean = false;
+//Public pierwsze/private ostatnie!
+
+export class PersonalDataComponent implements OnInit {
+  public personalDataForm: FormGroup;
+  public successMessage: string = '';
+  public errorMessage: string = '';
+  public userObject: UserREST;
+  public naturalUserDataObject: PersonalData;
+  private _voivodeships = voivodeships;
+
+  public showData = new BehaviorSubject<boolean>(false);
+  public showAddingForm: boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private pdataService: PersonalDataService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
   ) {}
 
   ngOnInit() {
@@ -41,28 +49,28 @@ export class PersonalDataComponent implements OnInit {
           '',
           [
             Validators.required,
-            Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))
+            Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/)),
           ]
         ],
         street: [
           '',
           [
             Validators.required,
-            Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))
+            Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/)),
           ]
         ],
         apartmentNo: [
           '',
           [
             Validators.required,
-            Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/))
+            Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/)),
           ]
         ],
         buildingNo: [
           '',
           [
             Validators.required,
-            Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/))
+            Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/)),
           ]
         ]
       }),
@@ -70,14 +78,14 @@ export class PersonalDataComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))
+          Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/)),
         ]
       ],
       lastName: [
         '',
         [
           Validators.required,
-          Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))
+          Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/)),
         ]
       ],
       phoneNo: [
@@ -95,7 +103,7 @@ export class PersonalDataComponent implements OnInit {
     }
   }
 
-  selectOptionsRender() {
+  public selectOptionsRender(): void {
     let selectInput = this.renderer.selectRootElement('select');
     this._voivodeships.forEach(value => {
       let option = this.renderer.createElement('option');
@@ -106,13 +114,7 @@ export class PersonalDataComponent implements OnInit {
   }
 
   showPersonalData(naturalUserData: PersonalData) {
-    this.showData = true;
-    console.log(this.getPersonalDataStorage());
-  }
-
-  renderPersonalData(naturalUserData: PersonalData) {
-    if (this.showData) {
-    }
+    console.log(naturalUserData);
   }
 
   getPersonalDataServer() {

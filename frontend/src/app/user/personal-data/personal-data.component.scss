@@ -155,6 +155,24 @@
   }     
 }
 
+.personal-data-component__data-container {
+  margin:auto;
+  border:1px solid red;
+  border-radius:10px;
+  height:50vh;
+  .data-container__data-group {
+    margin:auto;
+    border:1px solid red;
+
+    .data-group__header {
+
+      .header__text-node {
+
+      }
+    }
+  }
+}
+
 
 
   

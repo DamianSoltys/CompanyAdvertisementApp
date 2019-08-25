@@ -75,15 +75,12 @@ public class UserFacade {
 
     public User createNewUser(User user) {
 
-        user.setAccountType((short) 0);
-
         return userRepository.save(user);
     }
 
     @Transactional
     public void createVerificationTokenForUser(String userEmail, final String token) {
         VerificationToken myToken = new VerificationToken(token);
-        myToken.setId(0L);
 
         User user = this.userRepository.getByAddressEmail(userEmail);
         VerificationToken createdToken = verificationTokenRepository.save(myToken);
@@ -123,7 +120,6 @@ public class UserFacade {
 
             address = this.addressRepository.save(address);
             naturalPerson.setAddress(address);
-            naturalPerson.setId(0L);
 
             naturalPerson = this.naturalPersonRepository.save(naturalPerson);
             User user = this.authenticationFacade.getAuthenticatedUser();
@@ -143,7 +139,6 @@ public class UserFacade {
         return Address.builder()
                 .apartmentNo(naturalPerson.getAddress().getApartmentNo())
                 .buildingNo(naturalPerson.getAddress().getBuildingNo())
-                .id(0L)
                 .city(naturalPerson.getAddress().getCity())
                 .voivodeship_id(voivoideship)
                 .street(naturalPerson.getAddress().getStreet())

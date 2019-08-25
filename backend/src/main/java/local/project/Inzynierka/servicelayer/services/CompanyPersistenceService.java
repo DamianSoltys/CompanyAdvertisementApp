@@ -46,7 +46,6 @@ public class CompanyPersistenceService {
                                                    .category(this.getPersistedCategory(company))
                                                    .description(company.getDescription())
                                                    .hasBranch(company.hasBranch())
-                                                   .id(0L)
                                                    .name(company.getName())
                                                    .NIP(company.getNIP())
                                                    .registerer(user.getNaturalPerson())
@@ -61,7 +60,6 @@ public class CompanyPersistenceService {
         Address address = Address.builder()
                 .apartmentNo(company.getAddress().getApartmentNo())
                 .buildingNo(company.getAddress().getBuildingNo())
-                .id(0L)
                 .city(company.getAddress().getCity())
                 .voivodeship_id(voivoideship)
                 .street(company.getAddress().getStreet())
@@ -75,7 +73,6 @@ public class CompanyPersistenceService {
         if (soughtCategory == null) {
             soughtCategory = company.getCategory();
             soughtCategory.setName(company.getCategory().getName());
-            soughtCategory.setId((short) 0);
             this.categoryRepository.save(soughtCategory);
         }
 

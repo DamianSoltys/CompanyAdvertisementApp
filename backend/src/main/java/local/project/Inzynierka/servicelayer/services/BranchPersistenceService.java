@@ -30,7 +30,6 @@ public class BranchPersistenceService {
         branches.forEach(branch -> {
             branch.setCompany(createdCompany);
             branch.setRegisterer(createdCompany.getRegisterer());
-            branch.setId(0L);
             Voivoideship branchVoivodeship = this.voivodeshipRepository.findByName(branch.getAddress().getVoivodeship_id().getName());
             branch.getAddress().setVoivodeship_id(branchVoivodeship);
             Address branchAddress = this.addressRepository.save(branch.getAddress());

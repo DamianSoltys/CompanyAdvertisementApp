@@ -22,7 +22,7 @@ public class PromotionItem extends FullTimestampingAudit implements IEntity<Long
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "promotion_item_id")
-    private Long id;
+    private Long id = 0L;
 
     @Column(name = "name", length = 50, nullable = false)
     private String name;

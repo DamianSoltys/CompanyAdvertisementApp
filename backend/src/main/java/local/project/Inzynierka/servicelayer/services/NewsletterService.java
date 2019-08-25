@@ -43,7 +43,6 @@ public class NewsletterService {
         NewsletterSubscription newsletterSubscription = NewsletterSubscription.builder()
                 .company(company)
                 .emailAddressEntity(getPersistedEmailAddress(subscriptionToCreateDto.getEmailToSignUp()))
-                .id(0L)
                 .verified(subscriptionToCreateDto.isVerified())
                 .build();
 
@@ -57,7 +56,6 @@ public class NewsletterService {
         EmailAddress foundEmail = emailRepository.findByEmail(emailAddress);
         if (foundEmail == null) {
             foundEmail = new EmailAddress(emailAddress);
-            foundEmail.setId(0L);
 
             foundEmail = emailRepository.save(foundEmail);
         }
@@ -75,7 +73,6 @@ public class NewsletterService {
 
     private VerificationToken getPersistedToken(String token) {
         VerificationToken verificationToken = new VerificationToken(token);
-        verificationToken.setId(0L);
         verificationToken = verificationTokenRepository.save(verificationToken);
         return verificationToken;
     }

@@ -27,7 +27,7 @@ public class Address extends FullTimestampingAudit implements IEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id = 0L;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "voivodeship_id", nullable = false, foreignKey = @ForeignKey(name = "branch_voivodeship_FK"))

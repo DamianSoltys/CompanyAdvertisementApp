@@ -20,7 +20,7 @@ public class Voivoideship implements IEntity<Short>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "voivodeship_id")
-    private Short id;
+    private Short id = 0;
 
     @Column(nullable = false, unique = true, length = 25)
     private String name;

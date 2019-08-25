@@ -28,7 +28,7 @@ public class NewsletterSubscription extends FullTimestampingAudit implements IEn
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id = 0L;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", foreignKey = @ForeignKey(name = "newsletter_company_FK"), nullable = false)

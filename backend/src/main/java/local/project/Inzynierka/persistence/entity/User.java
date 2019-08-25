@@ -23,7 +23,7 @@ public class User extends FullTimestampingAudit implements IEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private Long id;
+    private Long id = 0L;
 
     @Column(nullable = false, name = "user_name", unique = true, length = 30)
     private String name;

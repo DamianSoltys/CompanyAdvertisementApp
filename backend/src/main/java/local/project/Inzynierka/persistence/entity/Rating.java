@@ -25,7 +25,7 @@ public class Rating extends FullTimestampingAudit implements IEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rating_id")
-    private Long id;
+    private Long id = 0L;
 
     @Min(1) @Max(5)
     @Column(nullable = false)

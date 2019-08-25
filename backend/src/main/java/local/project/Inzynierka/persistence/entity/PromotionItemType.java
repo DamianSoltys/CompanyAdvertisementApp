@@ -22,7 +22,7 @@ public class PromotionItemType extends CreationTimestampingAudit implements IEnt
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "promotion_item_type_id")
-    private Short id;
+    private Short id = 0;
 
     @Column(name = "type", length = 30, nullable = false)
     private String type;

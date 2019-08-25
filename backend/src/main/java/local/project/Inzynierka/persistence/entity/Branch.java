@@ -28,7 +28,7 @@ public class Branch extends FullTimestampingAudit implements IEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "branch_id")
-    private Long id;
+    private Long id = 0L;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "registerer_id", foreignKey = @ForeignKey(name = "branch_registerer_FK"), nullable = false)

@@ -18,7 +18,7 @@ public class EmailAddress extends CreationTimestampingAudit implements IEntity<L
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "email_id")
-    private Long id;
+    private Long id = 0L;
 
     @Column(unique = true, nullable = false, length = 254, name = "email")
     private String email;

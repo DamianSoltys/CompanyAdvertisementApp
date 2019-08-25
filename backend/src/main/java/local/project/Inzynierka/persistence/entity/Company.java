@@ -29,7 +29,7 @@ public class Company extends FullTimestampingAudit implements IEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id = 0L;
 
     @Column(nullable = false, length = 50)
     private String name;

@@ -9,7 +9,7 @@ import local.project.Inzynierka.servicelayer.dto.AddCompanyDto;
 import local.project.Inzynierka.servicelayer.dto.Address;
 import local.project.Inzynierka.servicelayer.dto.CompanyBranchDto;
 import local.project.Inzynierka.servicelayer.dto.Voivodeship;
-import local.project.Inzynierka.web.mapper.CompanyExtractor;
+import local.project.Inzynierka.servicelayer.dto.mapper.CompanyExtractor;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

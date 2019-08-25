@@ -11,7 +11,7 @@ import local.project.Inzynierka.servicelayer.services.UserPersistenceService;
 import local.project.Inzynierka.web.errors.BadLoginDataException;
 import local.project.Inzynierka.web.errors.EmailAlreadyTakenException;
 import local.project.Inzynierka.web.errors.UserAlreadyExistsException;
-import local.project.Inzynierka.web.mapper.UserDtoMapper;
+import local.project.Inzynierka.servicelayer.dto.mapper.UserDtoMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

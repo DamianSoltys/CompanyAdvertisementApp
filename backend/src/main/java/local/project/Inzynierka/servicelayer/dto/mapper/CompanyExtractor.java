@@ -1,4 +1,4 @@
-package local.project.Inzynierka.web.mapper;
+package local.project.Inzynierka.servicelayer.dto.mapper;
 
 import local.project.Inzynierka.persistence.entity.Address;
 import local.project.Inzynierka.persistence.entity.Branch;

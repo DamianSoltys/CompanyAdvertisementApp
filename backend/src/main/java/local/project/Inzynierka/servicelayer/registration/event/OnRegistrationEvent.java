@@ -1,4 +1,4 @@
-package local.project.Inzynierka.web.registration.event;
+package local.project.Inzynierka.servicelayer.registration.event;
 
 public class OnRegistrationEvent {
 

@@ -4,7 +4,7 @@ import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.repository.CompanyRepository;
 import local.project.Inzynierka.servicelayer.dto.AddCompanyDto;
-import local.project.Inzynierka.web.mapper.CompanyExtractor;
+import local.project.Inzynierka.servicelayer.dto.mapper.CompanyExtractor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

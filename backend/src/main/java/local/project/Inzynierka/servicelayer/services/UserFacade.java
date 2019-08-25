@@ -20,7 +20,7 @@ import local.project.Inzynierka.servicelayer.errors.NotAuthorizedAccessToResourc
 import local.project.Inzynierka.servicelayer.errors.PasswordsNotMatchingException;
 import local.project.Inzynierka.servicelayer.validation.PasswordCreatorService;
 import local.project.Inzynierka.shared.AuthenticationFacade;
-import local.project.Inzynierka.web.mapper.NaturalPersonDtoMapper;
+import local.project.Inzynierka.servicelayer.dto.mapper.NaturalPersonDtoMapper;
 import local.project.Inzynierka.web.security.AccessPermissionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

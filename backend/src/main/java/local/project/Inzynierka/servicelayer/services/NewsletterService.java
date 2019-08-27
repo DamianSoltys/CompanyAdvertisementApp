@@ -9,7 +9,7 @@ import local.project.Inzynierka.persistence.repository.EmailRepository;
 import local.project.Inzynierka.persistence.repository.NewsletterSubscriptionRepository;
 import local.project.Inzynierka.persistence.repository.VerificationTokenRepository;
 import local.project.Inzynierka.servicelayer.dto.SubscriptionToCreateDto;
-import local.project.Inzynierka.web.newsletter.event.OnNewsletterSignUpEvent;
+import local.project.Inzynierka.servicelayer.newsletter.event.OnNewsletterSignUpEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +43,6 @@ public class NewsletterService {
         NewsletterSubscription newsletterSubscription = NewsletterSubscription.builder()
                 .company(company)
                 .emailAddressEntity(getPersistedEmailAddress(subscriptionToCreateDto.getEmailToSignUp()))
-                .id(0L)
                 .verified(subscriptionToCreateDto.isVerified())
                 .build();
 
@@ -57,7 +56,6 @@ public class NewsletterService {
         EmailAddress foundEmail = emailRepository.findByEmail(emailAddress);
         if (foundEmail == null) {
             foundEmail = new EmailAddress(emailAddress);
-            foundEmail.setId(0L);
 
             foundEmail = emailRepository.save(foundEmail);
         }
@@ -75,7 +73,6 @@ public class NewsletterService {
 
     private VerificationToken getPersistedToken(String token) {
         VerificationToken verificationToken = new VerificationToken(token);
-        verificationToken.setId(0L);
         verificationToken = verificationTokenRepository.save(verificationToken);
         return verificationToken;
     }

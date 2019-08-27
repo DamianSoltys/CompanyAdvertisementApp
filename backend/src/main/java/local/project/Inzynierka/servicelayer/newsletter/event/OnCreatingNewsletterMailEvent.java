@@ -1,4 +1,4 @@
-package local.project.Inzynierka.web.newsletter.event;
+package local.project.Inzynierka.servicelayer.newsletter.event;
 
 import lombok.ToString;
 

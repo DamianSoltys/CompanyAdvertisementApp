@@ -7,7 +7,7 @@ import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
 import local.project.Inzynierka.web.errors.BadLoginDataException;
 import local.project.Inzynierka.web.errors.EmailAlreadyTakenException;
 import local.project.Inzynierka.web.errors.UserAlreadyExistsException;
-import local.project.Inzynierka.web.registration.event.OnRegistrationEvent;
+import local.project.Inzynierka.servicelayer.registration.event.OnRegistrationEvent;
 import local.project.Inzynierka.web.security.AuthorizationHeader;
 import local.project.Inzynierka.web.security.UserAuthenticationService;
 import lombok.extern.slf4j.Slf4j;

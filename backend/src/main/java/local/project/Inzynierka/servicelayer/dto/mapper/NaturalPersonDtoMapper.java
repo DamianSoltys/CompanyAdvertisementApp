@@ -1,4 +1,4 @@
-package local.project.Inzynierka.web.mapper;
+package local.project.Inzynierka.servicelayer.dto.mapper;
 
 
 import local.project.Inzynierka.persistence.entity.Address;
@@ -36,7 +36,7 @@ public class NaturalPersonDtoMapper {
 
         AuthenticatedUserPersonalDataDto personDto = new AuthenticatedUserPersonalDataDto();
         personDto.setAddress(new local.project.Inzynierka.servicelayer.dto.Address(
-                Voivodeship.fromVoivodeship(person.getAddress().getVoivodeship_id().getName()),
+                Voivodeship.fromVoivodeship(person.getAddress().getVoivodeship_id().getName().toLowerCase()),
                 person.getAddress().getCity(),
                 person.getAddress().getStreet(),
                 person.getAddress().getBuildingNo(),

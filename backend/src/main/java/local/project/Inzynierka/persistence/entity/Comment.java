@@ -22,7 +22,7 @@ public class Comment extends FullTimestampingAudit implements IEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id = 0L;
 
     @Column(nullable = false, length = 500)
     private String comment;

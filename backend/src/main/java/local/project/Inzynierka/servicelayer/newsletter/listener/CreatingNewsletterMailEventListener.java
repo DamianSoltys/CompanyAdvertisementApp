@@ -1,10 +1,10 @@
-package local.project.Inzynierka.web.newsletter.listener;
+package local.project.Inzynierka.servicelayer.newsletter.listener;
 
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.NewsletterSubscription;
 import local.project.Inzynierka.persistence.repository.CompanyRepository;
 import local.project.Inzynierka.persistence.repository.NewsletterSubscriptionRepository;
-import local.project.Inzynierka.web.newsletter.event.OnCreatingNewsletterMailEvent;
+import local.project.Inzynierka.servicelayer.newsletter.event.OnCreatingNewsletterMailEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.mail.SimpleMailMessage;

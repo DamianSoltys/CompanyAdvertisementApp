@@ -4,7 +4,7 @@ import local.project.Inzynierka.servicelayer.dto.AddCompanyDto;
 import local.project.Inzynierka.servicelayer.dto.NewsletterItemDto;
 import local.project.Inzynierka.servicelayer.services.CompanyManagementService;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
-import local.project.Inzynierka.web.newsletter.event.OnCreatingNewsletterMailEvent;
+import local.project.Inzynierka.servicelayer.newsletter.event.OnCreatingNewsletterMailEvent;
 import local.project.Inzynierka.web.security.CompanyManagementPermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;

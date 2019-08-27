@@ -20,7 +20,7 @@ import local.project.Inzynierka.servicelayer.errors.NotAuthorizedAccessToResourc
 import local.project.Inzynierka.servicelayer.errors.PasswordsNotMatchingException;
 import local.project.Inzynierka.servicelayer.validation.PasswordCreatorService;
 import local.project.Inzynierka.shared.AuthenticationFacade;
-import local.project.Inzynierka.web.mapper.NaturalPersonDtoMapper;
+import local.project.Inzynierka.servicelayer.dto.mapper.NaturalPersonDtoMapper;
 import local.project.Inzynierka.web.security.AccessPermissionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,15 +75,12 @@ public class UserFacade {
 
     public User createNewUser(User user) {
 
-        user.setAccountType((short) 0);
-
         return userRepository.save(user);
     }
 
     @Transactional
     public void createVerificationTokenForUser(String userEmail, final String token) {
         VerificationToken myToken = new VerificationToken(token);
-        myToken.setId(0L);
 
         User user = this.userRepository.getByAddressEmail(userEmail);
         VerificationToken createdToken = verificationTokenRepository.save(myToken);
@@ -116,14 +113,13 @@ public class UserFacade {
 
             Voivoideship voivoideship = this.voivodeshipRepository.findByName(naturalPerson.getAddress().getVoivodeship_id().getName());
             if (voivoideship == null) {
-                return Optional.empty();
+                throw new IllegalArgumentException("Voivodeship with that name doesn't exist!");
             }
 
             Address address = this.buildAddress(naturalPerson, voivoideship);
 
             address = this.addressRepository.save(address);
             naturalPerson.setAddress(address);
-            naturalPerson.setId(0L);
 
             naturalPerson = this.naturalPersonRepository.save(naturalPerson);
             User user = this.authenticationFacade.getAuthenticatedUser();
@@ -143,7 +139,6 @@ public class UserFacade {
         return Address.builder()
                 .apartmentNo(naturalPerson.getAddress().getApartmentNo())
                 .buildingNo(naturalPerson.getAddress().getBuildingNo())
-                .id(0L)
                 .city(naturalPerson.getAddress().getCity())
                 .voivodeship_id(voivoideship)
                 .street(naturalPerson.getAddress().getStreet())

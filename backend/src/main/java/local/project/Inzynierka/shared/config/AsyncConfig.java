@@ -1,4 +1,4 @@
-package local.project.Inzynierka.web.config;
+package local.project.Inzynierka.shared.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;

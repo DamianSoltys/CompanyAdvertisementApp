@@ -2,16 +2,16 @@ package local.project.Inzynierka.web.security;
 
 import local.project.Inzynierka.persistence.entity.EmailAddress;
 import local.project.Inzynierka.persistence.entity.User;
+import local.project.Inzynierka.persistence.repository.EmailRepository;
 import local.project.Inzynierka.servicelayer.dto.LoginDto;
 import local.project.Inzynierka.servicelayer.dto.UserInfoDto;
 import local.project.Inzynierka.servicelayer.dto.UserRegistrationDto;
-import local.project.Inzynierka.servicelayer.services.EmailService;
 import local.project.Inzynierka.servicelayer.services.UserFacade;
 import local.project.Inzynierka.servicelayer.services.UserPersistenceService;
 import local.project.Inzynierka.web.errors.BadLoginDataException;
 import local.project.Inzynierka.web.errors.EmailAlreadyTakenException;
 import local.project.Inzynierka.web.errors.UserAlreadyExistsException;
-import local.project.Inzynierka.web.mapper.UserDtoMapper;
+import local.project.Inzynierka.servicelayer.dto.mapper.UserDtoMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,7 +26,7 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
 
     private final UserFacade userFacade;
 
-    private final EmailService emailService;
+    private final EmailRepository emailRepository;
 
     private final AuthenticationManager authenticationManager;
 
@@ -37,9 +37,9 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
     private final UserPersistenceService userPersistenceService;
 
 
-    public UserBasicAuthenticationService(UserFacade userFacade, EmailService emailService, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserDtoMapper mapper, UserPersistenceService userPersistenceService) {
+    public UserBasicAuthenticationService(UserFacade userFacade, EmailRepository emailRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserDtoMapper mapper, UserPersistenceService userPersistenceService) {
         this.userFacade = userFacade;
-        this.emailService = emailService;
+        this.emailRepository = emailRepository;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
         this.mapper = mapper;
@@ -50,7 +50,7 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
     public void registerNewUser(UserRegistrationDto userRegistrationDto) {
 
         User requestedUser = this.userFacade.findByName(mapper.map(userRegistrationDto).getName());
-        EmailAddress requestedEmail = this.emailService.findByEmail(userRegistrationDto.getEmail());
+        EmailAddress requestedEmail = this.emailRepository.findByEmail(userRegistrationDto.getEmail());
 
         if(requestedUser != null ){
             throw new UserAlreadyExistsException();
@@ -60,7 +60,7 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
         }
 
         requestedEmail = new EmailAddress(userRegistrationDto.getEmail());
-        requestedEmail = this.emailService.saveEmailAddress(requestedEmail);
+        requestedEmail = this.emailRepository.save(requestedEmail);
 
         requestedUser = new User(userRegistrationDto.getName(), passwordEncoder.encode(userRegistrationDto.getPassword()), requestedEmail);
         this.userFacade.createNewUser(requestedUser);

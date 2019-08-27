@@ -8,8 +8,6 @@ import local.project.Inzynierka.servicelayer.dto.UserRegistrationDto;
 import local.project.Inzynierka.servicelayer.dto.Voivodeship;
 import local.project.Inzynierka.servicelayer.services.UserFacade;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
-import local.project.Inzynierka.web.controller.AccountController;
-import local.project.Inzynierka.web.controller.AuthenticationController;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,12 +32,6 @@ import static org.junit.Assert.assertEquals;
 public class UserBecomeNaturalPersonIntegrationTest {
 
     @Autowired
-    private AccountController accountController;
-
-    @Autowired
-    private AuthenticationController authenticationController;
-
-    @Autowired
     private TestRestTemplate testRestTemplate;
 
     @Autowired
@@ -50,12 +42,12 @@ public class UserBecomeNaturalPersonIntegrationTest {
 
     private CountDownLatch countDownLatch = new CountDownLatch(1);
 
+    private User user;
+
 
     String email = "example100@gmail.com";
     String name = "somename";
     String password = "Haslo1";
-
-
 
     @Before
     public void setUp() throws InterruptedException {
@@ -77,7 +69,7 @@ public class UserBecomeNaturalPersonIntegrationTest {
          * */
         countDownLatch.await(1000, TimeUnit.MILLISECONDS);
 
-        User user = userFacade.findByName(name);
+        user = userFacade.findByName(name);
         log.info(String.valueOf(user));
         String token = user.getVerificationToken().getToken();
 
@@ -102,7 +94,7 @@ public class UserBecomeNaturalPersonIntegrationTest {
         String uri = "http://localhost:"+randomServerPort;
 
         var result= testRestTemplate.withBasicAuth(email,password)
-                .postForEntity(uri+"api/user/naturalperson",becomeNaturalPersonDto, String.class);
+                .postForEntity(uri+ String.format("api/user/%d/naturalperson", user.getId()),becomeNaturalPersonDto, String.class);
 
         assertEquals(HttpStatus.CREATED,result.getStatusCode() );
         assertEquals(SimpleJsonFromStringCreator.toJson("OK"), result.getBody());

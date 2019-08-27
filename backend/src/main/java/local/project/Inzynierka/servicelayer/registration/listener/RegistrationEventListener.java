@@ -1,7 +1,7 @@
-package local.project.Inzynierka.web.registration.listener;
+package local.project.Inzynierka.servicelayer.registration.listener;
 
 import local.project.Inzynierka.servicelayer.services.UserFacade;
-import local.project.Inzynierka.web.registration.event.OnRegistrationEvent;
+import local.project.Inzynierka.servicelayer.registration.event.OnRegistrationEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;

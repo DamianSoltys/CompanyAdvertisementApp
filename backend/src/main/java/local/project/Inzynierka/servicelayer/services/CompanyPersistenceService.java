@@ -42,8 +42,8 @@ public class CompanyPersistenceService {
         User user = this.userRepository.getByAddressEmail(this.authenticationFacade.getAuthentication().getName());
 
         return this.companyRepository.save(Company.builder()
-                                                   .address(this.getPersistedAddress(company))
-                                                   .category(this.getPersistedCategory(company))
+                                                   .address(this.getPersistedAddress(company.getAddress()))
+                                                   .category(this.getPersistedCategory(company.getCategory()))
                                                    .description(company.getDescription())
                                                    .hasBranch(company.hasBranch())
                                                    .name(company.getName())
@@ -54,26 +54,24 @@ public class CompanyPersistenceService {
                                                    .build());
     }
 
-    private Address getPersistedAddress(Company company) {
-        Voivoideship voivoideship = this.voivodeshipRepository.findByName(company.getAddress().getVoivodeship_id().getName());
+    private Address getPersistedAddress(Address address) {
+        Voivoideship voivoideship = this.voivodeshipRepository.findByName(address.getVoivodeship_id().getName());
 
-        Address address = Address.builder()
-                .apartmentNo(company.getAddress().getApartmentNo())
-                .buildingNo(company.getAddress().getBuildingNo())
-                .city(company.getAddress().getCity())
+        Address addressToPersist = Address.builder()
+                .apartmentNo(address.getApartmentNo())
+                .buildingNo(address.getBuildingNo())
+                .city(address.getCity())
                 .voivodeship_id(voivoideship)
-                .street(company.getAddress().getStreet())
+                .street(address.getStreet())
                 .build();
 
-        return this.addressRepository.save(address);
+        return this.addressRepository.save(addressToPersist);
     }
 
-    private Category getPersistedCategory(Company company) {
-        Category soughtCategory = this.categoryRepository.findByName(company.getCategory().getName());
+    private Category getPersistedCategory(Category category) {
+        Category soughtCategory = this.categoryRepository.findByName(category.getName());
         if (soughtCategory == null) {
-            soughtCategory = company.getCategory();
-            soughtCategory.setName(company.getCategory().getName());
-            this.categoryRepository.save(soughtCategory);
+            soughtCategory = this.categoryRepository.save(new Category(category.getName()));
         }
 
         return soughtCategory;

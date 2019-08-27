@@ -43,9 +43,9 @@ Find the path to schema.sql file by right clicking on the file from the tree vie
 
 Now run from the console: 
 
-{path-to-mysql}\mariadb.exe --user=user --password=Admin123 -e "source {path-to-schema-file}"  
+{path-to-mysql}\mariadb.exe --user=user --password=Admin123 -e "source {path-to-schema_proc-file}"  
 or  
-{path-to-mysql}\mariadb.exe --user=user --password=Admin123 < {path-to-schema-file}
+{path-to-mysql}\mariadb.exe --user=user --password=Admin123 < {path-to-schema_proc-file}
 
 Run the same command with the data.sql  
 

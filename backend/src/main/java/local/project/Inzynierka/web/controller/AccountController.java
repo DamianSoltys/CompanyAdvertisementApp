@@ -35,7 +35,7 @@ public class AccountController {
         if (person.isPresent()) {
             return ResponseEntity.status(HttpStatus.CREATED).body(person.get());
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
     }
 
@@ -48,7 +48,7 @@ public class AccountController {
         if (person.isPresent()) {
             return ResponseEntity.ok(person.get());
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 
@@ -60,7 +60,7 @@ public class AccountController {
         if (user.isPresent()) {
             return ResponseEntity.ok(user.get());
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 
@@ -70,7 +70,7 @@ public class AccountController {
         if (this.userFacade.changePassword(updateUserDto, id)) {
             return ResponseEntity.ok(SimpleJsonFromStringCreator.toJson("PASSWORD CHANGED"));
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 
@@ -83,7 +83,7 @@ public class AccountController {
         if (person.isPresent()) {
             return ResponseEntity.ok(person.get());
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 }

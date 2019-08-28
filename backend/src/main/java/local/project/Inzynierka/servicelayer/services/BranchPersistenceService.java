@@ -40,4 +40,8 @@ public class BranchPersistenceService {
     public Iterable<Branch> saveAll(List<Branch> branches) {
         return this.branchRepository.saveAll(branches);
     }
+
+    public List<Long> getCompanyBranchesIds(Long id) {
+        return this.branchRepository.getAllByCompanyId(id);
+    }
 }

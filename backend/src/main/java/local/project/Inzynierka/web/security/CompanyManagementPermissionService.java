@@ -34,6 +34,9 @@ public class CompanyManagementPermissionService {
     public boolean hasManagingAuthority(Long companyId) {
         User user = userRepository.getByAddressEmail(authenticationFacade.getAuthentication().getName());
 
+        if (user == null) {
+            return false;
+        }
         NaturalPerson naturalPerson = user.getNaturalPerson();
         if( naturalPerson == null) {
             return false;

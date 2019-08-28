@@ -13,6 +13,8 @@ import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
 import local.project.Inzynierka.shared.AuthenticationFacade;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class CompanyPersistenceService {
 
@@ -37,7 +39,7 @@ public class CompanyPersistenceService {
         this.categoryRepository = categoryRepository;
     }
 
-    public Company getPersistedCompany(Company company) {
+    Company getPersistedCompany(Company company) {
 
         User user = this.userRepository.getByAddressEmail(this.authenticationFacade.getAuthentication().getName());
 
@@ -52,6 +54,10 @@ public class CompanyPersistenceService {
                                                    .logoPath(company.getLogoPath())
                                                    .REGON(company.getREGON())
                                                    .build());
+    }
+
+    Optional<Company> getPersistedCompany(Long id) {
+        return this.companyRepository.findById(id);
     }
 
     private Address getPersistedAddress(Address address) {

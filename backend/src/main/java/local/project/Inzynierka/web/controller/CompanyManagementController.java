@@ -2,9 +2,9 @@ package local.project.Inzynierka.web.controller;
 
 import local.project.Inzynierka.servicelayer.dto.AddCompanyDto;
 import local.project.Inzynierka.servicelayer.dto.NewsletterItemDto;
+import local.project.Inzynierka.servicelayer.newsletter.event.OnCreatingNewsletterMailEvent;
 import local.project.Inzynierka.servicelayer.services.CompanyManagementService;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
-import local.project.Inzynierka.servicelayer.newsletter.event.OnCreatingNewsletterMailEvent;
 import local.project.Inzynierka.web.security.CompanyManagementPermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -84,6 +86,18 @@ public class CompanyManagementController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SimpleJsonFromStringCreator
                               .toJson(OK_STATUS));
+
+    }
+
+    @RequestMapping(method = GET, value = "/companies/{id}")
+    public ResponseEntity<?> getCompanyInfo(final @PathVariable(value = "id") Long id) {
+
+        if (!this.companyManagementPermissionService.hasManagingAuthority(id)) {
+            return new ResponseEntity<>(SimpleJsonFromStringCreator.toJson(LACK_OF_MANAGING_PERMISSION_MESSAGE), HttpStatus.FORBIDDEN);
+        }
+
+        return this.companyManagementService.getCompanyInfo(id)
+                .map(ResponseEntity::ok).orElse(null);
 
     }
 }

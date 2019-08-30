@@ -60,7 +60,7 @@ public class CompanyPersistenceService {
         return this.companyRepository.findById(id);
     }
 
-    private Address getPersistedAddress(Address address) {
+    public Address getPersistedAddress(Address address) {
         Voivoideship voivoideship = this.voivodeshipRepository.findByName(address.getVoivodeship_id().getName());
 
         Address addressToPersist = Address.builder()
@@ -74,7 +74,7 @@ public class CompanyPersistenceService {
         return this.addressRepository.save(addressToPersist);
     }
 
-    private Category getPersistedCategory(Category category) {
+    public Category getPersistedCategory(Category category) {
         Category soughtCategory = this.categoryRepository.findByName(category.getName());
         if (soughtCategory == null) {
             soughtCategory = this.categoryRepository.save(new Category(category.getName()));

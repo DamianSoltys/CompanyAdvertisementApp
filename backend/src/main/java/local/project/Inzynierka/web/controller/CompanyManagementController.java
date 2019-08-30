@@ -2,6 +2,7 @@ package local.project.Inzynierka.web.controller;
 
 import local.project.Inzynierka.servicelayer.dto.AddCompanyDto;
 import local.project.Inzynierka.servicelayer.dto.NewsletterItemDto;
+import local.project.Inzynierka.servicelayer.dto.UpdateCompanyInfoDto;
 import local.project.Inzynierka.servicelayer.newsletter.event.OnCreatingNewsletterMailEvent;
 import local.project.Inzynierka.servicelayer.services.CompanyManagementService;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -98,6 +100,20 @@ public class CompanyManagementController {
 
         return this.companyManagementService.getCompanyInfo(id)
                 .map(ResponseEntity::ok).orElse(null);
+
+    }
+
+    @RequestMapping(method = PATCH, value = "/companies/{id}")
+    public ResponseEntity<?> updateCompanyInfo(final @PathVariable(value = "id") Long id,
+                                               @Valid final @RequestBody UpdateCompanyInfoDto updateCompanyInfoDto) {
+
+        if (!this.companyManagementPermissionService.hasManagingAuthority(id)) {
+            return new ResponseEntity<>(SimpleJsonFromStringCreator.toJson(LACK_OF_MANAGING_PERMISSION_MESSAGE), HttpStatus.FORBIDDEN);
+        }
+
+        return this.companyManagementService.updateCompanyInfo(id, updateCompanyInfoDto)
+                .map(ResponseEntity::ok).orElse(null);
+
 
     }
 }

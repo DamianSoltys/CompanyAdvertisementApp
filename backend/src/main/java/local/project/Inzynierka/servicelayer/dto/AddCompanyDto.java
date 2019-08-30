@@ -1,5 +1,6 @@
 package local.project.Inzynierka.servicelayer.dto;
 
+import local.project.Inzynierka.shared.ValidWebProtocolUrl;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,4 +37,7 @@ public class AddCompanyDto {
     private String category;
 
     List<CompanyBranchDto> branches;
+
+    @ValidWebProtocolUrl
+    private String companyWebsiteUrl;
 }

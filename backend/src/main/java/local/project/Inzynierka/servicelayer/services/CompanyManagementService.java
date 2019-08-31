@@ -6,6 +6,7 @@ import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.repository.CompanyRepository;
 import local.project.Inzynierka.servicelayer.dto.AddCompanyDto;
 import local.project.Inzynierka.servicelayer.dto.CompanyInfoDto;
+import local.project.Inzynierka.servicelayer.dto.CompanyRelatedDeletedEntities;
 import local.project.Inzynierka.servicelayer.dto.UpdateCompanyInfoDto;
 import local.project.Inzynierka.servicelayer.dto.mapper.AddressMapper;
 import local.project.Inzynierka.servicelayer.dto.mapper.CompanyExtractor;
@@ -65,6 +66,7 @@ public class CompanyManagementService {
         return String.format("%s %s", company.getRegisterer().getFirstName(), company.getRegisterer().getLastName());
     }
 
+    @Transactional
     public Optional<CompanyInfoDto> updateCompanyInfo(Long id, UpdateCompanyInfoDto updateCompanyInfoDto) {
 
         Optional<Company> optionalCompany = this.companyPersistenceService.getPersistedCompany(id);
@@ -107,4 +109,31 @@ public class CompanyManagementService {
                 .branchesIDs(company.hasBranch() ? this.branchPersistenceService.getCompanyBranchesIds(company.getId()) : Collections.emptyList())
                 .build();
     }
+
+    public Optional<CompanyRelatedDeletedEntities> deleteCompany(Long id) {
+
+        Optional<Company> companyOptional = this.companyPersistenceService.getPersistedCompany(id);
+
+        CompanyRelatedDeletedEntities companyRelatedDeletedEntities =
+                companyOptional.map(this::buildCompanyDeletedIdentities).orElseThrow(IllegalStateException::new);
+
+        return Optional.of(companyRelatedDeletedEntities);
+    }
+
+    private CompanyRelatedDeletedEntities buildCompanyDeletedIdentities(Company company) {
+
+        List<Long> branches = this.branchPersistenceService.getCompanyBranchesIds(company.getId());
+        return CompanyRelatedDeletedEntities.builder()
+                .companyId(company.getId())
+                .commentsIds(this.companyPersistenceService.getCommentsIdsRelatedToCompanyBranches(branches))
+                .branchesIds(branches)
+                .socialProfileUrls(this.companyPersistenceService.getSocialProfileUrlsRelatedToCompany(company.getId()))
+                .promotionItemsIds(this.companyPersistenceService.getPromotionItemsRelatedToCompany(company.getId()))
+                .newsletterSubscriptions(this.companyPersistenceService.getNewsletterSubscriptionsRelatedToCompany(company.getId()))
+                .ratingsIds(this.companyPersistenceService.getRatingsIdsRelatedToCompanyBranches(branches))
+                .favouriteBranchesIds(this.companyPersistenceService.getFavouriteBranchesRelatedToCompany(branches))
+                .addressesIds(this.companyPersistenceService.getAddressesIdsRelatedToCompany(company.getId()))
+                .build();
+    }
+
 }

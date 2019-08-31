@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
 
@@ -114,6 +115,16 @@ public class CompanyManagementController {
         return this.companyManagementService.updateCompanyInfo(id, updateCompanyInfoDto)
                 .map(ResponseEntity::ok).orElse(null);
 
+    }
 
+    @RequestMapping(method = DELETE, value = "/companies/{id}")
+    public ResponseEntity<?> deleteCompany(final @PathVariable(value = "id") Long id) {
+
+        if (!this.companyManagementPermissionService.hasManagingAuthority(id)) {
+            return new ResponseEntity<>(SimpleJsonFromStringCreator.toJson(LACK_OF_MANAGING_PERMISSION_MESSAGE), HttpStatus.FORBIDDEN);
+        }
+
+        return this.companyManagementService.deleteCompany(id)
+                .map(ResponseEntity::ok).orElse(null);
     }
 }

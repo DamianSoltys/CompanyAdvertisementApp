@@ -13,6 +13,7 @@ import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
 import local.project.Inzynierka.shared.AuthenticationFacade;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -83,5 +84,32 @@ public class CompanyPersistenceService {
         return soughtCategory;
     }
 
+    public List<Long> getAddressesIdsRelatedToCompany(Long id) {
+        return this.companyRepository.getAddressesRelatedToCompany(id);
+    }
+
+    public List<Long> getCommentsIdsRelatedToCompanyBranches(List<Long> ids) {
+        return this.companyRepository.getCommentsRelatedToBranches(ids);
+    }
+
+    public List<Long> getRatingsIdsRelatedToCompanyBranches(List<Long> ids) {
+        return this.companyRepository.getRatingsRelatedToBranches(ids);
+    }
+
+    public List<List<Long>> getFavouriteBranchesRelatedToCompany(List<Long> ids) {
+        return this.companyRepository.getFavouriteBranchesRelatedToCompany(ids);
+    }
+
+    public List<Long> getNewsletterSubscriptionsRelatedToCompany(Long id) {
+        return this.companyRepository.getNewsletterSubscriptionsRelatedToCompany(id);
+    }
+
+    public List<Long> getPromotionItemsRelatedToCompany(Long id) {
+        return this.companyRepository.getPromotionItemsRelatedToCompany(id);
+    }
+
+    public List<String> getSocialProfileUrlsRelatedToCompany(Long id) {
+        return this.companyRepository.getSocialProfileUrlRelatedToCompany(id);
+    }
 
 }

@@ -34,6 +34,8 @@ export class PersonalDataComponent implements OnInit {
   public userObject: UserREST;
   public naturalUserDataObject: PersonalData;
   public _voivodeships = voivodeships;
+  private successMessageText = 'Akcja została zakończona pomyślnie';
+  private errorMessageText = 'Akcja niepowiodła się';
 
   public showData = new BehaviorSubject<boolean>(false);
   public showAddingForm = new BehaviorSubject<boolean>(false);
@@ -106,16 +108,6 @@ export class PersonalDataComponent implements OnInit {
     }
   }
 
-  // public selectOptionsRender(): void {
-  //   let selectInput = this.renderer.selectRootElement('select');
-  //   this._voivodeships.forEach(value => {
-  //     let option = this.renderer.createElement('option');
-  //     let text = this.renderer.createText(value);
-  //     this.renderer.appendChild(option, text);
-  //     this.renderer.appendChild(selectInput, option);
-  //   });
-  // }
-
   showPersonalData(naturalUserData: PersonalData) {
     this.showData.next(true);
   }
@@ -144,13 +136,49 @@ export class PersonalDataComponent implements OnInit {
           if (error.status === 404) {
             this.showAddingForm.next(true);
             console.log(`User nie ma danych`);
+            this.showRequestMessage(
+              'get',
+              'error',
+              (this.errorMessage = 'Użytkownik nie posiada danych osobowych')
+            );
           } else {
             this.naturalUserDataObject = {} as PersonalData;
             this.showAddingForm.next(false);
             console.log(`Wystąpił błąd:${error}`);
+            this.showRequestMessage('get', 'error');
           }
         }
       );
+  }
+
+  showRequestMessage(
+    context: string,
+    type: string,
+    successMessage: string = this.successMessageText,
+    errorMessage: string = this.errorMessageText
+  ) {
+    switch (context) {
+      case 'get': {
+        if (type === 'success') {
+          this.successMessage = successMessage;
+          this.errorMessage = '';
+        } else {
+          this.successMessage = '';
+          this.errorMessage = errorMessage;
+        }
+        break;
+      }
+      case 'post': {
+        if (type === 'success') {
+          this.successMessage = successMessage;
+          this.errorMessage = '';
+        } else {
+          this.successMessage = '';
+          this.errorMessage = errorMessage;
+        }
+        break;
+      }
+    }
   }
 
   getPersonalDataStorage(): PersonalData {
@@ -211,8 +239,7 @@ export class PersonalDataComponent implements OnInit {
         (response: HttpResponse<any>) => {
           if (response.status === 200) {
             console.log(response);
-            this.errorMessage = '';
-            this.successMessage = 'Twoje dane zostały zapisane';
+            this.showRequestMessage('post', 'success', 'Dane zostały zapisane');
             this.setStoragePersonalData(this.personalDataForm.value);
             this.personalDataForm.reset();
           } else {
@@ -222,8 +249,7 @@ export class PersonalDataComponent implements OnInit {
         },
         error => {
           console.log(error);
-          this.successMessage = '';
-          this.errorMessage = 'Nie udało się zapisać danych';
+          this.showRequestMessage('post', 'error');
         }
       );
   }

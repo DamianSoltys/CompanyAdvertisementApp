@@ -113,43 +113,34 @@ export class PersonalDataComponent implements OnInit {
     this.showData.next(true);
   }
 
-  private showEditForm() {
+  public showEditForm() {
     this.showData.next(false);
     this.showEditingForm.next(true);
   }
 
   private getPersonalDataServer() {
     this.userObject = JSON.parse(localStorage.getItem('userREST'));
+    if(this.userObject.naturalPersonID){
     this.pdataService
       .getPersonalData(this.userObject.userID, this.userObject.naturalPersonID)
       .subscribe(
         response => {
           this.naturalUserDataObject = response.body as PersonalData;
-          if (response.status === 200) {
             console.log('Dane pobrane z servera');
             this.setStoragePersonalData(this.naturalUserDataObject);
             this.showPersonalData(this.naturalUserDataObject);
-          } else {
-            console.log('Coś poszło nie tak');
-          }
         },
         error => {
-          if (error.status === 404) {
-            this.showAddingForm.next(true);
-            console.log(`User nie ma danych`);
-            this.showRequestMessage(
-              'get',
-              'error',
-              (this.errorMessage = 'Użytkownik nie posiada danych osobowych')
-            );
-          } else {
+          if (error.status === 404 || error.status === 400) {
             this.naturalUserDataObject = {} as PersonalData;
-            this.showAddingForm.next(false);
-            console.log(`Wystąpił błąd:${error}`);
-            this.showRequestMessage('get', 'error');
-          }
+            this.showAddingForm.next(true);
+          } 
         }
       );
+    } else {
+      this.naturalUserDataObject = {} as PersonalData;
+      this.showAddingForm.next(true);
+    }
   }
 
   private showRequestMessage(
@@ -195,7 +186,7 @@ export class PersonalDataComponent implements OnInit {
   private checkIfPersonalDataStorage() {
     if (
       storage_Avaliable('localStorage') &&
-      JSON.parse(localStorage.getItem('naturalUserData'))
+      localStorage.getItem('naturalUserData')
     ) {
       return true;
     } else {
@@ -226,7 +217,7 @@ export class PersonalDataComponent implements OnInit {
     return this.personalDataForm.get('address')['controls'];
   }
 
-  private onSubmit() {
+  public onSubmit() {
     if(!this.showEditingForm.getValue()){
       this.checkIfPostDataSuccess();
     } else {
@@ -243,18 +234,15 @@ export class PersonalDataComponent implements OnInit {
       )
       .subscribe(
         (response: HttpResponse<any>) => {
-          if (response.status === 200) {
             console.log(response);
             this.showRequestMessage('post', 'success', 'Dane zostały zapisane');
             this.setStoragePersonalData(this.personalDataForm.value);
             this.personalDataForm.reset();
-          } else {
-            console.log(`Wystąpił błąd:${response.status}`);
-            this.errorMessage = 'Nie udało się zapisać danych';
-          }
+            this.showData.next(true);
         },
         error => {
           console.log(error);
+          console.log(this.personalDataForm.value);
           this.showRequestMessage('post', 'error');
         }
       );

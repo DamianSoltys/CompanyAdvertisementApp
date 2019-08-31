@@ -7,6 +7,7 @@ import local.project.Inzynierka.persistence.repository.UserRepository;
 import local.project.Inzynierka.servicelayer.dto.UserInfoDto;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,5 +38,17 @@ public class UserPersistenceService {
         userInfoDto.setLoginName(authenticatedUser.getName());
 
         return userInfoDto;
+    }
+
+    public List<Long> getCommentsOfUser(Long id) {
+        return this.userRepository.getCommentsOfUser(id);
+    }
+
+    public List<Long> getRatingsOfUser(Long id) {
+        return this.userRepository.getRatingsOfUser(id);
+    }
+
+    public List<Long> getSubscriptionsOfUser(Long id) {
+        return this.userRepository.getSubscriptionsOfUser(id);
     }
 }

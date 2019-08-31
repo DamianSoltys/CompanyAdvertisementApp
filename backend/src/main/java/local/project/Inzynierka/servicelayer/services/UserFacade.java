@@ -10,17 +10,19 @@ import local.project.Inzynierka.persistence.repository.NaturalPersonRepository;
 import local.project.Inzynierka.persistence.repository.UserRepository;
 import local.project.Inzynierka.persistence.repository.VerificationTokenRepository;
 import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
+import local.project.Inzynierka.servicelayer.dto.AccountRelatedDeletedEntities;
 import local.project.Inzynierka.servicelayer.dto.AuthenticatedUserPersonalDataDto;
 import local.project.Inzynierka.servicelayer.dto.BecomeNaturalPersonDto;
+import local.project.Inzynierka.servicelayer.dto.PersonRelatedDeletedEntities;
 import local.project.Inzynierka.servicelayer.dto.UpdatePersonalDataDto;
 import local.project.Inzynierka.servicelayer.dto.UpdateUserDto;
 import local.project.Inzynierka.servicelayer.dto.UserInfoDto;
+import local.project.Inzynierka.servicelayer.dto.mapper.NaturalPersonDtoMapper;
 import local.project.Inzynierka.servicelayer.errors.IllegalPasswordException;
 import local.project.Inzynierka.servicelayer.errors.NotAuthorizedAccessToResourceException;
 import local.project.Inzynierka.servicelayer.errors.PasswordsNotMatchingException;
 import local.project.Inzynierka.servicelayer.validation.PasswordCreatorService;
 import local.project.Inzynierka.shared.AuthenticationFacade;
-import local.project.Inzynierka.servicelayer.dto.mapper.NaturalPersonDtoMapper;
 import local.project.Inzynierka.web.security.AccessPermissionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +48,8 @@ public class UserFacade {
 
     private final PasswordCreatorService passwordCreatorService;
 
+
+    //TODO move this to the controller or somewhere else
     private final AccessPermissionService accessPermissionService;
 
     private final NaturalPersonDtoMapper naturalPersonDtoMapper;
@@ -75,6 +79,7 @@ public class UserFacade {
 
     public User createNewUser(User user) {
 
+        user.setAccountType((short) 0);
         return userRepository.save(user);
     }
 
@@ -259,5 +264,40 @@ public class UserFacade {
         }
 
         return person;
+    }
+
+    public Optional<PersonRelatedDeletedEntities> deletePersonalData() {
+
+        User user = this.authenticationFacade.getAuthenticatedUser();
+        NaturalPerson naturalPerson = user.getNaturalPerson();
+        PersonRelatedDeletedEntities personRelatedDeletedEntities = getPersonRelatedDeletedEntities(naturalPerson);
+
+        return Optional.of(personRelatedDeletedEntities);
+    }
+
+    private PersonRelatedDeletedEntities getPersonRelatedDeletedEntities(NaturalPerson naturalPerson) {
+        return PersonRelatedDeletedEntities.builder()
+                .personId(naturalPerson.getId())
+                .addressId(naturalPerson.getAddress().getId())
+                .companiesIds(this.naturalPersonRepository.getAllRegisteredCompaniesIds(naturalPerson.getId()))
+                .build();
+    }
+
+    public Optional<AccountRelatedDeletedEntities> deleteAccount() {
+
+        User user = this.authenticationFacade.getAuthenticatedUser();
+        AccountRelatedDeletedEntities accountRelatedDeletedEntities = AccountRelatedDeletedEntities.builder()
+                .userId(user.getId())
+                .commentsIds(this.userPersistenceService.getCommentsOfUser(user.getId()))
+                .ratingIds(this.userPersistenceService.getRatingsOfUser(user.getId()))
+                .subscriptionIds(this.userPersistenceService.getSubscriptionsOfUser(user.getId()))
+                .emailId(user.getEmailAddressEntity().getId())
+                .verificationTokenId(user.getVerificationToken() ==
+                                             null ? null : user.getVerificationToken().getId()) // TODO Remove in batch job instead
+                .personRelatedDeletedEntities(user.getNaturalPerson() == null ?
+                                                      null : this.getPersonRelatedDeletedEntities(user.getNaturalPerson()))
+                .build();
+
+        return Optional.of(accountRelatedDeletedEntities);
     }
 }

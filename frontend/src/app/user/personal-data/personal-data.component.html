@@ -1,6 +1,6 @@
 <div class="container-fluid personal-data-component">
   <div class="row personal-data-component__form">
-    <form (ngSubmit)="onSubmit()" class=" col-12 col-xl-6 col-md-9 form__personal-data-form" *ngIf="showAddingForm"
+    <form (ngSubmit)="onSubmit()" class=" col-12 col-xl-6 col-md-9 form__personal-data-form" *ngIf="showAddingForm.getValue()"
       [formGroup]="personalDataForm">
       <div class="personal-data-form__header col-12 text-center">
         <p class="header__text-node"><i class="fas fa-id-card header__icon"></i>Dane personalne</p>
@@ -100,6 +100,7 @@
             <div class="section-container__select-wrapper">
               <select  name="voivodeship" class="form-control section-container__select-input"
                 formControlName="voivodeship">
+                <option class="select-input__option" *ngFor="let item of _voivodeships">{{item}}</option>
               </select>
             </div>
             <div *ngIf="
@@ -165,7 +166,7 @@
     </div>
     </form>
   </div>
-  <div class="row personal-data-component__data-container col-6" *ngIf="showData">
+  <div class="row personal-data-component__data-container col-6" *ngIf="showData.getValue()">
     <div class="row data-container__data-group col-12">
       <div class="data-group__header col-12">
         <span class="header__text-node">Dane osobowe</span>
@@ -200,6 +201,9 @@
           <li class="data-list__item">{{naturalUserDataObject?.phoneNo}}</li>
         </ul>
       </div>
+    </div>
+    <div class="data-container__button text-center col-12">
+      <button class="button__button--edit btn btn-primary" (click)="showEditForm()">Edytuj dane</button>
     </div>
   </div>
 </div>

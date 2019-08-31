@@ -1,4 +1,10 @@
-import { Component, OnInit, Renderer2, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Renderer2,
+  ViewChild,
+  ElementRef
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -6,7 +12,6 @@ import {
   Validators,
   FormArray
 } from '@angular/forms';
-import { UrlHandlingStrategy } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 
@@ -15,30 +20,28 @@ import { PersonalDataService } from 'src/app/services/personal-data.service';
 import { voivodeships } from 'src/app/classes/Voivodeship';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
 
-
 @Component({
   selector: 'app-personal-data',
   templateUrl: './personal-data.component.html',
   styleUrls: ['./personal-data.component.scss']
 })
 
-//Public pierwsze/private ostatnie!
-
+// Public pierwsze/private ostatnie!
 export class PersonalDataComponent implements OnInit {
   public personalDataForm: FormGroup;
   public successMessage: string = '';
   public errorMessage: string = '';
   public userObject: UserREST;
   public naturalUserDataObject: PersonalData;
-  private _voivodeships = voivodeships;
+  public _voivodeships = voivodeships;
 
   public showData = new BehaviorSubject<boolean>(false);
-  public showAddingForm: boolean = false;
+  public showAddingForm = new BehaviorSubject<boolean>(false);
 
   constructor(
     private fb: FormBuilder,
     private pdataService: PersonalDataService,
-    private renderer: Renderer2,
+    private renderer: Renderer2
   ) {}
 
   ngOnInit() {
@@ -49,28 +52,28 @@ export class PersonalDataComponent implements OnInit {
           '',
           [
             Validators.required,
-            Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/)),
+            Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))
           ]
         ],
         street: [
           '',
           [
             Validators.required,
-            Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/)),
+            Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))
           ]
         ],
         apartmentNo: [
           '',
           [
             Validators.required,
-            Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/)),
+            Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/))
           ]
         ],
         buildingNo: [
           '',
           [
             Validators.required,
-            Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/)),
+            Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/))
           ]
         ]
       }),
@@ -78,14 +81,14 @@ export class PersonalDataComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/)),
+          Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))
         ]
       ],
       lastName: [
         '',
         [
           Validators.required,
-          Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/)),
+          Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))
         ]
       ],
       phoneNo: [
@@ -103,18 +106,23 @@ export class PersonalDataComponent implements OnInit {
     }
   }
 
-  public selectOptionsRender(): void {
-    let selectInput = this.renderer.selectRootElement('select');
-    this._voivodeships.forEach(value => {
-      let option = this.renderer.createElement('option');
-      let text = this.renderer.createText(value);
-      this.renderer.appendChild(option, text);
-      this.renderer.appendChild(selectInput, option);
-    });
-  }
+  // public selectOptionsRender(): void {
+  //   let selectInput = this.renderer.selectRootElement('select');
+  //   this._voivodeships.forEach(value => {
+  //     let option = this.renderer.createElement('option');
+  //     let text = this.renderer.createText(value);
+  //     this.renderer.appendChild(option, text);
+  //     this.renderer.appendChild(selectInput, option);
+  //   });
+  // }
 
   showPersonalData(naturalUserData: PersonalData) {
-    console.log(naturalUserData);
+    this.showData.next(true);
+  }
+
+  showEditForm() {
+    this.showData.next(false);
+    this.showAddingForm.next(true);
   }
 
   getPersonalDataServer() {
@@ -122,9 +130,9 @@ export class PersonalDataComponent implements OnInit {
     this.pdataService
       .getPersonalData(this.userObject.userID, this.userObject.naturalPersonID)
       .subscribe(
-        (response) => {
+        response => {
           this.naturalUserDataObject = response.body as PersonalData;
-          if(response.status === 200) {
+          if (response.status === 200) {
             console.log('Dane pobrane z servera');
             this.setStoragePersonalData(this.naturalUserDataObject);
             this.showPersonalData(this.naturalUserDataObject);
@@ -133,12 +141,12 @@ export class PersonalDataComponent implements OnInit {
           }
         },
         error => {
-          if(error.status === 404){
-            this.showAddingForm = true;
+          if (error.status === 404) {
+            this.showAddingForm.next(true);
             console.log(`User nie ma danych`);
           } else {
             this.naturalUserDataObject = {} as PersonalData;
-            this.showAddingForm = false;
+            this.showAddingForm.next(false);
             console.log(`Wystąpił błąd:${error}`);
           }
         }

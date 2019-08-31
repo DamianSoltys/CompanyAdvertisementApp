@@ -39,6 +39,7 @@ export class PersonalDataComponent implements OnInit {
 
   public showData = new BehaviorSubject<boolean>(false);
   public showAddingForm = new BehaviorSubject<boolean>(false);
+  public showEditingForm = new BehaviorSubject<boolean>(false);
 
   constructor(
     private fb: FormBuilder,
@@ -108,16 +109,16 @@ export class PersonalDataComponent implements OnInit {
     }
   }
 
-  showPersonalData(naturalUserData: PersonalData) {
+  private showPersonalData(naturalUserData: PersonalData) {
     this.showData.next(true);
   }
 
-  showEditForm() {
+  private showEditForm() {
     this.showData.next(false);
-    this.showAddingForm.next(true);
+    this.showEditingForm.next(true);
   }
 
-  getPersonalDataServer() {
+  private getPersonalDataServer() {
     this.userObject = JSON.parse(localStorage.getItem('userREST'));
     this.pdataService
       .getPersonalData(this.userObject.userID, this.userObject.naturalPersonID)
@@ -151,7 +152,7 @@ export class PersonalDataComponent implements OnInit {
       );
   }
 
-  showRequestMessage(
+  private showRequestMessage(
     context: string,
     type: string,
     successMessage: string = this.successMessageText,
@@ -181,7 +182,7 @@ export class PersonalDataComponent implements OnInit {
     }
   }
 
-  getPersonalDataStorage(): PersonalData {
+  private getPersonalDataStorage(): PersonalData {
     let naturalUserDataObject = {} as PersonalData;
     if (storage_Avaliable('localStorage')) {
       naturalUserDataObject = JSON.parse(
@@ -191,7 +192,7 @@ export class PersonalDataComponent implements OnInit {
     }
   }
 
-  checkIfPersonalDataStorage() {
+  private checkIfPersonalDataStorage() {
     if (
       storage_Avaliable('localStorage') &&
       JSON.parse(localStorage.getItem('naturalUserData'))
@@ -202,7 +203,7 @@ export class PersonalDataComponent implements OnInit {
     }
   }
 
-  setStoragePersonalData(PersonalDataObject: PersonalData) {
+  private setStoragePersonalData(PersonalDataObject: PersonalData) {
     if (
       storage_Avaliable('localStorage') &&
       !this.checkIfPersonalDataStorage()
@@ -225,11 +226,16 @@ export class PersonalDataComponent implements OnInit {
     return this.personalDataForm.get('address')['controls'];
   }
 
-  onSubmit() {
-    this.checkIfRequestSuccess();
+  private onSubmit() {
+    if(!this.showEditingForm.getValue()){
+      this.checkIfPostDataSuccess();
+    } else {
+      this.checkIfEditDataSuccess();
+    }
+    
   }
 
-  checkIfRequestSuccess() {
+  private checkIfPostDataSuccess() {
     this.pdataService
       .sendPersonalData(
         this.personalDataForm.value as PersonalData,
@@ -252,5 +258,9 @@ export class PersonalDataComponent implements OnInit {
           this.showRequestMessage('post', 'error');
         }
       );
+  }
+
+  private checkIfEditDataSuccess() {
+
   }
 }

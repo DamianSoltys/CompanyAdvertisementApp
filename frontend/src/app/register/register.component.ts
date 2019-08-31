@@ -12,7 +12,7 @@ import { HttpResponse } from '@angular/common/http';
 export class RegisterComponent implements OnInit {
 
   registerForm: FormGroup;
-  passwordMatch = false;
+  passwordMatchError = false;
   register_error: boolean;
   error_message: string;
   success_message = '';
@@ -33,23 +33,23 @@ export class RegisterComponent implements OnInit {
 
  onSubmit() {
    if (this.regForm.password.value === this.regForm.checkpassword.value) {
-    this.passwordMatch = false;
+    this.passwordMatchError = false;
     const User_Data: UserReg = this.setUserData();
     this.checkIfRegisterSuccess(User_Data);
   } else {
-    this.passwordMatch = true;
+    this.passwordMatchError = true;
   }
  }
 
  checkIfRegisterSuccess(User_Data: UserReg) {
-    this.regService.Register(User_Data).subscribe((data:HttpResponse<any>) => {
+    this.regService.Register(User_Data).subscribe((data:HttpResponse<any>) => {     
     if (data.status === 200) {
       this.register_error = false;
       this.success_message = 'Proszę potwierdzić swoje konto linkiem wysłanym na podany adres email';
        console.log('Proszę potwierdzić swoje konto linkiem wysłanym na podany email');
      }
    }, (error) => {
-    this.error_message = error.error.text;
+    this.error_message = 'Coś poszło nie tak,proszę spróbować później!';
     this.register_error = true;
     console.log(error.error.text);
    });

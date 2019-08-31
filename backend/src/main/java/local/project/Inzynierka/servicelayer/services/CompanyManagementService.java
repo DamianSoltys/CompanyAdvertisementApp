@@ -1,50 +1,32 @@
 package local.project.Inzynierka.servicelayer.services;
 
-import local.project.Inzynierka.persistence.entity.Address;
 import local.project.Inzynierka.persistence.entity.Branch;
-import local.project.Inzynierka.persistence.entity.Category;
 import local.project.Inzynierka.persistence.entity.Company;
-import local.project.Inzynierka.persistence.entity.User;
-import local.project.Inzynierka.persistence.entity.Voivoideship;
-import local.project.Inzynierka.persistence.repository.AddressRepository;
-import local.project.Inzynierka.persistence.repository.BranchRepository;
-import local.project.Inzynierka.persistence.repository.CategoryRepository;
 import local.project.Inzynierka.persistence.repository.CompanyRepository;
-import local.project.Inzynierka.persistence.repository.UserRepository;
-import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
 import local.project.Inzynierka.servicelayer.dto.AddCompanyDto;
-import local.project.Inzynierka.shared.AuthenticationFacade;
-import local.project.Inzynierka.web.mapper.CompanyExtractor;
+import local.project.Inzynierka.servicelayer.dto.CompanyInfoDto;
+import local.project.Inzynierka.servicelayer.dto.mapper.AddressMapper;
+import local.project.Inzynierka.servicelayer.dto.mapper.CompanyExtractor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CompanyManagementService {
 
     private final CompanyRepository companyRepository;
 
-    private final BranchRepository branchRepository;
+    private final CompanyPersistenceService companyPersistenceService;
 
-    private final UserRepository userRepository;
+    private final BranchPersistenceService branchPersistenceService;
 
-    private final AuthenticationFacade authenticationFacade;
-
-    private final CategoryRepository categoryRepository;
-
-    private final VoivodeshipRepository voivodeshipRepository;
-
-    private final AddressRepository addressRepository;
-
-    public CompanyManagementService(CompanyRepository companyRepository, BranchRepository branchRepository, UserRepository userRepository, AuthenticationFacade authenticationFacade, CategoryRepository categoryRepository, VoivodeshipRepository voivodeshipRepository, AddressRepository addressRepository) {
+    public CompanyManagementService(CompanyRepository companyRepository, CompanyPersistenceService companyPersistenceService, BranchPersistenceService branchPersistenceService) {
         this.companyRepository = companyRepository;
-        this.branchRepository = branchRepository;
-        this.userRepository = userRepository;
-        this.authenticationFacade = authenticationFacade;
-        this.categoryRepository = categoryRepository;
-        this.voivodeshipRepository = voivodeshipRepository;
-        this.addressRepository = addressRepository;
+        this.companyPersistenceService = companyPersistenceService;
+        this.branchPersistenceService = branchPersistenceService;
     }
 
     @Transactional
@@ -54,75 +36,42 @@ public class CompanyManagementService {
         List<Branch> branches = companyExtractor.getBranches();
         Company company = companyExtractor.getCompany();
 
-        Company createdCompany = this.getPersistedCompany(company);
+        Company createdCompany = this.companyPersistenceService.getPersistedCompany(company);
 
-        if (!createdCompany.isHasBranch()) {
+        if (!createdCompany.hasBranch()) {
             return;
         }
 
-        this.buildAllCompanyBranches(branches, createdCompany);
+        this.branchPersistenceService.buildAllCompanyBranches(branches, createdCompany);
 
-        this.branchRepository.saveAll(branches);
-    }
-
-    private Company getPersistedCompany(Company company) {
-
-        User user = this.userRepository.getByAddressEmail(this.authenticationFacade.getAuthentication().getName());
-
-        return this.companyRepository.save(Company.builder()
-                .address(this.getPersistedAddress(company))
-                .category(this.getPersistedCategory(company))
-                .description(company.getDescription())
-                .hasBranch(company.isHasBranch())
-                .id(0L)
-                .name(company.getName())
-                .NIP(company.getNIP())
-                .registerer(user.getNaturalPerson())
-                .logoPath(company.getLogoPath())
-                .REGON(company.getREGON())
-                .build());
-    }
-
-    private void buildAllCompanyBranches(List<Branch> branches, Company createdCompany) {
-        branches.forEach(branch -> {
-            branch.setCompany(createdCompany);
-            branch.setRegisterer(createdCompany.getRegisterer());
-            branch.setId(0L);
-            Voivoideship branchVoivodeship = this.voivodeshipRepository.findByName(branch.getAddress().getVoivodeship_id().getName());
-            branch.getAddress().setVoivodeship_id(branchVoivodeship);
-            Address branchAddress = this.addressRepository.save(branch.getAddress());
-            branch.setAddress(branchAddress);
-        });
-    }
-
-    private Address getPersistedAddress(Company company) {
-        Voivoideship voivoideship = this.voivodeshipRepository.findByName(company.getAddress().getVoivodeship_id().getName());
-
-        Address address = Address.builder()
-                .apartmentNo(company.getAddress().getApartmentNo())
-                .buildingNo(company.getAddress().getBuildingNo())
-                .id(0L)
-                .city(company.getAddress().getCity())
-                .voivodeship_id(voivoideship)
-                .street(company.getAddress().getStreet())
-                .build();
-
-        return this.addressRepository.save(address);
-    }
-
-    private Category getPersistedCategory(Company company) {
-        Category soughtCategory = this.categoryRepository.findByName(company.getCategory().getName());
-        if (soughtCategory == null) {
-            soughtCategory = company.getCategory();
-            soughtCategory.setName(company.getCategory().getName());
-            soughtCategory.setId((short) 0);
-            this.categoryRepository.save(soughtCategory);
-        }
-
-        return soughtCategory;
+        this.branchPersistenceService.saveAll(branches);
     }
 
     public boolean companyExists(Long id) {
         return this.companyRepository.getByCompanyId(id) != null;
+    }
+
+    public Optional<CompanyInfoDto> getCompanyInfo(Long id) {
+
+        Optional<Company> optionalCompany = this.companyPersistenceService.getPersistedCompany(id);
+
+
+        AddressMapper addressMapper = new AddressMapper();
+        return optionalCompany.map(company ->
+                                           CompanyInfoDto.builder()
+                                                   .category(company.getCategory().getName())
+                                                   .companyId(company.getId())
+                                                   .companyName(company.getName())
+                                                   .address(addressMapper.map(company.getAddress()))
+                                                   .description(company.getDescription())
+                                                   .registererFullname(this.getRegistererFullname(company))
+                                                   .companyWebsiteUrl(company.getCompanyWebsiteLink())
+                                                   .branchesIDs(company.hasBranch() ? this.branchPersistenceService.getCompanyBranchesIds(company.getId()) : Collections.emptyList())
+                                                   .build());
+    }
+
+    //TODO move to some better place
+    private String getRegistererFullname(Company company) {
+        return String.format("%s %s", company.getRegisterer().getFirstName(), company.getRegisterer().getLastName());
     }
 }

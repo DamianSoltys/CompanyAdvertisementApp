@@ -1,4 +1,4 @@
-package local.project.Inzynierka.web.mapper;
+package local.project.Inzynierka.servicelayer.dto.mapper;
 
 import local.project.Inzynierka.persistence.entity.Address;
 import local.project.Inzynierka.persistence.entity.Branch;
@@ -15,6 +15,8 @@ public class CompanyExtractor {
 
     private final Company company = new Company();
     private final List<Branch> branches;
+
+    private AddressMapper addressMapper = new AddressMapper();
 
     public CompanyExtractor(AddCompanyDto addCompanyDto) {
 
@@ -42,6 +44,7 @@ public class CompanyExtractor {
                             .city(companyBranchDto.getAddress().getCity())
                             .buildingNo(companyBranchDto.getAddress().getBuildingNo())
                             .street(companyBranchDto.getAddress().getStreet())
+                            .apartmentNo(companyBranchDto.getAddress().getApartmentNo())
                             .voivodeship_id(new Voivoideship(companyBranchDto.getAddress().getVoivodeship().toString()))
                             .build()
                     )
@@ -74,7 +77,7 @@ public class CompanyExtractor {
                 .buildingNo(addCompanyDto.getAddress().getBuildingNo())
                 .street(addCompanyDto.getAddress().getStreet())
                 .voivodeship_id(new Voivoideship(addCompanyDto.getAddress().getVoivodeship().toString()))
-                .street(addCompanyDto.getAddress().getCity())
+                .apartmentNo(addCompanyDto.getAddress().getApartmentNo())
                 .city(addCompanyDto.getAddress().getCity())
                 .build());
         company.setCategory(new Category(addCompanyDto.getCategory()));
@@ -99,26 +102,12 @@ public class CompanyExtractor {
                         addCompanyDto.getName() :
                         addCompanyDto.getBranches().get(0).getName()
         );
-        branch.getAddress().setCity(
-                addCompanyDto.getBranches().get(0).getAddress().getCity() == null ?
-                        addCompanyDto.getAddress().getCity():
-                        addCompanyDto.getBranches().get(0).getAddress().getCity()
+        branch.setAddress(
+                addCompanyDto.getBranches().get(0).getAddress() == null ?
+                        addressMapper.map(addCompanyDto.getAddress()):
+                        addressMapper.map(addCompanyDto.getBranches().get(0).getAddress())
         );
-        branch.getAddress().setVoivodeship_id(
-                addCompanyDto.getBranches().get(0).getAddress().getVoivodeship() == null ?
-                        new Voivoideship(addCompanyDto.getAddress().getVoivodeship().toString()) :
-                        new Voivoideship(addCompanyDto.getBranches().get(0).getAddress().getVoivodeship().toString())
-                );
-        branch.getAddress().setBuildingNo(
-                addCompanyDto.getBranches().get(0).getAddress().getBuildingNo() == null ?
-                addCompanyDto.getAddress().getBuildingNo() :
-                addCompanyDto.getBranches().get(0).getAddress().getBuildingNo()
-        );
-        branch.getAddress().setStreet(
-                addCompanyDto.getBranches().get(0).getAddress().getStreet() == null ?
-                        addCompanyDto.getAddress().getStreet() :
-                        addCompanyDto.getBranches().get(0).getAddress().getStreet()
-        );
+
         branch.setCompany(company);
         branch.setGeoX(addCompanyDto.getBranches().get(0).getGeoX());
         branch.setGeoY(addCompanyDto.getBranches().get(0).getGeoY());

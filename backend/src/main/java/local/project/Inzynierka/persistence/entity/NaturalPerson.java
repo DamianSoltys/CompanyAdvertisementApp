@@ -21,7 +21,7 @@ public class NaturalPerson extends FullTimestampingAudit implements IEntity<Long
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_natural_person")
-    private Long id;
+    private Long id = 0L;
 
     @Column(nullable = false, name = "first_name", length = 30)
     private String firstName;

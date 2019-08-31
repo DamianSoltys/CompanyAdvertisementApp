@@ -22,7 +22,7 @@ public class PromotionItem extends FullTimestampingAudit implements IEntity<Long
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "promotion_item_id")
-    private Long id;
+    private Long id = 0L;
 
     @Column(name = "name", length = 50, nullable = false)
     private String name;
@@ -38,8 +38,8 @@ public class PromotionItem extends FullTimestampingAudit implements IEntity<Long
     @JoinColumn(name = "promotion_type_id", nullable = false,  foreignKey = @ForeignKey(name = "promotion_type_FK"))
     private PromotionItemType promotionItemType;
 
-    @Column(name = "valid")
-    private boolean valid;
+    @Column(name = "was_sent")
+    private boolean wasSent;
 
     @Column(nullable = false, name = "valid_from", columnDefinition = "TIMESTAMP")
     private Timestamp validFrom;

@@ -18,7 +18,7 @@ public class VerificationToken extends CreationTimestampingAudit implements IEnt
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "token_id")
-    private Long id;
+    private Long id = 0L;
 
     @Column(unique = true, nullable = false)
     private String token;

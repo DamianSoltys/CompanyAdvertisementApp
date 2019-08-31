@@ -18,7 +18,7 @@ public class SocialMediaPlatform extends FullTimestampingAudit implements IEntit
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "platform_id")
-    private  Short id;
+    private Short id = 0;
 
     @Column(name = "social_media_platform", nullable = false)
     private String socialMediaPlatform;

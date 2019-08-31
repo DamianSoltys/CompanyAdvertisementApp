@@ -19,7 +19,7 @@ public class Category extends FullTimestampingAudit implements IEntity<Short> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Short id;
+    private Short id = 0;
 
     @Column(nullable = false, length = 30)
     private String name;

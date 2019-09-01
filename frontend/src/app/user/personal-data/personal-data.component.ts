@@ -99,27 +99,42 @@ export class PersonalDataComponent implements OnInit {
         [Validators.required, Validators.pattern(new RegExp(/^[0-9]+$/))]
       ]
     });
+    this.userObject = JSON.parse(localStorage.getItem('userREST'));
+    this.checkForPersonalData();
+  }
 
+  private checkForPersonalData() {
     if (this.checkIfPersonalDataStorage()) {
       console.log('git');
       this.naturalUserDataObject = this.getPersonalDataStorage();
-      this.showPersonalData(this.naturalUserDataObject);
+      this.showPersonalData();
     } else {
       this.getPersonalDataServer();
     }
   }
 
-  private showPersonalData(naturalUserData: PersonalData) {
+  public showPersonalData(e?:Event) {
+    if(e) {
+      e.preventDefault();
+    }
+
+    this.showAddingForm.next(false);
+    this.showEditingForm.next(false);
     this.showData.next(true);
   }
-
+  
   public showEditForm() {
     this.showData.next(false);
+    this.showAddingForm.next(false);
     this.showEditingForm.next(true);
+  }
+  public showAddForm() {
+    this.showData.next(false);
+    this.showAddingForm.next(true);
+    this.showEditingForm.next(false);
   }
 
   private getPersonalDataServer() {
-    this.userObject = JSON.parse(localStorage.getItem('userREST'));
     if(this.userObject.naturalPersonID){
     this.pdataService
       .getPersonalData(this.userObject.userID, this.userObject.naturalPersonID)
@@ -128,18 +143,18 @@ export class PersonalDataComponent implements OnInit {
           this.naturalUserDataObject = response.body as PersonalData;
             console.log('Dane pobrane z servera');
             this.setStoragePersonalData(this.naturalUserDataObject);
-            this.showPersonalData(this.naturalUserDataObject);
+            this.showPersonalData();
         },
         error => {
           if (error.status === 404 || error.status === 400) {
             this.naturalUserDataObject = {} as PersonalData;
-            this.showAddingForm.next(true);
+            this.showAddForm();
           } 
         }
       );
     } else {
       this.naturalUserDataObject = {} as PersonalData;
-      this.showAddingForm.next(true);
+      this.showAddForm();
     }
   }
 
@@ -238,17 +253,37 @@ export class PersonalDataComponent implements OnInit {
             this.showRequestMessage('post', 'success', 'Dane zostały zapisane');
             this.setStoragePersonalData(this.personalDataForm.value);
             this.personalDataForm.reset();
-            this.showData.next(true);
+            this.showPersonalData(); 
         },
         error => {
           console.log(error);
-          console.log(this.personalDataForm.value);
           this.showRequestMessage('post', 'error');
         }
       );
   }
 
   private checkIfEditDataSuccess() {
-
+    this.pdataService
+    .editPersonalData(
+      this.personalDataForm.value as PersonalData,
+      this.userObject.userID,
+      this.userObject.naturalPersonID
+    )
+    .subscribe(
+      (response: HttpResponse<any>) => {
+          console.log(response);
+          this.showRequestMessage('post', 'success', 'Dane zostały zapisane');
+          this.setStoragePersonalData(this.personalDataForm.value);
+          this.personalDataForm.reset();
+          localStorage.removeItem('naturalUserData');
+          this.checkForPersonalData();
+          this.showPersonalData();      
+      },
+      error => {
+        console.log(error);
+        console.log(this.personalDataForm.value);
+        this.showRequestMessage('post', 'error');
+      }
+    );
   }
 }

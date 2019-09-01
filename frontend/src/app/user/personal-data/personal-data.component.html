@@ -158,22 +158,30 @@
           {{ errorMessage }}
         </p>
       </div>
-      <div class="personal-data-form__button-container text-center col-12">
+      <div class="personal-data-form__button-container text-center col-12 row">
       <button class="btn btn-primary personal-data-form__button--submit" [disabled]="!this.personalDataForm.valid"
-        type="submit">
-        Dodaj dane
+        type="submit" *ngIf="showAddingForm.getValue()">
+        <span class="button--submit__text-node">Dodaj dane</span>
+      </button>
+      <button class="btn btn-primary personal-data-form__button--submit" [disabled]="!this.personalDataForm.valid" 
+      type="submit" *ngIf="showEditingForm.getValue()">
+          <span class="button--submit__text-node">Zapisz dane</span>
+      </button>
+      <button class="btn btn-primary personal-data-form__button--submit" (click)="showPersonalData($event)"
+      *ngIf="showEditingForm.getValue()">
+        <span class="button--submit__text-node">Pokaż dane</span>
       </button>
     </div>
     </form>
   </div>
-  <div class="row personal-data-component__data-container col-12 col-xl-6 col-md-8" *ngIf="showData.getValue()">
+  <div class="row personal-data-component__data-container col-12 col-xl-5 col-md-6" *ngIf="showData.getValue()">
       <div class="data-container__header col-12 text-center">
           <p class="header__text-node"><i class="fas fa-id-card header__icon"></i>Dane personalne</p>
       </div>
       <div class="col-12 data-container__data-group-container">
     <div class="row data-group-container__data-group col-12">
       <div class="data-group__header col-12">
-        <span class="header__text-node">Dane osobowe</span>
+        <span class="header__text-node"><i class="fas fa-user-tag text-node__icon"></i>Dane osobowe</span>
       </div>
       <div class="data-group__container col-12">
         <ul class="container__data-list">
@@ -184,7 +192,7 @@
     </div>
     <div class="row data-group-container__data-group col-12">
       <div class="data-group__header col-12">
-        <span class="header__text-node">Dane adresowe</span>
+        <span class="header__text-node"><i class="fas fa-home text-node__icon"></i>Dane adresowe</span>
       </div>
       <div class="data-group__container col-12">
         <ul #ulList class="container__data-list">
@@ -198,7 +206,7 @@
     </div>
     <div class="row data-group-container__data-group col-12">
       <div class="data-group__header col-12">
-        <span class="header__text-node">Dane kontaktowe</span>
+        <span class="header__text-node"><i class="fas fa-phone text-node__icon"></i>Dane kontaktowe</span>
       </div>
       <div class="data-group__container col-12">
         <ul #ulList class="container__data-list">

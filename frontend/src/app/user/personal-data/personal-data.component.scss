@@ -34,18 +34,21 @@
     align-self: center;
     margin: auto;
     padding:0;
-
-    .personal-data-form__button--submit {
-      width: 60%;
-      margin-bottom:5%;
-      border-radius: 50px;
-      border: 0;
-      background: linear-gradient(-45deg, #FFA63D, #FF3D77, #338AFF, #3CF0C5);
-      animation: button-background-animation 16s linear infinite;
-      background-size: 600%;
-  
-      @include phone {
-        width: 75%;
+    .personal-data-form__button-container {
+      margin:0;
+      justify-content: space-evenly;
+      .personal-data-form__button--submit {
+        width: 45%;
+        margin-bottom:5%;
+        border-radius: 50px;
+        border: 0;
+        background: linear-gradient(-45deg, #FFA63D, #FF3D77, #338AFF, #3CF0C5);
+        animation: button-background-animation 16s linear infinite;
+        background-size: 600%;
+    
+        @include phone {
+          width: 85%;
+        }
       }
     }
 
@@ -57,6 +60,7 @@
         .group-label__text-node {
           font-size:1.1rem;
           margin: 0 15px;
+          font-weight: bold;
           color:darken($bgcolor,10);
 
           .text-node__icon {
@@ -193,11 +197,15 @@
     margin:auto;
 
     .data-group__header {
-
+      padding: 0;
       .header__text-node {
         font-size:1.1rem;
         margin: 0 15px;
+        font-weight: bold;
         color:darken($bgcolor,10);
+        .text-node__icon {
+          padding-right: 5px;
+        }
       }
     }
 
@@ -205,15 +213,26 @@
       border:1px solid darken($bgcolor,10);
       border-width: 1px 0 0 0;
       border-radius: 6px;
-      padding:20px;
+      padding:20px 40px;
       margin:auto;
       margin-bottom:5px;
-      justify-content: space-evenly;
       z-index: 1;
       @include boxShadow(inset 0px 15px 8px -15px rgba(32, 99, 143, 0.66));
       .container__data-list {
         list-style:none;
         padding: 0;
+        justify-content: space-evenly;
+        .data-list__item {
+          padding: 10px;
+          .data-list__caption {
+            padding-right: 10px;
+            font-size: 1.1rem;
+            color:darken($bgcolor,15);
+          }
+        }
+      }
+      @include phone() {
+        padding:10px;
       }
     }
   }

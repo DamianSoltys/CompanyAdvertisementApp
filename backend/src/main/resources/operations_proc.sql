@@ -39,5 +39,11 @@ begin
     call inzynierka.insert_companies();
     call inzynierka.insert_branches();
     call inzynierka.insert_newsletter_subscriptions();
+    call inzynierka.insert_comments();
+    call inzynierka.insert_favourite_branches();
+    call inzynierka.insert_promotion_types();
+    call inzynierka.insert_promotion_items();
+    call inzynierka.insert_social_platforms();
+    call inzynierka.insert_social_profiles();
 end;
 |

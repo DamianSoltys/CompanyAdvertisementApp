@@ -19,6 +19,7 @@ import { PersonalData, UserREST } from 'src/app/classes/User';
 import { PersonalDataService } from 'src/app/services/personal-data.service';
 import { voivodeships } from 'src/app/classes/Voivodeship';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-personal-data',
@@ -44,7 +45,8 @@ export class PersonalDataComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private pdataService: PersonalDataService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private userService:UserService,
   ) {}
 
   ngOnInit() {
@@ -101,6 +103,7 @@ export class PersonalDataComponent implements OnInit {
     });
     this.userObject = JSON.parse(localStorage.getItem('userREST'));
     this.checkForPersonalData();
+    this.updateUserObject();
   }
 
   private checkForPersonalData() {
@@ -108,6 +111,7 @@ export class PersonalDataComponent implements OnInit {
       console.log('git');
       this.naturalUserDataObject = this.getPersonalDataStorage();
       this.showPersonalData();
+      console.log(this.userObject);
     } else {
       this.getPersonalDataServer();
     }
@@ -211,8 +215,7 @@ export class PersonalDataComponent implements OnInit {
 
   private setStoragePersonalData(PersonalDataObject: PersonalData) {
     if (
-      storage_Avaliable('localStorage') &&
-      !this.checkIfPersonalDataStorage()
+      storage_Avaliable('localStorage')
     ) {
       localStorage.setItem(
         'naturalUserData',
@@ -233,12 +236,27 @@ export class PersonalDataComponent implements OnInit {
   }
 
   public onSubmit() {
+    console.log(this.personalDataForm.value)
     if(!this.showEditingForm.getValue()){
       this.checkIfPostDataSuccess();
     } else {
       this.checkIfEditDataSuccess();
     }
     
+  }
+
+  updateUserObject() {
+    this.userService.getActualUser(this.userObject.userID).subscribe(response =>{
+      console.log(response);
+      if (storage_Avaliable('localStorage')) {
+        const userNewObject: UserREST = response.body;      
+        localStorage.setItem('userREST', JSON.stringify(userNewObject));
+      } else {
+        console.log('Nie udało się zapisać nowych danych usera');
+      }  
+    },error =>{
+      console.log(error);
+    });
   }
 
   private checkIfPostDataSuccess() {
@@ -253,6 +271,8 @@ export class PersonalDataComponent implements OnInit {
             this.showRequestMessage('post', 'success', 'Dane zostały zapisane');
             this.setStoragePersonalData(this.personalDataForm.value);
             this.personalDataForm.reset();
+            this.naturalUserDataObject = this.personalDataForm.value;
+            this.updateUserObject();
             this.showPersonalData(); 
         },
         error => {

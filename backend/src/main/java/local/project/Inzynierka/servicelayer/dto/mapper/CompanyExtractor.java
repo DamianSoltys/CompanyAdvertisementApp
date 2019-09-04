@@ -80,6 +80,7 @@ public class CompanyExtractor {
                 .apartmentNo(addCompanyDto.getAddress().getApartmentNo())
                 .city(addCompanyDto.getAddress().getCity())
                 .build());
+        company.setCompanyWebsiteLink(addCompanyDto.getCompanyWebsiteUrl());
         company.setCategory(new Category(addCompanyDto.getCategory()));
         company.setDescription(addCompanyDto.getDescription());
         company.setName(addCompanyDto.getName());

@@ -7,6 +7,7 @@ import local.project.Inzynierka.servicelayer.dto.UpdateUserDto;
 import local.project.Inzynierka.servicelayer.dto.UserInfoDto;
 import local.project.Inzynierka.servicelayer.services.UserFacade;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
+import local.project.Inzynierka.web.security.AccessPermissionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,8 +24,11 @@ public class AccountController {
 
     private final UserFacade userFacade;
 
-    public AccountController(UserFacade userFacade) {
+    private final AccessPermissionService accessPermissionService;
+
+    public AccountController(UserFacade userFacade, AccessPermissionService accessPermissionService) {
         this.userFacade = userFacade;
+        this.accessPermissionService = accessPermissionService;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/{id}/naturalperson")
@@ -86,4 +90,28 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/user/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable(value = "id") final Long userId) {
+
+        if (this.accessPermissionService.hasPrincipalHavePermissionToUserResource(userId)) {
+            return this.userFacade.deleteAccount().map(ResponseEntity::ok).orElse(null);
+        }
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/user/{id}/naturalperson/{naturalPersonId}")
+    public ResponseEntity<?> deletePersonalData(@PathVariable(value = "id") final Long userId,
+                                                @PathVariable(value = "naturalPersonId") final Long personId) {
+
+        if (this.accessPermissionService.hasPrincipalHavePermissionToUserResource(userId)) {
+            if (this.accessPermissionService.hasPrincipalHavePermissionToNaturalPersonResource(userId, personId)) {
+                return this.userFacade.deletePersonalData().map(ResponseEntity::ok).orElse(null);
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
 }

@@ -1,6 +1,7 @@
 package local.project.Inzynierka.servicelayer.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.Arrays;
 
@@ -29,6 +30,7 @@ public enum Voivodeship {
 
 
     @Override
+    @JsonValue
     public String toString() {
         return this.voivodeship;
     }

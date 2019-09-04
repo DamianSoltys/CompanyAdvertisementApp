@@ -4,6 +4,7 @@ import local.project.Inzynierka.persistence.common.FullTimestampingAudit;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -31,18 +32,18 @@ public class User extends FullTimestampingAudit implements IEntity<Long> {
     @Column(nullable = false, name = "password_hash")
     private String passwordHash;
 
-    @OneToOne
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "id_natural_person", referencedColumnName = "id_natural_person",foreignKey = @ForeignKey(name = "natural_person_FK"))
     private NaturalPerson naturalPerson;
 
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, orphanRemoval = true)
     @JoinColumn(name = "id_email_address",referencedColumnName = "email_id", unique = true, nullable = false, foreignKey = @ForeignKey(name = "email_FK"))
     private EmailAddress emailAddressEntity;
 
     @Column(nullable = false, name = "account_type")
     private Short accountType;
 
-    @OneToOne
+    @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "verification_token_id",referencedColumnName = "token_id", unique = true, foreignKey = @ForeignKey(name = "verify_user_token_FK"))
     private VerificationToken verificationToken;
 

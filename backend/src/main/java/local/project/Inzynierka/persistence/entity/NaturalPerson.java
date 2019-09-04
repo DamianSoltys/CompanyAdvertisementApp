@@ -10,7 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Data
@@ -32,7 +32,7 @@ public class NaturalPerson extends FullTimestampingAudit implements IEntity<Long
     @Column(nullable = false, name = "last_name", length = 30)
     private String lastName;
 
-    @ManyToOne
+    @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "address_id", nullable = false, foreignKey = @ForeignKey(name = "address_natural_person_FK"))
     private Address address;
 

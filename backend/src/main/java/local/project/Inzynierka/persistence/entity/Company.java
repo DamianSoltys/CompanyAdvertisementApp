@@ -17,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Data
@@ -40,7 +41,7 @@ public class Company extends FullTimestampingAudit implements IEntity<Long> {
     @Column(unique = true, nullable = false, length = 14)
     private String REGON;
 
-    @ManyToOne
+    @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "address_id", nullable = false, foreignKey = @ForeignKey(name = "address_company_FK"))
     private Address address;
 

@@ -110,12 +110,17 @@ public class CompanyManagementService {
                 .build();
     }
 
+    @Transactional
     public Optional<CompanyRelatedDeletedEntities> deleteCompany(Long id) {
 
         Optional<Company> companyOptional = this.companyPersistenceService.getPersistedCompany(id);
 
         CompanyRelatedDeletedEntities companyRelatedDeletedEntities =
                 companyOptional.map(this::buildCompanyDeletedIdentities).orElseThrow(IllegalStateException::new);
+
+        this.companyRepository.deleteById(id);
+        this.companyPersistenceService.deleteAddresses(companyRelatedDeletedEntities.getAddressesIds());
+
 
         return Optional.of(companyRelatedDeletedEntities);
     }

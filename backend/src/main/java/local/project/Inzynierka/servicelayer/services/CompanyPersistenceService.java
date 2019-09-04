@@ -112,4 +112,7 @@ public class CompanyPersistenceService {
         return this.companyRepository.getSocialProfileUrlRelatedToCompany(id);
     }
 
+    public void deleteAddresses(List<Long> addresses) {
+        this.addressRepository.deleteAllById(addresses);
+    }
 }

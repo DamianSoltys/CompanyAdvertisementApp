@@ -266,11 +266,17 @@ public class UserFacade {
         return person;
     }
 
+    @Transactional
     public Optional<PersonRelatedDeletedEntities> deletePersonalData() {
 
         User user = this.authenticationFacade.getAuthenticatedUser();
         NaturalPerson naturalPerson = user.getNaturalPerson();
-        PersonRelatedDeletedEntities personRelatedDeletedEntities = getPersonRelatedDeletedEntities(naturalPerson);
+        PersonRelatedDeletedEntities personRelatedDeletedEntities = this.getPersonRelatedDeletedEntities(naturalPerson);
+
+
+        //TODO Put it in priority queue that run asynchronously
+        //TODO Send an email with personalData/companies removal confirmation
+        this.naturalPersonRepository.deleteById(naturalPerson.getId());
 
         return Optional.of(personRelatedDeletedEntities);
     }
@@ -283,6 +289,7 @@ public class UserFacade {
                 .build();
     }
 
+    @Transactional
     public Optional<AccountRelatedDeletedEntities> deleteAccount() {
 
         User user = this.authenticationFacade.getAuthenticatedUser();
@@ -293,10 +300,14 @@ public class UserFacade {
                 .subscriptionIds(this.userPersistenceService.getSubscriptionsOfUser(user.getId()))
                 .emailId(user.getEmailAddressEntity().getId())
                 .verificationTokenId(user.getVerificationToken() ==
-                                             null ? null : user.getVerificationToken().getId()) // TODO Remove in batch job instead
+                                             null ? null : user.getVerificationToken().getId()) // TODO Remove unused verification tokens in batch job instead
                 .personRelatedDeletedEntities(user.getNaturalPerson() == null ?
                                                       null : this.getPersonRelatedDeletedEntities(user.getNaturalPerson()))
                 .build();
+
+        //TODO Put it in priority queue that run asynchronously
+        //TODO Send an email with account removal confirmation
+        this.userRepository.delete(user);
 
         return Optional.of(accountRelatedDeletedEntities);
     }

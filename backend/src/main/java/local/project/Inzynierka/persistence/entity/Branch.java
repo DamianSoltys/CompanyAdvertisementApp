@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Data
@@ -41,7 +42,7 @@ public class Branch extends FullTimestampingAudit implements IEntity<Long> {
     @Column(nullable = false, length = 50)
     private String name;
 
-    @ManyToOne
+    @OneToOne(orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "address_id", nullable = false, foreignKey = @ForeignKey(name = "address_branch_FK"))
     private Address address;
 

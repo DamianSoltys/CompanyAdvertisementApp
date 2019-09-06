@@ -107,6 +107,7 @@ BEGIN
             unique (phone_no),
         constraint address_natural_person_FK
             foreign key (address_id) references addresses (id)
+                on delete CASCADE
     );
 
     create or replace table companies
@@ -130,11 +131,13 @@ BEGIN
         constraint unique_nip
             unique (nip),
         constraint address_company_FK
-            foreign key (address_id) references addresses (id),
+            foreign key (address_id) references addresses (id)
+                on delete cascade,
         constraint company_category_FK
             foreign key (category_id) references categories (id),
         constraint company_registerer_FK
             foreign key (registerer_id) references natural_persons (id_natural_person)
+                on delete cascade
     );
 
     create or replace table branches
@@ -151,11 +154,14 @@ BEGIN
         company_id       bigint                                  not null,
         registerer_id    bigint                                  not null,
         constraint address_branch_FK
-            foreign key (address_id) references addresses (id),
+            foreign key (address_id) references addresses (id)
+                on delete cascade,
         constraint branch_registerer_FK
-            foreign key (registerer_id) references natural_persons (id_natural_person),
+            foreign key (registerer_id) references natural_persons (id_natural_person)
+                on delete cascade,
         constraint company_branch_FK
             foreign key (company_id) references companies (id)
+                on delete cascade
     );
 
     create or replace table newsletter_subscriptions
@@ -174,9 +180,11 @@ BEGIN
         constraint unique_verification_token
             unique (id_verification_token),
         constraint newsletter_company_FK
-            foreign key (company_id) references companies (id),
+            foreign key (company_id) references companies (id)
+                on delete cascade,
         constraint newsletter_email_FK
-            foreign key (id_email) references email_addresses (email_id),
+            foreign key (id_email) references email_addresses (email_id)
+                on delete cascade,
         constraint unsubscribe_newsletter_token_FK
             foreign key (id_unsubscribe_token) references tokens (token_id),
         constraint verify_newsletter_token_FK
@@ -197,7 +205,8 @@ BEGIN
         promoting_company_id bigint                                  not null,
         promotion_type_id    smallint(6)                             not null,
         constraint promoting_company_FK
-            foreign key (promoting_company_id) references companies (id),
+            foreign key (promoting_company_id) references companies (id)
+                on delete cascade,
         constraint promotion_type_FK
             foreign key (promotion_type_id) references promotion_item_types (promotion_item_type_id)
     );
@@ -211,7 +220,8 @@ BEGIN
         modified_at        timestamp default '0000-00-00 00:00:00' not null,
         primary key (company_id, platform_id),
         constraint company_soc_prof_FK
-            foreign key (company_id) references companies (id),
+            foreign key (company_id) references companies (id)
+                on delete cascade,
         constraint platform_FK
             foreign key (platform_id) references social_platforms (platform_id)
     );
@@ -238,7 +248,8 @@ BEGIN
         constraint email_FK
             foreign key (id_email_address) references email_addresses (email_id),
         constraint natural_person_FK
-            foreign key (id_natural_person) references natural_persons (id_natural_person),
+            foreign key (id_natural_person) references natural_persons (id_natural_person)
+                ON DELETE SET NULL,
         constraint verify_user_token_FK
             foreign key (verification_token_id) references tokens (token_id)
     );
@@ -253,9 +264,11 @@ BEGIN
         branch_id   bigint                                  not null,
         user_id     bigint                                  not null,
         constraint commentend_branch_FK
-            foreign key (branch_id) references branches (branch_id),
+            foreign key (branch_id) references branches (branch_id)
+                on delete CASCADE,
         constraint commenting_user_FK
             foreign key (user_id) references users (user_id)
+                on delete CASCADE
     );
 
     create or replace table favourite_branches
@@ -266,9 +279,11 @@ BEGIN
         modified_at timestamp default '0000-00-00 00:00:00' not null,
         primary key (branch_id, user_id),
         constraint favourite_branches_branch_FK
-            foreign key (branch_id) references branches (branch_id),
+            foreign key (branch_id) references branches (branch_id)
+                on delete cascade,
         constraint favourite_branches_user_FK
             foreign key (user_id) references users (user_id)
+                on delete cascade
     );
 
     create or replace table ratings
@@ -281,9 +296,11 @@ BEGIN
         branch_id   bigint                                  not null,
         user_id     bigint                                  not null,
         constraint rated_FK
-            foreign key (branch_id) references branches (branch_id),
+            foreign key (branch_id) references branches (branch_id)
+                on delete cascade,
         constraint rating_user_FK
-            foreign key (user_id) references users (user_id),
+            foreign key (user_id) references users (user_id)
+                on delete cascade,
         constraint rating
             check (`rating` <= 5 and `rating` >= 1)
     );

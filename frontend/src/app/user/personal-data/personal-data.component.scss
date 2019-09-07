@@ -34,18 +34,21 @@
     align-self: center;
     margin: auto;
     padding:0;
-
-    .personal-data-form__button--submit {
-      width: 60%;
-      margin-bottom:5%;
-      border-radius: 50px;
-      border: 0;
-      background: linear-gradient(-45deg, #FFA63D, #FF3D77, #338AFF, #3CF0C5);
-      animation: button-background-animation 16s linear infinite;
-      background-size: 600%;
-  
-      @include phone {
-        width: 75%;
+    .personal-data-form__button-container {
+      margin:0;
+      justify-content: space-evenly;
+      .personal-data-form__button--submit {
+        width: 45%;
+        margin-bottom:5%;
+        border-radius: 50px;
+        border: 0;
+        background: linear-gradient(-45deg, #FFA63D, #FF3D77, #338AFF, #3CF0C5);
+        animation: button-background-animation 16s linear infinite;
+        background-size: 600%;
+    
+        @include phone {
+          width: 85%;
+        }
       }
     }
 
@@ -57,6 +60,7 @@
         .group-label__text-node {
           font-size:1.1rem;
           margin: 0 15px;
+          font-weight: bold;
           color:darken($bgcolor,10);
 
           .text-node__icon {
@@ -92,7 +96,7 @@
             position: relative;
             left:-10px;
             width:calc(100% + 20px);
-            
+
             @include phone() {
               left:0;
               width:100%;
@@ -106,10 +110,6 @@
               top: 8px;
               right: 10px;
               color:$bgcolor;
-
-              @include phone() {
-                transform: rotate(180deg);
-              }
             }
             .section-container__select-input {
               -moz-appearance: none;
@@ -157,6 +157,102 @@
       }
     }    
   }     
+}
+
+.personal-data-component__data-container {
+  margin:auto;
+  @include boxShadow(0px 4px 5px 0px rgba(187, 185, 191, 1));
+  border: 0;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  align-self: center;
+  padding:0;
+  .data-container__header {
+    position: relative;
+    min-height: 30px;
+    height: 6vh;
+    max-height: 60px;
+    background-color: $bgcolor;
+    border: 0;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+  
+    .header__text-node {
+      color: white;
+      position: relative;
+      top: 50%;
+      transform: translate(0, -50%);
+      font-size: 1.2em;
+    }
+
+    .fa-id-card {
+      margin-right: 5px;
+    }
+  }
+  .data-container__data-group-container {
+    padding:3%;
+      margin-top:2%;
+  }
+  .data-group-container__data-group {
+    margin:auto;
+
+    .data-group__header {
+      padding: 0;
+      .header__text-node {
+        font-size:1.1rem;
+        margin: 0 15px;
+        font-weight: bold;
+        color:darken($bgcolor,10);
+        .text-node__icon {
+          padding-right: 5px;
+        }
+      }
+    }
+
+    .data-group__container {
+      border:1px solid darken($bgcolor,10);
+      border-width: 1px 0 0 0;
+      border-radius: 6px;
+      padding:20px 40px;
+      margin:auto;
+      margin-bottom:5px;
+      z-index: 1;
+      @include boxShadow(inset 0px 15px 8px -15px rgba(32, 99, 143, 0.66));
+      .container__data-list {
+        list-style:none;
+        padding: 0;
+        justify-content: space-evenly;
+        .data-list__item {
+          padding: 10px;
+          .data-list__caption {
+            padding-right: 10px;
+            font-size: 1.1rem;
+            color:darken($bgcolor,15);
+          }
+        }
+      }
+      @include phone() {
+        padding:10px;
+      }
+    }
+  }
+
+  .data-container__button {
+
+    .button__button--edit {
+      width: 60%;
+      margin-bottom:5%;
+      border-radius: 50px;
+      border: 0;
+      background: linear-gradient(-45deg, #FFA63D, #FF3D77, #338AFF, #3CF0C5);
+      animation: button-background-animation 16s linear infinite;
+      background-size: 600%;
+  
+      @include phone {
+        width: 75%;
+      }
+    }
+  } 
 }
 
 

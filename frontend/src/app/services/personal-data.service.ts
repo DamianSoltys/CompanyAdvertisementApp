@@ -10,7 +10,7 @@ export class PersonalDataService {
 
   constructor(private http: HttpClient) { }
 
-  sendPersonalData(personalData: PersonalData,userId:number) {
+  public sendPersonalData(personalData: PersonalData,userId:number) {
     return this.http.post(`http://localhost:8090/api/user/${userId}/naturalperson`,
     {
       'address':{
@@ -27,7 +27,7 @@ export class PersonalDataService {
     );
   }
 
-  editPersonalData(personalData: PersonalData,userId:number,naturalPersonId:number) {
+  public editPersonalData(personalData: PersonalData,userId:number,naturalPersonId:number) {
     return this.http.patch(`http://localhost:8090/api/user/${userId}/naturalperson/${naturalPersonId}`,
     {
       'address':{
@@ -44,7 +44,11 @@ export class PersonalDataService {
     );
   }
 
-  getPersonalData(userId: number,naturalPersonId: number): Observable<any> {
+  public getPersonalData(userId: number,naturalPersonId: number): Observable<any> {
     return this.http.get(`http://localhost:8090/api/user/${userId}/naturalperson/${naturalPersonId}`,{observe: 'response'});
+  }
+
+  public deletePersonalData(userId: number,naturalPersonId: number): Observable<any> {
+    return this.http.delete(`http://localhost:8090/api/user/${userId}/naturalperson/${naturalPersonId}`,{observe: 'response'});
   }
 }

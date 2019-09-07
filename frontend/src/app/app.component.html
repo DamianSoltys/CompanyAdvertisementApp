@@ -31,12 +31,14 @@
       <button routerLink="/search" type="button" class="navbar__button-link btn btn-primary">Szukaj</button>
       <button routerLink="" type="button" class="navbar__button-link btn btn-primary">Twoje firmy</button>     
       <button routerLink="" type="button" class="navbar__button-link btn btn-primary">Ulubione zakłady</button>   
-      <button (click)="toggleMenu(false)" type="button" class="navbar__button-link btn btn-primary" id="dropdownId">Dane użytkownika</button>
-        <ul [@showHideDropdown] = "displayDropdown.value ? 'visible':'hidden'" class="dropdown-menu__dropdown">
-          <li><a routerLink="/user/personalData" type="button" class="dropdown__item btn btn-primary">Dane osobowe</a></li>
-          <li><a routerLink="" type="button" class="dropdown__item btn btn-primary">Dane konta</a></li>
-          <li><a type="button" class="dropdown__item btn btn-primary" (click)="logOut()">Wyloguj</a></li>
+      <button (click)="toggleMenu(false)" type="button" class="navbar__button-link btn btn-primary" id="dropdownId">Dane użytkownika
+        <ul [@showHideDropdown] = "displayDropdown.value ? 'visible':'hidden'" class="button-link__dropdown">
+          <a routerLink="/user/personalData" type="button" class="dropdown__item"><li>Dane osobowe</li></a>
+          <a routerLink="" type="button" class="dropdown__item"><li>Dane konta</li></a>
+          <a type="button" class="dropdown__item" (click)="logOut()"><li>Wyloguj</li></a>
         </ul>
+      </button>
+        
     </div>
     <div class="navbar__dropdown col-9">
       <button (click)="toggleMenu(true)" class="btn btn-secondary dropdown__button" type="button" id="menuId">

@@ -193,6 +193,8 @@
   .data-container__button-container {
     display:flex;
     justify-content: space-evenly;
+    padding: 0;
+    margin-left: 0;
 
       .button__button--edit,.button__button--delete {    
         width:40%;   

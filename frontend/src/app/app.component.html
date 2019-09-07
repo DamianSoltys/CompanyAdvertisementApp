@@ -34,7 +34,7 @@
       <button (click)="toggleMenu(false)" type="button" class="navbar__button-link btn btn-primary" id="dropdownId">Dane użytkownika
         <ul [@showHideDropdown] = "displayDropdown.value ? 'visible':'hidden'" class="button-link__dropdown">
           <a routerLink="/user/personalData" type="button" class="dropdown__item"><li>Dane osobowe</li></a>
-          <a routerLink="" type="button" class="dropdown__item"><li>Dane konta</li></a>
+          <a routerLink="/user/accountData" type="button" class="dropdown__item"><li>Dane konta</li></a>
           <a type="button" class="dropdown__item" (click)="logOut()"><li>Wyloguj</li></a>
         </ul>
       </button>

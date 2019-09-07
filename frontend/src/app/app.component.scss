@@ -59,7 +59,7 @@ html {
       list-style: none;
       top: 37px;
       border-radius: 5px;
-      border-top-left-radius: 0;
+      border-top-left-radius: 20px;
       border-top-right-radius: 0;
       @include boxShadow(0px 4px 5px 0px #bbb9bf);
 
@@ -79,13 +79,16 @@ html {
         border: 0;        
         all: initial;
         width: 100%;
+        &:first-of-type li {
+          border-top-left-radius: 20px;
+        }
 
         li {
           padding: 5px 10px;
           list-style: none;
           font-weight: bold;
           color: $bgcolor;
-          cursor: pointer;
+          cursor: pointer;         
 
           &:hover {
             background-color: whitesmoke;

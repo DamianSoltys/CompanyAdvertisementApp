@@ -41,11 +41,18 @@ html {
 
 .navbar__button-group {
     position: relative;
+
+    .dropdown-menu__dropdown {
+      position: absolute;
+      list-style: none;
+
+    }
     
   .navbar__button-link {
     background-color: $bgcolor1;
     border: 1px solid $btborder;
-    transition: 0.5s;
+    transition: 0.5s; 
+    position: relative;  
     
     &:hover {
       background-color: $bgcolor;

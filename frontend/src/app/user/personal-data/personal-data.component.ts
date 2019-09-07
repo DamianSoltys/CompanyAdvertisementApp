@@ -110,7 +110,11 @@ export class PersonalDataComponent implements OnInit {
     if (this.checkIfPersonalDataStorage()) {
       console.log('git');
       this.naturalUserDataObject = this.getPersonalDataStorage();
-      this.showPersonalData();
+      
+      setTimeout(()=>{
+        this.showPersonalData();
+      },2000);
+
       console.log(this.userObject);
     } else {
       this.getPersonalDataServer();
@@ -147,7 +151,9 @@ export class PersonalDataComponent implements OnInit {
           this.naturalUserDataObject = response.body as PersonalData;
             console.log('Dane pobrane z servera');
             this.setStoragePersonalData(this.naturalUserDataObject);
-            this.showPersonalData();
+            setTimeout(()=>{
+              this.showPersonalData();
+            },2000); 
         },
         error => {
           if (error.status === 404 || error.status === 400) {
@@ -272,8 +278,10 @@ export class PersonalDataComponent implements OnInit {
             this.setStoragePersonalData(this.personalDataForm.value);
             this.personalDataForm.reset();
             this.naturalUserDataObject = this.personalDataForm.value;
-            this.updateUserObject();
-            this.showPersonalData(); 
+            this.updateUserObject();           
+            setTimeout(()=>{
+              this.showPersonalData();
+            },2000); 
         },
         error => {
           console.log(error);
@@ -297,7 +305,9 @@ export class PersonalDataComponent implements OnInit {
           this.personalDataForm.reset();
           localStorage.removeItem('naturalUserData');
           this.checkForPersonalData();
-          this.showPersonalData();      
+          setTimeout(()=>{
+            this.showPersonalData();
+          },2000);      
       },
       error => {
         console.log(error);
@@ -305,5 +315,9 @@ export class PersonalDataComponent implements OnInit {
         this.showRequestMessage('post', 'error');
       }
     );
+  }
+
+  public deleteData() {
+    console.log("usuwanie danych");
   }
 }

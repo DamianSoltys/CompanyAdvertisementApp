@@ -19,8 +19,6 @@ import { HttpConfigInterceptor } from './interceptor/http.interceptor';
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule
-
-
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true}

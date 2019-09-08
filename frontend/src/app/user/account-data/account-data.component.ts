@@ -18,6 +18,9 @@ import { HttpResponse } from '@angular/common/http';
 import { UserREST } from 'src/app/classes/User';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
 import { UserService } from 'src/app/services/user.service';
+import { AccountDataService } from 'src/app/services/account-data.service';
+import { Router } from '@angular/router';
+import { LoginService } from 'src/app/services/login.service';
 
 @Component({
   selector: 'app-account-data',
@@ -38,12 +41,16 @@ export class AccountDataComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private renderer: Renderer2,
-    private userService: UserService
+    private userService: UserService,
+    private accountService: AccountDataService,
+    private router: Router,
+    private lgService: LoginService,
   ) {}
 
   ngOnInit() {
     this.accountDataForm = this.fb.group({
-      password: [
+      oldPassword: ['', [Validators.required]],
+      newPassword: [
         '',
         [
           Validators.required,
@@ -52,21 +59,21 @@ export class AccountDataComponent implements OnInit {
           )
         ]
       ],
-      checkpassword: ['', [Validators.required]]
-    });  
+      checkPassword: ['', [Validators.required]]
+    });
     this.checkForUserData();
   }
 
   private checkForUserData() {
     this.userObject = JSON.parse(localStorage.getItem('userREST'));
-    if(storage_Avaliable('localStorage') && this.userObject) {
+    if (storage_Avaliable('localStorage') && this.userObject) {
       this.showAccountData();
     } else {
-      this.showRequestMessage('error','','Coś poszło nie tak');
+      this.showRequestMessage('error', '', 'Coś poszło nie tak');
     }
   }
 
-  private showRequestMessage (
+  private showRequestMessage(
     type: string,
     successMessage: string = this.successMessageText,
     errorMessage: string = this.errorMessageText
@@ -122,17 +129,44 @@ export class AccountDataComponent implements OnInit {
   }
 
   public onSubmit() {
-
-    if(this.form.password.value === this.form.checkpassword.value) {
-      console.log("submit");
-      this.showRequestMessage('success','Hasło zostało zmienione');
+    if (this.form.newPassword.value === this.form.checkPassword.value) {
+      this.accountService
+        .changePassword(
+          this.form.oldPassword.value,
+          this.form.newPassword.value,
+          this.userObject.userID
+        )
+        .subscribe(
+          response => {
+            this.showRequestMessage('success', 'Hasło zostało zmienione');
+            this.updateUserObject();
+            setTimeout(() => {
+              this.showAccountData();
+            }, 1000);
+          },
+          error => {
+            this.showRequestMessage('error', '', 'Hasło nie uległo zmianie');
+          }
+        );
     } else {
-      console.log("serror");
-      this.showRequestMessage('error','','Coś poszło nie tak');
+      this.showRequestMessage('error', '', 'Hasła różnią się od siebie');
     }
   }
 
   public deleteAccount() {
-    console.log("delete");
+    this.accountService.deleteAccount(this.userObject.userID).subscribe(
+      response => {
+        console.log(response);
+        this.showRequestMessage('success', 'Konto zostało usunięte');
+        this.lgService.logoutStorageClean();
+        setTimeout(() => {
+          this.router.navigate(['home']);
+        }, 1000);
+      },
+      error => {
+        console.log(error);
+        this.showRequestMessage('error', '', 'Konto nie zostało usunięte');
+      }
+    );
   }
 }

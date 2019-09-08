@@ -95,21 +95,13 @@ export class AppComponent implements OnInit {
     console.log(localStorage.getItem('token'));
     this.logOut_success = true;
     this.logOutMessageRender();
-    this.logoutStorageClean();
+    this.lgservice.logoutStorageClean();
     this.lgservice.ChangeLogged();
     this.router.navigate(['']);
     console.log('wylogowany');
   }
 
-  logoutStorageClean() {
-    if(storage_Avaliable('localStorage')) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('userREST');
-      localStorage.removeItem('naturalUserData');
-    } else {
-      console.log('Storage nie jest dostępny')
-    }
-  }
+  
 
   logOutMessageRender() {
     this.renderer.setStyle(this.logOutMessage.nativeElement, 'visibility', 'visible');

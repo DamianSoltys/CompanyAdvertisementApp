@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UserLog } from '../classes/User';
 import { Observable, BehaviorSubject, observable } from 'rxjs';
 import { storage_Avaliable } from '../classes/storage_checker';
+import { Route, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class LoginService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     observe: 'response' as 'response'
   };
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,private router:Router) {
 
    }
 
@@ -38,6 +39,9 @@ export class LoginService {
       localStorage.removeItem('userREST');
       localStorage.removeItem('naturalUserData');
       this.ChangeLogged();
+      setTimeout(() => {
+        this.router.navigate(['']);
+      }, 1000);
     } else {
       console.log('Storage nie jest dostępny')
     }

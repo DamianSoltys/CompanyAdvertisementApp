@@ -139,11 +139,8 @@ export class AccountDataComponent implements OnInit {
         .subscribe(
           response => {
             this.showRequestMessage('success', 'Hasło zostało zmienione');
-            console.log(window.atob(localStorage.getItem('token')));
             let newToken = window.btoa(`${this.userObject.emailAddress}:${this.form.newPassword.value}`);
-            console.log(window.atob(newToken));
             localStorage.setItem('token',newToken);
-            console.log(localStorage.getItem('token'));
             this.updateUserObject();
             this.accountDataForm.reset();
             setTimeout(() => {
@@ -165,9 +162,6 @@ export class AccountDataComponent implements OnInit {
         console.log(response);
         this.showRequestMessage('success', 'Konto zostało usunięte');
         this.lgService.logoutStorageClean();
-        setTimeout(() => {
-          this.router.navigate(['home']);
-        }, 1000);
       },
       error => {
         console.log(error);

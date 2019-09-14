@@ -92,12 +92,9 @@ export class AppComponent implements OnInit {
   }
   
   logOut() {
-    console.log(localStorage.getItem('token'));
     this.logOut_success = true;
     this.logOutMessageRender();
     this.lgservice.logoutStorageClean();
-    this.lgservice.ChangeLogged();
-    this.router.navigate(['']);
     console.log('wylogowany');
   }
 

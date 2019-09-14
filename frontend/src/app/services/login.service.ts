@@ -37,6 +37,7 @@ export class LoginService {
       localStorage.removeItem('token');
       localStorage.removeItem('userREST');
       localStorage.removeItem('naturalUserData');
+      this.ChangeLogged();
     } else {
       console.log('Storage nie jest dostępny')
     }

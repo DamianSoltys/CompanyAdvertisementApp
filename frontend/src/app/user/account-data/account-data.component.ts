@@ -139,7 +139,13 @@ export class AccountDataComponent implements OnInit {
         .subscribe(
           response => {
             this.showRequestMessage('success', 'Hasło zostało zmienione');
+            console.log(window.atob(localStorage.getItem('token')));
+            let newToken = window.btoa(`${this.userObject.emailAddress}:${this.form.newPassword.value}`);
+            console.log(window.atob(newToken));
+            localStorage.setItem('token',newToken);
+            console.log(localStorage.getItem('token'));
             this.updateUserObject();
+            this.accountDataForm.reset();
             setTimeout(() => {
               this.showAccountData();
             }, 1000);

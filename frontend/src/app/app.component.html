@@ -29,7 +29,7 @@
     </div>
     <div class="btn-group navbar__button-group">
       <button routerLink="/search" type="button" class="navbar__button-link btn btn-primary">Szukaj</button>
-      <button routerLink="" type="button" class="navbar__button-link btn btn-primary">Twoje firmy</button>     
+      <button routerLink="/user/companyData" type="button" class="navbar__button-link btn btn-primary">Twoje firmy</button>     
       <button routerLink="" type="button" class="navbar__button-link btn btn-primary">Ulubione zakłady</button>   
       <button (click)="toggleMenu(false)" type="button" class="navbar__button-link btn btn-primary" id="dropdownId">Dane użytkownika
         <ul [@showHideDropdown] = "displayDropdown.value ? 'visible':'hidden'" class="button-link__dropdown">
@@ -45,7 +45,7 @@
       </button>
       <div [@showHideMenu] = "displayHamburgerMenu.value ? 'visible':'hidden'" class="dropdown__menu">
         <button routerLink="/search" class="dropdown__item" (click)="toggleMenu()"><i class="fas fa-search item__icon"></i>Szukaj</button>
-        <button routerLink="" class="dropdown__item" (click)="toggleMenu()"><i class="fas fa-building item__icon"></i>Twoje firmy</button>
+        <button routerLink="/user/companyData" class="dropdown__item" (click)="toggleMenu()"><i class="fas fa-building item__icon"></i>Twoje firmy</button>
         <button routerLink="user/personalData" class="dropdown__item" (click)="toggleMenu()"><i class="fas fa-id-card item__icon"></i>Dane osobowe</button>
         <button routerLink="" class="dropdown__item" (click)="toggleMenu()"><i class="fas fa-synagogue item__icon"></i>Ulubione zakłady</button>
         <button class="dropdown__item" (click)="toggleMenu(); logOut()"><i class="fas fa-sign-out-alt item__icon"></i>Wyloguj</button>

@@ -1,12 +1,75 @@
-<div class="company-component container-fluid">
-  <div class="company-component__company-section"> 
-      <app-company-section companyData = "dupa"></app-company-section>
-      <app-company-section companyData = "cipa"></app-company-section>
+<!--COMPANY LIST-->
+<div class="company-component container-fluid" *ngIf="this.canShowDataList()">
+  <div class="company-component__company-section">
+    <app-company-section companyData="dupa"></app-company-section>
+    <app-company-section companyData="cipa"></app-company-section>
   </div>
 
-  <div class="company-component__button-container">
-    <button class="button-container__button--add">
+  <div class="company-component__separator"></div>
+
+  <div class="company-component__button-container" *ngIf="this.havePersonalData.getValue()">
+    <button class="btn button-container__button--add" (click)="toggleAddForm()">
       <span class="button--add__text-node">Dodaj firmę</span>
+    </button>
+  </div>
+  <div class="company-component__information-container" *ngIf="!this.havePersonalData.getValue()">
+    <span class="information-container__message--error text-danger">
+      Aby dodać firmę,musisz dodać dane osobowe!
+    </span>
+  </div>
+</div>
+
+<!--FORM-->
+<div class="company-component container-fluid" *ngIf="this.canShowAddsForm()">
+  <div class="company-component__form">
+    <form class="form__add-form">
+      elohere
+      <div class="add-form__input-container">
+          <div class="input-container__input-group">
+              <input>1
+              <input>2
+          </div>
+      </div>
+      <div class="company-component__button-container">
+        <button type="submit" class="btn button-container__button--submit">
+          <span class="button--add__text-node">Zatwierdź</span>
+        </button>
+      </div>
+    </form>
+  </div>
+  <div class="company-component__separator"></div>
+  <div class="company-component__button-container">
+    <button class="btn button-container__button--add" (click)="toggleAddForm()">
+      <span class="button--add__text-node">Wróć</span>
+    </button>
+    <button class="btn button-container__button--add" (click)="toggleWorkForm()">
+      <span class="button--add__text-node">Dodaj zakład</span>
+    </button>
+  </div>
+</div>
+
+<!--WORK-FORM-->
+<div class="company-component container-fluid" *ngIf="this.canShowWorkForm.getValue()">
+  <div class="company-component__form">
+    <form class="form__add-form">
+      elohere2
+      <div class="add-form__input-container">
+          <div class="input-container__input-group">
+            <input>1
+            <input>2
+          </div>
+      </div>
+      <div class="company-component__button-container">
+        <button type="submit" class="btn button-container__button--submit">
+          <span class="button--add__text-node">Zatwierdź</span>
+        </button>
+      </div>
+    </form>
+  </div>
+  <div class="company-component__separator"></div>
+  <div class="company-component__button-container">
+    <button class="btn button-container__button--add" (click)="toggleWorkForm()">
+      <span class="button--add__text-node">Wróć</span>
     </button>
   </div>
 </div>

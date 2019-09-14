@@ -6,6 +6,13 @@
     display: flex;
     flex-direction: column;
 
+    .company-component__form {
+        .form__add-form {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+
     .company-component__button-container {
         display: flex;
         align-self: center;       
@@ -16,7 +23,7 @@
             width:85%;
         }
 
-        .button-container__button--add {
+        .button-container__button--add,.button-container__button--submit {
             width:100%;
             height: 35px;   
             margin-bottom:5%;
@@ -30,6 +37,14 @@
                 color:white;
             }   
         }
+    }
+    .company-component__separator {
+        height: 100%;
+        border-bottom:1px solid blue;
+    }
+    .company-component__information-container {
+        display:flex;
+        align-self: center;
     }
 
     .company-component__company-section {

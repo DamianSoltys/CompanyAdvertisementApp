@@ -189,6 +189,28 @@
       margin-right: 5px;
     }
   }
+
+  .data-container__button-container {
+    display:flex;
+    justify-content: space-evenly;
+    padding: 0;
+    margin-left: 0;
+
+      .button__button--edit,.button__button--delete {    
+        width:40%;   
+        margin-bottom:5%;
+        border-radius: 50px;
+        border: 0;
+        background: linear-gradient(-45deg, #FFA63D, #FF3D77, #338AFF, #3CF0C5);
+        animation: button-background-animation 16s linear infinite;
+        background-size: 600%;
+    
+        @include phone {
+          width: 85%;
+        }    
+    }
+  } 
+
   .data-container__data-group-container {
     padding:3%;
       margin-top:2%;
@@ -236,23 +258,6 @@
       }
     }
   }
-
-  .data-container__button {
-
-    .button__button--edit {
-      width: 60%;
-      margin-bottom:5%;
-      border-radius: 50px;
-      border: 0;
-      background: linear-gradient(-45deg, #FFA63D, #FF3D77, #338AFF, #3CF0C5);
-      animation: button-background-animation 16s linear infinite;
-      background-size: 600%;
-  
-      @include phone {
-        width: 75%;
-      }
-    }
-  } 
 }
 
 

@@ -22,6 +22,16 @@ const routes: Routes = [
     loadChildren: './user/personal-data/personal-data.module#PersonalDataModule',
     canActivate: [AuthGuard]
   },
+  {
+    path: 'user/accountData',
+    loadChildren: './user/account-data/account-data.module#AccountDataModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'user/companyData',
+    loadChildren: './user/company/company.module#CompanyModule',
+    canActivate: [AuthGuard]
+  },
   {path: '**', redirectTo: 'home', pathMatch: 'full'},
 ];
 

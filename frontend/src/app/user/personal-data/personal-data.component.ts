@@ -46,7 +46,7 @@ export class PersonalDataComponent implements OnInit {
     private fb: FormBuilder,
     private pdataService: PersonalDataService,
     private renderer: Renderer2,
-    private userService:UserService,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
@@ -101,61 +101,63 @@ export class PersonalDataComponent implements OnInit {
         [Validators.required, Validators.pattern(new RegExp(/^[0-9]+$/))]
       ]
     });
+
     this.userObject = JSON.parse(localStorage.getItem('userREST'));
     this.checkForPersonalData();
-    this.updateUserObject();
   }
 
   private checkForPersonalData() {
     if (this.checkIfPersonalDataStorage()) {
-      console.log('git');
-      this.naturalUserDataObject = this.getPersonalDataStorage();
-      this.showPersonalData();
-      console.log(this.userObject);
+      this.naturalUserDataObject = this.getPersonalDataStorage();     
+        setTimeout(() => {
+          this.showPersonalData();
+        }, 1000);     
     } else {
       this.getPersonalDataServer();
     }
   }
 
-  public showPersonalData(e?:Event) {
-    if(e) {
+  public showPersonalData(e?: Event) {
+    if (e) {
       e.preventDefault();
     }
-
+    this.clearRequestMessage();
     this.showAddingForm.next(false);
     this.showEditingForm.next(false);
     this.showData.next(true);
   }
-  
+
   public showEditForm() {
+    this.clearRequestMessage();
     this.showData.next(false);
     this.showAddingForm.next(false);
     this.showEditingForm.next(true);
   }
   public showAddForm() {
+    this.clearRequestMessage();
     this.showData.next(false);
     this.showAddingForm.next(true);
     this.showEditingForm.next(false);
   }
 
   private getPersonalDataServer() {
-    if(this.userObject.naturalPersonID){
-    this.pdataService
-      .getPersonalData(this.userObject.userID, this.userObject.naturalPersonID)
-      .subscribe(
-        response => {
-          this.naturalUserDataObject = response.body as PersonalData;
-            console.log('Dane pobrane z servera');
+    if (this.userObject.naturalPersonID) {
+      this.pdataService
+        .getPersonalData(
+          this.userObject.userID,
+          this.userObject.naturalPersonID
+        )
+        .subscribe(
+          response => {
+            this.naturalUserDataObject = response.body as PersonalData;
             this.setStoragePersonalData(this.naturalUserDataObject);
-            this.showPersonalData();
-        },
-        error => {
-          if (error.status === 404 || error.status === 400) {
-            this.naturalUserDataObject = {} as PersonalData;
-            this.showAddForm();
-          } 
-        }
-      );
+            this.checkForPersonalData();
+          },
+          error => {
+              this.naturalUserDataObject = {} as PersonalData;
+              this.showAddForm();
+          }
+        );
     } else {
       this.naturalUserDataObject = {} as PersonalData;
       this.showAddForm();
@@ -163,33 +165,21 @@ export class PersonalDataComponent implements OnInit {
   }
 
   private showRequestMessage(
-    context: string,
     type: string,
     successMessage: string = this.successMessageText,
     errorMessage: string = this.errorMessageText
   ) {
-    switch (context) {
-      case 'get': {
-        if (type === 'success') {
-          this.successMessage = successMessage;
-          this.errorMessage = '';
-        } else {
-          this.successMessage = '';
-          this.errorMessage = errorMessage;
-        }
-        break;
-      }
-      case 'post': {
-        if (type === 'success') {
-          this.successMessage = successMessage;
-          this.errorMessage = '';
-        } else {
-          this.successMessage = '';
-          this.errorMessage = errorMessage;
-        }
-        break;
-      }
+    if (type === 'success') {
+      this.successMessage = successMessage;
+      this.errorMessage = '';
+    } else {
+      this.successMessage = '';
+      this.errorMessage = errorMessage;
     }
+  }
+  private clearRequestMessage() {
+    this.successMessage = '';
+    this.errorMessage = '';
   }
 
   private getPersonalDataStorage(): PersonalData {
@@ -214,16 +204,17 @@ export class PersonalDataComponent implements OnInit {
   }
 
   private setStoragePersonalData(PersonalDataObject: PersonalData) {
-    if (
-      storage_Avaliable('localStorage')
-    ) {
+    if (storage_Avaliable('localStorage')) {
       localStorage.setItem(
         'naturalUserData',
         JSON.stringify(PersonalDataObject)
       );
-      console.log('Dane zostały zapisane do magazynu!');
-    } else {
-      console.log('Zapisanie danych nie powiodło się, bądz są już zapisane');
+    } 
+  }
+
+  private deleteStoragePersonalData() {
+    if (storage_Avaliable('localStorage')) {
+      localStorage.removeItem('naturalUserData');
     }
   }
 
@@ -236,27 +227,26 @@ export class PersonalDataComponent implements OnInit {
   }
 
   public onSubmit() {
-    console.log(this.personalDataForm.value)
-    if(!this.showEditingForm.getValue()){
+    if (!this.showEditingForm.getValue()) {
       this.checkIfPostDataSuccess();
     } else {
       this.checkIfEditDataSuccess();
     }
-    
   }
 
   updateUserObject() {
-    this.userService.getActualUser(this.userObject.userID).subscribe(response =>{
-      console.log(response);
-      if (storage_Avaliable('localStorage')) {
-        const userNewObject: UserREST = response.body;      
-        localStorage.setItem('userREST', JSON.stringify(userNewObject));
-      } else {
-        console.log('Nie udało się zapisać nowych danych usera');
-      }  
-    },error =>{
-      console.log(error);
-    });
+    this.userService.getActualUser(this.userObject.userID).subscribe(
+      response => {
+        if (storage_Avaliable('localStorage')) {
+          const userNewObject: UserREST = response.body;
+          localStorage.setItem('userREST', JSON.stringify(userNewObject));
+          this.userObject = JSON.parse(localStorage.getItem('userREST'));
+        } 
+      },
+      error => {
+        console.log(error);
+      }
+    );
   }
 
   private checkIfPostDataSuccess() {
@@ -267,43 +257,60 @@ export class PersonalDataComponent implements OnInit {
       )
       .subscribe(
         (response: HttpResponse<any>) => {
-            console.log(response);
-            this.showRequestMessage('post', 'success', 'Dane zostały zapisane');
-            this.setStoragePersonalData(this.personalDataForm.value);
-            this.personalDataForm.reset();
-            this.naturalUserDataObject = this.personalDataForm.value;
-            this.updateUserObject();
-            this.showPersonalData(); 
+          this.showRequestMessage('success', 'Dane zostały zapisane');
+          this.setStoragePersonalData(this.personalDataForm.value);
+          this.personalDataForm.reset();       
+          this.updateUserObject();
+          this.checkForPersonalData();
         },
         error => {
           console.log(error);
-          this.showRequestMessage('post', 'error');
+          this.showRequestMessage('error');
         }
       );
   }
 
   private checkIfEditDataSuccess() {
     this.pdataService
-    .editPersonalData(
-      this.personalDataForm.value as PersonalData,
-      this.userObject.userID,
-      this.userObject.naturalPersonID
-    )
-    .subscribe(
-      (response: HttpResponse<any>) => {
-          console.log(response);
-          this.showRequestMessage('post', 'success', 'Dane zostały zapisane');
+      .editPersonalData(
+        this.personalDataForm.value as PersonalData,
+        this.userObject.userID,
+        this.userObject.naturalPersonID
+      )
+      .subscribe(
+        (response: HttpResponse<any>) => {
+          this.showRequestMessage('success', 'Dane uległy edycji');
           this.setStoragePersonalData(this.personalDataForm.value);
           this.personalDataForm.reset();
-          localStorage.removeItem('naturalUserData');
+          this.deleteStoragePersonalData();
           this.checkForPersonalData();
-          this.showPersonalData();      
-      },
-      error => {
-        console.log(error);
-        console.log(this.personalDataForm.value);
-        this.showRequestMessage('post', 'error');
-      }
-    );
+        },
+        error => {
+          console.log(error);
+          this.showRequestMessage('error');
+        }
+      );
+  }
+
+  public deleteData() {
+    this.pdataService
+      .deletePersonalData(
+        this.userObject.userID,
+        this.userObject.naturalPersonID
+      )
+      .subscribe(
+        response => {
+          this.showRequestMessage('success', 'Dane zostały usunięte');
+          this.updateUserObject();
+          this.deleteStoragePersonalData();
+          setTimeout(() => {
+            this.showAddForm();
+          }, 1000);
+        },
+        error => {
+          console.log(error);
+          this.showRequestMessage('error', 'Nie udało się usunąć danych');
+        }
+      );
   }
 }

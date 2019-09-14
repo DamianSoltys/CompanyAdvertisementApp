@@ -40,6 +40,18 @@ import { storage_Avaliable } from './classes/storage_checker';
       ]),
 
     ]),
+    trigger('showHideDropdown', [
+      state('visible', style({
+        transform:'scaleY(1)',
+      })),
+      state('hidden', style({
+        transform:'scaleY(0)',
+      })),
+      transition('visible <=> hidden', [
+        animate('.2s')
+      ]),
+
+    ]),
   ],
 })
 export class AppComponent implements OnInit {
@@ -48,12 +60,16 @@ export class AppComponent implements OnInit {
   logged = false;
   visible = true;
   logOut_success = false;
-  displayMenu = new BehaviorSubject(false);
+  displayHamburgerMenu = new BehaviorSubject(false);
+  displayDropdown = new BehaviorSubject(false);
   constructor(private lgservice: LoginService, private router: Router, private renderer: Renderer2) {
     document.body.addEventListener('click', (e) => {
      if ((<HTMLElement>e.target).id !== 'menuId') {
-       this.displayMenu.next(false);
+       this.displayHamburgerMenu.next(false);
      }
+     if ((<HTMLElement>e.target).id !== 'dropdownId') {
+       this.displayDropdown.next(false);
+    }
     });
   }
 
@@ -67,29 +83,22 @@ export class AppComponent implements OnInit {
     this.nearby_toggle = !this.nearby_toggle;
     this.visible = !this.visible;
   }
-  toggleMenu() {
-    this.displayMenu.next(!this.displayMenu.value);
+  toggleMenu(mobile?:boolean) {
+    if(!mobile) {
+      this.displayDropdown.next(!this.displayDropdown.value);
+    } else {
+      this.displayHamburgerMenu.next(!this.displayHamburgerMenu.value);
+    }
   }
   
   logOut() {
-    console.log(localStorage.getItem('token'));
     this.logOut_success = true;
     this.logOutMessageRender();
-    this.logoutStorageClean();
-    this.lgservice.ChangeLogged();
-    this.router.navigate(['']);
+    this.lgservice.logoutStorageClean();
     console.log('wylogowany');
   }
 
-  logoutStorageClean() {
-    if(storage_Avaliable('localStorage')) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('userREST');
-      localStorage.removeItem('naturalUserData');
-    } else {
-      console.log('Storage nie jest dostępny')
-    }
-  }
+  
 
   logOutMessageRender() {
     this.renderer.setStyle(this.logOutMessage.nativeElement, 'visibility', 'visible');

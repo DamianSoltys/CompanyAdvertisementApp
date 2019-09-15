@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
+import { voivodeships } from 'src/app/classes/Voivodeship';
 
 @Component({
   selector: 'app-company',
@@ -11,6 +12,7 @@ export class CompanyComponent implements OnInit {
   public havePersonalData = new BehaviorSubject(false);
   public canShowAddForm = new BehaviorSubject(false);
   public canShowWorkForm = new BehaviorSubject(false);
+  public _voivodeships = voivodeships;
   constructor() { }
 
   ngOnInit() {

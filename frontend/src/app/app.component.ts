@@ -3,6 +3,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LoginService } from './services/login.service';
 import { Router } from '@angular/router';
+import { storage_Avaliable } from './classes/storage_checker';
 
 @Component({
   selector: 'app-root',
@@ -27,14 +28,24 @@ import { Router } from '@angular/router';
     ]),
     trigger('showHideMenu', [
       state('visible', style({
-        //visibility:'visible',
         transform:'scaleY(1)',
         top:'48px'
       })),
       state('hidden', style({
-        //visibility:'hidden',
         transform:'scaleY(0)',
         top:'-200px'
+      })),
+      transition('visible <=> hidden', [
+        animate('.2s')
+      ]),
+
+    ]),
+    trigger('showHideDropdown', [
+      state('visible', style({
+        transform:'scaleY(1)',
+      })),
+      state('hidden', style({
+        transform:'scaleY(0)',
       })),
       transition('visible <=> hidden', [
         animate('.2s')
@@ -49,15 +60,19 @@ export class AppComponent implements OnInit {
   logged = false;
   visible = true;
   logOut_success = false;
-  displayMenu = new BehaviorSubject(false);
+  displayHamburgerMenu = new BehaviorSubject(false);
+  displayDropdown = new BehaviorSubject(false);
   constructor(private lgservice: LoginService, private router: Router, private renderer: Renderer2) {
     document.body.addEventListener('click', (e) => {
      if ((<HTMLElement>e.target).id !== 'menuId') {
-       this.displayMenu.next(false);
+       this.displayHamburgerMenu.next(false);
      }
-
+     if ((<HTMLElement>e.target).id !== 'dropdownId') {
+       this.displayDropdown.next(false);
+    }
     });
   }
+
   ngOnInit(): void {
     this.lgservice.Logged.subscribe(value => {
     this.logged = value;
@@ -68,21 +83,28 @@ export class AppComponent implements OnInit {
     this.nearby_toggle = !this.nearby_toggle;
     this.visible = !this.visible;
   }
-  toggleMenu() {
-    this.displayMenu.next(!this.displayMenu.value);
+  toggleMenu(mobile?:boolean) {
+    if(!mobile) {
+      this.displayDropdown.next(!this.displayDropdown.value);
+    } else {
+      this.displayHamburgerMenu.next(!this.displayHamburgerMenu.value);
+    }
   }
+  
   logOut() {
-    console.log(localStorage.getItem('token'));
     this.logOut_success = true;
+    this.logOutMessageRender();
+    this.lgservice.logoutStorageClean();
+    console.log('wylogowany');
+  }
+
+  
+
+  logOutMessageRender() {
     this.renderer.setStyle(this.logOutMessage.nativeElement, 'visibility', 'visible');
     setTimeout(() => {
       this.logOut_success = false;
       this.renderer.setStyle(this.logOutMessage.nativeElement, 'visibility', 'hidden');
     }, 1000);
-    localStorage.removeItem('token');
-    localStorage.removeItem('userREST');
-    this.lgservice.ChangeLogged();
-    this.router.navigate(['']);
-    console.log('wylogowany');
   }
 }

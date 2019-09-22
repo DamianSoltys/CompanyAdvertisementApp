@@ -1,0 +1,20 @@
+@import '../../../commonStyles/shared';
+
+.company-section__company-container {
+    height:10vh;
+    border:1px solid blue;
+    margin: 5px;
+    display:flex;
+    
+    .company-container__company-data {
+        flex:1;
+    }
+
+    .company-container__company-action {
+        flex:1;
+    }
+
+    .company-container__company-rating {
+        flex:1;
+    }
+}

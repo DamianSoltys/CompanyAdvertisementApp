@@ -8,6 +8,6 @@ import org.springframework.security.core.Authentication;
 public interface UserAuthenticationService {
     void registerNewUser(UserRegistrationDto userRegistrationDto);
 
-    UserInfoDto login(LoginDto userDto, Long userId, Authentication authentication);
+    UserInfoDto login(LoginDto userDto, Authentication authentication);
     boolean confirmUser(String token);
 }

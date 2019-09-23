@@ -69,11 +69,11 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
     }
 
     @Override
-    public UserInfoDto login(LoginDto loginDto, Long userId, Authentication authentication) {
+    public UserInfoDto login(LoginDto loginDto, Authentication authentication) {
         try {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            return this.userPersistenceService.getUserInfo(userId);
+            return this.userPersistenceService.getUserInfo(this.userPersistenceService.getUserIdByEmail(loginDto.getEmail()));
 
         } catch (AuthenticationException e) {
             throw new BadLoginDataException();

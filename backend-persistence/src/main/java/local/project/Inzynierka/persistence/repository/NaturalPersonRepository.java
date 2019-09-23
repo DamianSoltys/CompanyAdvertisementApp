@@ -3,9 +3,11 @@ package local.project.Inzynierka.persistence.repository;
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.NaturalPerson;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface NaturalPersonRepository extends ApplicationBigRepository<NaturalPerson> {
 
     NaturalPerson findByPhoneNo(String phoneNo);

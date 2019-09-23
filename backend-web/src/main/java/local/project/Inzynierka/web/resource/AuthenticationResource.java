@@ -1,6 +1,5 @@
 package local.project.Inzynierka.web.resource;
 
-import local.project.Inzynierka.auth.AuthFacade;
 import local.project.Inzynierka.auth.AuthorizationHeader;
 import local.project.Inzynierka.auth.UserPrincipal;
 import local.project.Inzynierka.servicelayer.dto.LoginDto;
@@ -38,13 +37,11 @@ public class AuthenticationResource {
 
     private final UserAuthenticationService authenticationService;
     private final ApplicationEventPublisher eventPublisher;
-    private final AuthFacade authFacade;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResource(UserAuthenticationService authenticationService, ApplicationEventPublisher eventPublisher, AuthFacade authFacade, AuthenticationManager authenticationManager) {
+    public AuthenticationResource(UserAuthenticationService authenticationService, ApplicationEventPublisher eventPublisher, AuthenticationManager authenticationManager) {
         this.authenticationService = authenticationService;
         this.eventPublisher = eventPublisher;
-        this.authFacade = authFacade;
         this.authenticationManager = authenticationManager;
     }
 
@@ -84,7 +81,8 @@ public class AuthenticationResource {
                     new UserPrincipal(usernamePasswordAuthentication), usernamePasswordAuthentication.getPassword());
 
             Authentication authentication = authenticationManager.authenticate(loginToken);
-            userInfo = authenticationService.login(loginDto, this.authFacade.getAuthenticatedUser().getId(), authentication);
+
+            userInfo = authenticationService.login(loginDto, authentication);
 
         } catch (BadLoginDataException e) {
             return ResponseEntity.status(e.getStatus()).body(e.getMessage());
@@ -104,8 +102,8 @@ public class AuthenticationResource {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/auth/registration/confirm")
-    public ResponseEntity<String> confirmRegistration(@RequestParam(name = "token") String token ) {
-        if( authenticationService.confirmUser(token)) {
+    public ResponseEntity<String> confirmRegistration(@RequestParam(name = "token") String token) {
+        if (authenticationService.confirmUser(token)) {
             return ResponseEntity.ok().body(SimpleJsonFromStringCreator.toJson(CONFIRMATION_MESSAGE));
         }
         return ResponseEntity.ok().body(SimpleJsonFromStringCreator.toJson(WRONG_TOKEN));

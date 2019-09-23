@@ -51,4 +51,8 @@ public class UserPersistenceService {
     public List<Long> getSubscriptionsOfUser(Long id) {
         return this.userRepository.getSubscriptionsOfUser(id);
     }
+
+    public Long getUserIdByEmail(String email) {
+        return this.userRepository.getUserIdByEmail(email);
+    }
 }

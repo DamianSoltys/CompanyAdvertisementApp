@@ -22,7 +22,7 @@
 <!--FORM-->
 <div class="company-component container-fluid" *ngIf="this.canShowAddsForm()">
   <div class="company-component__form">
-    <form class="form__add-form">
+    <form class="form__add-form" (ngSubmit)="onSubmit($event)">
       <div class="add-form__header">
         <span class="header__text-node">Dane firmowe</span>
       </div>
@@ -34,22 +34,22 @@
             <div class="input-group__inputs">
                 <div class="inputs__input-container">
                   <label class="input-container__label" for="city">Miasto</label>
-                  <input name="city" type="text" class="input-container__input">
+                  <input name="city" type="text" class="input-container__input form-control">
                   <div class="input-container__error-container">
 
                   </div>
                 </div>
                 <div class="inputs__input-container">
                     <label class="input-container__label" for="street">Ulica</label>
-                    <input name="street" type="text" class="input-container__input">
+                    <input name="street" type="text" class="input-container__input form-control">
                     <div class="input-container__error-container">
   
                     </div>
                   </div>
-                  <div class="inputs__input-container">
+                  <div class="inputs__input-container select-wrapper">
                       <div class="input-container__select-wrapper">
                           <label class="input-container__label" for="voivodeship">Województwo</label>
-                          <select  name="voivodeship" class="section-wrapper__select-input">
+                          <select  name="voivodeship" class="form-control select-wrapper__select-input">
                             <option class="select-input__option" *ngFor="let item of _voivodeships">{{item}}</option>
                           </select>
                         </div>
@@ -59,14 +59,14 @@
                     </div>
                     <div class="inputs__input-container">
                         <label class="input-container__label" for="buildingNo">Nr.Budynku</label>
-                        <input name="buildingNo" type="text" class="input-container__input">
+                        <input name="buildingNo" type="text" class="input-container__input form-control">
                         <div class="input-container__error-container">
       
                         </div>
                       </div>
                       <div class="inputs__input-container">
                           <label class="input-container__label" for="apartmentNo">Nr.Siedziby</label>
-                          <input name="apartmentNo" type="text" class="input-container__input">
+                          <input name="apartmentNo" type="text" class="input-container__input form-control">
                           <div class="input-container__error-container">
         
                           </div>
@@ -80,15 +80,15 @@
               <div class="input-group__inputs">
                   <div class="inputs__input-container">
                       <label class="input-container__label" for="name">Nazwa</label>
-                      <input name="name" type="text" class="input-container__input">
+                      <input name="name" type="text" class="input-container__input form-control">
                       <div class="input-container__error-container">
     
                       </div>
                     </div>
-                  <div class="inputs__input-container">
+                  <div class="inputs__input-container select-wrapper">
                       <div class="input-container__select-wrapper">
                           <label class="input-container__label" for="category">Kategoria</label>
-                          <select  name="category" class="section-wrapper__select-input">
+                          <select  name="category" class="form-control select-wrapper__select-input">
                             <option class="select-input__option" *ngFor="let item of _voivodeships">{{item}}</option>
                           </select>
                         </div>
@@ -98,21 +98,21 @@
                     </div>
                     <div class="inputs__input-container">
                         <label class="input-container__label" for="url">Strona firmy</label>
-                        <input name="url" type="text" class="input-container__input">
+                        <input name="url" type="text" class="input-container__input form-control">
                         <div class="input-container__error-container">
       
                         </div>
                       </div>                    
                         <div class="inputs__input-container">
                             <label class="input-container__label" for="NIP">NIP</label>
-                            <input name="NIP" type="text" class="input-container__input">
+                            <input name="NIP" type="text" class="input-container__input form-control">
                             <div class="input-container__error-container">
           
                             </div>
                           </div>
                           <div class="inputs__input-container">
                               <label class="input-container__label" for="REGON">REGON</label>
-                              <input name="REGON" type="text" class="input-container__input">
+                              <input name="REGON" type="text" class="input-container__input form-control">
                               <div class="input-container__error-container">
             
                               </div>
@@ -147,19 +147,58 @@
 <!--WORK-FORM-->
 <div class="company-component container-fluid" *ngIf="this.canShowWorkForm.getValue()">
   <div class="company-component__form">
-    <form class="form__add-form">
+    <form class="form__add-form" (ngSubmit)="onSubmit($event)">
         <div class="add-form__header">
             <span class="header__text-node">Dane zakładu</span>
           </div>
       <div class="add-form__input-container">
           <div class="input-container__input-group">
-              <div class="input-group__header">
-                <span class="header__text-node">Dane adresowe</span>
-              </div>
-              <div class="input-group__inputs">
-                  <input>1
-                  <input>2
-              </div>         
+              <div class="input-container__input-group">
+                  <div class="input-group__header">
+                    <span class="header__text-node">Dane adresowe</span>
+                  </div>
+                  <div class="input-group__inputs">
+                      <div class="inputs__input-container">
+                        <label class="input-container__label" for="city">Miasto</label>
+                        <input name="city" type="text" class="input-container__input form-control">
+                        <div class="input-container__error-container">
+      
+                        </div>
+                      </div>
+                      <div class="inputs__input-container">
+                          <label class="input-container__label" for="street">Ulica</label>
+                          <input name="street" type="text" class="input-container__input form-control">
+                          <div class="input-container__error-container">
+        
+                          </div>
+                        </div>
+                        <div class="inputs__input-container select-wrapper">
+                            <div class="input-container__select-wrapper">
+                                <label class="input-container__label" for="voivodeship">Województwo</label>
+                                <select  name="voivodeship" class="form-control select-wrapper__select-input">
+                                  <option class="select-input__option" *ngFor="let item of _voivodeships">{{item}}</option>
+                                </select>
+                              </div>
+                              <div class="input-container__error-container">
+        
+                              </div>
+                          </div>
+                          <div class="inputs__input-container">
+                              <label class="input-container__label" for="buildingNo">Nr.Budynku</label>
+                              <input name="buildingNo" type="text" class="input-container__input form-control">
+                              <div class="input-container__error-container">
+            
+                              </div>
+                            </div>
+                            <div class="inputs__input-container">
+                                <label class="input-container__label" for="apartmentNo">Nr.Siedziby</label>
+                                <input name="apartmentNo" type="text" class="input-container__input form-control">
+                                <div class="input-container__error-container">
+              
+                                </div>
+                              </div>
+                  </div>         
+                </div>       
             </div>
             <div class="input-container__input-group">
                 <div class="input-group__header">
@@ -183,5 +222,8 @@
     <button class="btn button-container__button--add" (click)="toggleWorkForm()">
       <span class="button--add__text-node">Wróć</span>
     </button>
+    <button class="btn button-container__button--add" (click)="addAnotherWork()">
+        <span class="button--add__text-node">Następny zakład</span>
+      </button>
   </div>
 </div>

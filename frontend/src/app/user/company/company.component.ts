@@ -19,6 +19,14 @@ export class CompanyComponent implements OnInit {
     this.checkForPersonalData();
   }
 
+  public addAnotherWork() {
+    console.log("kolejny form");
+  }
+  public onSubmit(event:Event) {
+    event.preventDefault();
+    console.log("submit")
+  }
+
   private checkForPersonalData() {
     if(storage_Avaliable('localStorage') && localStorage.getItem('naturalUserData')) {
       this.havePersonalData.next(true);

@@ -1,6 +1,7 @@
 package local.project.Inzynierka.servicelayer.rating.listener;
 
 import local.project.Inzynierka.servicelayer.rating.event.CommentCreatedEvent;
+import local.project.Inzynierka.servicelayer.rating.event.CommentDeletedEvent;
 import local.project.Inzynierka.servicelayer.rating.event.CommentEditedEvent;
 import local.project.Inzynierka.servicelayer.services.CommentService;
 import org.springframework.context.event.EventListener;
@@ -24,5 +25,11 @@ public class CommentsEventListener {
     @EventListener
     public void handleCommentEdition(CommentEditedEvent event) {
         this.commentService.editComment(event);
+    }
+
+    @Async
+    @EventListener
+    public void handleCommentDeletion(CommentDeletedEvent event) {
+        this.commentService.deleteComment(event);
     }
 }

@@ -4,6 +4,7 @@ import local.project.Inzynierka.auth.AuthFacade;
 import local.project.Inzynierka.servicelayer.dto.CreateCommentDto;
 import local.project.Inzynierka.servicelayer.dto.EditCommentDto;
 import local.project.Inzynierka.servicelayer.rating.event.CommentCreatedEvent;
+import local.project.Inzynierka.servicelayer.rating.event.CommentDeletedEvent;
 import local.project.Inzynierka.servicelayer.rating.event.CommentEditedEvent;
 import local.project.Inzynierka.shared.UserAccount;
 import org.springframework.context.ApplicationEventPublisher;
@@ -47,5 +48,11 @@ public class CommentResource {
                 .newCommentContent(editCommentDto.getComment())
                 .build();
         applicationEventPublisher.publishEvent(commentEditedEvent);
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/comment/{id}")
+    public void deleteComment(@PathVariable(value = "id") Long commentId) {
+
+        applicationEventPublisher.publishEvent(new CommentDeletedEvent(commentId));
     }
 }

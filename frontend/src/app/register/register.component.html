@@ -36,7 +36,7 @@
         <p class="text-danger error-container__text-danger" *ngIf="regForm.checkpassword.errors.required">Pole nie może być puste</p>
       </div>    </div>
       <button class="btn btn-primary register-form__button--submit" type="submit" [disabled]="!registerForm.valid">Zarejestruj</button>
-      <div class="text-center input-group__error-container" *ngIf="passwordMatch">
+      <div class="text-center input-group__error-container" *ngIf="passwordMatchError">
       <p class="text-danger error-container__text-danger">Hasła muszą być identyczne!</p>
     </div>
     <div *ngIf="register_error" class="input-group__error-container">

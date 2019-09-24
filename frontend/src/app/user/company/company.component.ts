@@ -12,51 +12,59 @@ export class CompanyComponent implements OnInit {
   public havePersonalData = new BehaviorSubject(false);
   public canShowAddForm = new BehaviorSubject(false);
   public canShowWorkForm = new BehaviorSubject(false);
+  //dodać formularze do firmy/zakładu
+  //funkcja do dodawania wielu zakładów dla jednej firmy
+  //edycja/usuwanie firmy/zakładu
+  //profil zakładu-wyświetlanie oddzielny komponent wraz do wyszukiwarki
   public _voivodeships = voivodeships;
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
     this.checkForPersonalData();
   }
 
   public addAnotherWork() {
-    console.log("kolejny form");
+    console.log('kolejny form');
   }
-  public onSubmit(event:Event) {
+  public onSubmit(event: Event) {
     event.preventDefault();
-    console.log("submit")
+    console.log('submit');
   }
 
   private checkForPersonalData() {
-    if(storage_Avaliable('localStorage') && localStorage.getItem('naturalUserData')) {
+    if (
+      storage_Avaliable('localStorage') &&
+      localStorage.getItem('naturalUserData')
+    ) {
       this.havePersonalData.next(true);
-      console.log("są dane");
+      console.log('są dane');
     } else {
       this.havePersonalData.next(false);
     }
   }
+
   public toggleAddForm() {
     this.canShowWorkForm.next(false);
     this.canShowAddForm.next(!this.canShowAddForm.value);
   }
+  
   public toggleWorkForm() {
     this.canShowWorkForm.next(!this.canShowWorkForm.value);
   }
 
   public canShowDataList() {
-    if(!this.canShowAddForm.value && !this.canShowWorkForm.value) {
+    if (!this.canShowAddForm.value && !this.canShowWorkForm.value) {
       return true;
-    }else {
+    } else {
       return false;
     }
   }
 
   public canShowAddsForm() {
-    if(this.canShowAddForm.value && !this.canShowWorkForm.value) {
+    if (this.canShowAddForm.value && !this.canShowWorkForm.value) {
       return true;
-    }else {
+    } else {
       return false;
     }
   }
-
 }

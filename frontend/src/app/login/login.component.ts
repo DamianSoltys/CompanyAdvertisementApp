@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
         console.log(data.headers.get('Authorization'));
         if (data.status === 200) {
           this.login_error = false;
-          this.success_message = 'Pomyślnie zalogowano';
+          this.showRequestMessage('error','Pomyślnie zalogowano!','');
           this.login_success = true;
 
           setTimeout(() => {
@@ -60,10 +60,24 @@ export class LoginComponent implements OnInit {
       },
       error => {
         console.log(error);
-        this.error_message = error.error;
+        this.showRequestMessage('error','','Coś poszło nie tak!');
         this.login_error = true;
       }
     );
+  }
+
+  private showRequestMessage(
+    type: string,
+    successMessage: string = this.success_message,
+    errorMessage: string = this.error_message
+  ) {
+    if (type === 'success') {
+      this.success_message = successMessage;
+      this.error_message = '';
+    } else {
+      this.success_message = '';
+      this.error_message = errorMessage;
+    }
   }
 
   setUserData(): UserLog {
@@ -84,7 +98,7 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['']);
       console.log('Użytkownik został zalogowany');
     } else {
-      this.error_message = 'Coś poszło nie tak!';
+      this.showRequestMessage('error','','Coś poszło nie tak!');
       this.login_error = true;
     }
   }

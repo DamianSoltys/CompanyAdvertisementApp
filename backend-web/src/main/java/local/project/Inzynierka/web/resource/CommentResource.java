@@ -2,9 +2,12 @@ package local.project.Inzynierka.web.resource;
 
 import local.project.Inzynierka.auth.AuthFacade;
 import local.project.Inzynierka.servicelayer.dto.CreateCommentDto;
+import local.project.Inzynierka.servicelayer.dto.EditCommentDto;
 import local.project.Inzynierka.servicelayer.rating.event.CommentCreatedEvent;
+import local.project.Inzynierka.servicelayer.rating.event.CommentEditedEvent;
 import local.project.Inzynierka.shared.UserAccount;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,5 +37,15 @@ public class CommentResource {
                 .commentContent(createCommentDto.getComment())
                 .build();
         applicationEventPublisher.publishEvent(commentCreatedEvent);
+    }
+
+    @RequestMapping(method = RequestMethod.PATCH, value = "/comment/{id}")
+    public void editComment(@RequestBody final EditCommentDto editCommentDto, @PathVariable(value = "id") Long commentId) {
+
+        CommentEditedEvent commentEditedEvent = CommentEditedEvent.builder()
+                .commentId(commentId)
+                .newCommentContent(editCommentDto.getComment())
+                .build();
+        applicationEventPublisher.publishEvent(commentEditedEvent);
     }
 }

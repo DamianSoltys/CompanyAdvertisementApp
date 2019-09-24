@@ -5,7 +5,9 @@ import local.project.Inzynierka.persistence.entity.Comment;
 import local.project.Inzynierka.persistence.entity.User;
 import local.project.Inzynierka.persistence.repository.CommentRepository;
 import local.project.Inzynierka.servicelayer.rating.event.CommentCreatedEvent;
+import local.project.Inzynierka.servicelayer.rating.event.CommentEditedEvent;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CommentService {
@@ -19,6 +21,7 @@ public class CommentService {
         this.userFacade = userFacade;
     }
 
+    @Transactional
     public void createComment(CommentCreatedEvent event) {
         User user = this.userFacade.findByName(event.getUserName());
         Branch branch = Branch.builder().id(event.getBranchId()).build();
@@ -32,4 +35,8 @@ public class CommentService {
         this.commentRepository.save(comment);
     }
 
+    @Transactional
+    public void editComment(CommentEditedEvent event) {
+        this.commentRepository.updateComment(event.getCommentId(), event.getNewCommentContent());
+    }
 }

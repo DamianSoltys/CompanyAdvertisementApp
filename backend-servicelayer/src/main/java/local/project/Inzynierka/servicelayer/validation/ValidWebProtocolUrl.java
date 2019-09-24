@@ -1,4 +1,4 @@
-package local.project.Inzynierka.shared;
+package local.project.Inzynierka.servicelayer.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

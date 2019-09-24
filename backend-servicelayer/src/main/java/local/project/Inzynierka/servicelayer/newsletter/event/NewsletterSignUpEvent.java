@@ -4,13 +4,13 @@ import local.project.Inzynierka.persistence.entity.NewsletterSubscription;
 import lombok.ToString;
 
 @ToString
-public class OnNewsletterSignUpEvent {
+public class NewsletterSignUpEvent {
 
     private final NewsletterSubscription newsletterSubscription;
     private final String appUrl;
     private final boolean verified;
 
-    public OnNewsletterSignUpEvent(NewsletterSubscription newsletterSubscription, String appUrl, boolean verified) {
+    public NewsletterSignUpEvent(NewsletterSubscription newsletterSubscription, String appUrl, boolean verified) {
         this.appUrl = appUrl;
         this.newsletterSubscription = newsletterSubscription;
         this.verified = verified;

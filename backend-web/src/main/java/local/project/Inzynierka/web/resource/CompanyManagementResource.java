@@ -4,7 +4,7 @@ import local.project.Inzynierka.auth.AuthFacade;
 import local.project.Inzynierka.servicelayer.dto.AddCompanyDto;
 import local.project.Inzynierka.servicelayer.dto.NewsletterItemDto;
 import local.project.Inzynierka.servicelayer.dto.UpdateCompanyInfoDto;
-import local.project.Inzynierka.servicelayer.newsletter.event.OnCreatingNewsletterMailEvent;
+import local.project.Inzynierka.servicelayer.newsletter.event.CreatingNewsletterMailEvent;
 import local.project.Inzynierka.servicelayer.services.CompanyManagementPermissionService;
 import local.project.Inzynierka.servicelayer.services.CompanyManagementService;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
@@ -81,7 +81,7 @@ public class CompanyManagementResource {
         }
 
         this.applicationEventPublisher.publishEvent(
-                new OnCreatingNewsletterMailEvent(
+                new CreatingNewsletterMailEvent(
                         newsletterItemDto.getMessage(),
                         newsletterItemDto.getSubject(),
                         request.getHeader(ORIGIN_HEADER),

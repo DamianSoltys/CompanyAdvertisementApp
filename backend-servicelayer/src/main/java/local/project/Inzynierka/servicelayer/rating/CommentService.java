@@ -1,4 +1,4 @@
-package local.project.Inzynierka.servicelayer.services;
+package local.project.Inzynierka.servicelayer.rating;
 
 import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.persistence.entity.Comment;
@@ -7,6 +7,7 @@ import local.project.Inzynierka.persistence.repository.CommentRepository;
 import local.project.Inzynierka.servicelayer.rating.event.CommentCreatedEvent;
 import local.project.Inzynierka.servicelayer.rating.event.CommentDeletedEvent;
 import local.project.Inzynierka.servicelayer.rating.event.CommentEditedEvent;
+import local.project.Inzynierka.servicelayer.services.UserFacade;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

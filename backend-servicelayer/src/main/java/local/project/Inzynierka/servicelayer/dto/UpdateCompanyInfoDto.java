@@ -1,7 +1,7 @@
 package local.project.Inzynierka.servicelayer.dto;
 
-import local.project.Inzynierka.shared.NullOrNotBlank;
-import local.project.Inzynierka.shared.ValidWebProtocolUrl;
+import local.project.Inzynierka.servicelayer.validation.NullOrNotBlank;
+import local.project.Inzynierka.servicelayer.validation.ValidWebProtocolUrl;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

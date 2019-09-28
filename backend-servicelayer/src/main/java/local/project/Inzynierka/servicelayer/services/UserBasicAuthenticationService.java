@@ -17,9 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-import java.util.function.Consumer;
-
 @Service
 public class UserBasicAuthenticationService implements UserAuthenticationService {
 
@@ -46,19 +43,16 @@ public class UserBasicAuthenticationService implements UserAuthenticationService
     @Transactional
     public void registerNewUser(UserRegistrationDto userRegistrationDto) {
 
-        onRegistrationValidationSuccess(userRegistrationDto, userFacade::createNewUser);
-    }
+        User user = this.userFacade.findByName(mapper.map(userRegistrationDto).getName());
+        if (user != null) {
+            throw new UserAlreadyExistsException();
+        }
+        EmailAddress emailAddress = this.emailRepository.findByEmail(userRegistrationDto.getName());
+        if (emailAddress != null) {
+            throw new EmailAlreadyTakenException();
+        }
 
-    private void onRegistrationValidationSuccess(UserRegistrationDto userRegistrationDto, Consumer<User> registration) {
-        Optional.ofNullable(this.userFacade.findByName(mapper.map(userRegistrationDto).getName()))
-                .ifPresentOrElse(user -> {
-                    Optional.ofNullable(this.emailRepository.findByEmail(userRegistrationDto.getEmail()))
-                            .ifPresentOrElse(emailAddress -> {
-
-                                registration.accept(constructNewUser(userRegistrationDto));
-
-                            }, () -> {throw new EmailAlreadyTakenException();});
-                }, () -> {throw new UserAlreadyExistsException();});
+        this.userFacade.createNewUser(constructNewUser(userRegistrationDto));
 
     }
 

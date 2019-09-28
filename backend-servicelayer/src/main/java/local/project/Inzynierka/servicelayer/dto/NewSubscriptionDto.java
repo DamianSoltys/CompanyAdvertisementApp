@@ -1,6 +1,6 @@
 package local.project.Inzynierka.servicelayer.dto;
 
-import local.project.Inzynierka.shared.NullOrNotBlank;
+import local.project.Inzynierka.servicelayer.validation.NullOrNotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

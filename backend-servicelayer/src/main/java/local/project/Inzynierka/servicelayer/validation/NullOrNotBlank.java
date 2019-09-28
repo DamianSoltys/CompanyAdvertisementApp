@@ -1,4 +1,4 @@
-package local.project.Inzynierka.shared;
+package local.project.Inzynierka.servicelayer.validation;
 
 import org.hibernate.validator.constraints.CompositionType;
 import org.hibernate.validator.constraints.ConstraintComposition;

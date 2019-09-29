@@ -3,17 +3,22 @@ package local.project.Inzynierka.web.resource;
 import local.project.Inzynierka.auth.AuthFacade;
 import local.project.Inzynierka.servicelayer.dto.CreateRatingDto;
 import local.project.Inzynierka.servicelayer.dto.EditRatingDto;
+import local.project.Inzynierka.servicelayer.dto.RatingGetDto;
+import local.project.Inzynierka.servicelayer.rating.RatingService;
 import local.project.Inzynierka.servicelayer.rating.event.CommentDeletedEvent;
 import local.project.Inzynierka.servicelayer.rating.event.RatingCreatedEvent;
 import local.project.Inzynierka.servicelayer.rating.event.RatingEditedEvent;
 import local.project.Inzynierka.shared.UserAccount;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -22,10 +27,12 @@ public class RatingResource {
 
     private final ApplicationEventPublisher applicationEventPublisher;
     private final AuthFacade authFacade;
+    private final RatingService ratingService;
 
-    public RatingResource(ApplicationEventPublisher applicationEventPublisher, AuthFacade authFacade) {
+    public RatingResource(ApplicationEventPublisher applicationEventPublisher, AuthFacade authFacade, RatingService ratingService) {
         this.applicationEventPublisher = applicationEventPublisher;
         this.authFacade = authFacade;
+        this.ratingService = ratingService;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/rating")
@@ -69,5 +76,25 @@ public class RatingResource {
         }
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/comment")
+    public Page<RatingGetDto> getRatings(@RequestParam(value = "userId", required = false) Long userId,
+                                         @RequestParam(value = "branchId", required = false) Long branchId,
+                                         Pageable pageable) {
+
+        if (branchId != null && userId != null) {
+
+            return this.ratingService.getRatingsByBranchAndUser(branchId, userId, pageable);
+        } else if (branchId == null && userId != null) {
+
+            return this.ratingService.getRatingsByUser(userId, pageable);
+        } else if (branchId != null && userId == null) {
+
+            return this.ratingService.getRatingsByBranch(branchId, pageable);
+        } else {
+
+            return this.ratingService.getRatings(pageable);
+        }
     }
 }

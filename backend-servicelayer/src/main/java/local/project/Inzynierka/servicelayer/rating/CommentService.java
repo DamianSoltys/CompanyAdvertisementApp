@@ -64,6 +64,27 @@ public class CommentService {
                 .map(this::buildCommentGetDto);
     }
 
+    public Page<CommentGetDto> getCommentsByBranchAndUser(Long branchId, Long userId, Pageable pageable) {
+        return this.commentRepository
+                .findAllByBranchAndUser(Branch.builder().id(branchId).build(),
+                                        User.builder().id(userId).build(),
+                                        pageable)
+                .map(this::buildCommentGetDto);
+    }
+
+    public Page<CommentGetDto> getCommentsByBranch(Long branchId, Pageable pageable) {
+        return this.commentRepository
+                .findAllByBranch(Branch.builder().id(branchId).build(),
+                                 pageable)
+                .map(this::buildCommentGetDto);
+    }
+
+    public Page<CommentGetDto> getComments(Pageable pageable) {
+        return this.commentRepository
+                .findAll(pageable)
+                .map(this::buildCommentGetDto);
+    }
+
     private CommentGetDto buildCommentGetDto(Comment comment) {
         return CommentGetDto.builder()
                 .branchId(comment.getBranch().getId())

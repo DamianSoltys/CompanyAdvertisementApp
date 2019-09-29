@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -95,9 +94,23 @@ public class CommentResource {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/comment")
-    public Page<CommentGetDto> getCommentByUser(@RequestParam(value = "userId") Long userId, Pageable pageable) {
+    public Page<CommentGetDto> getComments(@RequestParam(value = "userId", required = false) Long userId,
+                                           @RequestParam(value = "branchId", required = false) Long branchId,
+                                           Pageable pageable) {
 
-        return this.commentService.getCommentsByUser(userId, pageable);
+        if (branchId != null && userId != null) {
+
+            return this.commentService.getCommentsByBranchAndUser(branchId, userId, pageable);
+        } else if (branchId == null && userId != null) {
+
+            return this.commentService.getCommentsByUser(userId, pageable);
+        } else if (branchId != null && userId == null) {
+
+            return this.commentService.getCommentsByBranch(branchId, pageable);
+        } else {
+
+            return this.commentService.getComments(pageable);
+        }
     }
 
 }

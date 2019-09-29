@@ -1,5 +1,9 @@
 package local.project.Inzynierka.auth;
 
+import local.project.Inzynierka.persistence.entity.Comment;
+import local.project.Inzynierka.persistence.entity.Rating;
+import local.project.Inzynierka.persistence.repository.CommentRepository;
+import local.project.Inzynierka.persistence.repository.RatingRepository;
 import local.project.Inzynierka.persistence.repository.UserRepository;
 import local.project.Inzynierka.shared.UserAccount;
 import org.springframework.security.core.Authentication;
@@ -12,8 +16,14 @@ import java.util.Optional;
 public class AuthFacadeImpl implements AuthFacade {
 
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
+    private final RatingRepository ratingRepository;
 
-    public AuthFacadeImpl(UserRepository userRepository) {this.userRepository = userRepository;}
+    public AuthFacadeImpl(UserRepository userRepository, CommentRepository commentRepository, RatingRepository ratingRepository) {
+        this.userRepository = userRepository;
+        this.commentRepository = commentRepository;
+        this.ratingRepository = ratingRepository;
+    }
 
     @Override
     public Authentication getAuthentication() {
@@ -39,6 +49,22 @@ public class AuthFacadeImpl implements AuthFacade {
                         user.isNaturalPersonRegistered() &&
                         user.personId().equals(personId))
                 .orElse(false);
+    }
+
+    @Override
+    public boolean hasPrincipalHavePermissionToCommentResource(Long commentId) {
+        return this.commentRepository.findById(commentId)
+                .map(Comment::getUser)
+                .filter(user -> commentId.equals(user.getId()))
+                .isPresent();
+    }
+
+    @Override
+    public boolean hasPrincipalHavePermissionToRatingResource(Long ratingId) {
+        return this.ratingRepository.findById(ratingId)
+                .map(Rating::getUser)
+                .filter(user -> ratingId.equals(user.getId()))
+                .isPresent();
     }
 
 }

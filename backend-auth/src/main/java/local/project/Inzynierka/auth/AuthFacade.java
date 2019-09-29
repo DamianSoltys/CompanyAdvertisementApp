@@ -15,4 +15,9 @@ public interface AuthFacade {
     boolean hasPrincipalHavePermissionToUserResource(Long userId);
 
     boolean hasPrincipalHavePermissionToNaturalPersonResource(Long userId, Long personId);
+
+    boolean hasPrincipalHavePermissionToCommentResource(Long commentId);
+
+    boolean hasPrincipalHavePermissionToRatingResource(Long ratingId);
+
 }

@@ -8,6 +8,8 @@ import local.project.Inzynierka.servicelayer.rating.event.CommentDeletedEvent;
 import local.project.Inzynierka.servicelayer.rating.event.CommentEditedEvent;
 import local.project.Inzynierka.shared.UserAccount;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +30,7 @@ public class CommentResource {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/comment")
-    public void createComment(@RequestBody final CreateCommentDto createCommentDto) {
+    public ResponseEntity<?> createComment(@RequestBody final CreateCommentDto createCommentDto) {
 
         UserAccount userAccount = this.authFacade.getAuthenticatedUser();
 
@@ -38,21 +40,36 @@ public class CommentResource {
                 .commentContent(createCommentDto.getComment())
                 .build();
         applicationEventPublisher.publishEvent(commentCreatedEvent);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 
     @RequestMapping(method = RequestMethod.PATCH, value = "/comment/{id}")
-    public void editComment(@RequestBody final EditCommentDto editCommentDto, @PathVariable(value = "id") Long commentId) {
+    public ResponseEntity<?> editComment(@RequestBody final EditCommentDto editCommentDto, @PathVariable(value = "id") Long commentId) {
 
-        CommentEditedEvent commentEditedEvent = CommentEditedEvent.builder()
-                .commentId(commentId)
-                .newCommentContent(editCommentDto.getComment())
-                .build();
-        applicationEventPublisher.publishEvent(commentEditedEvent);
+        if (this.authFacade.hasPrincipalHavePermissionToCommentResource(commentId)) {
+            CommentEditedEvent commentEditedEvent = CommentEditedEvent.builder()
+                    .commentId(commentId)
+                    .newCommentContent(editCommentDto.getComment())
+                    .build();
+            applicationEventPublisher.publishEvent(commentEditedEvent);
+
+            return ResponseEntity.ok(null);
+        }
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/comment/{id}")
-    public void deleteComment(@PathVariable(value = "id") Long commentId) {
+    public ResponseEntity<?> deleteComment(@PathVariable(value = "id") Long commentId) {
 
-        applicationEventPublisher.publishEvent(new CommentDeletedEvent(commentId));
+        if (this.authFacade.hasPrincipalHavePermissionToCommentResource(commentId)) {
+            applicationEventPublisher.publishEvent(new CommentDeletedEvent(commentId));
+
+            return ResponseEntity.ok(null);
+        }
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+
     }
 }

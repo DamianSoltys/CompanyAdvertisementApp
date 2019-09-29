@@ -29,7 +29,7 @@ public class CommentService {
     }
 
     @Transactional
-    public void createComment(CommentCreatedEvent event) {
+    public Long createComment(CommentCreatedEvent event) {
         User user = this.userFacade.findByName(event.getUserName());
         Branch branch = Branch.builder().id(event.getBranchId()).build();
 
@@ -39,7 +39,9 @@ public class CommentService {
                 .comment(event.getCommentContent())
                 .build();
 
-        this.commentRepository.save(comment);
+        return Optional.of(this.commentRepository.save(comment))
+                .map(Comment::getId)
+                .get();
     }
 
     @Transactional
@@ -88,6 +90,7 @@ public class CommentService {
     private CommentGetDto buildCommentGetDto(Comment comment) {
         return CommentGetDto.builder()
                 .branchId(comment.getBranch().getId())
+                .commentId(comment.getId())
                 .userId(comment.getUser().getId())
                 .comment(comment.getComment())
                 .build();

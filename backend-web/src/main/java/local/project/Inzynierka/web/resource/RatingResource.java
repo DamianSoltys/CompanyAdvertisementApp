@@ -45,9 +45,9 @@ public class RatingResource {
                 .userName(userAccount.getLoginName())
                 .rating(createRatingDto.getRating())
                 .build();
-        applicationEventPublisher.publishEvent(ratingCreatedEvent);
+        Long ratingId = this.ratingService.createRating(ratingCreatedEvent);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ratingId);
     }
 
     @RequestMapping(method = RequestMethod.PATCH, value = "/rating/{id}")
@@ -78,23 +78,22 @@ public class RatingResource {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/comment")
+    @RequestMapping(method = RequestMethod.GET, value = "/rating")
     public Page<RatingGetDto> getRatings(@RequestParam(value = "userId", required = false) Long userId,
                                          @RequestParam(value = "branchId", required = false) Long branchId,
                                          Pageable pageable) {
+        Page<RatingGetDto> result;
 
         if (branchId != null && userId != null) {
-
-            return this.ratingService.getRatingsByBranchAndUser(branchId, userId, pageable);
+            result = this.ratingService.getRatingsByBranchAndUser(branchId, userId, pageable);
         } else if (branchId == null && userId != null) {
-
-            return this.ratingService.getRatingsByUser(userId, pageable);
+            result = this.ratingService.getRatingsByUser(userId, pageable);
         } else if (branchId != null && userId == null) {
-
-            return this.ratingService.getRatingsByBranch(branchId, pageable);
+            result = this.ratingService.getRatingsByBranch(branchId, pageable);
         } else {
-
-            return this.ratingService.getRatings(pageable);
+            result = this.ratingService.getRatings(pageable);
         }
+
+        return result;
     }
 }

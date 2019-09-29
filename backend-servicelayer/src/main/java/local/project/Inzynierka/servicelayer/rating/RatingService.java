@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class RatingService {
 
@@ -26,12 +28,12 @@ public class RatingService {
     }
 
     @Transactional
-    public void createRating(RatingCreatedEvent ratingCreatedEvent) {
+    public Long createRating(RatingCreatedEvent ratingCreatedEvent) {
 
         User user = this.userFacade.findByName(ratingCreatedEvent.getUserName());
         Rating rating = buildRating(ratingCreatedEvent, user);
 
-        this.ratingRepository.save(rating);
+        return Optional.of(this.ratingRepository.save(rating)).map(Rating::getId).get();
     }
 
     private Rating buildRating(RatingCreatedEvent ratingCreatedEvent, User user) {

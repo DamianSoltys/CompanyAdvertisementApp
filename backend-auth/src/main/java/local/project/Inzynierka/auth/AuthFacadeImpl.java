@@ -55,7 +55,7 @@ public class AuthFacadeImpl implements AuthFacade {
     public boolean hasPrincipalHavePermissionToCommentResource(Long commentId) {
         return this.commentRepository.findById(commentId)
                 .map(Comment::getUser)
-                .filter(user -> commentId.equals(user.getId()))
+                .filter(user -> getAuthenticatedUser().getId().equals(user.getId()))
                 .isPresent();
     }
 
@@ -63,7 +63,7 @@ public class AuthFacadeImpl implements AuthFacade {
     public boolean hasPrincipalHavePermissionToRatingResource(Long ratingId) {
         return this.ratingRepository.findById(ratingId)
                 .map(Rating::getUser)
-                .filter(user -> ratingId.equals(user.getId()))
+                .filter(user -> getAuthenticatedUser().getId().equals(user.getId()))
                 .isPresent();
     }
 

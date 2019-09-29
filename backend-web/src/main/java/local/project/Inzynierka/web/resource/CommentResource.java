@@ -47,9 +47,10 @@ public class CommentResource {
                 .userName(userAccount.getLoginName())
                 .commentContent(createCommentDto.getComment())
                 .build();
-        applicationEventPublisher.publishEvent(commentCreatedEvent);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        Long commentId = this.commentService.createComment(commentCreatedEvent);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(commentId);
     }
 
     @RequestMapping(method = RequestMethod.PATCH, value = "/comment/{id}")
@@ -97,20 +98,18 @@ public class CommentResource {
     public Page<CommentGetDto> getComments(@RequestParam(value = "userId", required = false) Long userId,
                                            @RequestParam(value = "branchId", required = false) Long branchId,
                                            Pageable pageable) {
+        Page<CommentGetDto> result;
 
         if (branchId != null && userId != null) {
-
-            return this.commentService.getCommentsByBranchAndUser(branchId, userId, pageable);
+            result = this.commentService.getCommentsByBranchAndUser(branchId, userId, pageable);
         } else if (branchId == null && userId != null) {
-
-            return this.commentService.getCommentsByUser(userId, pageable);
+            result = this.commentService.getCommentsByUser(userId, pageable);
         } else if (branchId != null && userId == null) {
-
-            return this.commentService.getCommentsByBranch(branchId, pageable);
+            result = this.commentService.getCommentsByBranch(branchId, pageable);
         } else {
-
-            return this.commentService.getComments(pageable);
+            result = this.commentService.getComments(pageable);
         }
+        return result;
     }
 
 }

@@ -4,12 +4,17 @@ import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.persistence.entity.Comment;
 import local.project.Inzynierka.persistence.entity.User;
 import local.project.Inzynierka.persistence.repository.CommentRepository;
+import local.project.Inzynierka.servicelayer.dto.CommentGetDto;
 import local.project.Inzynierka.servicelayer.rating.event.CommentCreatedEvent;
 import local.project.Inzynierka.servicelayer.rating.event.CommentDeletedEvent;
 import local.project.Inzynierka.servicelayer.rating.event.CommentEditedEvent;
 import local.project.Inzynierka.servicelayer.services.UserFacade;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class CommentService {
@@ -47,4 +52,24 @@ public class CommentService {
         this.commentRepository.delete(
                 Comment.builder().id(event.getCommentId()).build());
     }
+
+    public Optional<CommentGetDto> getComment(Long commentId) {
+        return this.commentRepository.findById(commentId)
+                .map(this::buildCommentGetDto);
+    }
+
+    public Page<CommentGetDto> getCommentsByUser(Long userId, Pageable pageable) {
+        return this.commentRepository
+                .findAllByUser(User.builder().id(userId).build(), pageable)
+                .map(this::buildCommentGetDto);
+    }
+
+    private CommentGetDto buildCommentGetDto(Comment comment) {
+        return CommentGetDto.builder()
+                .branchId(comment.getBranch().getId())
+                .userId(comment.getUser().getId())
+                .comment(comment.getComment())
+                .build();
+    }
 }
+

@@ -1,6 +1,6 @@
 package local.project.Inzynierka.servicelayer.newsletter.listener;
 
-import local.project.Inzynierka.servicelayer.newsletter.event.OnNewsletterSignUpEvent;
+import local.project.Inzynierka.servicelayer.newsletter.event.NewsletterSignUpEvent;
 import local.project.Inzynierka.servicelayer.services.NewsletterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class NewsletterSignUpEventListener {
 
     @Async
     @EventListener
-    public void handleNewsletterSignUp(OnNewsletterSignUpEvent event) {
+    public void handleNewsletterSignUp(NewsletterSignUpEvent event) {
 
         final String signUpToken = UUID.randomUUID().toString();
         final String signOutToken = UUID.randomUUID().toString();
@@ -40,13 +40,13 @@ public class NewsletterSignUpEventListener {
         }
     }
 
-    private SimpleMailMessage constructEmailMessage(OnNewsletterSignUpEvent onNewsletterSignUpEvent,
-                                              String signUpToken, String signOutToken) {
+    private SimpleMailMessage constructEmailMessage(NewsletterSignUpEvent newsletterSignUpEvent,
+                                                    String signUpToken, String signOutToken) {
 
-        String companyName = onNewsletterSignUpEvent.getNewsletterSubscription().getCompany().getName();
-        String recipient = onNewsletterSignUpEvent.getNewsletterSubscription().getEmailAddressEntity().getEmail();
-        String signUpLink = onNewsletterSignUpEvent.getAppUrl()+"/newsletter/signup/"+signUpToken;
-        String signOutLink =  onNewsletterSignUpEvent.getAppUrl()+"/newsletter/signout/"+signOutToken;
+        String companyName = newsletterSignUpEvent.getNewsletterSubscription().getCompany().getName();
+        String recipient = newsletterSignUpEvent.getNewsletterSubscription().getEmailAddressEntity().getEmail();
+        String signUpLink = newsletterSignUpEvent.getAppUrl() + "/newsletter/signup/" + signUpToken;
+        String signOutLink = newsletterSignUpEvent.getAppUrl() + "/newsletter/signout/" + signOutToken;
 
         String message = "Właśnie zapisano cię na listę odbiorców newslettera firmy " + companyName + "."+
                 "\r\nAby przekonać nas, że jesteś tym za kogo się podajesz, kliknij jeszcze w link poniżej: \r\n"+

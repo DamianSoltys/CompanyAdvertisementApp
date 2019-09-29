@@ -78,15 +78,15 @@ DELIMITER |
 
 CREATE OR REPLACE PROCEDURE insert_users()
 -- password - Haslo1
-INSERT IGNORE INTO users(user_name, password_hash, modified_at, created_at, id_natural_person, id_email_address,
+INSERT IGNORE INTO users(user_id,user_name, password_hash, modified_at, created_at, id_natural_person, id_email_address,
                          account_type, is_enabled)
-VALUES ('biedronka', '$2a$10$lb/zKrT4Pey1JCYdGbWKn.Nn61spi./CT/rSdoSOKO/ChBoaLHhtu', NOW(), NOW(), 3, 1, 0, true),
-       ('kurczak5', '$2a$10$lb/zKrT4Pey1JCYdGbWKn.Nn61spi./CT/rSdoSOKO/ChBoaLHhtu', NOW(), NOW(), NULL, 2, 0, true),
-       ('magicznyKrzystof', '$2a$10$lb/zKrT4Pey1JCYdGbWKn.Nn61spi./CT/rSdoSOKO/ChBoaLHhtu', NOW(), NOW(), NULL, 3, 0,
+VALUES (1,'biedronka', '$2a$10$lb/zKrT4Pey1JCYdGbWKn.Nn61spi./CT/rSdoSOKO/ChBoaLHhtu', NOW(), NOW(), 3, 1, 0, true),
+       (2,'kurczak5', '$2a$10$lb/zKrT4Pey1JCYdGbWKn.Nn61spi./CT/rSdoSOKO/ChBoaLHhtu', NOW(), NOW(), NULL, 2, 0, true),
+       (3,'magicznyKrzystof', '$2a$10$lb/zKrT4Pey1JCYdGbWKn.Nn61spi./CT/rSdoSOKO/ChBoaLHhtu', NOW(), NOW(), NULL, 3, 0,
         false),
-       ('Gacek', '$2a$10$lb/zKrT4Pey1JCYdGbWKn.Nn61spi./CT/rSdoSOKO/ChBoaLHhtu', NOW(), NOW(), NULL, 4, 0, false),
-       ('maciejowicz', '$2a$10$lb/zKrT4Pey1JCYdGbWKn.Nn61spi./CT/rSdoSOKO/ChBoaLHhtu', NOW(), NOW(), NULL, 5, 0, false),
-       ('jezyk', '$2a$10$lb/zKrT4Pey1JCYdGbWKn.Nn61spi./CT/rSdoSOKO/ChBoaLHhtu', NOW(), NOW(), 5, 6, 0, true);
+       (4,'Gacek', '$2a$10$lb/zKrT4Pey1JCYdGbWKn.Nn61spi./CT/rSdoSOKO/ChBoaLHhtu', NOW(), NOW(), NULL, 4, 0, false),
+       (5,'maciejowicz', '$2a$10$lb/zKrT4Pey1JCYdGbWKn.Nn61spi./CT/rSdoSOKO/ChBoaLHhtu', NOW(), NOW(), NULL, 5, 0, false),
+       (6,'jezyk', '$2a$10$lb/zKrT4Pey1JCYdGbWKn.Nn61spi./CT/rSdoSOKO/ChBoaLHhtu', NOW(), NOW(), 5, 6, 0, true);
 |
 
 DELIMITER ;
@@ -153,9 +153,65 @@ CALL insert_newsletter_subscriptions();
 DELIMITER |
 
 CREATE OR REPLACE PROCEDURE insert_comments()
-INSERT IGNORE INTO comments (comment, branch_id, user_id)
-VALUES ('Very good', 4, 1),
-       ('TEST', 5, 1);
+INSERT IGNORE INTO comments (comment, branch_id, user_id, modified_at)
+VALUES ('Very good', 4, 1, NOW()),
+       ('TEST11', 4, 2, NOW()),
+       ('TEST12', 4, 3, NOW()),
+       ('TEST13', 4, 4, NOW()),
+       ('TEST114', 1, 3, NOW()),
+       ('TEST115', 1, 4, NOW()),
+       ('TEST116', 4, 1, NOW()),
+       ('TEST117', 5, 1, NOW()),
+       ('TEST118', 4, 1, NOW()),
+       ('TEST119', 5, 1, NOW()),
+       ('TEST120', 4, 1, NOW()),
+       ('TEST121', 5, 1, NOW()),
+       ('TEST121', 4, 1, NOW()),
+       ('TEST122', 5, 1, NOW()),
+       ('TEST123', 4, 1, NOW()),
+       ('TEST124', 5, 1, NOW()),
+       ('TEST125', 4, 1, NOW()),
+       ('TEST126', 5, 1, NOW()),
+       ('Very good1', 4, 1, NOW()),
+       ('TEST1', 4, 2, NOW()),
+       ('TEST2', 4, 3, NOW()),
+       ('TEST3', 4, 4, NOW()),
+       ('TEST4', 3, 1, NOW()),
+       ('TEST5', 3, 2, NOW()),
+       ('TEST6', 3, 3, NOW()),
+       ('TEST17', 3, 4, NOW()),
+       ('TEST8', 2, 1, NOW()),
+       ('TEST9', 2, 2, NOW()),
+       ('TEST10', 2, 3, NOW()),
+       ('TEST11', 2, 4, NOW()),
+       ('TEST12', 1, 1, NOW()),
+       ('TEST13', 1, 2, NOW()),
+       ('TEST14', 1, 3, NOW()),
+       ('TEST15', 1, 4, NOW()),
+       ('TEST16', 4, 1, NOW()),
+       ('TEST17', 5, 1, NOW()),
+       ('TEST18', 4, 1, NOW()),
+       ('TEST19', 5, 1, NOW()),
+       ('TEST20', 4, 1, NOW()),
+       ('TEST21', 5, 1, NOW()),
+       ('TEST21', 4, 1, NOW()),
+       ('TEST22', 5, 1, NOW()),
+       ('TEST23', 4, 1, NOW()),
+       ('TEST24', 5, 1, NOW()),
+       ('TEST25', 4, 1, NOW()),
+       ('TEST26', 5, 1, NOW()),
+       ('TEST316', 4, 1, NOW()),
+       ('TEST317', 5, 1, NOW()),
+       ('TEST318', 4, 1, NOW()),
+       ('TEST319', 5, 1, NOW()),
+       ('TEST320', 4, 1, NOW()),
+       ('TEST321', 5, 1, NOW()),
+       ('TEST321', 4, 1, NOW()),
+       ('TEST322', 5, 1, NOW()),
+       ('TEST323', 4, 1, NOW()),
+       ('TEST324', 5, 1, NOW()),
+       ('TEST325', 4, 1, NOW()),
+       ('TEST326', 5, 1, NOW());
 
 DELIMITER ;
 CALL insert_comments();
@@ -184,7 +240,7 @@ DELIMITER |
 CREATE OR REPLACE PROCEDURE insert_promotion_items()
 INSERT IGNORE INTO promotion_items (description, name, was_sent, promoting_company_id, promotion_type_id)
 VALUES ('helo', 'cos tam', 0, 2, 1),
-       ('TEST', 'TEST', 0, 2, 2);
+       ('TEST1', 'TEST1', 0, 2, 2);
 
 DELIMITER ;
 CALL insert_promotion_items();

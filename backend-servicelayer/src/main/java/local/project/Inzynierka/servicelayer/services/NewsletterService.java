@@ -9,7 +9,7 @@ import local.project.Inzynierka.persistence.repository.EmailRepository;
 import local.project.Inzynierka.persistence.repository.NewsletterSubscriptionRepository;
 import local.project.Inzynierka.persistence.repository.VerificationTokenRepository;
 import local.project.Inzynierka.servicelayer.dto.SubscriptionToCreateDto;
-import local.project.Inzynierka.servicelayer.newsletter.event.OnNewsletterSignUpEvent;
+import local.project.Inzynierka.servicelayer.newsletter.event.NewsletterSignUpEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,7 +49,7 @@ public class NewsletterService {
         newsletterSubscription = newsletterSubscriptionRepository.save(newsletterSubscription);
 
         applicationEventPublisher.publishEvent(
-                new OnNewsletterSignUpEvent(newsletterSubscription, originHeader, subscriptionToCreateDto.isVerified()));
+                new NewsletterSignUpEvent(newsletterSubscription, originHeader, subscriptionToCreateDto.isVerified()));
     }
 
     private EmailAddress getPersistedEmailAddress(String emailAddress) {

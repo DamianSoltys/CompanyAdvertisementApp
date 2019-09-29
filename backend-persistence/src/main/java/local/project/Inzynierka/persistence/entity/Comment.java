@@ -1,7 +1,10 @@
 package local.project.Inzynierka.persistence.entity;
 
 import local.project.Inzynierka.persistence.common.FullTimestampingAudit;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +21,9 @@ import javax.persistence.Table;
 @Data
 @Entity
 @Table(name = "comments")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Comment extends FullTimestampingAudit implements IEntity<Long> {
 
     @Id

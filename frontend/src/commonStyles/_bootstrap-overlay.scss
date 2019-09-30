@@ -1,3 +1,4 @@
+
 .form-control {
     transition:all 0.2s ease-in-out;
 
@@ -11,5 +12,11 @@
 
     &:focus {
         box-shadow:0 0 0 0.1rem rgba(38,143,255,.5);
+    }
+}
+
+.container-fluid {
+    @include phone {
+        padding: 0;
     }
 }

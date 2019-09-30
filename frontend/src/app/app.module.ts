@@ -8,7 +8,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpConfigInterceptor } from './interceptor/http.interceptor';
 
-
 @NgModule({
   declarations: [
     AppComponent,

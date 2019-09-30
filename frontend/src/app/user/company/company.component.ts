@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
 import { voivodeships } from 'src/app/classes/Voivodeship';
+import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-company',
@@ -12,23 +13,73 @@ export class CompanyComponent implements OnInit {
   public havePersonalData = new BehaviorSubject(false);
   public canShowAddForm = new BehaviorSubject(false);
   public canShowWorkForm = new BehaviorSubject(false);
+  public workForms:FormGroup[];
   //dodać formularze do firmy/zakładu
   //funkcja do dodawania wielu zakładów dla jednej firmy
   //edycja/usuwanie firmy/zakładu
   //profil zakładu-wyświetlanie oddzielny komponent wraz do wyszukiwarki
   public _voivodeships = voivodeships;
-  constructor() {}
+  public companyForm = this.fb.group({
+    description:[''],
+    category:[''],
+    name:[''],
+    nip:[''],
+    regon:[''],
+    url:[''],
+    address:this.fb.group({
+      apartmentNo:[''],
+      buildingNo:[''],
+      city:[''],
+      street:[''],
+      voivodeship:[''],
+    }),
+  });
+
+  public workForm = this.fb.group({
+    address:this.fb.group({
+      apartmentNo:[''],
+      buildingNo:[''],
+      city:[''],
+      street:[''],
+      voivodeship:[''],
+    }),
+    geoX:[''],
+    geoY:[''],
+    name:[''],
+  });
+
+  config ={
+    toolbar:[
+      ['bold','italic','underline']
+    ] 
+  }
+
+  constructor(private fb:FormBuilder) {}
 
   ngOnInit() {
     this.checkForPersonalData();
   }
 
-  public addAnotherWork() {
-    console.log('kolejny form');
+  public get _companyForm() {
+    return this.companyForm.controls;
   }
+
+  public get _workForm() {
+    return this.workForm.controls;
+  }
+
+  public addAnotherWork() {
+    if(!this.workForms) {
+      this.workForms = [];
+    }
+    if(this.workForm) {
+      this.workForms.push(this.workForm);
+      console.log(this.workForms);
+    }    
+  }
+
   public onSubmit(event: Event) {
     event.preventDefault();
-    console.log('submit');
   }
 
   private checkForPersonalData() {

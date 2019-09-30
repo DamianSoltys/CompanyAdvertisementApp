@@ -7,7 +7,8 @@
     margin-top: 5%;
 
     @include phone {
-        width:100%;
+        width: 95%;
+        padding: 0;
     }
 
     .company-component__form {
@@ -43,6 +44,10 @@
                 flex-direction: column;
                 padding: 20px;
 
+                @include phone {
+                    padding: 20px 5px;
+                }
+
                 .input-container__input-group {
                     display:flex;
                     flex-direction: column;
@@ -67,6 +72,10 @@
                         flex-wrap: wrap;
                         justify-content: space-evenly;
 
+                        @include phone {
+                            padding:20px 0;
+                        }
+
                         .inputs__input-container {
                             display:flex;
                             flex-direction: column;
@@ -75,12 +84,22 @@
                             transition: all .2s ease-in-out;
                             margin:5px 20px;
 
+                            @include phone {
+                                margin:5px 0;
+                                width: 95%;
+                            }
+
                             .input-container__select-wrapper {
                                 display:flex;
                                 flex-direction: column;
                                 position: relative;
                                 width: 120%;
                                 left: -10%;
+
+                                @include phone {
+                                    width: 100%;
+                                    left: unset;
+                                }
 
                                 &:before {
                                     content: "\f078";
@@ -142,6 +161,19 @@
                     .input-group__description-container {
                         display:flex;
                         flex-direction: column;
+                        width:50%;
+                        margin: auto; 
+
+                        @include phone {
+                            width: 100%;
+                            padding:0 5px;
+                        }                                              
+                        .description-container__editor {
+                            height: 150px;
+                            @include phone {
+                                height: 100px;
+                            } 
+                        }
                     }
                 }
             }

@@ -186,7 +186,7 @@ html {
   @include boxShadow(0px 4px 5px 0px rgba(187, 185, 191, 1));
   border: 1px solid $bgcolor;
   z-index: 10;
-  right: -20px;
+  right: -5px;
   width: calc(100vw + 10px);
   background: #fff;
 
@@ -227,6 +227,7 @@ html {
 
 .navbar__dropdown {
   position: relative;
+  padding: 0 15px;
 
   @include tablet {
     display: none;

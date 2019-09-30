@@ -50,9 +50,8 @@ export class LoginComponent implements OnInit {
         console.log(data.headers.get('Authorization'));
         if (data.status === 200) {
           this.login_error = false;
-          this.showRequestMessage('error','Pomyślnie zalogowano!','');
           this.login_success = true;
-
+          this.showRequestMessage('success','Pomyślnie zalogowano!','');        
           setTimeout(() => {
             this.loginStorageSet(data);
           }, 500);

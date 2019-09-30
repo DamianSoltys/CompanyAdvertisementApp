@@ -1,5 +1,9 @@
 @import '../../../commonStyles/shared';
-
+.personal-data-component {
+  @include phone {
+    width: 95%;
+  }
+}
 .personal-data-component__form { 
     margin-top:5%;
 
@@ -79,7 +83,10 @@
         justify-content: space-evenly;
         z-index: 1;
         @include boxShadow(inset 0px 15px 8px -15px rgba(32, 99, 143, 0.66));
-
+        
+        @include phone {
+          padding: 20px 0;
+        }
         .section-container__error-container {
           .error-container__text--danger,.error-container__text--success {
             margin-bottom:0;
@@ -212,11 +219,15 @@
   } 
 
   .data-container__data-group-container {
-    padding:3%;
+      padding:3%;
       margin-top:2%;
   }
   .data-group-container__data-group {
     margin:auto;
+
+    @include phone {
+      padding: 0;
+    }
 
     .data-group__header {
       padding: 0;

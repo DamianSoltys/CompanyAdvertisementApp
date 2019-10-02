@@ -1,5 +1,7 @@
 @import '../../../commonStyles/shared';
-
+.account-data-component {
+  width: 95%;
+}
 .account-data-component__form { 
   margin-top:5%;
 
@@ -78,6 +80,10 @@
       margin-bottom:5px;
       justify-content: space-evenly;
       z-index: 1;
+      
+      @include phone {
+        padding: 20px 0;
+      }
       @include boxShadow(inset 0px 15px 8px -15px rgba(32, 99, 143, 0.66));
 
       .section-container__error-container {

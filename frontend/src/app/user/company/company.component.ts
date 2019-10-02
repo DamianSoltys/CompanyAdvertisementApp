@@ -2,8 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
 import { voivodeships } from 'src/app/classes/Voivodeship';
-import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { MouseEvent } from '@agm/core';
 
+interface Position {
+  latitude:number,
+  longitude:number,
+}
+interface Marker {
+  latitude:number,
+  longitude:number,
+  label:string,
+}
 @Component({
   selector: 'app-company',
   templateUrl: './company.component.html',
@@ -13,6 +23,8 @@ export class CompanyComponent implements OnInit {
   public havePersonalData = new BehaviorSubject(false);
   public canShowAddForm = new BehaviorSubject(false);
   public canShowWorkForm = new BehaviorSubject(false);
+  public actualPosition:Position;
+  public mapMarker:Marker;
   public workForms:FormGroup[];
   //dodać formularze do firmy/zakładu
   //funkcja do dodawania wielu zakładów dla jednej firmy
@@ -22,30 +34,30 @@ export class CompanyComponent implements OnInit {
   public companyForm = this.fb.group({
     description:[''],
     category:[''],
-    name:[''],
-    nip:[''],
-    regon:[''],
+    name:['',[Validators.required]],
+    nip:['',[Validators.required]],
+    regon:['',[Validators.required]],
     url:[''],
     address:this.fb.group({
-      apartmentNo:[''],
-      buildingNo:[''],
-      city:[''],
-      street:[''],
+      apartmentNo:['',[Validators.required]],
+      buildingNo:['',[Validators.required]],
+      city:['',[Validators.required]],
+      street:['',[Validators.required]],
       voivodeship:[''],
     }),
   });
 
   public workForm = this.fb.group({
     address:this.fb.group({
-      apartmentNo:[''],
-      buildingNo:[''],
-      city:[''],
-      street:[''],
+      apartmentNo:['',[Validators.required]],
+      buildingNo:['',[Validators.required]],
+      city:['',[Validators.required]],
+      street:['',[Validators.required]],
       voivodeship:[''],
     }),
     geoX:[''],
     geoY:[''],
-    name:[''],
+    name:['',[Validators.required]],
   });
 
   config ={
@@ -58,6 +70,41 @@ export class CompanyComponent implements OnInit {
 
   ngOnInit() {
     this.checkForPersonalData();
+    this.getActualPosition();
+  }
+
+  private getActualPosition() {
+    let navigatorObject = window.navigator;
+    
+    if(storage_Avaliable('localStorage')) {     
+      if(!localStorage.getItem('actualPosition') && !this.actualPosition){
+        navigatorObject.geolocation.getCurrentPosition((position)=>{
+           this.actualPosition = {
+            latitude:position.coords.latitude,
+            longitude:position.coords.longitude,
+          };
+          localStorage.setItem('actualPosition',JSON.stringify(this.actualPosition));          
+        },error =>{
+          console.log("Coś poszło nie tak !");
+        })
+      } else {
+        let position = JSON.parse(localStorage.getItem('actualPosition'));
+
+        this.actualPosition = {
+          latitude:position.latitude,
+          longitude:position.longitude,
+        };
+      }
+      
+    }
+  }
+
+  public mapClickEvent($event:MouseEvent) {
+    this.mapMarker = {
+      latitude:$event.coords.lat,
+      longitude:$event.coords.lng,
+      label:"Pozycja zakładu",
+    }
   }
 
   public get _companyForm() {

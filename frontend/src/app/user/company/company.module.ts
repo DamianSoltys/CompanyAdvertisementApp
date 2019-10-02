@@ -6,6 +6,7 @@ import { CompanyComponent } from './company.component';
 import { CompanySectionComponent } from '../../commonComponents/company-section/company-section.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill'
+import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,10 @@ import { QuillModule } from 'ngx-quill'
     CompanyRoutingModule,  
     FormsModule,
     ReactiveFormsModule,
-    QuillModule.forRoot(), 
+    QuillModule.forRoot(),
+    AgmCoreModule.forRoot({
+      apiKey:'AIzaSyDymmSbQ_6KBgygpEZwcztemgH3HXTOYrI'
+    }), 
   ]
 })
 export class CompanyModule { }

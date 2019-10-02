@@ -76,13 +76,41 @@
                             padding:20px 0;
                         }
 
+                        .inputs__map-container {                             
+                           &:focus-within {
+                               .map-container__label {                                                                  
+                                   color:$bgcolor;
+                               }
+                               .map-container__map-wrapper {
+                                   border-color: $bgcolor;
+                               }
+                           }
+                           .map-container__label {
+                            transition: all .2s ease-in-out;
+                           }
+                           .map-container__map-wrapper {
+                               transition: all .2s ease-in-out;
+                               border:2px solid black;
+
+                               .map-wrapper__map {
+                               height:300px;
+                               width:300px;
+
+                                @include phone {
+                                height: 300px;
+                                width: 85vw;
+                            }
+                            }
+                        }                      
+                        }
+
                         .inputs__input-container {
                             display:flex;
                             flex-direction: column;
                             position: relative;
                             left:0px;
                             transition: all .2s ease-in-out;
-                            margin:5px 20px;
+                            margin:5px 20px;                           
 
                             @include phone {
                                 margin:5px 0;

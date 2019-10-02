@@ -31,19 +31,20 @@ export class CompanyComponent implements OnInit {
   //edycja/usuwanie firmy/zakładu
   //profil zakładu-wyświetlanie oddzielny komponent wraz do wyszukiwarki
   public _voivodeships = voivodeships;
+
   public companyForm = this.fb.group({
     description:[''],
-    category:[''],
+    category:['',[Validators.required]],
     name:['',[Validators.required]],
     nip:['',[Validators.required]],
     regon:['',[Validators.required]],
-    url:[''],
+    url:['',[Validators.required]],
     address:this.fb.group({
       apartmentNo:['',[Validators.required]],
       buildingNo:['',[Validators.required]],
       city:['',[Validators.required]],
       street:['',[Validators.required]],
-      voivodeship:[''],
+      voivodeship:['',[Validators.required]],
     }),
   });
 
@@ -75,7 +76,7 @@ export class CompanyComponent implements OnInit {
 
   private getActualPosition() {
     let navigatorObject = window.navigator;
-    
+
     if(storage_Avaliable('localStorage')) {     
       if(!localStorage.getItem('actualPosition') && !this.actualPosition){
         navigatorObject.geolocation.getCurrentPosition((position)=>{
@@ -111,8 +112,15 @@ export class CompanyComponent implements OnInit {
     return this.companyForm.controls;
   }
 
+  public get _companyAddress() {
+    return this.companyForm.get('address')['controls'];
+  }
+
   public get _workForm() {
     return this.workForm.controls;
+  }
+  public get _workAddress() {
+    return this.workForm.get('address')['controls'];
   }
 
   public addAnotherWork() {
@@ -121,6 +129,7 @@ export class CompanyComponent implements OnInit {
     }
     if(this.workForm) {
       this.workForms.push(this.workForm);
+      this.workForm.reset();
       console.log(this.workForms);
     }    
   }

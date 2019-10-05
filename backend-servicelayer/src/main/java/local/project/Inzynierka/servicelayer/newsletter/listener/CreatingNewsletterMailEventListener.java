@@ -4,7 +4,7 @@ import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.NewsletterSubscription;
 import local.project.Inzynierka.persistence.repository.CompanyRepository;
 import local.project.Inzynierka.persistence.repository.NewsletterSubscriptionRepository;
-import local.project.Inzynierka.servicelayer.newsletter.event.OnCreatingNewsletterMailEvent;
+import local.project.Inzynierka.servicelayer.newsletter.event.CreatingNewsletterMailEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.mail.SimpleMailMessage;
@@ -34,7 +34,7 @@ public class CreatingNewsletterMailEventListener {
 
     @Async
     @EventListener
-    public void handleSendingNewsletterOut(OnCreatingNewsletterMailEvent event) {
+    public void handleSendingNewsletterOut(CreatingNewsletterMailEvent event) {
         Company company = companyRepository.findById(event.getCompanyId()).
                 orElseThrow(IllegalArgumentException::new);
 
@@ -49,21 +49,21 @@ public class CreatingNewsletterMailEventListener {
     }
 
 
-    private SimpleMailMessage constructEmailMessage(OnCreatingNewsletterMailEvent onCreatingNewsletterMailEvent,
+    private SimpleMailMessage constructEmailMessage(CreatingNewsletterMailEvent creatingNewsletterMailEvent,
                                                     NewsletterSubscription newsletterSubscription,
                                                     Company company) {
 
         String companyName = company.getName();
         String recipient = newsletterSubscription.getEmailAddressEntity().getEmail();
-        String signOutLink =  onCreatingNewsletterMailEvent.getAppUrl()+"/newsletter/signout/"+
+        String signOutLink = creatingNewsletterMailEvent.getAppUrl() + "/newsletter/signout/" +
                 newsletterSubscription.getUnsubscribeToken().getToken();
 
-        String message = onCreatingNewsletterMailEvent.getMessage()  + "\r\n\r\n"+
+        String message = creatingNewsletterMailEvent.getMessage() + "\r\n\r\n" +
                      "\r\n\r\n" + "Aby wypisać się z listy newslettera, kliknij tu:\r\n"+signOutLink;
 
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom("test@example.com");
-        simpleMailMessage.setSubject( onCreatingNewsletterMailEvent.getSubject() + " Newsletter -" + companyName);
+        simpleMailMessage.setSubject(creatingNewsletterMailEvent.getSubject() + " Newsletter -" + companyName);
         simpleMailMessage.setTo(recipient);
         simpleMailMessage.setText(message);
 

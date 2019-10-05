@@ -3,7 +3,7 @@ package local.project.Inzynierka.servicelayer.newsletter.event;
 import lombok.ToString;
 
 @ToString
-public class OnCreatingNewsletterMailEvent {
+public class CreatingNewsletterMailEvent {
 
     private final String message;
 
@@ -13,7 +13,7 @@ public class OnCreatingNewsletterMailEvent {
 
     private final Long companyId;
 
-    public OnCreatingNewsletterMailEvent(String message, String subject, String appUrl, Long companyId) {
+    public CreatingNewsletterMailEvent(String message, String subject, String appUrl, Long companyId) {
         this.message = message;
         this.subject = subject;
         this.appUrl = appUrl;

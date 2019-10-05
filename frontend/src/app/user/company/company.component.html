@@ -180,7 +180,7 @@
     </form>
   </div>
   <div class="company-component__separator"></div>
-  <div class="company-component__button-container">
+  <div class="company-component__button-container" *ngIf="!editRequestData.companyId">
     <button class="btn button-container__button--add" (click)="toggleAddForm()">
       <span class="button--add__text-node">Wróć</span>
     </button>
@@ -309,7 +309,7 @@
     </form>
   </div>
   <div class="company-component__separator"></div>
-  <div class="company-component__button-container">
+  <div class="company-component__button-container" *ngIf="!editRequestData.workId">
     <button class="btn button-container__button--add" (click)="toggleWorkForm()">
       <span class="button--add__text-node">Wróć</span>
     </button>
@@ -318,3 +318,4 @@
     </button>
   </div>
 </div>
+

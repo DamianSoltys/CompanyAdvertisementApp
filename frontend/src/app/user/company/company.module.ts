@@ -22,6 +22,9 @@ import { AgmCoreModule } from '@agm/core';
     AgmCoreModule.forRoot({
       apiKey:'AIzaSyDymmSbQ_6KBgygpEZwcztemgH3HXTOYrI'
     }), 
+  ],exports:[
+    CompanyComponent,
+    CompanySectionComponent,
   ]
 })
 export class CompanyModule { }

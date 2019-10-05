@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
 import { voivodeships } from 'src/app/classes/Voivodeship';
@@ -9,6 +9,7 @@ import { Company, Branch } from 'src/app/classes/Company';
 import { PersonalDataService } from 'src/app/services/personal-data.service';
 import { CompanyService } from 'src/app/services/company.service';
 import { UserREST } from 'src/app/classes/User';
+import { UserService } from 'src/app/services/user.service';
 
 interface Position {
   latitude:number,
@@ -18,6 +19,11 @@ interface Marker {
   latitude:number,
   longitude:number,
   label:string,
+}
+
+interface EditRequestData {
+  companyId:number;
+  workId:number;
 }
 @Component({
   selector: 'app-company',
@@ -36,6 +42,10 @@ export class CompanyComponent implements OnInit {
   public mapMarker:Marker;
   public workForms:Branch[];
   public workNumber:number = 1;
+  @Input() editRequestData:EditRequestData = {
+    companyId:null,
+    workId:null,
+  };
   //dodać formularze do firmy/zakładu
   //funkcja do dodawania wielu zakładów dla jednej firmy
   //edycja/usuwanie firmy/zakładu
@@ -78,11 +88,12 @@ export class CompanyComponent implements OnInit {
     ] 
   }
 
-  constructor(private fb:FormBuilder,private pDataService:PersonalDataService,private cDataService:CompanyService) {}
+  constructor(private fb:FormBuilder,private pDataService:PersonalDataService,private cDataService:CompanyService,private uDataService:UserService) {}
 
   ngOnInit() {
     this.checkForPersonalData();
     this.getActualPosition();
+    this.showEditForm();
   }
 
   private getActualPosition() {
@@ -109,6 +120,11 @@ export class CompanyComponent implements OnInit {
         };
       }
       
+    }
+  }
+  private getCompanyList() {
+    if(storage_Avaliable('localStorage')) {
+      let userREST:UserREST = JSON.parse(localStorage.getItem('userREST'));
     }
   }
 
@@ -168,6 +184,7 @@ export class CompanyComponent implements OnInit {
       this.showRequestMessage('success');
       console.log(response);
       this.setDefaultValues();
+      this.uDataService.updateUser();
     },error=>{
       this.showRequestMessage('error');
       this.setDefaultValues();
@@ -245,6 +262,14 @@ export class CompanyComponent implements OnInit {
       return true;
     } else {
       return false;
+    }
+  }
+
+  private showEditForm() {
+    if(this.editRequestData.companyId) {
+      this.toggleAddForm();
+    }else if(this.editRequestData.workId) {
+      this.toggleWorkForm();
     }
   }
 }

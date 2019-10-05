@@ -16,15 +16,15 @@ export class CompanyService {
     return this.http.post(`http://localhost:8090/api/companies`,companyData);
   }
 
-  public getCompany(userRest:UserREST) {
-    return this.http.get(`http://localhost:8090/api/companies/${userRest.userID}`,{observe: 'response'});
+  public getCompany(companyId:number) {
+    return this.http.get(`http://localhost:8090/api/companies/${companyId}`,{observe: 'response'});
   }
 
-  public deleteCompany(userRest:UserREST) {
-    return this.http.delete(`http://localhost:8090/api/companies/${userRest.userID}`,{observe: 'response'});
+  public deleteCompany(companyId:number) {
+    return this.http.delete(`http://localhost:8090/api/companies/${companyId}`,{observe: 'response'});
   }
 
-  public editCompany(companyData:Company,userRest:UserREST) {
-    return this.http.patch(`http://localhost:8090/api/companies/${userRest.userID}`,companyData);
+  public editCompany(companyData:Company,companyId:number) {
+    return this.http.patch(`http://localhost:8090/api/companies/${companyId}`,companyData);
   }
 }

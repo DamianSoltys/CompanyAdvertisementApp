@@ -17,6 +17,14 @@
       Aby dodać firmę,musisz dodać dane osobowe!
     </span>
   </div>
+  <div class="company-component__error-container text-center col-12">
+    <p *ngIf="successMessage" class="text-success error-container__text--success">
+      {{ successMessage }}
+    </p>
+    <p *ngIf="errorMessage" class="text-danger error-container__text--danger">
+      {{ errorMessage }}
+    </p>
+  </div>
 </div>
 
 <!--FORM-->
@@ -113,7 +121,7 @@
               <div class="input-container__select-wrapper">
                 <label class="input-container__label" for="category">Kategoria</label>
                 <select formControlName="category" name="category" class="form-control select-wrapper__select-input">
-                  <option class="select-input__option" *ngFor="let item of _voivodeships">{{ item }}</option>
+                  <option class="select-input__option" *ngFor="let item of _categories">{{ item }}</option>
                 </select>
               </div>
               <div class="input-container__error-container" *ngIf="
@@ -125,12 +133,12 @@
               </div>
             </div>
             <div class="inputs__input-container">
-              <label class="input-container__label" for="url">Strona firmy</label>
-              <input formControlName="url" name="url" type="text" class="input-container__input form-control" />
+              <label class="input-container__label" for="companyWebsiteUrl">Strona firmy</label>
+              <input formControlName="companyWebsiteUrl" name="companyWebsiteUrl" type="text" class="input-container__input form-control" />
               <div class="input-container__error-container" *ngIf="
-              (this._companyForm.url.touched || this._companyForm.url.dirty) &&
-              this._companyForm.url.errors">
-                <p class="text-danger error-container__text--danger" *ngIf="this._companyForm.url.errors.required">
+              (this._companyForm.companyWebsiteUrl.touched || this._companyForm.companyWebsiteUrl.dirty) &&
+              this._companyForm.companyWebsiteUrl.errors">
+                <p class="text-danger error-container__text--danger" *ngIf="this._companyForm.companyWebsiteUrl.errors.required">
                   Pole nie może być puste
                 </p>
               </div>
@@ -187,7 +195,7 @@
   <div class="company-component__form">
     <form [formGroup]="workForm" class="form__add-form" (ngSubmit)="onSubmit($event)">
       <div class="add-form__header">
-        <span class="header__text-node">Dane zakładu</span>
+        <span class="header__text-node">Dane zakładu {{workNumber}}</span>
       </div>
       <div class="add-form__input-container">
         <div class="input-container__input-group">
@@ -221,7 +229,7 @@
               <div class="inputs__input-container select-wrapper">
                 <div class="input-container__select-wrapper">
                   <label class="input-container__label" for="voivodeship">Województwo</label>
-                  <select name="voivodeship" class="form-control select-wrapper__select-input">
+                  <select formControlName="voivodeship" name="voivodeship" class="form-control select-wrapper__select-input">
                     <option class="select-input__option" *ngFor="let item of _voivodeships">{{ item }}</option>
                   </select>
                 </div>

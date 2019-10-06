@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Company,GetCompany } from 'src/app/classes/Company';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
 import { UserREST } from 'src/app/classes/User';
@@ -11,7 +11,7 @@ import { UserService } from 'src/app/services/user.service';
   templateUrl: './company-section.component.html',
   styleUrls: ['./company-section.component.scss']
 })
-export class CompanySectionComponent implements OnInit {
+export class CompanySectionComponent implements OnInit,OnDestroy {
   @Input() companyData:GetCompany;
   public owner = new BehaviorSubject(false);
   constructor(private cDataService:CompanyService,private uDataService:UserService) { }
@@ -36,6 +36,9 @@ export class CompanySectionComponent implements OnInit {
       console.log(error);
     });
     
+  }
+  ngOnDestroy() {
+    this.cDataService.CompanyData[this.companyData.companyId] = this.companyData;
   }
 
 

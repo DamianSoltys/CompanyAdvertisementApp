@@ -13,6 +13,10 @@
         width: 95%;
         padding: 0;
     }
+    .company-component__company-section {
+        max-height: 50vh;
+        overflow: auto;
+    }
 
     .company-component__form {
         @include boxShadow(0px 4px 5px 0px #bbb9bf);
@@ -247,9 +251,5 @@
     .company-component__information-container {
         display:flex;
         align-self: center;
-    }
-
-    .company-component__company-section {
-        border:1px solid red;
     }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ParamMap, ActivatedRoute } from '@angular/router';
 
 interface EditRequestData {
   companyId:number;
@@ -11,15 +12,13 @@ interface EditRequestData {
 })
 export class CompanyProfileComponent implements OnInit {
   public editData:EditRequestData;
-  constructor() {
-    this.editData = {
-      companyId: null,
-      workId: 5,
-    };
-    
-   }
+  public param:string;
+  constructor(private activatedRoute: ActivatedRoute) {  }
 
   ngOnInit() {
+    this.activatedRoute.params.subscribe(params=>{
+      this.param = params['id'];
+    });
   }
 
 }

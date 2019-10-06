@@ -1,12 +1,23 @@
 <div class="company-section__company-container">
   <div class="company-container__company-data">
-    {{companyData}}
+    <div class="company-data__data-container">
+    <p class="data-container__text-node">Nazwa:{{companyData.companyName}}</p>
+    <p class="data-container__text-node">Kategoria:{{companyData.category}}</p>
+    <p class="data-container__text-node">Rejestrujący:{{companyData.registererFullname}}</p>
+  </div>
   </div>
   <div class="company-container__company-action">
-      {{companyData}}
+    <div class="company-action__button-container" *ngIf="owner">
+        <a [routerLink]="[ '/companyProfile', companyData.companyId, 'owner']" class="btn btn-primary company-action__button--profile">Profil</a>
+        <button class="btn btn-primary company-action__button--delete" (click)="deleteCompany()">Usuń</button>
+    </div>
+
+    <div class="company-action__button-container" *ngIf="!owner">
+        <a [routerLink]="[ '/companyProfile', companyData.companyId, 'guest']" class="btn btn-primary company-action__button--profile">Profil</a>
+    </div>
+   
     </div>
     <div class="company-container__company-rating">
-        {{companyData}}
+      <p class="company-rating__text-node">*****</p>       
       </div>
-     <a [routerLink]="[ '/companyProfile', 2]">klik</a>
 </div>

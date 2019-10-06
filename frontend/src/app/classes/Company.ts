@@ -9,6 +9,19 @@ export class Company {
     regon: string;
 }
 
+export class GetCompany {
+    address:Address;     
+    branchesIDs:Branch[];
+    category: string;
+    companyId:number;
+    companyWebsiteUrl: string;
+    description: string;
+    companyName: string;
+    nip: string;
+    regon: string;
+    registererFullname:string;
+}
+
 export class Branch {
     address: Address;       
     geoX: string;

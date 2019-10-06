@@ -1,20 +1,59 @@
 @import '../../../commonStyles/shared';
 
 .company-section__company-container {
-    height:10vh;
-    border:1px solid blue;
+    @include boxShadow(0px 0px 5px -2px $bgcolor);
+    border-radius: 5px;
     margin: 5px;
     display:flex;
+    @include phone {
+        flex-direction: column;
+    }
     
     .company-container__company-data {
         flex:1;
+
+        .company-data__data-container{
+            padding-left: 10px;
+            .data-container__text-node{
+                padding: 10px;
+                margin:0;
+            }
+        }
     }
 
     .company-container__company-action {
         flex:1;
+        .company-action__button-container {
+            display: flex;
+            flex-direction: column;
+            height:100%;
+            justify-content: center;
+            align-items: center;
+
+            .company-action__button {
+                &--delete,&--profile {
+                    background-color: $bgcolor;
+                    border: 1px solid $btborder;
+                    margin:5px;
+                    width:50%;
+                    
+                    @include phone {
+                        width:65%;
+                    }
+                    &:hover {
+                        background-color: $bgcolor1;
+                        opacity: 0.8;                    
+                    }
+                }              
+            }
+        }
     }
 
     .company-container__company-rating {
         flex:1;
+        display:flex;
+        align-items: center;
+        justify-content: center;
+    
     }
 }

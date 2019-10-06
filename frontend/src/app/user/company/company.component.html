@@ -1,8 +1,9 @@
 <!--COMPANY LIST-->
 <div class="company-component container-fluid" *ngIf="this.canShowDataList()">
-  <div class="company-component__company-section">
-    <app-company-section companyData="dupa"></app-company-section>
-    <app-company-section companyData="cipa"></app-company-section>
+  <div class="company-component__company-section" *ngIf="canShowCompanyList()">
+  <div class="company-section__company-container" *ngFor="let company of companyList">
+    <app-company-section [companyData]="company"></app-company-section>
+  </div>
   </div>
 
   <div class="company-component__separator"></div>
@@ -11,19 +12,6 @@
     <button class="btn button-container__button--add" (click)="toggleAddForm()">
       <span class="button--add__text-node">Dodaj firmę</span>
     </button>
-  </div>
-  <div class="company-component__information-container" *ngIf="!this.havePersonalData.getValue()">
-    <span class="information-container__message--error text-danger">
-      Aby dodać firmę,musisz dodać dane osobowe!
-    </span>
-  </div>
-  <div class="company-component__error-container text-center col-12">
-    <p *ngIf="successMessage" class="text-success error-container__text--success">
-      {{ successMessage }}
-    </p>
-    <p *ngIf="errorMessage" class="text-danger error-container__text--danger">
-      {{ errorMessage }}
-    </p>
   </div>
 </div>
 
@@ -318,4 +306,13 @@
     </button>
   </div>
 </div>
+
+<div class="company-component__error-container text-center col-12">
+    <p *ngIf="successMessage" class="text-success error-container__text--success">
+      {{ successMessage }}
+    </p>
+    <p *ngIf="errorMessage" class="text-danger error-container__text--danger">
+      {{ errorMessage }}
+    </p>
+  </div>
 

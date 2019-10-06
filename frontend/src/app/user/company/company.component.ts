@@ -5,7 +5,7 @@ import { voivodeships } from 'src/app/classes/Voivodeship';
 import { categories } from 'src/app/classes/Category';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MouseEvent } from '@agm/core';
-import { Company, Branch } from 'src/app/classes/Company';
+import { Company, Branch, GetCompany } from 'src/app/classes/Company';
 import { PersonalDataService } from 'src/app/services/personal-data.service';
 import { CompanyService } from 'src/app/services/company.service';
 import { UserREST } from 'src/app/classes/User';
@@ -36,6 +36,7 @@ export class CompanyComponent implements OnInit {
   public canShowWorkForm = new BehaviorSubject(false);
   private successMessageText = 'Akcja została zakończona pomyślnie';
   private errorMessageText = 'Akcja niepowiodła się';
+  public companyList:GetCompany[];
   public successMessage: string = '';
   public errorMessage: string = '';
   public actualPosition:Position;
@@ -92,8 +93,9 @@ export class CompanyComponent implements OnInit {
 
   ngOnInit() {
     this.checkForPersonalData();
+    this.getCompanyList();
     this.getActualPosition();
-    this.showEditForm();
+    this.showEditForm(); 
   }
 
   private getActualPosition() {
@@ -125,7 +127,30 @@ export class CompanyComponent implements OnInit {
   private getCompanyList() {
     if(storage_Avaliable('localStorage')) {
       let userREST:UserREST = JSON.parse(localStorage.getItem('userREST'));
+      if(userREST.companiesIDs) {
+      this.companyList = [];
+      userREST.companiesIDs.forEach(companyId=>{
+       this.cDataService.getCompany(companyId).subscribe(response=>{
+        this.companyList.push(<GetCompany>response.body);
+        this.companyList.sort(this.companySort);       
+       },error=>{
+        console.log(error);
+       });
+      });
+    }      
     }
+  }
+
+  public canShowCompanyList() {
+    if(this.companyList && this.companyList.length !==0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  private companySort(item1:GetCompany,item2:GetCompany) {
+    return item1.companyId-item2.companyId;
   }
 
   public mapClickEvent($event:MouseEvent) {
@@ -182,9 +207,10 @@ export class CompanyComponent implements OnInit {
 
     this.cDataService.addCompany(companyData).subscribe(response=>{
       this.showRequestMessage('success');
-      console.log(response);
-      this.setDefaultValues();
-      this.uDataService.updateUser();
+      setTimeout(()=>{
+        this.uDataService.updateUser();
+        location.reload();
+      },500);
     },error=>{
       this.showRequestMessage('error');
       this.setDefaultValues();
@@ -228,9 +254,11 @@ export class CompanyComponent implements OnInit {
           this.havePersonalData.next(true);
         },error=>{
           this.havePersonalData.next(false);
+          this.showRequestMessage('error','','Aby dodać firmę musisz dodać dane osobowe!');
         });
       } else {
         this.havePersonalData.next(false);
+        this.showRequestMessage('error','','Aby dodać firmę musisz dodać dane osobowe!');
       }
     }
   }

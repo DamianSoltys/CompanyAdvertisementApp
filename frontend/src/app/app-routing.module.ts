@@ -18,6 +18,9 @@ const routes: Routes = [
     path: 'registerConfirm/:auth', loadChildren: './user/register-confirm/register-confirm.module#RegisterConfirmModule'
   },
   {
+    path: 'companyProfile/:id', loadChildren: './commonComponents/company-profile/company-profile.module#CompanyProfileModule'
+  },
+  {
     path: 'user/personalData',
     loadChildren: './user/personal-data/personal-data.module#PersonalDataModule',
     canActivate: [AuthGuard]

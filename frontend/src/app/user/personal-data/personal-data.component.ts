@@ -111,7 +111,7 @@ export class PersonalDataComponent implements OnInit {
       this.naturalUserDataObject = this.getPersonalDataStorage();     
         setTimeout(() => {
           this.showPersonalData();
-        }, 1000);     
+        }, 500);     
     } else {
       this.getPersonalDataServer();
     }

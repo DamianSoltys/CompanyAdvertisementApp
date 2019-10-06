@@ -82,6 +82,10 @@ html {
         &:first-of-type li {
           border-top-left-radius: 20px;
         }
+        &:last-of-type li {
+          border-bottom-left-radius: 5px;
+          border-bottom-right-radius: 5px;
+        }
 
         li {
           padding: 5px 10px;
@@ -186,7 +190,7 @@ html {
   @include boxShadow(0px 4px 5px 0px rgba(187, 185, 191, 1));
   border: 1px solid $bgcolor;
   z-index: 10;
-  right: -20px;
+  right: -5px;
   width: calc(100vw + 10px);
   background: #fff;
 
@@ -227,6 +231,7 @@ html {
 
 .navbar__dropdown {
   position: relative;
+  padding: 0 15px;
 
   @include tablet {
     display: none;

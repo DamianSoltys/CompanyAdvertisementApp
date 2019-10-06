@@ -38,6 +38,7 @@ export class RegisterComponent implements OnInit {
     this.checkIfRegisterSuccess(User_Data);
   } else {
     this.passwordMatchError = true;
+    console.log("Dupa");
   }
  }
 
@@ -45,15 +46,30 @@ export class RegisterComponent implements OnInit {
     this.regService.Register(User_Data).subscribe((data:HttpResponse<any>) => {     
     if (data.status === 200) {
       this.register_error = false;
-      this.success_message = 'Proszę potwierdzić swoje konto linkiem wysłanym na podany adres email';
-       console.log('Proszę potwierdzić swoje konto linkiem wysłanym na podany email');
+      this.showRequestMessage('success','Proszę potwierdzić swoje konto linkiem wysłanym na podany adres email','');
+       console.log('Proszę potwierdzić swoje konto linkiem wysłanym na podany email!');
      }
    }, (error) => {
-    this.error_message = 'Coś poszło nie tak,proszę spróbować później!';
+    this.showRequestMessage('error','','Niestety rejestracja się nie udała!');
+    console.log('Niestety rejestracja się nie udała!');
     this.register_error = true;
     console.log(error.error.text);
    });
  }
+
+ private showRequestMessage(
+  type: string,
+  successMessage: string = this.success_message,
+  errorMessage: string = this.error_message
+) {
+  if (type === 'success') {
+    this.success_message = successMessage;
+    this.error_message = '';
+  } else {
+    this.success_message = '';
+    this.error_message = errorMessage;
+  }
+}
 
  setUserData(): UserReg{
     const User_Data = new UserReg();

@@ -38,6 +38,7 @@ export class LoginService {
       localStorage.removeItem('token');
       localStorage.removeItem('userREST');
       localStorage.removeItem('naturalUserData');
+      localStorage.removeItem('actualPosition');
       this.ChangeLogged();
       setTimeout(() => {
         this.router.navigate(['']);

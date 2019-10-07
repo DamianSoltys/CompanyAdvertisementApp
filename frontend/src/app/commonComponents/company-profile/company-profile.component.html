@@ -1,3 +1,29 @@
-<p>
-{{companyData[param].companyName}}
-</p>
+<div class="container-fluid company-profile-component">
+    <div class="company-profile-component__main-container">
+        <div class="main-container__header">
+            <span class="header__text-node">Profil firmy</span>
+        </div>
+        <div class="main-container__content">
+            <div class="content__section--main col-6">
+                <div class="section--main__data"><p class="data__text-node">{{companyData.registererFullname}}</p></div>
+                <div class="section--main__data"><p class="data__text-node">{{companyData.companyName}}</p></div>
+                <div class="section--main__data"><p class="data__text-node">{{companyData.category}}</p></div>
+                <div class="section--main__data"><p class="data__text-node">{{companyData.nip}}</p></div>
+                <div class="section--main__data"><p class="data__text-node">{{companyData.regon}}</p></div>
+            </div>
+            <div class="content__section--address col-6">
+                <div class="section--address__data"><p class="data__text-node">{{companyData.address.voivodeship}}</p></div>
+                <div class="section--address__data"><p class="data__text-node">{{companyData.address.city}}</p></div>
+                <div class="section--address__data"><p class="data__text-node">{{companyData.address.street}}</p></div>
+                <div class="section--address__data"><p class="data__text-node">{{companyData.address.apartmentNo}}</p></div>
+                <div class="section--address__data"><p class="data__text-node">{{companyData.address.buildingNo}}</p></div>
+            </div>
+            <div class="content__section--description col-12">
+                <div class="section--description__data">test</div>
+            </div>
+            <div class="content__section--buttons col-12">
+                    Przyciski
+            </div>
+        </div>
+    </div>
+</div>

@@ -17,7 +17,6 @@ export class CompanySectionComponent implements OnInit,OnDestroy {
   constructor(private cDataService:CompanyService,private uDataService:UserService) { }
 
   ngOnInit() {
-    console.log(this.companyData);
     if(storage_Avaliable('localStorage')) {
       let userREST:UserREST = JSON.parse(localStorage.getItem('userREST'));
       userREST.companiesIDs.forEach(value=>{

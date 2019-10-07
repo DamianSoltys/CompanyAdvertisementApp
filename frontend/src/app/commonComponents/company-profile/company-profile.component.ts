@@ -15,7 +15,7 @@ interface EditRequestData {
 export class CompanyProfileComponent implements OnInit {
   public editData:EditRequestData;
   public param:string;
-  public companyData:GetCompany[];
+  public companyData:GetCompany;
   constructor(private activatedRoute: ActivatedRoute,private cDataService:CompanyService) {  }
 
   ngOnInit() {
@@ -23,7 +23,8 @@ export class CompanyProfileComponent implements OnInit {
       this.param = params['id'];
     });
 
-    this.companyData = this.cDataService.CompanyData;
+    this.companyData = this.cDataService.CompanyData[this.param];
+    console.log(this.companyData);
   }
 
 }

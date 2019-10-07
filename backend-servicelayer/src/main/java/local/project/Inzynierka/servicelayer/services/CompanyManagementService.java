@@ -103,6 +103,8 @@ public class CompanyManagementService {
                 .category(company.getCategory().getName())
                 .companyId(company.getId())
                 .companyName(company.getName())
+                .REGON(company.getREGON())
+                .NIP(company.getNIP())
                 .address(addressMapper.map(company.getAddress()))
                 .description(company.getDescription())
                 .registererFullname(this.getRegistererFullname(company))

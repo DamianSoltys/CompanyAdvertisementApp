@@ -1,6 +1,6 @@
 package local.project.Inzynierka.web.resource;
 
-import local.project.Inzynierka.servicelayer.dto.CompanyBranchDto;
+import local.project.Inzynierka.servicelayer.dto.PersistedBranchDto;
 import local.project.Inzynierka.servicelayer.services.BranchQueriesService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +30,7 @@ public class BranchResource {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/branch")
-    public Page<CompanyBranchDto> getBranches(Pageable pageable) {
+    public Page<PersistedBranchDto> getBranches(Pageable pageable) {
 
         return branchQueriesService.getAll(pageable);
     }

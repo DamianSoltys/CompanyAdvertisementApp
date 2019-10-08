@@ -2,6 +2,7 @@ package local.project.Inzynierka.servicelayer.services;
 
 import local.project.Inzynierka.persistence.repository.BranchRepository;
 import local.project.Inzynierka.servicelayer.dto.CompanyBranchDto;
+import local.project.Inzynierka.servicelayer.dto.PersistedBranchDto;
 import local.project.Inzynierka.servicelayer.dto.mapper.BranchMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,11 +23,11 @@ public class BranchQueriesService {
 
     public Optional<CompanyBranchDto> getById(Long branchId) {
         return branchRepository.findById(branchId)
-                .map(branchMapper::map);
+                .map(branchMapper::mapInputBranch);
     }
 
-    public Page<CompanyBranchDto> getAll(Pageable pageable) {
+    public Page<PersistedBranchDto> getAll(Pageable pageable) {
         return branchRepository.findAll(pageable)
-                .map(branchMapper::map);
+                .map(branchMapper::mapPersistedBranch);
     }
 }

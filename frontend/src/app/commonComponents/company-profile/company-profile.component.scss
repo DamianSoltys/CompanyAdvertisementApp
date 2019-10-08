@@ -10,6 +10,26 @@
         width: 95%;
         padding: 0;
     }
+
+    .company-profile-component__shared--buttons {
+        display:flex;
+        justify-content: center;
+        .shared--buttons__button--back {
+            width: 30%;
+            margin-bottom: 2%;
+            border-radius: 50px;
+            border: 0;
+            background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
+            animation: button-background-animation 16s linear infinite;
+            background-size: 600%;
+            margin-top: 4%;
+
+            @include phone {
+                width: 75%;
+            }
+        }
+    }
+
     .company-profile-component__main-container {
         @include boxShadow(0px 4px 5px 0px #bbb9bf);
         border-bottom-left-radius: 20px;

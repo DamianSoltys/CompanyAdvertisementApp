@@ -17,7 +17,7 @@ interface EditRequestData {
 export class CompanyProfileComponent implements OnInit {
   public editData: EditRequestData;
   public paramId: number;
-  public paramPerson: string;
+  public owner:boolean;
   public companyData: GetCompany;
   private successMessageText = 'Akcja została zakończona pomyślnie';
   private errorMessageText = 'Akcja niepowiodła się';
@@ -27,12 +27,14 @@ export class CompanyProfileComponent implements OnInit {
   public canShowBranches = new BehaviorSubject(false);
   public canShowCompany = new BehaviorSubject(true);
 
-  constructor(private activatedRoute: ActivatedRoute, private cDataService: CompanyService) {}
+  constructor(private activatedRoute: ActivatedRoute, private cDataService: CompanyService,private router:Router) {}
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       this.paramId = params['id'];
-      this.paramPerson = params['owner'];
+    });
+    this.activatedRoute.data.subscribe(data=>{
+      this.owner = data['owner'];
     });
     this.getCompanyData();
   }
@@ -53,10 +55,17 @@ export class CompanyProfileComponent implements OnInit {
       );
     }
   }
+  public goBack() {
+    this.canShowComments.next(false);
+    this.canShowBranches.next(false);
+    this.canShowCompany.next(true);
+  }
+
   public showComments() {
     this.canShowComments.next(true);
     this.canShowCompany.next(false);
   }
+
   public showBranches() {
     this.canShowBranches.next(true);
     this.canShowCompany.next(false);

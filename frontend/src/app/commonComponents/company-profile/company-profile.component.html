@@ -49,12 +49,13 @@
       <div class="content__section--buttons col-12">
         <button class="btn btn-primary section--buttons__button--comments" (click)="showComments()">Komentarze</button>
         <button class="btn btn-primary section--buttons__button--branches" (click)="showBranches()">Zakłady</button>
-        <span class="section--buttons__owner-buttons" *ngIf="paramPerson == 'owner'">
+        <span class="section--buttons__owner-buttons" *ngIf="owner">
           <a class="btn btn-primary owner-buttons__button--edit">Edycja danych</a>
         </span>
       </div>
     </div>
   </div>
+
   <div class="company-profile-component__error-container text-center col-12">
     <p *ngIf="successMessage" class="text-success error-container__text--success">
       {{ successMessage }}
@@ -63,6 +64,11 @@
       {{ errorMessage }}
     </p>
   </div>
-  <app-company-section *ngIf="canShowBranches.value"></app-company-section>
+
+  <app-company-section [showWorks]="true" [companyData]="companyData" *ngIf="canShowBranches.value"></app-company-section>
   <app-comments *ngIf="canShowComments.value"></app-comments>
+  
+  <div class="company-profile-component__shared--buttons col-12" *ngIf="!this.canShowCompany.value">
+      <button class="btn btn-primary shared--buttons__button--back" (click)="goBack()">Wróć</button>
+  </div>
 </div>

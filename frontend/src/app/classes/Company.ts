@@ -12,7 +12,7 @@ export class Company {
 
 export class GetCompany {
     address:Address;     
-    branchesIDs:Branch[];
+    branchesIDs:number[];
     category: string;
     companyId:number;
     companyWebsiteUrl: string;

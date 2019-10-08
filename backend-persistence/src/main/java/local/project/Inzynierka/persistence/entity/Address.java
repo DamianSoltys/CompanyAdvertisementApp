@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +25,7 @@ import javax.persistence.Table;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Indexed
 public class Address extends FullTimestampingAudit implements IEntity<Long> {
 
     @Id
@@ -33,9 +36,11 @@ public class Address extends FullTimestampingAudit implements IEntity<Long> {
     @JoinColumn(name = "voivodeship_id", nullable = false, foreignKey = @ForeignKey(name = "branch_voivodeship_FK"))
     private Voivoideship voivodeship_id;
 
+    @Field
     @Column(nullable = false, length = 30)
     private String city;
 
+    @Field
     @Column(length = 30)
     private String street;
 

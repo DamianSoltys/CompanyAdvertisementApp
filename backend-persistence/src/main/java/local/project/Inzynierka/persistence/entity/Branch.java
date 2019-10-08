@@ -1,10 +1,14 @@
 package local.project.Inzynierka.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import local.project.Inzynierka.persistence.common.FullTimestampingAudit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,7 +28,13 @@ import javax.persistence.Table;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Branch extends FullTimestampingAudit implements IEntity<Long> {
+@Indexed
+@JsonAutoDetect(creatorVisibility = JsonAutoDetect.Visibility.NONE,
+        fieldVisibility = JsonAutoDetect.Visibility.NONE,
+        getterVisibility = JsonAutoDetect.Visibility.NONE,
+        isGetterVisibility = JsonAutoDetect.Visibility.NONE,
+        setterVisibility = JsonAutoDetect.Visibility.NONE)
+public class Branch extends FullTimestampingAudit implements IEntity<Long>, SearchableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,9 +49,11 @@ public class Branch extends FullTimestampingAudit implements IEntity<Long> {
     @JoinColumn(name = "company_id", foreignKey = @ForeignKey(name = "company_branch_FK"), nullable = false)
     private Company company;
 
+    @Field
     @Column(nullable = false, length = 50)
     private String name;
 
+    @IndexedEmbedded
     @OneToOne(orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "address_id", nullable = false, foreignKey = @ForeignKey(name = "address_branch_FK"))
     private Address address;

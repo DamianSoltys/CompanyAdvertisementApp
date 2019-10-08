@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,12 +29,14 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "companies")
-public class Company extends FullTimestampingAudit implements IEntity<Long> {
+@Indexed
+public class Company extends FullTimestampingAudit implements IEntity<Long>, SearchableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id = 0L;
 
+    @Field
     @Column(nullable = false, length = 50)
     private String name;
 
@@ -41,10 +46,12 @@ public class Company extends FullTimestampingAudit implements IEntity<Long> {
     @Column(unique = true, nullable = false, length = 14)
     private String REGON;
 
+    @IndexedEmbedded
     @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "address_id", nullable = false, foreignKey = @ForeignKey(name = "address_company_FK"))
     private Address address;
 
+    @Field
     @Column(nullable = false, length = 10000)
     private String description;
 

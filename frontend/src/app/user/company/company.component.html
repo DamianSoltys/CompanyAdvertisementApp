@@ -21,7 +21,7 @@
 </div>
 
 <!--FORM-->
-<div class="company-component container-fluid" *ngIf="this.canShowAddsForm()">
+<div class="company-component container-fluid" [ngClass]="{'company-component__edit': editRequestData.companyId}" *ngIf="this.canShowAddsForm()">
   <div class="company-component__form">
     <form [formGroup]='companyForm' class="form__add-form" (ngSubmit)="onSubmit($event)">
       <div class="add-form__header">

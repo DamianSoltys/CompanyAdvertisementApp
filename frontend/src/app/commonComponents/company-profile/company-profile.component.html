@@ -48,7 +48,7 @@
         <button class="btn btn-primary section--buttons__button--comments" (click)="showComments()">Komentarze</button>
         <button class="btn btn-primary section--buttons__button--branches" (click)="showBranches()">Zakłady</button>
         <span class="section--buttons__owner-buttons" *ngIf="owner">
-          <a class="btn btn-primary owner-buttons__button--edit">Edycja danych</a>
+          <button class="btn btn-primary owner-buttons__button--edit" (click)="showEditForm()">Edycja danych</button>
         </span>
       </div>
     </div>
@@ -65,6 +65,7 @@
 
   <app-company-section [showWorks]="true" [companyData]="companyData" *ngIf="canShowBranches.value"></app-company-section>
   <app-comments *ngIf="canShowComments.value"></app-comments>
+  <app-company  class="company-profile-component__app-company" *ngIf="canShowEditForm.value" [editRequestData]="editData"></app-company>
   
   <div class="company-profile-component__shared--buttons col-12" *ngIf="!this.canShowCompany.value">
       <button class="btn btn-primary shared--buttons__button--back" (click)="goBack()">Wróć</button>

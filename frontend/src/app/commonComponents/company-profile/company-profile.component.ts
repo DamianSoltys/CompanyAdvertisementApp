@@ -25,6 +25,7 @@ export class CompanyProfileComponent implements OnInit {
   public errorMessage: string = '';
   public canShowComments = new BehaviorSubject(false);
   public canShowBranches = new BehaviorSubject(false);
+  public canShowEditForm = new BehaviorSubject(false);
   public canShowCompany = new BehaviorSubject(true);
 
   constructor(private activatedRoute: ActivatedRoute, private cDataService: CompanyService,private router:Router) {}
@@ -56,6 +57,7 @@ export class CompanyProfileComponent implements OnInit {
   public goBack() {
     this.canShowComments.next(false);
     this.canShowBranches.next(false);
+    this.canShowEditForm.next(false);
     this.canShowCompany.next(true);
   }
 
@@ -66,6 +68,15 @@ export class CompanyProfileComponent implements OnInit {
 
   public showBranches() {
     this.canShowBranches.next(true);
+    this.canShowCompany.next(false);
+  }
+
+  public showEditForm() {    
+      this.editData ={
+        companyId:this.companyData.companyId,
+        workId:null,
+      }          
+    this.canShowEditForm.next(true);
     this.canShowCompany.next(false);
   }
 

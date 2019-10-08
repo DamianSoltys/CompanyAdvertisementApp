@@ -4,7 +4,7 @@
     display: flex;
     flex-direction: column;
     width:60%;
-    margin-top: 5%;
+    margin-top: 2%;
     max-width: 1000px;
 
     @include phone {
@@ -13,6 +13,9 @@
     }
     @include tablet {
         width:85%;
+    }
+    .company-profile-component__app-company {
+        margin-bottom: 5px;
     }
 
     .company-profile-component__shared--buttons {

@@ -50,10 +50,6 @@ export class CompanyComponent implements OnInit {
     companyId:null,
     workId:null,
   };
-  //dodać formularze do firmy/zakładu
-  //funkcja do dodawania wielu zakładów dla jednej firmy
-  //edycja/usuwanie firmy/zakładu
-  //profil zakładu-wyświetlanie oddzielny komponent wraz do wyszukiwarki
   public _voivodeships = voivodeships;
   public _categories = categories;
 
@@ -145,15 +141,6 @@ export class CompanyComponent implements OnInit {
     }      
     }
   }
-
-  public canShowCompanyList() {
-    if(this.companyList && this.companyList.length !==0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   private companySort(item1:GetCompany,item2:GetCompany) {
     return item1.companyId-item2.companyId;
   }
@@ -203,6 +190,18 @@ export class CompanyComponent implements OnInit {
 
   public onSubmit(event: Event) {
     event.preventDefault();
+    if(this.editRequestData.companyId ) {
+      this.patchData();
+    } else {
+      this.postData();
+    }
+  }
+
+  private patchData() {
+    console.log("patch");
+  }
+
+  private postData() {
     if(this.workForm.valid) {
       this.addAnotherWork();
     }
@@ -224,6 +223,7 @@ export class CompanyComponent implements OnInit {
         console.log(error);
       });     
   }
+
   public onFileSelected(event,companyForm:boolean) {
     if(companyForm) {
       this.companyLogo = event.target.files[0];
@@ -320,6 +320,14 @@ export class CompanyComponent implements OnInit {
       this.toggleAddForm();
     }else if(this.editRequestData.workId) {
       this.toggleWorkForm();
+    }
+  }
+
+  public canShowCompanyList() {
+    if(this.companyList && this.companyList.length !==0) {
+      return true;
+    } else {
+      return false;
     }
   }
 }

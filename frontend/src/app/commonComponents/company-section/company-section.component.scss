@@ -58,6 +58,8 @@
     }
 }
 .branch-section__branch-container {
+    max-height: 50vh;
+    overflow: auto;
     .branch-container__empty-list {
         .empty-list__text-node {
             color:$bgcolor;

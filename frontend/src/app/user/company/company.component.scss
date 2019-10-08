@@ -1,5 +1,8 @@
 @import "../../../commonStyles/shared";
-
+.company-component__edit {
+    width:100% !important;
+    margin-top:0 !important;
+}
 .company-component {
     display: flex;
     flex-direction: column;

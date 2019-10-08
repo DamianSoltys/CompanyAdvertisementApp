@@ -18,6 +18,8 @@ public class CompanyInfoDto {
     private String companyWebsiteUrl;
     private String description;
     private Address address;
+    private String REGON;
+    private String NIP;
     private List<Long> branchesIDs;
 
 }

@@ -3,12 +3,16 @@
 .company-profile-component {
     display: flex;
     flex-direction: column;
-    width:80%;
+    width:60%;
     margin-top: 5%;
+    max-width: 1000px;
 
     @include phone {
         width: 95%;
         padding: 0;
+    }
+    @include tablet {
+        width:85%;
     }
 
     .company-profile-component__shared--buttons {
@@ -25,7 +29,7 @@
             margin-top: 4%;
 
             @include phone {
-                width: 75%;
+                width: 95%;
             }
         }
     }
@@ -54,19 +58,39 @@
         .main-container__content {
             display:flex;
             flex-wrap: wrap;
-            height:50vh;
+            height:60vh;
+            @include phone {
+                height: unset;
+            }
 
             .content__section--buttons {
                 display:flex;
                 align-items: center;
                 justify-content: center;
+                @include phone {
+                    flex-direction: column;              
+                }
 
                 .section--buttons__owner-buttons {
                     width: 20%;
+                    @include phone {
+                        width:95%;
+                        margin: 10px;
+                    }
 
                     .owner-buttons__button {
                         &--edit {
                             width: 100%;
+                            border-radius: 50px;
+                            border: 0;
+                            background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
+                            animation: button-background-animation 16s linear infinite;
+                            background-size: 600%;
+                            color:#fff;
+                            min-width: 125px;
+                            &:hover {
+                                cursor: pointer;
+                            } 
                         }
                     }
                 }
@@ -75,6 +99,14 @@
                     &--comments,&--branches {
                         width: 20%;
                         margin: 10px;
+                        border-radius: 50px;
+                        border: 0;
+                        background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
+                        animation: button-background-animation 16s linear infinite;
+                        background-size: 600%;
+                        @include phone {
+                            width:95%;
+                        }
                     }
                 }
             }

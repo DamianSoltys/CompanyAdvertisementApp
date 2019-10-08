@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router, ParamMap, ActivatedRoute } from '@angular/router';
 import { GetCompany } from 'src/app/classes/Company';
 import { CompanyService } from 'src/app/services/company.service';
@@ -38,11 +38,9 @@ export class CompanyProfileComponent implements OnInit {
     });
     this.getCompanyData();
   }
-
   private getCompanyData() {
     if (this.cDataService.CompanyData[this.paramId]) {
       this.companyData = this.cDataService.CompanyData[this.paramId];
-      console.log('dupa');
     } else {
       this.cDataService.getCompany(this.paramId).subscribe(
         response => {

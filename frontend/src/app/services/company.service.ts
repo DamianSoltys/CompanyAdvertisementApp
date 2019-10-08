@@ -15,7 +15,7 @@ export class CompanyService {
   constructor(private http:HttpClient) { }
 
   public addCompany(companyData:Company) {
-    return this.http.post(`http://localhost:8090/api/companies`,companyData);
+    return this.http.post(`http://localhost:8090/api/companiess`,companyData);
   }
 
   public getCompany(companyId:number) {
@@ -26,7 +26,7 @@ export class CompanyService {
     return this.http.delete(`http://localhost:8090/api/companies/${companyId}`,{observe: 'response'});
   }
 
-  public editCompany(companyData:Company,companyId:number) {
+  public editCompany(companyData:Company,companyId:number,logo:File) {
     return this.http.patch(`http://localhost:8090/api/companies/${companyId}`,companyData);
   }
 }

@@ -3,11 +3,12 @@
 .company-component {
     display: flex;
     flex-direction: column;
-    width:60%;
+    width:75%;
     margin-top: 5%;
+    max-width: 1000px;
 
     @include tablet {
-        width: 80%
+        width: 85%
     }
     @include phone {
         width: 95%;
@@ -16,6 +17,39 @@
     .company-component__company-section {
         max-height: 50vh;
         overflow: auto;
+        .company-section__text-node {
+            font-size: 1.2rem;
+            color:$bgcolor;
+        }
+    }
+    .company-component__rodo-container {
+        .rodo-container__text-node {
+          font-size: 0.8rem;
+          margin: 15px 1rem;
+          text-align: justify;
+          .text-node__star{
+            font-size:1rem;
+            color:red;
+          }
+        }
+      }
+
+    .company-component__button--personal {
+        width: 20%;
+        align-self: center;
+        margin-bottom:5%;
+        border-radius: 50px;
+        border: 0;
+        margin-left: 5px;
+        margin-right: 5px;
+        background: linear-gradient(-45deg, #FFA63D, #FF3D77, #338AFF, #3CF0C5);
+        animation: button-background-animation 16s linear infinite;
+        background-size: 600%;
+
+        .button--personal__text-node {
+            color:white;
+            margin: 0;
+        }  
     }
 
     .company-component__form {
@@ -117,11 +151,16 @@
                             position: relative;
                             left:0px;
                             transition: all .2s ease-in-out;
-                            margin:5px 20px;                           
+                            margin:5px 20px;
+                            flex-basis: 25%;                           
 
                             @include phone {
                                 margin:5px 0;
                                 width: 95%;
+                                flex-basis: 100%; 
+                            }
+                            @include tablet{
+                                flex-basis: 40%;
                             }
 
                             .input-container__select-wrapper {
@@ -222,7 +261,7 @@
         align-self: center;       
         width: 40%;
         justify-content: center;
-        padding: 30px 0;
+        padding-top:30px;
 
         @include phone {
             width:85%;
@@ -231,7 +270,6 @@
         .button-container__button--add,.button-container__button--submit {
             width:100%;
             height: 35px;   
-            margin-bottom:5%;
             border-radius: 50px;
             border: 0;
             margin-left: 5px;

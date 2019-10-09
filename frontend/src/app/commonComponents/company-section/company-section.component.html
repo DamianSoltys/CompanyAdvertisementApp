@@ -24,16 +24,12 @@
 </div>
 
 <div class="branch-section__branch-container" *ngIf="showWorks">
-    <div class="branch-container__empty-list text-center" *ngIf="!works.length">
-        <p class="empty-list__text-node">Aktualnie nie posiadasz żadnych zakładów</p>
-    </div>
-   <div class="branch-container" *ngFor="let branch of works">
       <div class="branch-container__branch-logo">
           <p class="branch-logo__text-node">Logo</p>       
         </div>
       <div class="branch-container__branch-data">
           <div class="branch-data__data-container">
-          <p class="data-container__text-node">Nazwa:{{branch.name}}</p>
+          <p class="data-container__text-node">Nazwa:{{branchData.name}}</p>
           <p class="data-container__text-node">Kategoria:{{companyData.category}}</p>
           <p class="data-container__text-node">Rejestrujący:{{companyData.registererFullname}}</p>
         </div>
@@ -50,5 +46,4 @@
          
           </div>
           
-   </div>
   </div>

@@ -62,8 +62,11 @@
       {{ errorMessage }}
     </p>
   </div>
-
-  <app-company-section [showWorks]="true" [companyData]="companyData" *ngIf="canShowBranches.value"></app-company-section>
+  <div class="company-profile-component__branch-sections" *ngIf="canShowBranches.value">
+  <div class="branch-sections__branch-section" *ngFor="let branch of branchData">
+    <app-company-section [showWorks]="true" [branchData]="branch" [companyData]="companyData"></app-company-section>
+  </div>
+  </div>
   <app-comments *ngIf="canShowComments.value"></app-comments>
   <app-company  class="company-profile-component__app-company" *ngIf="canShowEditForm.value" [editRequestData]="editData"></app-company>
   

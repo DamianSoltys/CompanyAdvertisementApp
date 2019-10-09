@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router, ParamMap, ActivatedRoute } from '@angular/router';
-import { GetCompany } from 'src/app/classes/Company';
+import { GetCompany, Branch } from 'src/app/classes/Company';
 import { CompanyService } from 'src/app/services/company.service';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
 import { BehaviorSubject } from 'rxjs';
+import { BranchService } from 'src/app/services/branch.service';
 
 interface EditRequestData {
   companyId: number;
@@ -19,6 +20,7 @@ export class CompanyProfileComponent implements OnInit {
   public paramId: number;
   public owner:boolean;
   public companyData: GetCompany;
+  public branchData:Branch[];
   private successMessageText = 'Akcja została zakończona pomyślnie';
   private errorMessageText = 'Akcja niepowiodła się';
   public successMessage: string = '';
@@ -28,7 +30,7 @@ export class CompanyProfileComponent implements OnInit {
   public canShowEditForm = new BehaviorSubject(false);
   public canShowCompany = new BehaviorSubject(true);
 
-  constructor(private activatedRoute: ActivatedRoute, private cDataService: CompanyService,private router:Router) {}
+  constructor(private activatedRoute: ActivatedRoute, private cDataService: CompanyService,private router:Router,private bDataService:BranchService) {}
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
@@ -54,6 +56,23 @@ export class CompanyProfileComponent implements OnInit {
       );
     }
   }
+
+  private getBranchData() {
+    if(this.companyData) {
+      this.branchData = [];
+      this.companyData.branchesIDs.forEach(branchId=>{
+        this.bDataService.getBranch(branchId).subscribe(response=>{
+          let branchData:Branch = <Branch>response.body;
+          branchData.branchId = branchId;
+          this.branchData.push(branchData);
+        },error=>{
+          console.log(error);
+          this.showRequestMessage('error');
+        })
+      });
+    }
+  }
+
   public goBack() {
     this.canShowComments.next(false);
     this.canShowBranches.next(false);
@@ -67,8 +86,9 @@ export class CompanyProfileComponent implements OnInit {
   }
 
   public showBranches() {
-    this.canShowBranches.next(true);
+    this.getBranchData();
     this.canShowCompany.next(false);
+    this.canShowBranches.next(true);
   }
 
   public showEditForm() {    

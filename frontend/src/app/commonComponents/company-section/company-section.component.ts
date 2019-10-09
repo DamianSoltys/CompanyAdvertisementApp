@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 })
 export class CompanySectionComponent implements OnInit, OnDestroy {
   @Input() companyData: GetCompany;
+  @Input() branchData:Branch;
   @Input() showWorks: boolean;
   public owner = new BehaviorSubject(false);
   public works: Branch[];
@@ -25,28 +26,20 @@ export class CompanySectionComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    if (storage_Avaliable('localStorage') && !this.showWorks) {
+    if (storage_Avaliable('localStorage')) {
       let userREST: UserREST = JSON.parse(localStorage.getItem('userREST'));
       if (userREST) {
-        userREST.companiesIDs.forEach(value => {
-          if (value === this.companyData.companyId) this.owner.next(true);
-        });
+        if(!this.showWorks) {
+          userREST.companiesIDs.forEach(value => {
+            if (value === this.companyData.companyId) this.owner.next(true);
+          });
+        } else {
+          this.companyData.branchesIDs.forEach((branchId)=>{
+            if(branchId === this.branchData.branchId) this.owner.next(true);
+          });
+        }
       }
-    } else if (this.showWorks) {
-      this.works = [];
-      if (this.companyData.branchesIDs.length) {
-        this.companyData.branchesIDs.forEach(branchId => {
-          this.bDataService.getBranch(branchId).subscribe(
-            response => {
-              this.works.push(<Branch>response.body);
-            },
-            error => {
-              console.log(error);
-            }
-          );
-        });
-      }
-    }
+    } 
   }
 
   public deleteCompany() {

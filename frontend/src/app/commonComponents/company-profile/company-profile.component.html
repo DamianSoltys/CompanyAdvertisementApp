@@ -48,7 +48,7 @@
         </div>
       </div>
       <div class="content__section--buttons col-12">
-        <a routerLink = "/companyProfile/{{companyData.companyId}}/owner/newsletter" class="btn btn-primary section--buttons__button--comments">Newsletter</a>
+        <button class="btn btn-primary section--buttons__button--newsletters" (click)="showNewsletters()">Newsletter</button>
         <button class="btn btn-primary section--buttons__button--comments" (click)="showComments()">Komentarze</button>
         <button class="btn btn-primary section--buttons__button--branches" (click)="showBranches()">Zakłady</button>
         <span class="section--buttons__owner-buttons" *ngIf="owner">
@@ -69,6 +69,7 @@
   <div class="company-profile-component__branch-sections" *ngIf="canShowBranches.value">
       <div class="branch-sections__empty-branches" *ngIf="!branchData.length">
           <p class="empty-branches__text-node text-center">Firma nie posiada żadnego zakładu</p>
+          <button class="btn btn-primary empty-branches__button--add" (click)="showAddBranchform()">Dodaj zakład</button>
         </div>
   <div class="branch-sections__branch-section" *ngFor="let branch of branchData">
     <app-company-section [showWorks]="true" [branchData]="branch" [companyData]="companyData"></app-company-section>
@@ -76,6 +77,8 @@
   </div>
   <app-comments *ngIf="canShowComments.value"></app-comments>
   <app-company  class="company-profile-component__app-company" *ngIf="canShowEditForm.value" [editRequestData]="editData"></app-company>
+  <app-company  class="company-profile-component__app-company" *ngIf="canShowAddBranchForm.value" [editRequestData]="editData"></app-company>
+  <app-newsletter *ngIf="canShowNewsletters.value"></app-newsletter>
   
   <div class="company-profile-component__shared--buttons col-12" *ngIf="!this.canShowCompany.value">
       <button class="btn btn-primary shared--buttons__button--back" (click)="goBack()">Wróć</button>

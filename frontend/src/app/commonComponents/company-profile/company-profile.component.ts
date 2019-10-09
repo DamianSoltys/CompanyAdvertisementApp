@@ -5,18 +5,15 @@ import { CompanyService } from 'src/app/services/company.service';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
 import { BehaviorSubject } from 'rxjs';
 import { BranchService } from 'src/app/services/branch.service';
+import { EditRequestData } from 'src/app/user/company/company.component';
 
-interface EditRequestData {
-  companyId: number;
-  workId: number;
-}
 @Component({
   selector: 'app-company-profile',
   templateUrl: './company-profile.component.html',
   styleUrls: ['./company-profile.component.scss']
 })
 export class CompanyProfileComponent implements OnInit {
-  public editData: EditRequestData;
+  public editData:EditRequestData;
   public paramId: number;
   public owner:boolean;
   public companyData: GetCompany;
@@ -28,7 +25,8 @@ export class CompanyProfileComponent implements OnInit {
   public canShowComments = new BehaviorSubject(false);
   public canShowBranches = new BehaviorSubject(false);
   public canShowEditForm = new BehaviorSubject(false);
-  public canShowNewsletter = new BehaviorSubject(false);
+  public canShowNewsletters= new BehaviorSubject(false);
+  public canShowAddBranchForm = new BehaviorSubject(false);
   public canShowCompany = new BehaviorSubject(true);
 
   constructor(private activatedRoute: ActivatedRoute, private cDataService: CompanyService,private router:Router,private bDataService:BranchService) {}
@@ -78,6 +76,8 @@ export class CompanyProfileComponent implements OnInit {
     this.canShowComments.next(false);
     this.canShowBranches.next(false);
     this.canShowEditForm.next(false);
+    this.canShowAddBranchForm.next(false);
+    this.canShowNewsletters.next(false);
     this.canShowCompany.next(true);
   }
 
@@ -92,14 +92,25 @@ export class CompanyProfileComponent implements OnInit {
     this.canShowBranches.next(true);
   }
 
-  public showNewsletter() {
-
+  public showAddBranchform() {
+    this.editData ={
+      companyId:null,
+      workId:null,
+      addWork:true,
+    }   
+    this.canShowBranches.next(false);
+    this.canShowAddBranchForm.next(true);
+  }
+  public showNewsletters() {
+    this.canShowCompany.next(false);
+    this.canShowNewsletters.next(true);
   }
 
   public showEditForm() {    
       this.editData ={
         companyId:this.companyData.companyId,
         workId:null,
+        addWork:false,
       }          
     this.canShowEditForm.next(true);
     this.canShowCompany.next(false);

@@ -8,9 +8,6 @@ const routes: Routes = [
   {path: 'owner', component: CompanyProfileComponent,
   data:{owner:'true'},
   canActivate: [AuthGuard]},
-  {path: 'owner/newsletter', component: NewsletterComponent,
-  data:{owner:'true'},
-  canActivate: [AuthGuard]},
   {path: 'guest', component: CompanyProfileComponent},
   {path: '**', redirectTo: 'guest', pathMatch: 'full'},
 ];

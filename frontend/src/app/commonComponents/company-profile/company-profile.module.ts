@@ -6,12 +6,13 @@ import { CompanyProfileComponent } from './company-profile.component';
 import { CompanyProfileRoutingModule } from './company-profile-routing.module';
 import { CompanyModule } from 'src/app/user/company/company.module';
 import { CommentsComponent } from '../comments/comments.component';
-import { NewsletterModule } from '../newsletter/newsletter-module';
+import { NewsletterComponent } from '../newsletter/newsletter.component';
 
 @NgModule({
   declarations: [
     CompanyProfileComponent,
-    CommentsComponent
+    CommentsComponent,
+    NewsletterComponent
   ],
   imports: [
     CommonModule,
@@ -19,7 +20,6 @@ import { NewsletterModule } from '../newsletter/newsletter-module';
     FormsModule,
     ReactiveFormsModule,
     CompanyModule,
-    NewsletterModule,
   ]
 })
 export class CompanyProfileModule { }

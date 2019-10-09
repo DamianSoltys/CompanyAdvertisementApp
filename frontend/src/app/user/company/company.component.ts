@@ -22,9 +22,10 @@ interface Marker {
   label:string,
 }
 
-interface EditRequestData {
+export interface EditRequestData {
   companyId:number;
   workId:number;
+  addWork:boolean;
 }
 @Component({
   selector: 'app-company',
@@ -49,6 +50,7 @@ export class CompanyComponent implements OnInit {
   @Input() editRequestData:EditRequestData = {
     companyId:null,
     workId:null,
+    addWork:false,
   };
   public _voivodeships = voivodeships;
   public _categories = categories;
@@ -209,7 +211,6 @@ export class CompanyComponent implements OnInit {
     companyData = this.companyForm.value;
     companyData.branches = this.workForms;
     companyData.logo = this.companyLogo;
-    console.log(companyData);
 
       this.cDataService.addCompany(companyData).subscribe(response=>{
         this.showRequestMessage('success');
@@ -316,9 +317,10 @@ export class CompanyComponent implements OnInit {
   }
 
   private showEditForm() {
+    console.log(this.editRequestData)
     if(this.editRequestData.companyId) {
       this.toggleAddForm();
-    }else if(this.editRequestData.workId) {
+    }else if(this.editRequestData.workId || this.editRequestData.addWork) {
       this.toggleWorkForm();
     }
   }
@@ -327,6 +329,13 @@ export class CompanyComponent implements OnInit {
     if(this.companyList && this.companyList.length !==0) {
       return true;
     } else {
+      return false;
+    }
+  }
+  public canShowBranchBackBtn() {
+    if(!this.editRequestData.workId && !this.editRequestData.addWork) {
+      return true;
+    }else {
       return false;
     }
   }

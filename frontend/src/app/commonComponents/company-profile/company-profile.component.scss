@@ -20,9 +20,20 @@
 
     .company-profile-component__branch-sections {
         .branch-sections__empty-branches {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             .empty-branches__text-node {
                 color:$bgcolor;
                 font-size: 1.2rem;
+            }
+            .empty-branches__button--add {
+                width:25%;
+                border-radius: 50px;
+                border: 0;
+                background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
+                animation: button-background-animation 16s linear infinite;
+                background-size: 600%;
             }
         }
     }
@@ -108,7 +119,7 @@
                 }
 
                 .section--buttons__button {
-                    &--comments,&--branches {
+                    &--comments,&--branches,&--newsletters {
                         width: 20%;
                         margin: 10px;
                         border-radius: 50px;

@@ -200,7 +200,7 @@
 </div>
 
 <!--WORK-FORM-->
-<div class="company-component container-fluid" *ngIf="this.canShowWorkForm.getValue()">
+<div class="company-component container-fluid" [ngClass]="{'company-component__edit': editRequestData.workId || editRequestData.addWork}" *ngIf="this.canShowWorkForm.getValue()">
   <div class="company-component__form">
     <form [formGroup]="workForm" class="form__add-form" (ngSubmit)="onSubmit($event)">
       <div class="add-form__header">
@@ -334,8 +334,8 @@
     </form>
   </div>
   <div class="company-component__separator"></div>
-  <div class="company-component__button-container" *ngIf="!editRequestData.workId">
-    <button class="btn button-container__button--add" (click)="toggleWorkForm()">
+  <div class="company-component__button-container">
+    <button class="btn button-container__button--add" (click)="toggleWorkForm()" *ngIf="canShowBranchBackBtn()">
       <span class="button--add__text-node">Wróć</span>
     </button>
     <button class="btn button-container__button--add" [disabled]="!this.workForm.valid" (click)="addAnotherWork()">

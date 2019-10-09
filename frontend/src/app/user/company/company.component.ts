@@ -10,6 +10,7 @@ import { PersonalDataService } from 'src/app/services/personal-data.service';
 import { CompanyService } from 'src/app/services/company.service';
 import { UserREST } from 'src/app/classes/User';
 import { UserService } from 'src/app/services/user.service';
+import { HttpEventType, HttpRequest, HttpResponse } from '@angular/common/http';
 
 interface Position {
   latitude:number,
@@ -43,6 +44,8 @@ export class CompanyComponent implements OnInit {
   public mapMarker:Marker;
   public workForms:Branch[];
   public workNumber:number = 1;
+  private companyLogo:File;
+  private workLogo:File;
   @Input() editRequestData:EditRequestData = {
     companyId:null,
     workId:null,
@@ -55,7 +58,8 @@ export class CompanyComponent implements OnInit {
   public _categories = categories;
 
   public companyForm = this.fb.group({
-    description:[''],
+    logo:[null,[Validators.required]],
+    description:['',[Validators.required]],
     category:['',[Validators.required]],
     name:['',[Validators.required]],
     nip:['',[Validators.required]],
@@ -81,6 +85,7 @@ export class CompanyComponent implements OnInit {
     geoX:[''],
     geoY:[''],
     name:['',[Validators.required]],
+    logo:[null,[Validators.required]],
   });
 
   config ={
@@ -191,6 +196,7 @@ export class CompanyComponent implements OnInit {
       }
       this.workNumber++;
       this.workForms.push(this.workForm.value);
+      this.workForms[this.workForms.length-1].logo = this.workLogo;
       this.workForm.reset();
     }    
   }
@@ -203,19 +209,27 @@ export class CompanyComponent implements OnInit {
     let companyData:Company;
     companyData = this.companyForm.value;
     companyData.branches = this.workForms;
+    companyData.logo = this.companyLogo;
     console.log(companyData);
 
-    this.cDataService.addCompany(companyData).subscribe(response=>{
-      this.showRequestMessage('success');
-      setTimeout(()=>{
-        this.uDataService.updateUser();
-        location.reload();
-      },500);
-    },error=>{
-      this.showRequestMessage('error');
-      this.setDefaultValues();
-      console.log(error);
-    });     
+      this.cDataService.addCompany(companyData).subscribe(response=>{
+        this.showRequestMessage('success');
+        setTimeout(()=>{
+          this.uDataService.updateUser();
+          location.reload();
+        },500);
+      },error=>{
+        this.showRequestMessage('error');
+        this.setDefaultValues();
+        console.log(error);
+      });     
+  }
+  public onFileSelected(event,companyForm:boolean) {
+    if(companyForm) {
+      this.companyLogo = event.target.files[0];
+    }else {
+      this.workLogo = event.target.files[0];
+    }
   }
 
   private showRequestMessage(
@@ -289,6 +303,14 @@ export class CompanyComponent implements OnInit {
     if (this.canShowAddForm.value && !this.canShowWorkForm.value) {
       return true;
     } else {
+      return false;
+    }
+  }
+
+  public canShowRouteButton() {
+    if(!this.canShowAddForm.value && !this.canShowWorkForm.value && !this.havePersonalData.value) {
+      return true;
+    }else{
       return false;
     }
   }

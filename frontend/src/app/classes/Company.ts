@@ -1,4 +1,5 @@
 export class Company {
+    logo:File;
     address:Address;     
     branches:Branch[];
     category: string;
@@ -27,6 +28,7 @@ export class Branch {
     geoX: string;
     geoY: string;
     name: string;
+    logo:File;
 }
 export class Address {
     apartmentNo: string;

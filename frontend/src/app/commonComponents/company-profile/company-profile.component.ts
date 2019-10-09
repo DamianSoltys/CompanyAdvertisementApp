@@ -22,7 +22,6 @@ export class CompanyProfileComponent implements OnInit {
   private errorMessageText = 'Akcja niepowiodła się';
   public successMessage: string = '';
   public errorMessage: string = '';
-  public canShowComments = new BehaviorSubject(false);
   public canShowBranches = new BehaviorSubject(false);
   public canShowEditForm = new BehaviorSubject(false);
   public canShowNewsletters= new BehaviorSubject(false);
@@ -73,17 +72,11 @@ export class CompanyProfileComponent implements OnInit {
   }
 
   public goBack() {
-    this.canShowComments.next(false);
     this.canShowBranches.next(false);
     this.canShowEditForm.next(false);
     this.canShowAddBranchForm.next(false);
     this.canShowNewsletters.next(false);
     this.canShowCompany.next(true);
-  }
-
-  public showComments() {
-    this.canShowComments.next(true);
-    this.canShowCompany.next(false);
   }
 
   public showBranches() {

@@ -49,7 +49,6 @@
       </div>
       <div class="content__section--buttons col-12">
         <button class="btn btn-primary section--buttons__button--newsletters" (click)="showNewsletters()">Newsletter</button>
-        <button class="btn btn-primary section--buttons__button--comments" (click)="showComments()">Komentarze</button>
         <button class="btn btn-primary section--buttons__button--branches" (click)="showBranches()">Zakłady</button>
         <span class="section--buttons__owner-buttons" *ngIf="owner">
           <button class="btn btn-primary owner-buttons__button--edit" (click)="showEditForm()">Edycja danych</button>
@@ -75,7 +74,6 @@
     <app-company-section [showWorks]="true" [branchData]="branch" [companyData]="companyData"></app-company-section>
   </div>
   </div>
-  <app-comments *ngIf="canShowComments.value"></app-comments>
   <app-company  class="company-profile-component__app-company" *ngIf="canShowEditForm.value" [editRequestData]="editData"></app-company>
   <app-company  class="company-profile-component__app-company" *ngIf="canShowAddBranchForm.value" [editRequestData]="editData"></app-company>
   <app-newsletter *ngIf="canShowNewsletters.value"></app-newsletter>

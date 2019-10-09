@@ -19,6 +19,9 @@
     }
 
     .company-profile-component__branch-sections {
+        height:50vh;
+        overflow: auto;
+        
         .branch-sections__empty-branches {
             display: flex;
             flex-direction: column;
@@ -96,9 +99,9 @@
 
                 .section--buttons__owner-buttons {
                     width: 20%;
+                    margin: 10px;
                     @include phone {
                         width:95%;
-                        margin: 10px;
                     }
 
                     .owner-buttons__button {

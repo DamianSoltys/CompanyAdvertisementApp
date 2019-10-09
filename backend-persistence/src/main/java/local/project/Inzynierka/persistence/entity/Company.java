@@ -46,7 +46,7 @@ public class Company extends FullTimestampingAudit implements IEntity<Long>, Sea
     @Column(unique = true, nullable = false, length = 14)
     private String REGON;
 
-    @IndexedEmbedded
+    @IndexedEmbedded(depth = 1)
     @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "address_id", nullable = false, foreignKey = @ForeignKey(name = "address_company_FK"))
     private Address address;
@@ -59,6 +59,7 @@ public class Company extends FullTimestampingAudit implements IEntity<Long>, Sea
     @JoinColumn(name = "registerer_id", nullable = false, foreignKey = @ForeignKey(name = "company_registerer_FK"))
     private NaturalPerson registerer;
 
+    @IndexedEmbedded(depth = 1)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false, foreignKey = @ForeignKey(name = "company_category_FK"))
     private Category category;

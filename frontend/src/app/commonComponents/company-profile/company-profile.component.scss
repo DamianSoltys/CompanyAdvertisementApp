@@ -18,6 +18,15 @@
         margin-bottom: 5px;
     }
 
+    .company-profile-component__branch-sections {
+        .branch-sections__empty-branches {
+            .empty-branches__text-node {
+                color:$bgcolor;
+                font-size: 1.2rem;
+            }
+        }
+    }
+
     .company-profile-component__shared--buttons {
         display:flex;
         justify-content: center;

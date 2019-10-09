@@ -28,6 +28,7 @@ export class CompanyProfileComponent implements OnInit {
   public canShowComments = new BehaviorSubject(false);
   public canShowBranches = new BehaviorSubject(false);
   public canShowEditForm = new BehaviorSubject(false);
+  public canShowNewsletter = new BehaviorSubject(false);
   public canShowCompany = new BehaviorSubject(true);
 
   constructor(private activatedRoute: ActivatedRoute, private cDataService: CompanyService,private router:Router,private bDataService:BranchService) {}
@@ -89,6 +90,10 @@ export class CompanyProfileComponent implements OnInit {
     this.getBranchData();
     this.canShowCompany.next(false);
     this.canShowBranches.next(true);
+  }
+
+  public showNewsletter() {
+
   }
 
   public showEditForm() {    

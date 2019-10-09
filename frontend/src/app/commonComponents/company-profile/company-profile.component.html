@@ -4,7 +4,10 @@
       <span class="header__text-node">Profil firmy</span>
     </div>
     <div class="main-container__content" *ngIf="companyData">
-      <div class="content__section--main col-12 col-md-6">
+        <div class="content__section--logo col-12 col-md-4">
+          LOGO
+        </div>
+      <div class="content__section--main col-12 col-md-4">
         <div class="section--main__data">
           <p class="data__text-node">Nazwa rejestratora: {{ companyData.registererFullname }}</p>
         </div>
@@ -21,7 +24,7 @@
           <p class="data__text-node">REGON: {{ companyData.regon }}</p>
         </div>
       </div>
-      <div class="content__section--address col-12 col-md-6">
+      <div class="content__section--address col-12 col-md-4">
         <div class="section--address__data">
           <p class="data__text-node">Województwo: {{ companyData.address.voivodeship }}</p>
         </div>
@@ -45,6 +48,7 @@
         </div>
       </div>
       <div class="content__section--buttons col-12">
+        <a routerLink = "/companyProfile/{{companyData.companyId}}/owner/newsletter" class="btn btn-primary section--buttons__button--comments">Newsletter</a>
         <button class="btn btn-primary section--buttons__button--comments" (click)="showComments()">Komentarze</button>
         <button class="btn btn-primary section--buttons__button--branches" (click)="showBranches()">Zakłady</button>
         <span class="section--buttons__owner-buttons" *ngIf="owner">
@@ -63,6 +67,9 @@
     </p>
   </div>
   <div class="company-profile-component__branch-sections" *ngIf="canShowBranches.value">
+      <div class="branch-sections__empty-branches" *ngIf="!branchData.length">
+          <p class="empty-branches__text-node text-center">Firma nie posiada żadnego zakładu</p>
+        </div>
   <div class="branch-sections__branch-section" *ngFor="let branch of branchData">
     <app-company-section [showWorks]="true" [branchData]="branch" [companyData]="companyData"></app-company-section>
   </div>

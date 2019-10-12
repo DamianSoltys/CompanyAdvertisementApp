@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { PersonalData, UserREST } from '../classes/User';
-import { Observable } from 'rxjs';
+import { PersonalData, UserREST, UserReg } from '../classes/User';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { storage_Avaliable } from '../classes/storage_checker';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-
+  userREST = new BehaviorSubject(<UserREST>null);
   constructor(private http:HttpClient) { }
 
   public getActualUser(userId): Observable<any> {
@@ -23,6 +23,7 @@ export class UserService {
             const userNewObject: UserREST = response.body;
             console.log(userNewObject);
             localStorage.setItem('userREST', JSON.stringify(userNewObject));
+            this.userREST.next(userNewObject);
           } 
         },
         error => {

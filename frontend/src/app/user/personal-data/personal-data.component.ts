@@ -209,12 +209,14 @@ export class PersonalDataComponent implements OnInit {
         'naturalUserData',
         JSON.stringify(PersonalDataObject)
       );
+      this.pdataService.personalData.next(PersonalDataObject);
     } 
   }
 
   private deleteStoragePersonalData() {
     if (storage_Avaliable('localStorage')) {
       localStorage.removeItem('naturalUserData');
+      this.pdataService.personalData.next(null);
     }
   }
 
@@ -234,21 +236,6 @@ export class PersonalDataComponent implements OnInit {
     }
   }
 
-  updateUserObject() {
-    this.userService.getActualUser(this.userObject.userID).subscribe(
-      response => {
-        if (storage_Avaliable('localStorage')) {
-          const userNewObject: UserREST = response.body;
-          localStorage.setItem('userREST', JSON.stringify(userNewObject));
-          this.userObject = JSON.parse(localStorage.getItem('userREST'));
-        } 
-      },
-      error => {
-        console.log(error);
-      }
-    );
-  }
-
   private checkIfPostDataSuccess() {
     this.pdataService
       .sendPersonalData(
@@ -260,7 +247,7 @@ export class PersonalDataComponent implements OnInit {
           this.showRequestMessage('success', 'Dane zostały zapisane');
           this.setStoragePersonalData(this.personalDataForm.value);
           this.personalDataForm.reset();       
-          this.updateUserObject();
+          this.userService.updateUser();
           this.checkForPersonalData();
         },
         error => {
@@ -283,6 +270,7 @@ export class PersonalDataComponent implements OnInit {
           this.setStoragePersonalData(this.personalDataForm.value);
           this.personalDataForm.reset();
           this.deleteStoragePersonalData();
+          this.userService.updateUser();
           this.checkForPersonalData();
         },
         error => {
@@ -301,7 +289,7 @@ export class PersonalDataComponent implements OnInit {
       .subscribe(
         response => {
           this.showRequestMessage('success', 'Dane zostały usunięte');
-          this.updateUserObject();
+          this.userService.updateUser();
           this.deleteStoragePersonalData();
           setTimeout(() => {
             this.showAddForm();

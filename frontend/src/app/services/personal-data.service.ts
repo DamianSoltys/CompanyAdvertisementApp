@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { PersonalData } from '../classes/User';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PersonalDataService {
-
+  personalData = new BehaviorSubject(<PersonalData>null);
+  
   constructor(private http: HttpClient) { }
 
   public sendPersonalData(personalData: PersonalData,userId:number) {

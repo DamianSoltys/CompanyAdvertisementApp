@@ -4,7 +4,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { LoginService } from './services/login.service';
 import { Router } from '@angular/router';
 import { storage_Avaliable } from './classes/storage_checker';
-import { UserREST } from './classes/User';
+import { UserREST, PersonalData } from './classes/User';
+import { PersonalDataService } from './services/personal-data.service';
 
 @Component({
   selector: 'app-root',
@@ -57,14 +58,16 @@ import { UserREST } from './classes/User';
 })
 export class AppComponent implements OnInit {
   @ViewChild('logOutMessage', {read: ElementRef}) logOutMessage: ElementRef;
-  nearby_toggle = false;
-  logged = false;
-  visible = true;
-  logOut_success = false;
-  displayHamburgerMenu = new BehaviorSubject(false);
-  displayDropdown = new BehaviorSubject(false);
-  userREST:UserREST;
-  constructor(private lgservice: LoginService, private router: Router, private renderer: Renderer2) {
+  public nearby_toggle = false;
+  public logged = false;
+  public visible = true;
+  public logOut_success = false;
+  public displayHamburgerMenu = new BehaviorSubject(false);
+  public displayDropdown = new BehaviorSubject(false);
+  public userREST:UserREST;
+  public personalData:PersonalData;
+
+  constructor(private lgservice: LoginService, private router: Router, private renderer: Renderer2,private pDataService:PersonalDataService) {
     document.body.addEventListener('click', (e) => {
      if ((<HTMLElement>e.target).id !== 'menuId') {
        this.displayHamburgerMenu.next(false);
@@ -78,16 +81,18 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.lgservice.Logged.subscribe(value => {
     this.logged = value;
-    this.getUserObject();
+    this.getStorageObjects();
     });
   }
 
-  getUserObject() {
+  getStorageObjects() {
     if(storage_Avaliable('localStorage') && this.logged) {
-      let userObject:UserREST = JSON.parse(localStorage.getItem('userREST'));
-      if(userObject){
-        this.userREST = userObject;
-      }
+      this.userREST = JSON.parse(localStorage.getItem('userREST'));
+      this.pDataService.personalData.subscribe(data=>{
+        this.personalData = data;
+        console.log(data);
+      });
+      
     }
   }
 

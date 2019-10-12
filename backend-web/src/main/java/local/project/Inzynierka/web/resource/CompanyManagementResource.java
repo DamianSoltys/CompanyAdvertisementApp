@@ -96,10 +96,6 @@ public class CompanyManagementResource {
     @RequestMapping(method = GET, value = "/companies/{id}")
     public ResponseEntity<?> getCompanyInfo(final @PathVariable(value = "id") Long id) {
 
-        if (!this.companyManagementPermissionService.hasManagingAuthority(id, this.authFacade.getAuthenticatedUser())) {
-            return new ResponseEntity<>(SimpleJsonFromStringCreator.toJson(LACK_OF_MANAGING_PERMISSION_MESSAGE), HttpStatus.FORBIDDEN);
-        }
-
         return this.companyManagementService.getCompanyInfo(id)
                 .map(ResponseEntity::ok).orElse(null);
 

@@ -1,3 +1,4 @@
+
 <div class="container-fluid app-component">
 
   <div class="row app-component__navbar" *ngIf="!logged">
@@ -58,7 +59,10 @@
   </div>
 
   <div  #logOutMessage [@showHideMenu] = "logOut_success ? 'visible':'hidden'" class="text-center app-component__logout-message"><p class="logout-message__success text-success">Pomyślnie wylogowano</p></div>
+  <div class="app-component__router-outlet">
+  <app-loader></app-loader>
   <router-outlet class="app-component__outlet"></router-outlet>
+  </div>
 
   <div class="app-component__nearby-container container-fluid">
     <h5 class="text-center nearby_container__text">Obok ciebie</h5>

@@ -10,6 +10,10 @@ html {
 .app-component {
   min-height: calc(100vh - 60px);
   overflow:hidden;
+  
+  .app-component__router-outlet {
+    position: relative;
+  }
 }
 
 .app-component__navbar {

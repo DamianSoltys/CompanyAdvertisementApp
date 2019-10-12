@@ -41,6 +41,7 @@ export class CompanyProfileComponent implements OnInit {
   private getCompanyData() {
     if (this.cDataService.CompanyData[this.paramId]) {
       this.companyData = this.cDataService.CompanyData[this.paramId];
+      this.checkForCompanyOwnership();
     } else {
       this.cDataService.getCompany(this.paramId).subscribe(
         response => {
@@ -61,13 +62,14 @@ export class CompanyProfileComponent implements OnInit {
       this.userREST.companiesIDs.forEach((companyId)=>{
         if(this.companyData && this.companyData.companyId === companyId) {
           this.owner.next(true);
-        } else {
-          this.router.navigate(['/companyProfile', this.paramId, 'guest']);
-        }
-        console.log(this.owner.value);
-      });
+        } 
+      });      
+    } 
+
+    if(!this.owner.value) {
+      this.router.navigate(['/companyProfile', this.paramId, 'guest']);
     }
-    this.router.navigate(['/companyProfile', this.paramId, 'guest']);
+    
   }
 
   private getBranchData() {

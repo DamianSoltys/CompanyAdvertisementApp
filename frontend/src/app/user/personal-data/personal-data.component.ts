@@ -27,7 +27,6 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./personal-data.component.scss']
 })
 
-// Public pierwsze/private ostatnie!
 export class PersonalDataComponent implements OnInit {
   public personalDataForm: FormGroup;
   public successMessage: string = '';
@@ -141,6 +140,7 @@ export class PersonalDataComponent implements OnInit {
   }
 
   private getPersonalDataServer() {
+    console.log(this.userObject.naturalPersonID)
     if (this.userObject.naturalPersonID) {
       this.pdataService
         .getPersonalData(

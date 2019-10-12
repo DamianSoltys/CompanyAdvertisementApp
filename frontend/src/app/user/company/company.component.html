@@ -7,7 +7,7 @@
     <app-company-section [companyData]="company"></app-company-section>
   </div>
   </div>
-  <div class="company-component__company-section" *ngIf="!canShowCompanyList()">
+  <div class="company-component__company-section" *ngIf="this.canShowText()">
     <p class="company-section__text-node text-center">Aktualnie nie posiadasz żadnej firmy</p>
   </div>
 

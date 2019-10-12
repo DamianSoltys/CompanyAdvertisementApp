@@ -9,11 +9,14 @@ import {
 } from '@angular/common/http';
 
 import { Observable, throwError } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, finalize } from 'rxjs/operators';
+import { LoaderService } from '../services/loader.service';
 
 @Injectable() export class HttpConfigInterceptor implements HttpInterceptor {
+    constructor(public loaderService: LoaderService) {}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        this.loaderService.showLoader();
         const token: string = localStorage.getItem('token');
         if (token) {
             request = request.clone(
@@ -25,12 +28,8 @@ import { map, catchError } from 'rxjs/operators';
         request = request.clone({ headers: request.headers.set('Accept', 'application/json') });
 
         return next.handle(request).pipe(
-            map((event: HttpEvent<any>) => {
-                if (event instanceof HttpResponse) {
-                    console.log('event--->>>', event);
-                }
-                return event;
-            }));
+                finalize(()=> this.loaderService.hideLoader())
+            );
 
     }
 }

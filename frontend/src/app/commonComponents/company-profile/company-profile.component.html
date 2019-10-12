@@ -4,7 +4,10 @@
       <span class="header__text-node">Profil firmy</span>
     </div>
     <div class="main-container__content" *ngIf="companyData">
-      <div class="content__section--main col-6">
+        <div class="content__section--logo col-12 col-md-4">
+          LOGO
+        </div>
+      <div class="content__section--main col-12 col-md-4">
         <div class="section--main__data">
           <p class="data__text-node">Nazwa rejestratora: {{ companyData.registererFullname }}</p>
         </div>
@@ -21,7 +24,7 @@
           <p class="data__text-node">REGON: {{ companyData.regon }}</p>
         </div>
       </div>
-      <div class="content__section--address col-6">
+      <div class="content__section--address col-12 col-md-4">
         <div class="section--address__data">
           <p class="data__text-node">Województwo: {{ companyData.address.voivodeship }}</p>
         </div>
@@ -41,20 +44,19 @@
       <div class="content__section--description col-12">
         <div class="section--description__data">
           <p class="data__text-node">Opis firmy:</p>
-          <div class="data__description-container">
-            No siema
-          </div>
+          <div class="data__description-container" [innerHTML]="companyData.description"></div>
         </div>
       </div>
       <div class="content__section--buttons col-12">
-        <button class="btn btn-primary section--buttons__button--comments" (click)="showComments()">Komentarze</button>
+        <button class="btn btn-primary section--buttons__button--newsletters" (click)="showNewsletters()">Newsletter</button>
         <button class="btn btn-primary section--buttons__button--branches" (click)="showBranches()">Zakłady</button>
-        <span class="section--buttons__owner-buttons" *ngIf="paramPerson == 'owner'">
-          <a class="btn btn-primary owner-buttons__button--edit">Edycja danych</a>
+        <span class="section--buttons__owner-buttons" *ngIf="owner">
+          <button class="btn btn-primary owner-buttons__button--edit" (click)="showEditForm()">Edycja danych</button>
         </span>
       </div>
     </div>
   </div>
+
   <div class="company-profile-component__error-container text-center col-12">
     <p *ngIf="successMessage" class="text-success error-container__text--success">
       {{ successMessage }}
@@ -63,6 +65,20 @@
       {{ errorMessage }}
     </p>
   </div>
-  <app-company-section *ngIf="canShowBranches.value"></app-company-section>
-  <app-comments *ngIf="canShowComments.value"></app-comments>
+  <div class="company-profile-component__branch-sections" *ngIf="canShowBranches.value">
+      <div class="branch-sections__empty-branches" *ngIf="!branchData.length">
+          <p class="empty-branches__text-node text-center">Firma nie posiada żadnego zakładu</p>
+          <button class="btn btn-primary empty-branches__button--add" (click)="showAddBranchform()">Dodaj zakład</button>
+        </div>
+  <div class="branch-sections__branch-section" *ngFor="let branch of branchData">
+    <app-company-section [showWorks]="true" [branchData]="branch" [companyData]="companyData"></app-company-section>
+  </div>
+  </div>
+  <app-company  class="company-profile-component__app-company" *ngIf="canShowEditForm.value" [editRequestData]="editData"></app-company>
+  <app-company  class="company-profile-component__app-company" *ngIf="canShowAddBranchForm.value" [editRequestData]="editData"></app-company>
+  <app-newsletter *ngIf="canShowNewsletters.value"></app-newsletter>
+  
+  <div class="company-profile-component__shared--buttons col-12" *ngIf="!this.canShowCompany.value">
+      <button class="btn btn-primary shared--buttons__button--back" (click)="goBack()">Wróć</button>
+  </div>
 </div>

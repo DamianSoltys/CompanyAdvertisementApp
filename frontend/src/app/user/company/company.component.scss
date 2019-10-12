@@ -1,10 +1,13 @@
 @import "../../../commonStyles/shared";
-
+.company-component__edit {
+    width:100% !important;
+    margin-top:0 !important;
+}
 .company-component {
     display: flex;
     flex-direction: column;
     width:75%;
-    margin-top: 5%;
+    margin-top: 2%;
     max-width: 1000px;
 
     @include tablet {

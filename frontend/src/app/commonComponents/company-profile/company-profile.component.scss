@@ -3,13 +3,63 @@
 .company-profile-component {
     display: flex;
     flex-direction: column;
-    width:80%;
-    margin-top: 5%;
+    width:60%;
+    margin-top: 2%;
+    max-width: 1000px;
 
     @include phone {
         width: 95%;
         padding: 0;
     }
+    @include tablet {
+        width:85%;
+    }
+    .company-profile-component__app-company {
+        margin-bottom: 5px;
+    }
+
+    .company-profile-component__branch-sections {
+        height:50vh;
+        overflow: auto;
+        
+        .branch-sections__empty-branches {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            .empty-branches__text-node {
+                color:$bgcolor;
+                font-size: 1.2rem;
+            }
+            .empty-branches__button--add {
+                width:25%;
+                border-radius: 50px;
+                border: 0;
+                background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
+                animation: button-background-animation 16s linear infinite;
+                background-size: 600%;
+            }
+        }
+    }
+
+    .company-profile-component__shared--buttons {
+        display:flex;
+        justify-content: center;
+        .shared--buttons__button--back {
+            width: 30%;
+            margin-bottom: 2%;
+            border-radius: 50px;
+            border: 0;
+            background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
+            animation: button-background-animation 16s linear infinite;
+            background-size: 600%;
+            margin-top: 4%;
+
+            @include phone {
+                width: 95%;
+            }
+        }
+    }
+
     .company-profile-component__main-container {
         @include boxShadow(0px 4px 5px 0px #bbb9bf);
         border-bottom-left-radius: 20px;
@@ -34,27 +84,55 @@
         .main-container__content {
             display:flex;
             flex-wrap: wrap;
-            height:50vh;
+            height:60vh;
+            @include phone {
+                height: unset;
+            }
 
             .content__section--buttons {
                 display:flex;
                 align-items: center;
                 justify-content: center;
+                @include phone {
+                    flex-direction: column;              
+                }
 
                 .section--buttons__owner-buttons {
                     width: 20%;
+                    margin: 10px;
+                    @include phone {
+                        width:95%;
+                    }
 
                     .owner-buttons__button {
                         &--edit {
                             width: 100%;
+                            border-radius: 50px;
+                            border: 0;
+                            background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
+                            animation: button-background-animation 16s linear infinite;
+                            background-size: 600%;
+                            color:#fff;
+                            min-width: 125px;
+                            &:hover {
+                                cursor: pointer;
+                            } 
                         }
                     }
                 }
 
                 .section--buttons__button {
-                    &--comments,&--branches {
+                    &--comments,&--branches,&--newsletters {
                         width: 20%;
                         margin: 10px;
+                        border-radius: 50px;
+                        border: 0;
+                        background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
+                        animation: button-background-animation 16s linear infinite;
+                        background-size: 600%;
+                        @include phone {
+                            width:95%;
+                        }
                     }
                 }
             }

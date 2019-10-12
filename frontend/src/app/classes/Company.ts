@@ -12,7 +12,7 @@ export class Company {
 
 export class GetCompany {
     address:Address;     
-    branchesIDs:Branch[];
+    branchesIDs:number[];
     category: string;
     companyId:number;
     companyWebsiteUrl: string;
@@ -29,7 +29,9 @@ export class Branch {
     geoY: string;
     name: string;
     logo:File;
+    branchId?:number;
 }
+
 export class Address {
     apartmentNo: string;
     buildingNo: string;

@@ -31,9 +31,10 @@
       <button routerLink="/search" type="button" class="navbar__button-link btn btn-primary">Szukaj</button>
       <button routerLink="/user/companyData" type="button" class="navbar__button-link btn btn-primary">Twoje firmy</button>     
       <button routerLink="" type="button" class="navbar__button-link btn btn-primary">Ulubione zakłady</button>   
-      <button (click)="toggleMenu(false)" type="button" class="navbar__button-link btn btn-primary" id="dropdownId">Dane użytkownika
+      <button (click)="toggleMenu(false)" type="button" class="navbar__button-link btn btn-primary" id="dropdownId">Profil użytkownika
         <ul [@showHideDropdown] = "displayDropdown.value ? 'visible':'hidden'" class="button-link__dropdown">
-          <a routerLink="/user/personalData" type="button" class="dropdown__item"><li>Dane osobowe</li></a>
+          <a  *ngIf="userREST" type="button" class="dropdown__item"> <li class="item__username">Zalogowany jako:<strong>{{userREST.loginName}}</strong></li></a>
+          <a routerLink="/user/personalData" type="button" class="dropdown__item" *ngIf="personalData"><li>Dane osobowe</li></a>
           <a routerLink="/user/accountData" type="button" class="dropdown__item"><li>Dane konta</li></a>
           <a type="button" class="dropdown__item" (click)="logOut()"><li>Wyloguj</li></a>
         </ul>
@@ -44,9 +45,11 @@
       <button (click)="toggleMenu(true)" class="btn btn-secondary dropdown__button" type="button" id="menuId">
       </button>
       <div [@showHideMenu] = "displayHamburgerMenu.value ? 'visible':'hidden'" class="dropdown__menu">
+        <button class="dropdown__item dropdown__username" *ngIf="userREST">Zalogowany jako:<strong>{{userREST.loginName}}</strong></button>
         <button routerLink="/search" class="dropdown__item" (click)="toggleMenu()"><i class="fas fa-search item__icon"></i>Szukaj</button>
         <button routerLink="/user/companyData" class="dropdown__item" (click)="toggleMenu()"><i class="fas fa-building item__icon"></i>Twoje firmy</button>
-        <button routerLink="user/personalData" class="dropdown__item" (click)="toggleMenu()"><i class="fas fa-id-card item__icon"></i>Dane osobowe</button>
+        <button routerLink="user/personalData" class="dropdown__item" (click)="toggleMenu()" *ngIf="personalData"><i class="fas fa-id-card item__icon"></i>Dane osobowe</button>
+        <button routerLink="user/accountData" class="dropdown__item" (click)="toggleMenu()"><i class="fas fa-id-card item__icon"></i>Dane konta</button>
         <button routerLink="" class="dropdown__item" (click)="toggleMenu()"><i class="fas fa-synagogue item__icon"></i>Ulubione zakłady</button>
         <button class="dropdown__item" (click)="toggleMenu(); logOut()"><i class="fas fa-sign-out-alt item__icon"></i>Wyloguj</button>
       </div>

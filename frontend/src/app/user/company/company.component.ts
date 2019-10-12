@@ -22,9 +22,10 @@ interface Marker {
   label:string,
 }
 
-interface EditRequestData {
+export interface EditRequestData {
   companyId:number;
   workId:number;
+  addWork:boolean;
 }
 @Component({
   selector: 'app-company',
@@ -49,11 +50,8 @@ export class CompanyComponent implements OnInit {
   @Input() editRequestData:EditRequestData = {
     companyId:null,
     workId:null,
+    addWork:false,
   };
-  //dodać formularze do firmy/zakładu
-  //funkcja do dodawania wielu zakładów dla jednej firmy
-  //edycja/usuwanie firmy/zakładu
-  //profil zakładu-wyświetlanie oddzielny komponent wraz do wyszukiwarki
   public _voivodeships = voivodeships;
   public _categories = categories;
 
@@ -145,15 +143,6 @@ export class CompanyComponent implements OnInit {
     }      
     }
   }
-
-  public canShowCompanyList() {
-    if(this.companyList && this.companyList.length !==0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   private companySort(item1:GetCompany,item2:GetCompany) {
     return item1.companyId-item2.companyId;
   }
@@ -202,7 +191,19 @@ export class CompanyComponent implements OnInit {
   }
 
   public onSubmit(event: Event) {
-    event.preventDefault();
+    event.preventDefault(); //switch na add i edit branch oraz edit company
+    if(this.editRequestData.companyId ) {
+      this.patchData();
+    } else {
+      this.postData();
+    }
+  }
+
+  private patchData() {
+    console.log("patch");
+  }
+
+  private postData() {
     if(this.workForm.valid) {
       this.addAnotherWork();
     }
@@ -210,7 +211,6 @@ export class CompanyComponent implements OnInit {
     companyData = this.companyForm.value;
     companyData.branches = this.workForms;
     companyData.logo = this.companyLogo;
-    console.log(companyData);
 
       this.cDataService.addCompany(companyData).subscribe(response=>{
         this.showRequestMessage('success');
@@ -224,6 +224,7 @@ export class CompanyComponent implements OnInit {
         console.log(error);
       });     
   }
+
   public onFileSelected(event,companyForm:boolean) {
     if(companyForm) {
       this.companyLogo = event.target.files[0];
@@ -316,10 +317,26 @@ export class CompanyComponent implements OnInit {
   }
 
   private showEditForm() {
+    console.log(this.editRequestData)
     if(this.editRequestData.companyId) {
       this.toggleAddForm();
-    }else if(this.editRequestData.workId) {
+    }else if(this.editRequestData.workId || this.editRequestData.addWork) {
       this.toggleWorkForm();
+    }
+  }
+
+  public canShowCompanyList() {
+    if(this.companyList && this.companyList.length !==0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  public canShowBranchBackBtn() {
+    if(!this.editRequestData.workId && !this.editRequestData.addWork) {
+      return true;
+    }else {
+      return false;
     }
   }
 }

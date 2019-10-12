@@ -10,6 +10,7 @@ import { LoginService } from '../services/login.service';
 import { Router } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
 import { storage_Avaliable } from '../classes/storage_checker';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -25,7 +26,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private lgservice: LoginService,
-    private router: Router
+    private router: Router,
+    private uDataService:UserService,
   ) {}
 
   ngOnInit() {
@@ -92,7 +94,7 @@ export class LoginComponent implements OnInit {
 
       localStorage.setItem('token', data.headers.get('Authorization'));
       localStorage.setItem('userREST', JSON.stringify(userObject));
-
+    
       this.lgservice.ChangeLogged();
       this.router.navigate(['']);
       console.log('Użytkownik został zalogowany');

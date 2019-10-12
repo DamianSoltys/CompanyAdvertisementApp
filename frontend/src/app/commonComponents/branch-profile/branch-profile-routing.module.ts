@@ -1,14 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { CompanyProfileComponent } from './company-profile.component';
 import { AuthGuard } from 'src/app/guards/auth-guard.service';
-import { NewsletterComponent } from '../newsletter/newsletter.component';
+import { BranchProfileComponent } from './branch-profile.component';
 
 const routes: Routes = [
-  {path: 'owner', component: CompanyProfileComponent,
+  {path: 'owner', component: BranchProfileComponent,
   data:{owner:'true'},
   canActivate: [AuthGuard]},
-  {path: 'guest', component: CompanyProfileComponent},
+  {path: 'guest', component: BranchProfileComponent},
   {path: '**', redirectTo: 'guest', pathMatch: 'full'},
 ];
 
@@ -16,4 +15,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class CompanyProfileRoutingModule { }
+export class BranchProfileRoutingModule { }

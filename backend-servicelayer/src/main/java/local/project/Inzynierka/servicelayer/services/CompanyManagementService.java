@@ -131,15 +131,19 @@ public class CompanyManagementService {
     private CompanyRelatedDeletedEntities buildCompanyDeletedIdentities(Company company) {
 
         List<Long> branches = this.branchPersistenceService.getCompanyBranchesIds(company.getId());
+        List<Long> commentsIds = company.hasBranch() ? this.companyPersistenceService.getCommentsIdsRelatedToCompanyBranches(branches) : Collections.emptyList();
+        List<List<Long>> favouriteBranchesIds = company.hasBranch() ? this.companyPersistenceService.getFavouriteBranchesRelatedToCompany(branches) : Collections.emptyList();
+        List<Long> ratingsIds = company.hasBranch() ? this.companyPersistenceService.getRatingsIdsRelatedToCompanyBranches(branches) : Collections.emptyList();
+
         return CompanyRelatedDeletedEntities.builder()
                 .companyId(company.getId())
-                .commentsIds(this.companyPersistenceService.getCommentsIdsRelatedToCompanyBranches(branches))
+                .commentsIds(commentsIds)
                 .branchesIds(branches)
                 .socialProfileUrls(this.companyPersistenceService.getSocialProfileUrlsRelatedToCompany(company.getId()))
                 .promotionItemsIds(this.companyPersistenceService.getPromotionItemsRelatedToCompany(company.getId()))
                 .newsletterSubscriptions(this.companyPersistenceService.getNewsletterSubscriptionsRelatedToCompany(company.getId()))
-                .ratingsIds(this.companyPersistenceService.getRatingsIdsRelatedToCompanyBranches(branches))
-                .favouriteBranchesIds(this.companyPersistenceService.getFavouriteBranchesRelatedToCompany(branches))
+                .ratingsIds(ratingsIds)
+                .favouriteBranchesIds(favouriteBranchesIds)
                 .addressesIds(this.companyPersistenceService.getAddressesIdsRelatedToCompany(company.getId()))
                 .build();
     }

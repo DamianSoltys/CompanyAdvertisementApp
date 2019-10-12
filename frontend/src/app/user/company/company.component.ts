@@ -121,7 +121,6 @@ export class CompanyComponent implements OnInit {
     this.getActualPosition();
     this.getCompanyList();
     this.showEditForm();
-    console.log(this.havePersonalData.value)
   }
 
   private getActualPosition() {
@@ -175,7 +174,7 @@ export class CompanyComponent implements OnInit {
           );
         });
       } 
-      if(!userREST.companiesIDs.length) {
+      if(!userREST.companiesIDs) {
         this.dataLoaded.next(true);
       }
 

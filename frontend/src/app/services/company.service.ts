@@ -15,7 +15,6 @@ export class CompanyService {
   constructor(private http:HttpClient) { }
 
   public addCompany(companyData:Company) {
-    console.log(companyData);
     return this.http.post(`http://localhost:8090/api/companies`,companyData);
   }
 

@@ -61,7 +61,7 @@ export class PersonalDataService {
         this.personalData.next(JSON.parse(localStorage.getItem('naturalUserData')));
       } else {
         let userREST:UserREST = JSON.parse(localStorage.getItem('userREST'));
-        if(userREST && userREST.naturalPersonID) {
+        if(userREST) {
           this.getPersonalData(userREST.userID,userREST.naturalPersonID).subscribe(response=>{
             this.personalData.next(<PersonalData>response.body);
           },error=>{

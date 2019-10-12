@@ -50,7 +50,7 @@
       <div class="content__section--buttons col-12">
         <button class="btn btn-primary section--buttons__button--newsletters" (click)="showNewsletters()">Newsletter</button>
         <button class="btn btn-primary section--buttons__button--branches" (click)="showBranches()">Zakłady</button>
-        <span class="section--buttons__owner-buttons" *ngIf="owner">
+        <span class="section--buttons__owner-buttons" *ngIf="owner.value">
           <button class="btn btn-primary owner-buttons__button--edit" (click)="showEditForm()">Edycja danych</button>
         </span>
       </div>
@@ -68,7 +68,7 @@
   <div class="company-profile-component__branch-sections" *ngIf="canShowBranches.value">
       <div class="branch-sections__empty-branches" *ngIf="!branchData.length">
           <p class="empty-branches__text-node text-center">Firma nie posiada żadnego zakładu</p>
-          <button class="btn btn-primary empty-branches__button--add" (click)="showAddBranchform()">Dodaj zakład</button>
+          <button class="btn btn-primary empty-branches__button--add" (click)="showAddBranchform()" *ngIf="owner.value">Dodaj zakład</button>
         </div>
   <div class="branch-sections__branch-section" *ngFor="let branch of branchData">
     <app-company-section [showWorks]="true" [branchData]="branch" [companyData]="companyData"></app-company-section>

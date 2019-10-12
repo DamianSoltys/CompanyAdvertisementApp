@@ -6,6 +6,7 @@ import { storage_Avaliable } from 'src/app/classes/storage_checker';
 import { BehaviorSubject } from 'rxjs';
 import { BranchService } from 'src/app/services/branch.service';
 import { EditRequestData } from 'src/app/user/company/company.component';
+import { UserREST } from 'src/app/classes/User';
 
 @Component({
   selector: 'app-company-profile',
@@ -15,9 +16,10 @@ import { EditRequestData } from 'src/app/user/company/company.component';
 export class CompanyProfileComponent implements OnInit {
   public editData:EditRequestData;
   public paramId: number;
-  public owner:boolean;
+  public owner = new BehaviorSubject(false);
   public companyData: GetCompany;
   public branchData:Branch[];
+  public userREST:UserREST;
   private successMessageText = 'Akcja została zakończona pomyślnie';
   private errorMessageText = 'Akcja niepowiodła się';
   public successMessage: string = '';
@@ -34,9 +36,6 @@ export class CompanyProfileComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.paramId = params['id'];
     });
-    this.activatedRoute.data.subscribe(data=>{
-      this.owner = data['owner'];
-    });
     this.getCompanyData();
   }
   private getCompanyData() {
@@ -46,13 +45,29 @@ export class CompanyProfileComponent implements OnInit {
       this.cDataService.getCompany(this.paramId).subscribe(
         response => {
           this.companyData = <GetCompany>response.body;
+          this.checkForCompanyOwnership();
         },
         error => {
-          console.log(error);
+          this.checkForCompanyOwnership();
           this.showRequestMessage('error');
         }
       );
     }
+  }
+
+  private checkForCompanyOwnership() {
+    if(storage_Avaliable('localStorage') && JSON.parse(localStorage.getItem('userREST'))) {
+      this.userREST = JSON.parse(localStorage.getItem('userREST'));
+      this.userREST.companiesIDs.forEach((companyId)=>{
+        if(this.companyData && this.companyData.companyId === companyId) {
+          this.owner.next(true);
+        } else {
+          this.router.navigate(['/companyProfile', this.paramId, 'guest']);
+        }
+        console.log(this.owner.value);
+      });
+    }
+    this.router.navigate(['/companyProfile', this.paramId, 'guest']);
   }
 
   private getBranchData() {

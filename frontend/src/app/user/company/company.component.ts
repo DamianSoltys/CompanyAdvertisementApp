@@ -191,7 +191,7 @@ export class CompanyComponent implements OnInit {
   }
 
   public onSubmit(event: Event) {
-    event.preventDefault();
+    event.preventDefault(); //switch na add i edit branch oraz edit company
     if(this.editRequestData.companyId ) {
       this.patchData();
     } else {

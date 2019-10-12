@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { LoginService } from './services/login.service';
 import { Router } from '@angular/router';
 import { storage_Avaliable } from './classes/storage_checker';
+import { UserREST } from './classes/User';
 
 @Component({
   selector: 'app-root',
@@ -62,6 +63,7 @@ export class AppComponent implements OnInit {
   logOut_success = false;
   displayHamburgerMenu = new BehaviorSubject(false);
   displayDropdown = new BehaviorSubject(false);
+  userREST:UserREST;
   constructor(private lgservice: LoginService, private router: Router, private renderer: Renderer2) {
     document.body.addEventListener('click', (e) => {
      if ((<HTMLElement>e.target).id !== 'menuId') {
@@ -76,7 +78,17 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.lgservice.Logged.subscribe(value => {
     this.logged = value;
+    this.getUserObject();
     });
+  }
+
+  getUserObject() {
+    if(storage_Avaliable('localStorage') && this.logged) {
+      let userObject:UserREST = JSON.parse(localStorage.getItem('userREST'));
+      if(userObject){
+        this.userREST = userObject;
+      }
+    }
   }
 
   toggleNearbyBlock() {

@@ -75,10 +75,12 @@ html {
       }
 
 
+
+
       .dropdown__item {
         border: 0;        
         all: initial;
-        width: 100%;
+        width: 100%;     
         &:first-of-type li {
           border-top-left-radius: 20px;
         }
@@ -86,8 +88,13 @@ html {
           border-bottom-left-radius: 5px;
           border-bottom-right-radius: 5px;
         }
-
-        li {
+        li.item__username {
+          padding: 5px 10px;
+          list-style: none;
+          font-size: 1rem;
+          font-weight: 450;
+        }
+        li:not(.item__username) {
           padding: 5px 10px;
           list-style: none;
           font-weight: bold;
@@ -194,7 +201,7 @@ html {
   width: calc(100vw + 10px);
   background: #fff;
 
-  .dropdown__item {
+  .dropdown__item:not(.dropdown__username) {
     float:right;
     width:100%;
     background-color:transparent;
@@ -226,6 +233,20 @@ html {
     &:focus{
       outline: none;
     }
+  }
+
+  .dropdown__username {
+    float:right;
+    width:100%;
+    background-color:transparent;
+    border:0;
+    padding:5px;
+    font-size: 1rem;
+
+    &:focus{
+      outline: none;
+    }
+    cursor: default;
   }
 }
 

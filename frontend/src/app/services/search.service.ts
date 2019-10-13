@@ -5,10 +5,9 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class SearchService {
+  constructor(private http: HttpClient) {}
 
-  constructor(private http:HttpClient) { }
-
-  sendSearchData(searchData:Array<string>){
+  sendSearchData(searchData: Array<string>) {
     console.log(searchData);
   }
 }

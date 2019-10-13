@@ -7,10 +7,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [PersonalDataComponent],
-  imports: [
-    CommonModule,
-    PersonalDataRoutingModule,
-    ReactiveFormsModule
-  ]
+  imports: [CommonModule, PersonalDataRoutingModule, ReactiveFormsModule]
 })
-export class PersonalDataModule { }
+export class PersonalDataModule {}

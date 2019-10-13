@@ -7,10 +7,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AccountDataComponent],
-  imports: [
-    CommonModule,
-    AccountDataRoutingModule,
-    ReactiveFormsModule
-  ]
+  imports: [CommonModule, AccountDataRoutingModule, ReactiveFormsModule]
 })
-export class AccountDataModule { }
+export class AccountDataModule {}

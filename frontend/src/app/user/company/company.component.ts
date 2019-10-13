@@ -101,7 +101,7 @@ export class CompanyComponent implements OnInit {
     }),
     geoX: [''],
     geoY: [''],
-    name: ['', [Validators.required]],
+    name: ['', [Validators.required]]
   });
 
   config = {
@@ -159,13 +159,13 @@ export class CompanyComponent implements OnInit {
       let userREST: UserREST = JSON.parse(localStorage.getItem('userREST'));
       if (userREST.companiesIDs) {
         this.companyList = [];
-        userREST.companiesIDs.forEach((companyId,index) => {
+        userREST.companiesIDs.forEach((companyId, index) => {
           this.cDataService.getCompany(companyId).subscribe(
             response => {
               this.companyList.push(<GetCompany>response.body);
               this.companyList.sort(this.companySort);
               this.cDataService.storeCompanyData(<GetCompany>response.body);
-              if(index === userREST.companiesIDs.length) {
+              if (index === userREST.companiesIDs.length) {
                 this.dataLoaded.next(true);
               }
             },
@@ -174,11 +174,13 @@ export class CompanyComponent implements OnInit {
             }
           );
         });
-      } 
-      if(!userREST.companiesIDs || (userREST.companiesIDs && !userREST.companiesIDs.length)) {
+      }
+      if (
+        !userREST.companiesIDs ||
+        (userREST.companiesIDs && !userREST.companiesIDs.length)
+      ) {
         this.dataLoaded.next(true);
       }
-
     }
   }
   private companySort(item1: GetCompany, item2: GetCompany) {
@@ -223,23 +225,23 @@ export class CompanyComponent implements OnInit {
       }
       this.workNumber++;
       this.workForms.push(this.workForm.value);
-      if(this.workLogo) {
+      if (this.workLogo) {
         this.LogoList.push(this.workLogo);
       }
       this.workForm.reset();
-      if(!this.editRequestData.addWork) {
+      if (!this.editRequestData.addWork) {
         this.toggleWorkForm();
       }
     }
   }
 
   public onSubmit(event: Event) {
-    event.preventDefault(); 
+    event.preventDefault();
     if (this.editRequestData.companyId) {
       this.patchCompanyData();
-    } else if(this.editRequestData.workId){
+    } else if (this.editRequestData.workId) {
       this.patchWorkIdData();
-    } else if(this.editRequestData.addWork) {
+    } else if (this.editRequestData.addWork) {
       this.addWorks();
     } else {
       this.postData();
@@ -247,34 +249,36 @@ export class CompanyComponent implements OnInit {
   }
 
   private addWorks() {
-    if(this.workForm.valid){
+    if (this.workForm.valid) {
       this.addAnotherWork();
     }
-    console.log("Dodawanko");
+    console.log('Dodawanko');
   }
 
   private patchCompanyData() {
     let companyData: Company;
     companyData = this.companyForm.value;
 
-    this.cDataService.editCompany(companyData,this.editRequestData.companyId).subscribe(
-      response => {
-        // this.cDataService.putFile('',this.companyLogo).subscribe(response=>{
+    this.cDataService
+      .editCompany(companyData, this.editRequestData.companyId)
+      .subscribe(
+        response => {
+          // this.cDataService.putFile('',this.companyLogo).subscribe(response=>{
 
-        // },error=>{
+          // },error=>{
 
-        // });
-        this.showRequestMessage('success');
-        setTimeout(() => {
-          this.uDataService.updateUser();
-          location.reload();
-        }, 500);
-      },
-      error => {
-        this.showRequestMessage('error');
-        console.log(error);
-      }
-    );
+          // });
+          this.showRequestMessage('success');
+          setTimeout(() => {
+            this.uDataService.updateUser();
+            location.reload();
+          }, 500);
+        },
+        error => {
+          this.showRequestMessage('error');
+          console.log(error);
+        }
+      );
   }
 
   private patchWorkIdData() {
@@ -309,11 +313,11 @@ export class CompanyComponent implements OnInit {
     );
   }
 
-  public onFileSelected(event,companyForm:boolean) {    
-    if(!this.LogoList) {
+  public onFileSelected(event, companyForm: boolean) {
+    if (!this.LogoList) {
       this.LogoList = [];
     }
-    if(companyForm) {
+    if (companyForm) {
       this.companyLogo = event.target.files[0];
     } else {
       this.workLogo = event.target.files[0];
@@ -393,10 +397,7 @@ export class CompanyComponent implements OnInit {
   }
 
   public canShowDataList() {
-    if (
-      !this.canShowAddForm.value &&
-      !this.canShowWorkForm.value
-    ) {
+    if (!this.canShowAddForm.value && !this.canShowWorkForm.value) {
       return true;
     } else {
       return false;
@@ -441,7 +442,7 @@ export class CompanyComponent implements OnInit {
   }
 
   public canShowText() {
-    if(!this.canShowCompanyList() && this.dataLoaded.getValue()) {
+    if (!this.canShowCompanyList() && this.dataLoaded.getValue()) {
       return true;
     } else {
       return false;

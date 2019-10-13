@@ -1,87 +1,179 @@
 <div class="container-fluid company-profile-component">
-  <div class="company-profile-component__main-container" *ngIf="canShowCompany.value">
+  <div
+    class="company-profile-component__main-container"
+    *ngIf="canShowCompany.value"
+  >
     <div class="main-container__header">
       <span class="header__text-node">Profil firmy</span>
     </div>
     <div class="main-container__content" *ngIf="companyData">
-        <div class="content__section--logo col-12 col-md-4">
-          LOGO
-        </div>
+      <div class="content__section--logo col-12 col-md-4">
+        LOGO
+      </div>
       <div class="content__section--main col-12 col-md-4">
         <div class="section--main__data">
-          <p class="data__text-node"><span class="text-node__label">Nazwa rejestratora:</span> {{ companyData.registererFullname }}</p>
+          <p class="data__text-node">
+            <span class="text-node__label">Nazwa rejestratora:</span>
+            {{ companyData.registererFullname }}
+          </p>
         </div>
         <div class="section--main__data">
-          <p class="data__text-node"><span class="text-node__label">Nazwa firmy:</span> {{ companyData.companyName }}</p>
+          <p class="data__text-node">
+            <span class="text-node__label">Nazwa firmy:</span>
+            {{ companyData.companyName }}
+          </p>
         </div>
         <div class="section--main__data">
-          <p class="data__text-node"><span class="text-node__label">Kategoria:</span> {{ companyData.category }}</p>
+          <p class="data__text-node">
+            <span class="text-node__label">Kategoria:</span>
+            {{ companyData.category }}
+          </p>
         </div>
         <div class="section--main__data">
-          <p class="data__text-node"><span class="text-node__label">NIP:</span> {{ companyData.nip }}</p>
+          <p class="data__text-node">
+            <span class="text-node__label">NIP:</span> {{ companyData.nip }}
+          </p>
         </div>
         <div class="section--main__data">
-          <p class="data__text-node"><span class="text-node__label">REGON:</span> {{ companyData.regon }}</p>
+          <p class="data__text-node">
+            <span class="text-node__label">REGON:</span> {{ companyData.regon }}
+          </p>
         </div>
       </div>
       <div class="content__section--address col-12 col-md-4">
         <div class="section--address__data">
-          <p class="data__text-node"><span class="text-node__label">Województwo:</span> {{ companyData.address.voivodeship }}</p>
+          <p class="data__text-node">
+            <span class="text-node__label">Województwo:</span>
+            {{ companyData.address.voivodeship }}
+          </p>
         </div>
         <div class="section--address__data">
-          <p class="data__text-node"><span class="text-node__label">Miasto:</span> {{ companyData.address.city }}</p>
+          <p class="data__text-node">
+            <span class="text-node__label">Miasto:</span>
+            {{ companyData.address.city }}
+          </p>
         </div>
         <div class="section--address__data">
-          <p class="data__text-node"><span class="text-node__label">Ulica:</span> {{ companyData.address.street }}</p>
+          <p class="data__text-node">
+            <span class="text-node__label">Ulica:</span>
+            {{ companyData.address.street }}
+          </p>
         </div>
         <div class="section--address__data">
-          <p class="data__text-node"><span class="text-node__label">Numer biura/pokoju:</span> {{ companyData.address.apartmentNo }}</p>
+          <p class="data__text-node">
+            <span class="text-node__label">Numer biura/pokoju:</span>
+            {{ companyData.address.apartmentNo }}
+          </p>
         </div>
         <div class="section--address__data">
-          <p class="data__text-node"><span class="text-node__label">Numer budynku:</span> {{ companyData.address.buildingNo }}</p>
+          <p class="data__text-node">
+            <span class="text-node__label">Numer budynku:</span>
+            {{ companyData.address.buildingNo }}
+          </p>
         </div>
       </div>
       <div class="content__section--description col-12">
         <div class="section--description__data">
           <p class="data__text-node">Opis firmy:</p>
-          <div class="data__description-container" [innerHTML]="companyData.description"></div>
+          <div
+            class="data__description-container"
+            [innerHTML]="companyData.description"
+          ></div>
         </div>
       </div>
       <div class="content__section--buttons col-12">
-        <button class="btn btn-primary section--buttons__button--newsletters" (click)="showNewsletters()">Newsletter</button>
-        <button class="btn btn-primary section--buttons__button--branches" (click)="showBranches()">Zakłady</button>
+        <button
+          class="btn btn-primary section--buttons__button--newsletters"
+          (click)="showNewsletters()"
+        >
+          Newsletter
+        </button>
+        <button
+          class="btn btn-primary section--buttons__button--branches"
+          (click)="showBranches()"
+        >
+          Zakłady
+        </button>
         <span class="section--buttons__owner-buttons" *ngIf="owner.value">
-          <button class="btn btn-primary owner-buttons__button--edit" (click)="showEditForm()">Edycja danych</button>
+          <button
+            class="btn btn-primary owner-buttons__button--edit"
+            (click)="showEditForm()"
+          >
+            Edycja danych
+          </button>
         </span>
       </div>
     </div>
   </div>
 
   <div class="company-profile-component__error-container text-center col-12">
-    <p *ngIf="successMessage" class="text-success error-container__text--success">
+    <p
+      *ngIf="successMessage"
+      class="text-success error-container__text--success"
+    >
       {{ successMessage }}
     </p>
     <p *ngIf="errorMessage" class="text-danger error-container__text--danger">
       {{ errorMessage }}
     </p>
   </div>
-  <div class="company-profile-component__branch-sections" *ngIf="canShowBranches.value">
-      <div class="branch-sections__empty-branches" *ngIf="!branchData.length">
-          <p class="empty-branches__text-node text-center" *ngIf="isLoaded.value">Firma nie posiada żadnego zakładu</p>
-          <button class="btn btn-primary empty-branches__button--add" (click)="showAddBranchform()" *ngIf="owner.value">Dodaj zakład</button>
-        </div>
-  <div class="branch-sections__branch-section" *ngFor="let branch of branchData">
-    <app-company-section [showWorks]="true" [branchData]="branch" [companyData]="companyData"></app-company-section>
+  <div
+    class="company-profile-component__branch-sections"
+    *ngIf="canShowBranches.value"
+  >
+    <div class="branch-sections__empty-branches" *ngIf="!branchData.length">
+      <p class="empty-branches__text-node text-center" *ngIf="isLoaded.value">
+        Firma nie posiada żadnego zakładu
+      </p>
+      <button
+        class="btn btn-primary empty-branches__button--add"
+        (click)="showAddBranchform()"
+        *ngIf="owner.value"
+      >
+        Dodaj zakład
+      </button>
+    </div>
+    <div
+      class="branch-sections__branch-section"
+      *ngFor="let branch of branchData"
+    >
+      <app-company-section
+        [showWorks]="true"
+        [branchData]="branch"
+        [companyData]="companyData"
+      ></app-company-section>
+    </div>
+    <div class="branch-sections__button-container">
+      <button
+        class="btn btn-primary button-container__button--add"
+        (click)="showAddBranchform()"
+        *ngIf="owner.value"
+      >
+        Dodaj zakład
+      </button>
+    </div>
   </div>
-  <div class="branch-sections__button-container">
-      <button class="btn btn-primary button-container__button--add" (click)="showAddBranchform()" *ngIf="owner.value">Dodaj zakład</button>
-  </div>
-  </div>
-  <app-company  class="company-profile-component__app-company" *ngIf="canShowEditForm.value" [editRequestData]="editData"></app-company>
-  <app-company  class="company-profile-component__app-company" *ngIf="canShowAddBranchForm.value" [editRequestData]="editData"></app-company>
+  <app-company
+    class="company-profile-component__app-company"
+    *ngIf="canShowEditForm.value"
+    [editRequestData]="editData"
+  ></app-company>
+  <app-company
+    class="company-profile-component__app-company"
+    *ngIf="canShowAddBranchForm.value"
+    [editRequestData]="editData"
+  ></app-company>
   <app-newsletter *ngIf="canShowNewsletters.value"></app-newsletter>
-  
-  <div class="company-profile-component__shared--buttons col-12" *ngIf="!this.canShowCompany.value">
-      <button class="btn btn-primary shared--buttons__button--back" (click)="goBack()">Wróć</button>
+
+  <div
+    class="company-profile-component__shared--buttons col-12"
+    *ngIf="!this.canShowCompany.value"
+  >
+    <button
+      class="btn btn-primary shared--buttons__button--back"
+      (click)="goBack()"
+    >
+      Wróć
+    </button>
   </div>
 </div>

@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private lgservice: LoginService,
     private router: Router,
-    private uDataService:UserService,
+    private uDataService: UserService
   ) {}
 
   ngOnInit() {
@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
         if (data.status === 200) {
           this.login_error = false;
           this.login_success = true;
-          this.showRequestMessage('success','Pomyślnie zalogowano!','');        
+          this.showRequestMessage('success', 'Pomyślnie zalogowano!', '');
           setTimeout(() => {
             this.loginStorageSet(data);
           }, 500);
@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
       },
       error => {
         console.log(error);
-        this.showRequestMessage('error','','Coś poszło nie tak!');
+        this.showRequestMessage('error', '', 'Coś poszło nie tak!');
         this.login_error = true;
       }
     );
@@ -94,12 +94,12 @@ export class LoginComponent implements OnInit {
 
       localStorage.setItem('token', data.headers.get('Authorization'));
       localStorage.setItem('userREST', JSON.stringify(userObject));
-    
+
       this.lgservice.ChangeLogged();
       this.router.navigate(['']);
       console.log('Użytkownik został zalogowany');
     } else {
-      this.showRequestMessage('error','','Coś poszło nie tak!');
+      this.showRequestMessage('error', '', 'Coś poszło nie tak!');
       this.login_error = true;
     }
   }

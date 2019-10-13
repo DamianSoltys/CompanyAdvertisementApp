@@ -44,7 +44,7 @@ export class AccountDataComponent implements OnInit {
     private userService: UserService,
     private accountService: AccountDataService,
     private router: Router,
-    private lgService: LoginService,
+    private lgService: LoginService
   ) {}
 
   ngOnInit() {
@@ -139,8 +139,10 @@ export class AccountDataComponent implements OnInit {
         .subscribe(
           response => {
             this.showRequestMessage('success', 'Hasło zostało zmienione');
-            let newToken = window.btoa(`${this.userObject.emailAddress}:${this.form.newPassword.value}`);
-            localStorage.setItem('token',newToken);
+            let newToken = window.btoa(
+              `${this.userObject.emailAddress}:${this.form.newPassword.value}`
+            );
+            localStorage.setItem('token', newToken);
             this.updateUserObject();
             this.accountDataForm.reset();
             setTimeout(() => {

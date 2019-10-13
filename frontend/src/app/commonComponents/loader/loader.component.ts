@@ -8,10 +8,8 @@ import { BehaviorSubject, Subject } from 'rxjs';
   styleUrls: ['./loader.component.scss']
 })
 export class LoaderComponent implements OnInit {
-  public showLoader:Subject<boolean> = this.loaderService.showLoaderComponent;
-  constructor(private loaderService:LoaderService) { }
+  public showLoader: Subject<boolean> = this.loaderService.showLoaderComponent;
+  constructor(private loaderService: LoaderService) {}
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

@@ -1,236 +1,441 @@
 <div class="container-fluid personal-data-component">
   <div class="personal-data-component__form">
-    <form (ngSubmit)="onSubmit()" class=" col-12 col-xl-6 col-md-9 form__personal-data-form" *ngIf="showAddingForm.getValue() || showEditingForm.getValue()"
-      [formGroup]="personalDataForm">
+    <form
+      (ngSubmit)="onSubmit()"
+      class=" col-12 col-xl-6 col-md-9 form__personal-data-form"
+      *ngIf="showAddingForm.getValue() || showEditingForm.getValue()"
+      [formGroup]="personalDataForm"
+    >
       <div class="personal-data-form__header col-12 text-center">
-        <p class="header__text-node"><i class="fas fa-id-card header__icon"></i>Dane personalne</p>
+        <p class="header__text-node">
+          <i class="fas fa-id-card header__icon"></i>Dane personalne
+        </p>
       </div>
       <div class="personal-data-form__input-group col-12">
         <div class="input_group__group-label">
-            <p class="group-label__text-node"><i class="fas fa-user-tag text-node__icon"></i>Dane osobowe</p>
+          <p class="group-label__text-node">
+            <i class="fas fa-user-tag text-node__icon"></i>Dane osobowe
+          </p>
         </div>
         <div class="input-group__section-container row col-12">
           <div class="form-group section-container__container">
             <label class="section-container__label" for="firstName">Imie</label>
-            <input type="text" name="firstName" class="form-control section-container__input"
-              formControlName="firstName" />
-            <div *ngIf="
+            <input
+              type="text"
+              name="firstName"
+              class="form-control section-container__input"
+              formControlName="firstName"
+            />
+            <div
+              *ngIf="
                 (this.form.firstName.touched || this.form.firstName.dirty) &&
                 this.form.firstName.errors
-              " class="section-container__error-container">
-              <p *ngIf="this.form.firstName.errors.required" class="text-danger error-container__text--danger">
+              "
+              class="section-container__error-container"
+            >
+              <p
+                *ngIf="this.form.firstName.errors.required"
+                class="text-danger error-container__text--danger"
+              >
                 Pole nie może być puste
               </p>
-              <p *ngIf="this.form.firstName.errors.pattern" class="text-danger error-container__text--danger">
+              <p
+                *ngIf="this.form.firstName.errors.pattern"
+                class="text-danger error-container__text--danger"
+              >
                 Proszę poprawnie uzupełnić pole
               </p>
             </div>
           </div>
           <div class="form-group section-container__container">
-            <label class="section-container__label" for="lastName">Nazwisko</label>
-            <input type="text" name="lastName" class="form-control section-container__input"
-              formControlName="lastName" />
-            <div *ngIf="
+            <label class="section-container__label" for="lastName"
+              >Nazwisko</label
+            >
+            <input
+              type="text"
+              name="lastName"
+              class="form-control section-container__input"
+              formControlName="lastName"
+            />
+            <div
+              *ngIf="
                 (this.form.lastName.touched || this.form.lastName.dirty) &&
                 this.form.lastName.errors
-              " class="section-container__error-container">
-              <p *ngIf="this.form.lastName.errors.required" class="text-danger error-container__text--danger">
+              "
+              class="section-container__error-container"
+            >
+              <p
+                *ngIf="this.form.lastName.errors.required"
+                class="text-danger error-container__text--danger"
+              >
                 Pole nie może być puste
               </p>
-              <p *ngIf="this.form.lastName.errors.pattern" class="text-danger error-container__text--danger">
+              <p
+                *ngIf="this.form.lastName.errors.pattern"
+                class="text-danger error-container__text--danger"
+              >
                 Proszę poprawnie uzupełnić pole
               </p>
             </div>
           </div>
         </div>
         <div class="input_group__group-label">
-            <p class="group-label__text-node"><i class="fas fa-home text-node__icon"></i>Dane adresowe</p>
+          <p class="group-label__text-node">
+            <i class="fas fa-home text-node__icon"></i>Dane adresowe
+          </p>
         </div>
-        <div class="input-group__section-container row col-12" formGroupName="address">
+        <div
+          class="input-group__section-container row col-12"
+          formGroupName="address"
+        >
           <div class="form-group section-container__container">
             <label class="section-container__label" for="street">Ulica</label>
-            <input type="text" name="street" class="form-control section-container__input" formControlName="street" />
-            <div *ngIf="
-                (this.formAddress.street.touched || this.formAddress.street.dirty) &&
+            <input
+              type="text"
+              name="street"
+              class="form-control section-container__input"
+              formControlName="street"
+            />
+            <div
+              *ngIf="
+                (this.formAddress.street.touched ||
+                  this.formAddress.street.dirty) &&
                 this.formAddress.street.errors
-              " class="section-container__error-container">
-              <p *ngIf="this.formAddress.street.errors.required" class="text-danger error-container__text--danger">
+              "
+              class="section-container__error-container"
+            >
+              <p
+                *ngIf="this.formAddress.street.errors.required"
+                class="text-danger error-container__text--danger"
+              >
                 Pole nie może być puste
               </p>
-              <p *ngIf="this.formAddress.street.errors.pattern" class="text-danger error-container__text--danger">
+              <p
+                *ngIf="this.formAddress.street.errors.pattern"
+                class="text-danger error-container__text--danger"
+              >
                 Proszę poprawnie uzupełnić pole
               </p>
             </div>
           </div>
           <div class="form-group section-container__container">
-            <label class="section-container__label" for="apartmentNo">Numer Mieszkania</label>
-            <input type="text" name="apartmentNo" class="form-control section-container__input"
-              formControlName="apartmentNo" />
-            <div *ngIf="
+            <label class="section-container__label" for="apartmentNo"
+              >Numer Mieszkania</label
+            >
+            <input
+              type="text"
+              name="apartmentNo"
+              class="form-control section-container__input"
+              formControlName="apartmentNo"
+            />
+            <div
+              *ngIf="
                 (this.formAddress.apartmentNo.touched ||
                   this.formAddress.apartmentNo.dirty) &&
                 this.formAddress.apartmentNo.errors
-              " class="section-container__error-container">
-              <p *ngIf="this.formAddress.apartmentNo.errors.required" class="text-danger error-container__text--danger">
+              "
+              class="section-container__error-container"
+            >
+              <p
+                *ngIf="this.formAddress.apartmentNo.errors.required"
+                class="text-danger error-container__text--danger"
+              >
                 Pole nie może być puste
               </p>
-              <p *ngIf="this.formAddress.apartmentNo.errors.pattern" class="text-danger error-container__text--danger">
+              <p
+                *ngIf="this.formAddress.apartmentNo.errors.pattern"
+                class="text-danger error-container__text--danger"
+              >
                 Proszę poprawnie uzupełnić pole
               </p>
             </div>
           </div>
           <div class="form-group section-container__container">
-            <label class="section-container__label" for="buildingNo">Numer Domu</label>
-            <input type="text" name="buildingNo" class="form-control section-container__input"
-              formControlName="buildingNo" />
-            <div *ngIf="
-                (this.formAddress.buildingNo.touched || this.formAddress.buildingNo.dirty) &&
+            <label class="section-container__label" for="buildingNo"
+              >Numer Domu</label
+            >
+            <input
+              type="text"
+              name="buildingNo"
+              class="form-control section-container__input"
+              formControlName="buildingNo"
+            />
+            <div
+              *ngIf="
+                (this.formAddress.buildingNo.touched ||
+                  this.formAddress.buildingNo.dirty) &&
                 this.formAddress.buildingNo.errors
-              " class="section-container__error-container">
-              <p *ngIf="this.formAddress.buildingNo.errors.required" class="text-danger error-container__text--danger">
+              "
+              class="section-container__error-container"
+            >
+              <p
+                *ngIf="this.formAddress.buildingNo.errors.required"
+                class="text-danger error-container__text--danger"
+              >
                 Pole nie może być puste
               </p>
-              <p *ngIf="this.formAddress.buildingNo.errors.pattern" class="text-danger error-container__text--danger">
+              <p
+                *ngIf="this.formAddress.buildingNo.errors.pattern"
+                class="text-danger error-container__text--danger"
+              >
                 Proszę poprawnie uzupełnić pole
               </p>
             </div>
           </div>
-          <div class="form-group section-container__container section-container__with--select">
-            <label class="section-container__label" for="voivodeship">Województwo</label>
+          <div
+            class="form-group section-container__container section-container__with--select"
+          >
+            <label class="section-container__label" for="voivodeship"
+              >Województwo</label
+            >
             <div class="section-container__select-wrapper">
-              <select  name="voivodeship" class="form-control section-container__select-input"
-                formControlName="voivodeship">
-                <option class="select-input__option" *ngFor="let item of _voivodeships">{{item}}</option>
+              <select
+                name="voivodeship"
+                class="form-control section-container__select-input"
+                formControlName="voivodeship"
+              >
+                <option
+                  class="select-input__option"
+                  *ngFor="let item of _voivodeships"
+                  >{{ item }}</option
+                >
               </select>
             </div>
-            <div *ngIf="
-                  (this.formAddress.voivodeship.touched ||
-                    this.formAddress.voivodeship.dirty) &&
-                  this.formAddress.voivodeship.errors
-                " class="section-container__error-container">
-              <p *ngIf="this.formAddress.voivodeship.errors.required" class="text-danger error-container__text--danger">
+            <div
+              *ngIf="
+                (this.formAddress.voivodeship.touched ||
+                  this.formAddress.voivodeship.dirty) &&
+                this.formAddress.voivodeship.errors
+              "
+              class="section-container__error-container"
+            >
+              <p
+                *ngIf="this.formAddress.voivodeship.errors.required"
+                class="text-danger error-container__text--danger"
+              >
                 Pole nie może być puste
               </p>
             </div>
           </div>
           <div class="form-group section-container__container">
             <label class="section-container__label" for="city">Miasto</label>
-            <input type="text" name="city" class="form-control section-container__input" formControlName="city" />
-            <div *ngIf="
-                  (this.formAddress.city.touched || this.formAddress.city.dirty) &&
-                  this.formAddress.city.errors
-                " class="section-container__error-container">
-              <p *ngIf="this.formAddress.city.errors.required" class="text-danger error-container__text--danger">
+            <input
+              type="text"
+              name="city"
+              class="form-control section-container__input"
+              formControlName="city"
+            />
+            <div
+              *ngIf="
+                (this.formAddress.city.touched ||
+                  this.formAddress.city.dirty) &&
+                this.formAddress.city.errors
+              "
+              class="section-container__error-container"
+            >
+              <p
+                *ngIf="this.formAddress.city.errors.required"
+                class="text-danger error-container__text--danger"
+              >
                 Pole nie może być puste
               </p>
-              <p *ngIf="this.formAddress.city.errors.pattern" class="text-danger error-container__text--danger">
+              <p
+                *ngIf="this.formAddress.city.errors.pattern"
+                class="text-danger error-container__text--danger"
+              >
                 Proszę poprawnie uzupełnić pole
               </p>
             </div>
           </div>
         </div>
         <div class="input_group__group-label">
-            <p class="group-label__text-node"><i class="fas fa-phone text-node__icon"></i>Dane kontaktowe</p>
+          <p class="group-label__text-node">
+            <i class="fas fa-phone text-node__icon"></i>Dane kontaktowe
+          </p>
         </div>
         <div class="input-group__section-container row col-12">
-            <div class="form-group section-container__container">
-              <label class="section-container__label" for="phoneNo">Telefon</label>
-              <input type="text" name="phoneNo" class="form-control section-container__input" formControlName="phoneNo" />
-              <div *ngIf="
-                    (this.form.phoneNo.touched || this.form.phoneNo.dirty) &&
-                    this.form.phoneNo.errors
-                  " class="section-container__error-container">
-                <p *ngIf="this.form.phoneNo.errors.required" class="text-danger error-container__text--danger">
-                  Pole nie może być puste
-                </p>
-                <p *ngIf="this.form.phoneNo.errors.pattern" class="text-danger error-container__text--danger">
-                  Proszę poprawnie uzupełnić pole
-                </p>
-              </div>
+          <div class="form-group section-container__container">
+            <label class="section-container__label" for="phoneNo"
+              >Telefon</label
+            >
+            <input
+              type="text"
+              name="phoneNo"
+              class="form-control section-container__input"
+              formControlName="phoneNo"
+            />
+            <div
+              *ngIf="
+                (this.form.phoneNo.touched || this.form.phoneNo.dirty) &&
+                this.form.phoneNo.errors
+              "
+              class="section-container__error-container"
+            >
+              <p
+                *ngIf="this.form.phoneNo.errors.required"
+                class="text-danger error-container__text--danger"
+              >
+                Pole nie może być puste
+              </p>
+              <p
+                *ngIf="this.form.phoneNo.errors.pattern"
+                class="text-danger error-container__text--danger"
+              >
+                Proszę poprawnie uzupełnić pole
+              </p>
             </div>
           </div>
+        </div>
       </div>
       <div class="personal-data-form__error-container text-center col-12">
-        <p *ngIf="successMessage" class="text-success error-container__text--success">
+        <p
+          *ngIf="successMessage"
+          class="text-success error-container__text--success"
+        >
           {{ successMessage }}
         </p>
-        <p *ngIf="errorMessage" class="text-danger error-container__text--danger">
+        <p
+          *ngIf="errorMessage"
+          class="text-danger error-container__text--danger"
+        >
           {{ errorMessage }}
         </p>
       </div>
       <div class="personal-data-form__button-container text-center col-12 row">
-      <button class="btn btn-primary personal-data-form__button--submit" [disabled]="!this.personalDataForm.valid"
-        type="submit" *ngIf="showAddingForm.getValue()">
-        <span class="button--submit__text-node">Dodaj dane</span>
-      </button>
-      <button class="btn btn-primary personal-data-form__button--submit" [disabled]="!this.personalDataForm.valid" 
-      type="submit" *ngIf="showEditingForm.getValue()">
+        <button
+          class="btn btn-primary personal-data-form__button--submit"
+          [disabled]="!this.personalDataForm.valid"
+          type="submit"
+          *ngIf="showAddingForm.getValue()"
+        >
+          <span class="button--submit__text-node">Dodaj dane</span>
+        </button>
+        <button
+          class="btn btn-primary personal-data-form__button--submit"
+          [disabled]="!this.personalDataForm.valid"
+          type="submit"
+          *ngIf="showEditingForm.getValue()"
+        >
           <span class="button--submit__text-node">Zapisz dane</span>
-      </button>
-      <button class="btn btn-primary personal-data-form__button--submit" (click)="showPersonalData($event)"
-      *ngIf="showEditingForm.getValue()">
-        <span class="button--submit__text-node">Pokaż dane</span>
-      </button>
-      <div class="personal-data-form__rodo-container text-center col-12">
-        <p class="rodo-container__text-node"><span class="text-node__star">*</span> Zapisując dane zgadzasz się na przetwarzanie twoich danych osobowych w celach naukowych(praca inżynierska), których administratorem
-          są Damian Sołtysiuk oraz Mateusz Szałkowski.
-        </p>
+        </button>
+        <button
+          class="btn btn-primary personal-data-form__button--submit"
+          (click)="showPersonalData($event)"
+          *ngIf="showEditingForm.getValue()"
+        >
+          <span class="button--submit__text-node">Pokaż dane</span>
+        </button>
+        <div class="personal-data-form__rodo-container text-center col-12">
+          <p class="rodo-container__text-node">
+            <span class="text-node__star">*</span> Zapisując dane zgadzasz się
+            na przetwarzanie twoich danych osobowych w celach naukowych(praca
+            inżynierska), których administratorem są Damian Sołtysiuk oraz
+            Mateusz Szałkowski.
+          </p>
+        </div>
       </div>
-    </div>
     </form>
   </div>
-  <div class="row personal-data-component__data-container col-12 col-xl-5 col-md-6" *ngIf="showData.getValue()">
-      <div class="data-container__header col-12 text-center">
-          <p class="header__text-node"><i class="fas fa-id-card header__icon"></i>Dane personalne</p>
+  <div
+    class="row personal-data-component__data-container col-12 col-xl-5 col-md-6"
+    *ngIf="showData.getValue()"
+  >
+    <div class="data-container__header col-12 text-center">
+      <p class="header__text-node">
+        <i class="fas fa-id-card header__icon"></i>Dane personalne
+      </p>
+    </div>
+    <div class="col-12 data-container__data-group-container">
+      <div class="row data-group-container__data-group col-12">
+        <div class="data-group__header col-12">
+          <span class="header__text-node"
+            ><i class="fas fa-user-tag text-node__icon"></i>Dane osobowe</span
+          >
+        </div>
+        <div class="data-group__container col-12">
+          <ul class="container__data-list">
+            <li class="data-list__item">
+              <span class="data-list__caption">Imie:</span
+              >{{ naturalUserDataObject?.firstName }}
+            </li>
+            <li class="data-list__item">
+              <span class="data-list__caption">Nazwisko:</span
+              >{{ naturalUserDataObject?.lastName }}
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="col-12 data-container__data-group-container">
-    <div class="row data-group-container__data-group col-12">
-      <div class="data-group__header col-12">
-        <span class="header__text-node"><i class="fas fa-user-tag text-node__icon"></i>Dane osobowe</span>
+      <div class="row data-group-container__data-group col-12">
+        <div class="data-group__header col-12">
+          <span class="header__text-node"
+            ><i class="fas fa-home text-node__icon"></i>Dane adresowe</span
+          >
+        </div>
+        <div class="data-group__container col-12">
+          <ul #ulList class="container__data-list">
+            <li class="data-list__item">
+              <span class="data-list__caption">Województwo:</span
+              >{{ naturalUserDataObject?.address.voivodeship }}
+            </li>
+            <li class="data-list__item">
+              <span class="data-list__caption">Miasto:</span
+              >{{ naturalUserDataObject?.address.city }}
+            </li>
+            <li class="data-list__item">
+              <span class="data-list__caption">Ulica:</span
+              >{{ naturalUserDataObject?.address.street }}
+            </li>
+            <li class="data-list__item">
+              <span class="data-list__caption">Numer mieszkania:</span>
+              {{ naturalUserDataObject?.address.apartmentNo }}
+            </li>
+            <li class="data-list__item">
+              <span class="data-list__caption">Numer domu:</span
+              >{{ naturalUserDataObject?.address.buildingNo }}
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="data-group__container col-12">
-        <ul class="container__data-list">
-          <li class="data-list__item"><span class="data-list__caption">Imie:</span>{{naturalUserDataObject?.firstName}}</li>
-          <li class="data-list__item"><span class="data-list__caption">Nazwisko:</span>{{naturalUserDataObject?.lastName}}</li>
-        </ul>
+      <div class="row data-group-container__data-group col-12">
+        <div class="data-group__header col-12">
+          <span class="header__text-node"
+            ><i class="fas fa-phone text-node__icon"></i>Dane kontaktowe</span
+          >
+        </div>
+        <div class="data-group__container col-12">
+          <ul #ulList class="container__data-list">
+            <li class="data-list__item">
+              <span class="data-list__caption">Telefon:</span
+              >{{ naturalUserDataObject?.phoneNo }}
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
-    <div class="row data-group-container__data-group col-12">
-      <div class="data-group__header col-12">
-        <span class="header__text-node"><i class="fas fa-home text-node__icon"></i>Dane adresowe</span>
-      </div>
-      <div class="data-group__container col-12">
-        <ul #ulList class="container__data-list">
-          <li class="data-list__item"><span class="data-list__caption">Województwo:</span>{{naturalUserDataObject?.address.voivodeship}}</li>
-          <li class="data-list__item"><span class="data-list__caption">Miasto:</span>{{naturalUserDataObject?.address.city}}</li>
-          <li class="data-list__item"><span class="data-list__caption">Ulica:</span>{{naturalUserDataObject?.address.street}}</li>
-          <li class="data-list__item"><span class="data-list__caption">Numer mieszkania:</span> {{naturalUserDataObject?.address.apartmentNo}}</li>
-          <li class="data-list__item"><span class="data-list__caption">Numer domu:</span>{{naturalUserDataObject?.address.buildingNo}}</li>
-        </ul>
-      </div>
-    </div>
-    <div class="row data-group-container__data-group col-12">
-      <div class="data-group__header col-12">
-        <span class="header__text-node"><i class="fas fa-phone text-node__icon"></i>Dane kontaktowe</span>
-      </div>
-      <div class="data-group__container col-12">
-        <ul #ulList class="container__data-list">
-          <li class="data-list__item"><span class="data-list__caption">Telefon:</span>{{naturalUserDataObject?.phoneNo}}</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <div class="personal-data-component__error-container text-center col-12">
-      <p *ngIf="successMessage" class="text-success error-container__text--success">
+    <div class="personal-data-component__error-container text-center col-12">
+      <p
+        *ngIf="successMessage"
+        class="text-success error-container__text--success"
+      >
         {{ successMessage }}
       </p>
       <p *ngIf="errorMessage" class="text-danger error-container__text--danger">
         {{ errorMessage }}
       </p>
     </div>
-  <div class="data-container__button-container text-center col-12 row">
-      <button class="button__button--edit btn btn-primary" (click)="showEditForm()"><span class="button--submit__text-node">Edytuj dane</span></button>
-      <button class="button__button--delete btn btn-primary" (click)="deleteData()"><span class="button--submit__text-node">Usuń dane</span></button>
-  </div>
+    <div class="data-container__button-container text-center col-12 row">
+      <button
+        class="button__button--edit btn btn-primary"
+        (click)="showEditForm()"
+      >
+        <span class="button--submit__text-node">Edytuj dane</span>
+      </button>
+      <button
+        class="button__button--delete btn btn-primary"
+        (click)="deleteData()"
+      >
+        <span class="button--submit__text-node">Usuń dane</span>
+      </button>
+    </div>
   </div>
 </div>

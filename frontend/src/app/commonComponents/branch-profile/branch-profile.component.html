@@ -4,56 +4,93 @@
       <span class="header__text-node">Profil zakładu</span>
     </div>
     <div class="main-container__content" *ngIf="branchData">
-        <div class="content__section--logo col-12 col-md-4">
-          LOGO
-        </div>
+      <div class="content__section--logo col-12 col-md-4">
+        LOGO
+      </div>
       <div class="content__section--main col-12 col-md-4">
         <div class="section--main__data">
-          <p class="data__text-node"><span class="text-node__label">Nazwa zakładu:</span> {{ branchData.name }}</p>
+          <p class="data__text-node">
+            <span class="text-node__label">Nazwa zakładu:</span>
+            {{ branchData.name }}
+          </p>
         </div>
       </div>
       <div class="content__section--address col-12 col-md-4">
         <div class="section--address__data">
-          <p class="data__text-node"><span class="text-node__label">Województwo:</span> {{ branchData.address.voivodeship }}</p>
+          <p class="data__text-node">
+            <span class="text-node__label">Województwo:</span>
+            {{ branchData.address.voivodeship }}
+          </p>
         </div>
         <div class="section--address__data">
-          <p class="data__text-node"><span class="text-node__label">Miasto:</span> {{ branchData.address.city }}</p>
+          <p class="data__text-node">
+            <span class="text-node__label">Miasto:</span>
+            {{ branchData.address.city }}
+          </p>
         </div>
         <div class="section--address__data">
-          <p class="data__text-node"><span class="text-node__label">Ulica:</span> {{ branchData.address.street }}</p>
+          <p class="data__text-node">
+            <span class="text-node__label">Ulica:</span>
+            {{ branchData.address.street }}
+          </p>
         </div>
         <div class="section--address__data">
-          <p class="data__text-node"><span class="text-node__label">Numer biura/pokoju:</span> {{ branchData.address.apartmentNo }}</p>
+          <p class="data__text-node">
+            <span class="text-node__label">Numer biura/pokoju:</span>
+            {{ branchData.address.apartmentNo }}
+          </p>
         </div>
         <div class="section--address__data">
-          <p class="data__text-node"><span class="text-node__label">Numer budynku:</span> {{ branchData.address.buildingNo }}</p>
+          <p class="data__text-node">
+            <span class="text-node__label">Numer budynku:</span>
+            {{ branchData.address.buildingNo }}
+          </p>
         </div>
       </div>
       <div class="content__section--map col-12">
         <div class="section--map__data">
           <p class="data__text-node">Lokalizacja:</p>
           <div class="data__map-container">
-            <agm-map [latitude]="actualPosition.latitude" [longitude]="actualPosition.longitude" class="map-container__map">
-              <agm-marker *ngIf="mapMarker" 
-              [latitude]="mapMarker.latitude" 
-              [longitude]="mapMarker.longitude" 
-              [label]="mapMarker.label">
+            <agm-map
+              [latitude]="actualPosition.latitude"
+              [longitude]="actualPosition.longitude"
+              class="map-container__map"
+            >
+              <agm-marker
+                *ngIf="mapMarker"
+                [latitude]="mapMarker.latitude"
+                [longitude]="mapMarker.longitude"
+                [label]="mapMarker.label"
+              >
               </agm-marker>
             </agm-map>
           </div>
         </div>
       </div>
       <div class="content__section--buttons col-12">
-          <button class="btn btn-primary section--buttons__button--comments" (click)="showComments()">Komentarze</button>
+        <button
+          class="btn btn-primary section--buttons__button--comments"
+          (click)="showComments()"
+        >
+          Komentarze
+        </button>
         <span class="section--buttons__owner-buttons" *ngIf="owner.value">
-          <button class="btn btn-primary owner-buttons__button--edit" (click)="showEditForm()">Edycja danych</button>
+          <button
+            class="btn btn-primary owner-buttons__button--edit"
+            (click)="showEditForm()"
+          >
+            Edycja danych
+          </button>
         </span>
       </div>
     </div>
   </div>
 
   <div class="branch-profile-component__error-container text-center col-12">
-    <p *ngIf="successMessage" class="text-success error-container__text--success">
+    <p
+      *ngIf="successMessage"
+      class="text-success error-container__text--success"
+    >
       {{ successMessage }}
     </p>
     <p *ngIf="errorMessage" class="text-danger error-container__text--danger">
@@ -61,7 +98,19 @@
     </p>
   </div>
   <div class="branch-profile-component__shared--buttons col-12">
-    <button class="btn btn-primary shared--buttons__button--back" (click)="goBack(true)" *ngIf="companyId">Wróć</button>
-    <button class="btn btn-primary shared--buttons__button--back" (click)="goBack(false)" *ngIf="!companyId">Wróć</button>
-</div>
+    <button
+      class="btn btn-primary shared--buttons__button--back"
+      (click)="goBack(true)"
+      *ngIf="companyId"
+    >
+      Wróć
+    </button>
+    <button
+      class="btn btn-primary shared--buttons__button--back"
+      (click)="goBack(false)"
+      *ngIf="!companyId"
+    >
+      Wróć
+    </button>
+  </div>
 </div>

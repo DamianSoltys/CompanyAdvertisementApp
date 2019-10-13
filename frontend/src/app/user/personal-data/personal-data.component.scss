@@ -4,8 +4,8 @@
     width: 95%;
   }
 }
-.personal-data-component__form { 
-    margin-top:2%;
+.personal-data-component__form {
+  margin-top: 2%;
 
   .personal-data-form__header {
     position: relative;
@@ -16,7 +16,7 @@
     border: 0;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-  
+
     .header__text-node {
       color: white;
       position: relative;
@@ -37,30 +37,30 @@
     border-bottom-right-radius: 20px;
     align-self: center;
     margin: auto;
-    padding:0;
+    padding: 0;
 
     .personal-data-form__rodo-container {
       .rodo-container__text-node {
         font-size: 0.8rem;
         margin: 15px 1rem;
         text-align: justify;
-        .text-node__star{
-          font-size:1rem;
-          color:red;
+        .text-node__star {
+          font-size: 1rem;
+          color: red;
         }
       }
     }
     .personal-data-form__button-container {
-      margin:0;
+      margin: 0;
       justify-content: space-evenly;
       .personal-data-form__button--submit {
         width: 45%;
         border-radius: 50px;
         border: 0;
-        background: linear-gradient(-45deg, #FFA63D, #FF3D77, #338AFF, #3CF0C5);
+        background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
         animation: button-background-animation 16s linear infinite;
         background-size: 600%;
-    
+
         @include phone {
           width: 85%;
           margin-bottom: 5%;
@@ -69,66 +69,67 @@
     }
 
     .personal-data-form__input-group {
-      padding:3%;
-      margin-top:2%;
+      padding: 3%;
+      margin-top: 2%;
 
       .input_group__group-label {
         .group-label__text-node {
-          font-size:1.1rem;
+          font-size: 1.1rem;
           margin: 0 15px;
           font-weight: bold;
-          color:darken($bgcolor,10);
+          color: darken($bgcolor, 10);
 
           .text-node__icon {
             padding-right: 5px;
           }
         }
       }
-   
+
       .input-group__section-container {
-        border:1px solid darken($bgcolor,10);
+        border: 1px solid darken($bgcolor, 10);
         border-width: 1px 0 0 0;
         border-radius: 6px;
-        padding:20px;
-        margin:auto;
-        margin-bottom:5px;
+        padding: 20px;
+        margin: auto;
+        margin-bottom: 5px;
         justify-content: space-evenly;
         z-index: 1;
         @include boxShadow(inset 0px 15px 8px -15px rgba(32, 99, 143, 0.66));
-        
+
         @include phone {
           padding: 20px 0;
         }
         .section-container__error-container {
-          .error-container__text--danger,.error-container__text--success {
-            margin-bottom:0;
+          .error-container__text--danger,
+          .error-container__text--success {
+            margin-bottom: 0;
           }
         }
-      
+
         .section-container__container {
-          margin:0 1rem 5px 1rem;
+          margin: 0 1rem 5px 1rem;
           position: relative;
-          left:0px;
-          transition: all .2s ease-in-out;
+          left: 0px;
+          transition: all 0.2s ease-in-out;
 
           .section-container__select-wrapper {
             position: relative;
-            left:-10px;
-            width:calc(100% + 20px);
+            left: -10px;
+            width: calc(100% + 20px);
 
             @include phone() {
-              left:0;
-              width:100%;
+              left: 0;
+              width: 100%;
             }
 
             &:before {
-              content: "\f078";
+              content: '\f078';
               font-family: 'Font Awesome 5 Free';
               font-weight: 900;
               position: absolute;
               top: 8px;
               right: 10px;
-              color:$bgcolor;
+              color: $bgcolor;
             }
             .section-container__select-input {
               -moz-appearance: none;
@@ -141,28 +142,28 @@
             }
           }
           .section-container__input {
-            padding:0;    
-          }   
-          
+            padding: 0;
+          }
+
           &:focus-within {
             color: $bgcolor;
 
             @include tablet() {
-              &:not(.section-container__with--select){
-                left:-15px;
+              &:not(.section-container__with--select) {
+                left: -15px;
 
                 .section-container__input {
-                  width:calc(100% + 30px);
+                  width: calc(100% + 30px);
                 }
               }
             }
 
             @include desktop() {
-              &:not(.section-container__with--select){
-                left:-25px;
+              &:not(.section-container__with--select) {
+                left: -25px;
 
                 .section-container__input {
-                  width:calc(100% + 50px);
+                  width: calc(100% + 50px);
                 }
               }
             }
@@ -170,22 +171,22 @@
 
           @include phone {
             width: 100%;
-            margin:auto;
+            margin: auto;
           }
         }
       }
-    }    
-  }     
+    }
+  }
 }
 
 .personal-data-component__data-container {
-  margin:auto;
+  margin: auto;
   @include boxShadow(0px 4px 5px 0px rgba(187, 185, 191, 1));
   border: 0;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
   align-self: center;
-  padding:0;
+  padding: 0;
   .data-container__header {
     position: relative;
     min-height: 30px;
@@ -195,7 +196,7 @@
     border: 0;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-  
+
     .header__text-node {
       color: white;
       position: relative;
@@ -210,32 +211,33 @@
   }
 
   .data-container__button-container {
-    display:flex;
+    display: flex;
     justify-content: space-evenly;
     padding: 0;
     margin-left: 0;
 
-      .button__button--edit,.button__button--delete {    
-        width:40%;   
-        margin-bottom:5%;
-        border-radius: 50px;
-        border: 0;
-        background: linear-gradient(-45deg, #FFA63D, #FF3D77, #338AFF, #3CF0C5);
-        animation: button-background-animation 16s linear infinite;
-        background-size: 600%;
-    
-        @include phone {
-          width: 85%;
-        }    
+    .button__button--edit,
+    .button__button--delete {
+      width: 40%;
+      margin-bottom: 5%;
+      border-radius: 50px;
+      border: 0;
+      background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
+      animation: button-background-animation 16s linear infinite;
+      background-size: 600%;
+
+      @include phone {
+        width: 85%;
+      }
     }
-  } 
+  }
 
   .data-container__data-group-container {
-      padding:3%;
-      margin-top:2%;
+    padding: 3%;
+    margin-top: 2%;
   }
   .data-group-container__data-group {
-    margin:auto;
+    margin: auto;
 
     @include phone {
       padding: 0;
@@ -244,10 +246,10 @@
     .data-group__header {
       padding: 0;
       .header__text-node {
-        font-size:1.1rem;
+        font-size: 1.1rem;
         margin: 0 15px;
         font-weight: bold;
-        color:darken($bgcolor,10);
+        color: darken($bgcolor, 10);
         .text-node__icon {
           padding-right: 5px;
         }
@@ -255,16 +257,16 @@
     }
 
     .data-group__container {
-      border:1px solid darken($bgcolor,10);
+      border: 1px solid darken($bgcolor, 10);
       border-width: 1px 0 0 0;
       border-radius: 6px;
-      padding:20px 40px;
-      margin:auto;
-      margin-bottom:5px;
+      padding: 20px 40px;
+      margin: auto;
+      margin-bottom: 5px;
       z-index: 1;
       @include boxShadow(inset 0px 15px 8px -15px rgba(32, 99, 143, 0.66));
       .container__data-list {
-        list-style:none;
+        list-style: none;
         padding: 0;
         justify-content: space-evenly;
         .data-list__item {
@@ -272,17 +274,13 @@
           .data-list__caption {
             padding-right: 10px;
             font-size: 1.1rem;
-            color:darken($bgcolor,15);
+            color: darken($bgcolor, 15);
           }
         }
       }
       @include phone() {
-        padding:10px;
+        padding: 10px;
       }
     }
   }
 }
-
-
-
-  

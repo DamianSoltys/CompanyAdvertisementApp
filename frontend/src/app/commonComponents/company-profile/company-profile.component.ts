@@ -39,19 +39,32 @@ export class CompanyProfileComponent implements OnInit {
     this.getCompanyData();
   }
   private getCompanyData() {
-    if (this.cDataService.CompanyData[this.paramId]) {
-      this.companyData = this.cDataService.CompanyData[this.paramId];
-    } else {
-      this.cDataService.getCompany(this.paramId).subscribe(
-        response => {
-          this.companyData = <GetCompany>response.body;
-          this.checkForCompanyOwnership();
-        },
-        error => {
-          this.checkForCompanyOwnership();
-          this.showRequestMessage('error');
+        this.getStorageCompanyData();
+
+        if(!this.companyData) {
+          this.cDataService.getCompany(this.paramId).subscribe(
+            response => {
+              this.companyData = <GetCompany>response.body;
+              this.cDataService.storeCompanyData(<GetCompany>response.body);
+              this.checkForCompanyOwnership();
+            },
+            error => {
+              this.checkForCompanyOwnership();
+              this.showRequestMessage('error');
+            }
+          );
+        }   
+  }
+
+  private getStorageCompanyData() {
+    if(storage_Avaliable('localStorage')) {
+      let companyData:GetCompany[] = JSON.parse(localStorage.getItem('companyData'));
+      companyData.forEach(company=>{
+        if(this.paramId == company.companyId) {
+          this.companyData = company;
+          this.checkForCompanyOwnership()
         }
-      );
+      });
     }
   }
 
@@ -61,13 +74,9 @@ export class CompanyProfileComponent implements OnInit {
       this.userREST.companiesIDs.forEach((companyId)=>{
         if(this.companyData && this.companyData.companyId === companyId) {
           this.owner.next(true);
-        } else {
-          this.router.navigate(['/companyProfile', this.paramId, 'guest']);
-        }
-        console.log(this.owner.value);
-      });
-    }
-    this.router.navigate(['/companyProfile', this.paramId, 'guest']);
+        } 
+      });      
+    }   
   }
 
   private getBranchData() {

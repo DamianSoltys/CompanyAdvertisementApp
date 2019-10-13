@@ -27,7 +27,6 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./personal-data.component.scss']
 })
 
-// Public pierwsze/private ostatnie!
 export class PersonalDataComponent implements OnInit {
   public personalDataForm: FormGroup;
   public successMessage: string = '';
@@ -101,40 +100,40 @@ export class PersonalDataComponent implements OnInit {
         [Validators.required, Validators.pattern(new RegExp(/^[0-9]+$/))]
       ]
     });
-
-    this.userObject = JSON.parse(localStorage.getItem('userREST'));
+    this.getUserObject();
     this.checkForPersonalData();
   }
 
   private checkForPersonalData() {
     if (this.checkIfPersonalDataStorage()) {
       this.naturalUserDataObject = this.getPersonalDataStorage();     
-        setTimeout(() => {
-          this.showPersonalData();
-        }, 500);     
+      this.showPersonalData();
     } else {
       this.getPersonalDataServer();
     }
+  }
+
+  private getUserObject() {
+    this.userService.userREST.subscribe(data=> {
+      this.userObject = data;
+    });
   }
 
   public showPersonalData(e?: Event) {
     if (e) {
       e.preventDefault();
     }
-    this.clearRequestMessage();
     this.showAddingForm.next(false);
     this.showEditingForm.next(false);
     this.showData.next(true);
   }
 
   public showEditForm() {
-    this.clearRequestMessage();
     this.showData.next(false);
     this.showAddingForm.next(false);
     this.showEditingForm.next(true);
   }
   public showAddForm() {
-    this.clearRequestMessage();
     this.showData.next(false);
     this.showAddingForm.next(true);
     this.showEditingForm.next(false);
@@ -176,6 +175,10 @@ export class PersonalDataComponent implements OnInit {
       this.successMessage = '';
       this.errorMessage = errorMessage;
     }
+
+    setTimeout(()=>{
+      this.clearRequestMessage();
+    },2000)
   }
   private clearRequestMessage() {
     this.successMessage = '';
@@ -237,6 +240,7 @@ export class PersonalDataComponent implements OnInit {
   }
 
   private checkIfPostDataSuccess() {
+    console.log(this.userObject)
     this.pdataService
       .sendPersonalData(
         this.personalDataForm.value as PersonalData,
@@ -271,6 +275,7 @@ export class PersonalDataComponent implements OnInit {
           this.personalDataForm.reset();
           this.deleteStoragePersonalData();
           this.userService.updateUser();
+          this.getUserObject();
           this.checkForPersonalData();
         },
         error => {
@@ -293,7 +298,7 @@ export class PersonalDataComponent implements OnInit {
           this.deleteStoragePersonalData();
           setTimeout(() => {
             this.showAddForm();
-          }, 1000);
+          }, 200);
         },
         error => {
           console.log(error);

@@ -90,7 +90,6 @@ export class AppComponent implements OnInit {
       this.userREST = JSON.parse(localStorage.getItem('userREST'));
       this.pDataService.personalData.subscribe(data=>{
         this.personalData = data;
-        console.log(data);
       });
       
     }

@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BranchProfileComponent } from './branch-profile.component';
 import { BranchProfileRoutingModule } from './branch-profile-routing.module';
-
+import { AgmCoreModule } from '@agm/core';
 @NgModule({
   declarations: [
     BranchProfileComponent
@@ -14,6 +14,9 @@ import { BranchProfileRoutingModule } from './branch-profile-routing.module';
     BranchProfileRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    AgmCoreModule.forRoot({
+      apiKey:'AIzaSyDymmSbQ_6KBgygpEZwcztemgH3HXTOYrI'
+    }), 
   ]
 })
 export class BranchProfileModule { }

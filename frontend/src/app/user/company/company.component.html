@@ -100,15 +100,8 @@
           </div>
           <div class="input-group__inputs">
               <div class="inputs__input-container">
-                  <label class="input-container__label" for="name">Logo</label>
-                  <input formControlName="logo" name="logo" type="file" class="input-container__input form-control-file" (change)="onFileSelected($event,true)"/>
-                  <div class="input-container__error-container" *ngIf="
-                  (this._companyForm.logo.touched || this._companyForm.logo.dirty) &&
-                  this._companyForm.logo.errors">
-                    <p class="text-danger error-container__text--danger" *ngIf="this._companyForm.logo.errors.required">
-                      Pole nie może być puste
-                    </p>
-                  </div>
+                  <label class="input-container__label" for="logo">Logo</label>
+                  <input name="logo" type="file" class="input-container__input input-container__file form-control-file" (change)="onFileSelected($event,true)"/>
                 </div>
             <div class="inputs__input-container">
               <label class="input-container__label" for="name">Nazwa</label>
@@ -191,7 +184,7 @@
   <div class="company-component__separator"></div>
   <div class="company-component__button-container" *ngIf="!editRequestData.companyId">
     <button class="btn button-container__button--add" (click)="toggleAddForm()">
-      <span class="button--add__text-node">Wróć</span>
+      <span class="button--add__text-node">Wróć do listy firm</span>
     </button>
     <button class="btn button-container__button--add" [disabled]="!this.companyForm.valid" (click)="toggleWorkForm()">
       <span class="button--add__text-node">Dodaj zakład</span>
@@ -309,19 +302,15 @@
               </div>
               <div class="inputs__input-container">
                   <label class="input-container__label" for="name">Logo</label>
-                  <input formControlName="logo" name="logo" type="file" class="input-container__input form-control-file" (change)="onFileSelected($event,false)"/>
-                  <div class="input-container__error-container" *ngIf="
-                  (this._workForm.logo.touched || this._workForm.logo.dirty) &&
-                  this._workForm.logo.errors">
-                    <p class="text-danger error-container__text--danger" *ngIf="this._workForm.logo.errors.required">
-                      Pole nie może być puste
-                    </p>
-                  </div>
+                  <input name="logo" type="file" class="input-container__input input-container__file form-control-file" (change)="onFileSelected($event,false)"/>
                 </div>
           </div>
         </div>
       </div>
-      <div class="company-component__button-container">
+      <div class="company-component__button-container company-component__buttons-work">
+        <button class="btn button-container__button--submit" (click)="addAnotherWork()" [disabled]="!this.workForm.valid">
+          <span class="button--add__text-node">Dodaj zakład</span>
+        </button>
         <button type="submit" class="btn button-container__button--submit" [disabled]="!this.workForm.valid">
           <span class="button--add__text-node">Zatwierdź</span>
         </button>
@@ -336,10 +325,7 @@
   <div class="company-component__separator"></div>
   <div class="company-component__button-container">
     <button class="btn button-container__button--add" (click)="toggleWorkForm()" *ngIf="canShowBranchBackBtn()">
-      <span class="button--add__text-node">Wróć</span>
-    </button>
-    <button class="btn button-container__button--add" [disabled]="!this.workForm.valid" (click)="addAnotherWork()">
-      <span class="button--add__text-node">Następny zakład</span>
+      <span class="button--add__text-node">Wróć do formularza firmy</span>
     </button>
   </div>
 </div>

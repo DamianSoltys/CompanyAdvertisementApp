@@ -258,7 +258,7 @@
             }
         }
     }
-
+    
     .company-component__button-container {
         display: flex;
         align-self: center;       
@@ -267,7 +267,9 @@
         padding-top:30px;
 
         @include phone {
-            width:85%;
+            width:90%;
+            flex-direction: column;
+            align-items: center;
         }
 
         .button-container__button--add,.button-container__button--submit {
@@ -283,9 +285,17 @@
 
             .button--add__text-node {
                 color:white;
+            }
+            @include phone {
+                margin:10px;
             }   
         }
     }
+    
+    .company-component__buttons-work {
+        width:60%
+    }
+
     .company-component__separator {
         height: 100%;
     }

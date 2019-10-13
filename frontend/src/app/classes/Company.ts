@@ -1,5 +1,5 @@
 export class Company {
-    logo:File;
+    logo:FormData;
     address:Address;     
     branches:Branch[];
     category: string;
@@ -28,8 +28,8 @@ export class Branch {
     geoX: string;
     geoY: string;
     name: string;
-    logo:File;
     branchId?:number;
+    logo:FormData;
 }
 
 export class Address {

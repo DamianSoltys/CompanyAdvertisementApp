@@ -4,7 +4,9 @@ import {
   Input,
   AfterViewInit,
   AfterViewChecked,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  ViewChild,
+  ElementRef
 } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
@@ -25,11 +27,11 @@ import { UserService } from 'src/app/services/user.service';
 import { HttpEventType, HttpRequest, HttpResponse } from '@angular/common/http';
 import { LoaderService } from 'src/app/services/loader.service';
 
-interface Position {
+export interface Position {
   latitude: number;
   longitude: number;
 }
-interface Marker {
+export interface Marker {
   latitude: number;
   longitude: number;
   label: string;
@@ -62,6 +64,7 @@ export class CompanyComponent implements OnInit {
   public mapMarker: Marker;
   public workForms: Branch[];
   public workNumber: number = 1;
+  private LogoList: File[];
   private companyLogo: File;
   private workLogo: File;
   @Input() editRequestData: EditRequestData = {
@@ -73,7 +76,6 @@ export class CompanyComponent implements OnInit {
   public _categories = categories;
 
   public companyForm = this.fb.group({
-    logo: [null, [Validators.required]],
     description: ['', [Validators.required]],
     category: ['', [Validators.required]],
     name: ['', [Validators.required]],
@@ -100,7 +102,6 @@ export class CompanyComponent implements OnInit {
     geoX: [''],
     geoY: [''],
     name: ['', [Validators.required]],
-    logo: [null, [Validators.required]]
   });
 
   config = {
@@ -163,6 +164,7 @@ export class CompanyComponent implements OnInit {
             response => {
               this.companyList.push(<GetCompany>response.body);
               this.companyList.sort(this.companySort);
+              this.cDataService.storeCompanyData(<GetCompany>response.body);
               index++;
               if(index === userREST.companiesIDs.length) {
                 this.dataLoaded.next(true);
@@ -174,7 +176,7 @@ export class CompanyComponent implements OnInit {
           );
         });
       } 
-      if(!userREST.companiesIDs) {
+      if(!userREST.companiesIDs || (userREST.companiesIDs && !userREST.companiesIDs.length)) {
         this.dataLoaded.next(true);
       }
 
@@ -222,35 +224,78 @@ export class CompanyComponent implements OnInit {
       }
       this.workNumber++;
       this.workForms.push(this.workForm.value);
-      this.workForms[this.workForms.length - 1].logo = this.workLogo;
+      if(this.workLogo) {
+        this.LogoList.push(this.workLogo);
+      }
       this.workForm.reset();
+      if(!this.editRequestData.addWork) {
+        this.toggleWorkForm();
+      }
     }
   }
 
   public onSubmit(event: Event) {
-    event.preventDefault(); //switch na add i edit branch oraz edit company
+    event.preventDefault(); 
     if (this.editRequestData.companyId) {
-      this.patchData();
+      this.patchCompanyData();
+    } else if(this.editRequestData.workId){
+      this.patchWorkIdData();
+    } else if(this.editRequestData.addWork) {
+      this.addWorks();
     } else {
       this.postData();
     }
   }
 
-  private patchData() {
-    console.log('patch');
+  private addWorks() {
+    if(this.workForm.valid){
+      this.addAnotherWork();
+    }
+    console.log("Dodawanko");
+  }
+
+  private patchCompanyData() {
+    let companyData: Company;
+    companyData = this.companyForm.value;
+
+    this.cDataService.editCompany(companyData,this.editRequestData.companyId).subscribe(
+      response => {
+        // this.cDataService.putFile('',this.companyLogo).subscribe(response=>{
+
+        // },error=>{
+
+        // });
+        this.showRequestMessage('success');
+        setTimeout(() => {
+          this.uDataService.updateUser();
+          location.reload();
+        }, 500);
+      },
+      error => {
+        this.showRequestMessage('error');
+        console.log(error);
+      }
+    );
+  }
+
+  private patchWorkIdData() {
+    console.log('patchWorkID');
   }
 
   private postData() {
-    if (this.workForm.valid) {
-      this.addAnotherWork();
-    }
     let companyData: Company;
     companyData = this.companyForm.value;
     companyData.branches = this.workForms;
-    companyData.logo = this.companyLogo;
+    this.LogoList.unshift(this.companyLogo);
+    console.log(this.LogoList);
 
     this.cDataService.addCompany(companyData).subscribe(
       response => {
+        // this.cDataService.putFile('',this.LogoList).subscribe(response=>{
+
+        // },error=>{
+
+        // });
         this.showRequestMessage('success');
         setTimeout(() => {
           this.uDataService.updateUser();
@@ -265,8 +310,11 @@ export class CompanyComponent implements OnInit {
     );
   }
 
-  public onFileSelected(event, companyForm: boolean) {
-    if (companyForm) {
+  public onFileSelected(event,companyForm:boolean) {    
+    if(!this.LogoList) {
+      this.LogoList = [];
+    }
+    if(companyForm) {
       this.companyLogo = event.target.files[0];
     } else {
       this.workLogo = event.target.files[0];

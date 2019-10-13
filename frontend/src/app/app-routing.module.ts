@@ -21,7 +21,7 @@ const routes: Routes = [
     path: 'companyProfile/:id', loadChildren: './commonComponents/company-profile/company-profile.module#CompanyProfileModule'
   },
   {
-    path: 'branchProfile/:id', loadChildren: './commonComponents/branch-profile/branch-profile.module#BranchProfileModule'
+    path: 'branchProfile/:idCompany/:idBranch', loadChildren: './commonComponents/branch-profile/branch-profile.module#BranchProfileModule'
   },
   {
     path: 'user/personalData',

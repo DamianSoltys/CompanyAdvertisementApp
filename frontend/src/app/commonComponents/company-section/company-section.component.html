@@ -10,15 +10,10 @@
   </div>
   </div>
   <div class="company-container__company-action">
-    <div class="company-action__button-container" *ngIf="owner">
-        <a [routerLink]="[ '/companyProfile', companyData.companyId, 'owner']" class="btn btn-primary company-action__button--profile">Profil</a>
-        <button class="btn btn-primary company-action__button--delete" (click)="deleteCompany()">Usuń</button>
-    </div>
-
-    <div class="company-action__button-container" *ngIf="!owner">
-        <a [routerLink]="[ '/companyProfile', companyData.companyId, 'guest']" class="btn btn-primary company-action__button--profile">Profil</a>
-    </div>
-   
+    <div class="company-action__button-container">
+        <a [routerLink]="[ '/companyProfile', companyData.companyId]" class="btn btn-primary company-action__button--profile">Profil</a>
+        <button class="btn btn-primary company-action__button--delete" *ngIf="owner.value" (click)="deleteCompany()">Usuń</button>
+    </div>   
     </div>
     
 </div>
@@ -35,15 +30,11 @@
         </div>
         </div>
         <div class="branch-container__branch-action">
-          <div class="branch-action__button-container" *ngIf="owner">
-              <a [routerLink]="[ '/branchProfile', branchData.branchId, 'owner']" class="btn btn-primary branch-action__button--profile">Profil</a>
-              <button class="btn btn-primary branch-action__button--delete" (click)="deleteBranch()">Usuń</button>
+          <div class="branch-action__button-container">
+              <a [routerLink]="['/branchProfile',companyData.companyId,branchData.branchId]" class="btn btn-primary branch-action__button--profile">Profil</a>
+              <button class="btn btn-primary branch-action__button--delete" *ngIf="owner.value" (click)="deleteBranch()">Usuń</button>
           </div>
-      
-          <div class="branch-action__button-container" *ngIf="!owner">
-              <a [routerLink]="[ '/branchProfile', branchData.branchId, 'guest']" class="btn btn-primary branch-action__button--profile">Profil</a>
-          </div>
-         
+        
           </div>
           
   </div>

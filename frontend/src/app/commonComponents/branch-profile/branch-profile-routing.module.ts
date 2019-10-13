@@ -4,10 +4,7 @@ import { AuthGuard } from 'src/app/guards/auth-guard.service';
 import { BranchProfileComponent } from './branch-profile.component';
 
 const routes: Routes = [
-  {path: 'owner', component: BranchProfileComponent,
-  data:{owner:'true'},
-  canActivate: [AuthGuard]},
-  {path: 'guest', component: BranchProfileComponent},
+  {path: '', component: BranchProfileComponent},
   {path: '**', redirectTo: 'guest', pathMatch: 'full'},
 ];
 

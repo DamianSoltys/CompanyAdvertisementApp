@@ -59,9 +59,10 @@ export class CompanySectionComponent implements OnInit, OnDestroy {
   public deleteBranch() {
     console.log('delete');
   }
-  ngOnDestroy() {
-    if (!this.showWorks) {
-      this.cDataService.CompanyData[this.companyData.companyId] = this.companyData;
-    }
+  ngOnDestroy() {  
+      this.cDataService.storeCompanyData(this.companyData);    
+      if(this.branchData) {
+        this.bDataService.storeBranchData(this.branchData);
+      }   
   }
 }

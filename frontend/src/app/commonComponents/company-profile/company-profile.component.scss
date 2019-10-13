@@ -37,6 +37,9 @@
                 background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
                 animation: button-background-animation 16s linear infinite;
                 background-size: 600%;
+                @include phone {
+                    width:85%;
+                }
             }
         }
     }
@@ -84,9 +87,23 @@
         .main-container__content {
             display:flex;
             flex-wrap: wrap;
-            height:60vh;
+            height:65vh;
             @include phone {
                 height: unset;
+            }
+
+            .content__section {
+                &--main,&--address {
+                    .data__text-node {
+                        margin:0;
+                        padding:10px;
+                        .text-node__label {
+                            padding-right: 10px;
+                            color:darken($bgcolor,10);
+                            font-size: 1.1rem;
+                        }
+                    }
+                }
             }
 
             .content__section--buttons {

@@ -5,10 +5,7 @@ import { AuthGuard } from 'src/app/guards/auth-guard.service';
 import { NewsletterComponent } from '../newsletter/newsletter.component';
 
 const routes: Routes = [
-  {path: 'owner', component: CompanyProfileComponent,
-  data:{owner:'true'},
-  canActivate: [AuthGuard]},
-  {path: 'guest', component: CompanyProfileComponent},
+  {path: '', component: CompanyProfileComponent},
   {path: '**', redirectTo: 'guest', pathMatch: 'full'},
 ];
 

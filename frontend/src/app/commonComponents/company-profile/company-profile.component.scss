@@ -21,6 +21,23 @@
     .company-profile-component__branch-sections {
         height:50vh;
         overflow: auto;
+
+        .branch-sections__button-container {
+            display:flex;
+            justify-content: center;
+            padding-top: 30px;
+            .button-container__button--add {
+                width:30%;
+                border-radius: 50px;
+                border: 0;
+                background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
+                animation: button-background-animation 16s linear infinite;
+                background-size: 600%;
+                @include phone {
+                    width:85%;
+                }
+            }
+        }
         
         .branch-sections__empty-branches {
             display: flex;
@@ -87,7 +104,6 @@
         .main-container__content {
             display:flex;
             flex-wrap: wrap;
-            height:65vh;
             @include phone {
                 height: unset;
             }
@@ -104,6 +120,10 @@
                         }
                     }
                 }
+            }
+
+            .section--description__data {
+                min-height:300px;
             }
 
             .content__section--buttons {

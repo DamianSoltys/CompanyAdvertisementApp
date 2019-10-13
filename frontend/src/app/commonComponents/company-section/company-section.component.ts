@@ -29,15 +29,11 @@ export class CompanySectionComponent implements OnInit, OnDestroy {
     if (storage_Avaliable('localStorage')) {
       let userREST: UserREST = JSON.parse(localStorage.getItem('userREST'));
       if (userREST) {
-        if(!this.showWorks) {
+        if(this.companyData) {
           userREST.companiesIDs.forEach(value => {
             if (value === this.companyData.companyId) this.owner.next(true);
           });
-        } else {
-          this.companyData.branchesIDs.forEach((branchId)=>{
-            if(branchId === this.branchData.branchId) this.owner.next(true);
-          });
-        }
+        } 
       }
     } 
   }
@@ -60,8 +56,10 @@ export class CompanySectionComponent implements OnInit, OnDestroy {
     console.log('delete');
   }
   ngOnDestroy() {  
-      this.cDataService.storeCompanyData(this.companyData);    
-      if(this.branchData) {
+      if(this.companyData && !this.showWorks) {
+        this.cDataService.storeCompanyData(this.companyData);
+      }    
+      if(this.branchData && this.showWorks) {
         this.bDataService.storeBranchData(this.branchData);
       }   
   }

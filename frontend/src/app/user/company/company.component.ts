@@ -165,7 +165,6 @@ export class CompanyComponent implements OnInit {
               this.companyList.push(<GetCompany>response.body);
               this.companyList.sort(this.companySort);
               this.cDataService.storeCompanyData(<GetCompany>response.body);
-              index++;
               if(index === userREST.companiesIDs.length) {
                 this.dataLoaded.next(true);
               }

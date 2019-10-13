@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Branch } from 'src/app/classes/Company';
+import { Branch, GetCompany } from 'src/app/classes/Company';
 import { BranchService } from 'src/app/services/branch.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
 import { BehaviorSubject } from 'rxjs';
 import { Position,Marker } from 'src/app/user/company/company.component';
+import { UserREST } from 'src/app/classes/User';
 
 @Component({
   selector: 'app-branch-profile',
@@ -37,20 +38,45 @@ export class BranchProfileComponent implements OnInit {
     this.getBranchData();
   }
 
-  public goBack() {
-    this.router.navigate(['/companyProfile',this.companyId]);
+  public goBack(isCompany:boolean) {
+    if(isCompany) {
+      this.router.navigate(['/companyProfile',this.companyId]);
+    } else {
+      this.router.navigate(['/search']);
+    }
+  }
+
+  private checkBranchOwnership() {
+    if(storage_Avaliable('localStorage')) {
+      let companyList:GetCompany[] = JSON.parse(localStorage.getItem('companyData'));
+      let userREST:UserREST = JSON.parse(localStorage.getItem('userREST'));
+      if(companyList && userREST) {      
+          userREST.companiesIDs.forEach(companyId=>{
+            if(companyId == this.companyId) {
+              this.owner.next(true);
+            }
+          });
+      }
+    }
+  }
+
+  public showEditForm() {
+    console.log('edit');
+  }
+  public showComments() {
+    console.log('comment');
   }
 
   private getBranchData() {
    this.getStorageBranchData();
-   console.log(this.branchData);
    if(!this.branchData) {
      this.bDataService.getBranch(this.branchId).subscribe(response=>{
-      this.branchData = <Branch>response.body;    
+      this.branchData = <Branch>response.body;   
      },error=>{
       console.log(error);
      });
    }
+   this.checkBranchOwnership(); 
    this.mapMarker = {
     latitude:Number(this.branchData.geoX),
     longitude:Number(this.branchData.geoY),

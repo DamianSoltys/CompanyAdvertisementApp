@@ -171,7 +171,7 @@
       </div>
       <div class="company-component__button-container">
         <button type="submit" class="btn button-container__button--submit" [disabled]="!this.companyForm.valid">
-          <span class="button--add__text-node">Zatwierdź</span>
+          <span class="button--add__text-node">Dodaj firmę</span>
         </button>
       </div>
       <div class="company-component__rodo-container text-center col-12">
@@ -309,10 +309,10 @@
       </div>
       <div class="company-component__button-container company-component__buttons-work">
         <button class="btn button-container__button--submit" (click)="addAnotherWork()" [disabled]="!this.workForm.valid">
-          <span class="button--add__text-node">Dodaj zakład</span>
+          <span class="button--add__text-node">Dodaj następny zakład</span>
         </button>
-        <button type="submit" class="btn button-container__button--submit" [disabled]="!this.workForm.valid">
-          <span class="button--add__text-node">Zatwierdź</span>
+        <button type="submit" class="btn button-container__button--submit" *ngIf="editRequestData.addWork" [disabled]="!this.workForm.valid">
+          <span class="button--add__text-node">Dodaj zakład</span>
         </button>
       </div>
       <div class="company-component__rodo-container text-center col-12">

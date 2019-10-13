@@ -67,11 +67,14 @@
   </div>
   <div class="company-profile-component__branch-sections" *ngIf="canShowBranches.value">
       <div class="branch-sections__empty-branches" *ngIf="!branchData.length">
-          <p class="empty-branches__text-node text-center">Firma nie posiada żadnego zakładu</p>
+          <p class="empty-branches__text-node text-center" *ngIf="isLoaded.value">Firma nie posiada żadnego zakładu</p>
           <button class="btn btn-primary empty-branches__button--add" (click)="showAddBranchform()" *ngIf="owner.value">Dodaj zakład</button>
         </div>
   <div class="branch-sections__branch-section" *ngFor="let branch of branchData">
     <app-company-section [showWorks]="true" [branchData]="branch" [companyData]="companyData"></app-company-section>
+  </div>
+  <div class="branch-sections__button-container">
+      <button class="btn btn-primary button-container__button--add" (click)="showAddBranchform()" *ngIf="owner.value">Dodaj zakład</button>
   </div>
   </div>
   <app-company  class="company-profile-component__app-company" *ngIf="canShowEditForm.value" [editRequestData]="editData"></app-company>

@@ -20,6 +20,7 @@ export class CompanyProfileComponent implements OnInit {
   public companyData: GetCompany;
   public branchData:Branch[];
   public userREST:UserREST;
+  public isLoaded = new BehaviorSubject(false);
   private successMessageText = 'Akcja została zakończona pomyślnie';
   private errorMessageText = 'Akcja niepowiodła się';
   public successMessage: string = '';
@@ -82,11 +83,14 @@ export class CompanyProfileComponent implements OnInit {
   private getBranchData() {
     if(this.companyData) {
       this.branchData = [];
-      this.companyData.branchesIDs.forEach(branchId=>{
+      this.companyData.branchesIDs.forEach((branchId,index)=>{
         this.bDataService.getBranch(branchId).subscribe(response=>{
           let branchData:Branch = <Branch>response.body;
           branchData.branchId = branchId;
           this.branchData.push(branchData);
+          if(index == this.companyData.branchesIDs.length) {
+            this.isLoaded.next(true);
+          }
         },error=>{
           console.log(error);
           this.showRequestMessage('error');

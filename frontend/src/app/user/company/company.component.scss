@@ -262,7 +262,7 @@
     .company-component__button-container {
         display: flex;
         align-self: center;       
-        width: 40%;
+        width: 100%;
         justify-content: center;
         padding-top:30px;
 
@@ -273,7 +273,7 @@
         }
 
         .button-container__button--add,.button-container__button--submit {
-            width:100%;
+            width:30%;
             height: 35px;   
             border-radius: 50px;
             border: 0;
@@ -288,14 +288,11 @@
             }
             @include phone {
                 margin:10px;
+                width:95%;
             }   
         }
     }
     
-    .company-component__buttons-work {
-        width:60%
-    }
-
     .company-component__separator {
         height: 100%;
     }

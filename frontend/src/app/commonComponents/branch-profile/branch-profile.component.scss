@@ -86,7 +86,6 @@
         .main-container__content {
             display:flex;
             flex-wrap: wrap;
-            height:65vh;
             
             @include phone {
                 height: unset;

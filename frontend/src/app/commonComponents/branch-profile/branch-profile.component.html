@@ -44,6 +44,7 @@
         </div>
       </div>
       <div class="content__section--buttons col-12">
+          <button class="btn btn-primary section--buttons__button--comments" (click)="showComments()">Komentarze</button>
         <span class="section--buttons__owner-buttons" *ngIf="owner.value">
           <button class="btn btn-primary owner-buttons__button--edit" (click)="showEditForm()">Edycja danych</button>
         </span>
@@ -60,6 +61,7 @@
     </p>
   </div>
   <div class="branch-profile-component__shared--buttons col-12">
-    <button class="btn btn-primary shared--buttons__button--back" (click)="goBack()">Wróć</button>
+    <button class="btn btn-primary shared--buttons__button--back" (click)="goBack(true)" *ngIf="companyId">Wróć</button>
+    <button class="btn btn-primary shared--buttons__button--back" (click)="goBack(false)" *ngIf="!companyId">Wróć</button>
 </div>
 </div>

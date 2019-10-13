@@ -24,6 +24,9 @@ const routes: Routes = [
     path: 'branchProfile/:idCompany/:idBranch', loadChildren: './commonComponents/branch-profile/branch-profile.module#BranchProfileModule'
   },
   {
+    path: 'branchProfile/:idBranch', loadChildren: './commonComponents/branch-profile/branch-profile.module#BranchProfileModule'
+  },
+  {
     path: 'user/personalData',
     loadChildren: './user/personal-data/personal-data.module#PersonalDataModule',
     canActivate: [AuthGuard]

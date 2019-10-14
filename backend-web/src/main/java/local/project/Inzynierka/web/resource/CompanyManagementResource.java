@@ -52,7 +52,7 @@ public class CompanyManagementResource {
     }
 
     @RequestMapping(value = "/companies", method = RequestMethod.POST)
-    public ResponseEntity<String> addCompany(@Valid @RequestBody final AddCompanyDto addCompanyDto){
+    public ResponseEntity<?> addCompany(@Valid @RequestBody final AddCompanyDto addCompanyDto) {
 
 
         if (!this.companyManagementPermissionService.hasRegisteringAuthority(this.authFacade.getAuthenticatedUser())) {
@@ -60,8 +60,8 @@ public class CompanyManagementResource {
         }
 
         try {
-            this.companyManagementService.registerCompany(addCompanyDto, this.authFacade.getAuthenticatedUser());
-            return ResponseEntity.ok().body(SimpleJsonFromStringCreator.toJson(OK_STATUS));
+            var companyBuildDto = this.companyManagementService.registerCompany(addCompanyDto, this.authFacade.getAuthenticatedUser());
+            return ResponseEntity.ok().body(companyBuildDto);
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

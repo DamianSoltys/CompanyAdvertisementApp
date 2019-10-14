@@ -1,6 +1,17 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { SnackbarOptions,SnackbarType, SnackbarComponent } from '../commonComponents/snackbar/snackbar.component';
+
+export enum SnackbarType {
+  error,
+  success,
+  information
+}
+
+export interface SnackbarOptions {
+  snackbarType?:SnackbarType,
+  message?:string,
+  isOpen?:boolean,
+}
 
 @Injectable({
   providedIn: 'root'

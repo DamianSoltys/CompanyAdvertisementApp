@@ -1,19 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { SnackbarService } from 'src/app/services/snackbar.service';
+import { SnackbarService, SnackbarOptions } from 'src/app/services/snackbar.service';
 import { trigger, style, animate, transition } from '@angular/animations';
 
-export enum SnackbarType {
-  error,
-  success,
-  information
-}
-
-export interface SnackbarOptions {
-  snackbarType?:SnackbarType,
-  message?:string,
-  isOpen?:boolean,
-}
 @Component({
   selector: 'app-snackbar',
   templateUrl: './snackbar.component.html',

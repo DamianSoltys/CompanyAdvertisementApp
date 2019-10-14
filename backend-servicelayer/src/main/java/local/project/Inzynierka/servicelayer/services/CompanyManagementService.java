@@ -5,6 +5,7 @@ import local.project.Inzynierka.persistence.entity.Category;
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.repository.CompanyRepository;
 import local.project.Inzynierka.servicelayer.dto.AddCompanyDto;
+import local.project.Inzynierka.servicelayer.dto.CompanyBuildDto;
 import local.project.Inzynierka.servicelayer.dto.CompanyInfoDto;
 import local.project.Inzynierka.servicelayer.dto.CompanyRelatedDeletedEntities;
 import local.project.Inzynierka.servicelayer.dto.UpdateCompanyInfoDto;
@@ -34,21 +35,30 @@ public class CompanyManagementService {
     }
 
     @Transactional
-    public void registerCompany(AddCompanyDto addCompanyDto, UserAccount registerer) {
+    public CompanyBuildDto registerCompany(AddCompanyDto addCompanyDto, UserAccount registerer) {
 
-        CompanyExtractor companyExtractor = new CompanyExtractor(addCompanyDto);
+        var companyExtractor = new CompanyExtractor(addCompanyDto);
         List<Branch> branches = companyExtractor.getBranches();
         Company company = companyExtractor.getCompany();
 
         Company createdCompany = this.companyPersistenceService.getPersistedCompany(company, registerer);
 
         if (!createdCompany.hasBranch()) {
-            return;
+            return mapToCompanyBuildDto(createdCompany);
         }
 
         this.branchPersistenceService.buildAllCompanyBranches(branches, createdCompany);
 
         this.branchPersistenceService.saveAll(branches);
+
+        return mapToCompanyBuildDto(createdCompany);
+    }
+
+    private CompanyBuildDto mapToCompanyBuildDto(Company createdCompany) {
+        return CompanyBuildDto.builder()
+                .id(createdCompany.getId())
+                .logoFilePath(createdCompany.getLogoPath())
+                .build();
     }
 
     public boolean companyExists(Long id) {

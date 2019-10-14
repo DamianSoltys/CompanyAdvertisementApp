@@ -24,6 +24,7 @@ public class LogoFilePathCreator {
     }
 
     public static String getLogoFilePath(String entityUUID, String logoUUID, EntityName entityName) {
-        return String.format("%s%s", getEntityLogoFileDirectory(entityUUID, entityName), logoUUID);
+        String extension = ".png";
+        return String.format("%s%s%s", getEntityLogoFileDirectory(entityUUID, entityName), logoUUID, extension);
     }
 }

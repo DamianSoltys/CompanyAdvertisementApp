@@ -46,4 +46,22 @@ public class FileResource {
 
         return fileStorageService.getCompanyLogo(companyUUID, logoUUID);
     }
+
+    @PutMapping(value = "/branch/{branchUUID}/{logoUUID}")
+    public String uploadBranchLogo(@PathVariable(value = "branchUUID") String branchUUID,
+                                   @PathVariable(value = "logoUUID") String logoUUID,
+                                   StandardMultipartHttpServletRequest request) throws IOException {
+
+        MultipartFile file = getLogoMultiPartFile(logoUUID, request);
+        fileStorageService.saveBranchLogo(branchUUID, logoUUID, file);
+
+        return SimpleJsonFromStringCreator.toJson("OK");
+    }
+
+    @GetMapping(value = "/branch/{branchUUID}/{logoUUID}", produces = MediaType.IMAGE_PNG_VALUE)
+    public byte[] getBranchLogo(@PathVariable(value = "branchUUID") String branchUUID,
+                                @PathVariable(value = "logoUUID") String logoUUID) throws IOException {
+
+        return fileStorageService.getBranchLogo(branchUUID, logoUUID);
+    }
 }

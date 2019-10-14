@@ -19,6 +19,7 @@ import { Router } from '@angular/router';
 import { storage_Avaliable } from './classes/storage_checker';
 import { UserREST, PersonalData } from './classes/User';
 import { PersonalDataService } from './services/personal-data.service';
+import { SnackbarService } from './services/snackbar.service';
 
 @Component({
   selector: 'app-root',
@@ -93,7 +94,8 @@ export class AppComponent implements OnInit {
     private lgservice: LoginService,
     private router: Router,
     private renderer: Renderer2,
-    private pDataService: PersonalDataService
+    private pDataService: PersonalDataService,
+    private snackbarService:SnackbarService
   ) {
     document.body.addEventListener('click', e => {
       if ((<HTMLElement>e.target).id !== 'menuId') {

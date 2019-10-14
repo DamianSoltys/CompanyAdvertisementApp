@@ -110,20 +110,6 @@
           </div>
         </div>
       </div>
-      <div class="account-data-form__error-container text-center col-12">
-        <p
-          *ngIf="successMessage"
-          class="text-success error-container__text--success"
-        >
-          {{ successMessage }}
-        </p>
-        <p
-          *ngIf="errorMessage"
-          class="text-danger error-container__text--danger"
-        >
-          {{ errorMessage }}
-        </p>
-      </div>
       <div class="account-data-form__button-container text-center col-12 row">
         <button
           class="btn btn-primary account-data-form__button--submit"
@@ -171,17 +157,6 @@
           </ul>
         </div>
       </div>
-    </div>
-    <div class="account-data-component__error-container text-center col-12">
-      <p
-        *ngIf="successMessage"
-        class="text-success error-container__text--success"
-      >
-        {{ successMessage }}
-      </p>
-      <p *ngIf="errorMessage" class="text-danger error-container__text--danger">
-        {{ errorMessage }}
-      </p>
     </div>
     <div class="data-container__button-container text-center col-12 row">
       <button

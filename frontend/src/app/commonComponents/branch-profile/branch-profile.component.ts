@@ -6,6 +6,7 @@ import { storage_Avaliable } from 'src/app/classes/storage_checker';
 import { BehaviorSubject } from 'rxjs';
 import { Position, Marker } from 'src/app/user/company/company.component';
 import { UserREST } from 'src/app/classes/User';
+import { SnackbarService } from 'src/app/services/snackbar.service';
 
 @Component({
   selector: 'app-branch-profile',
@@ -23,15 +24,12 @@ export class BranchProfileComponent implements OnInit {
   private branchId: number;
   private companyId: number;
   public owner = new BehaviorSubject(false);
-  private successMessageText = 'Akcja została zakończona pomyślnie';
-  private errorMessageText = 'Akcja niepowiodła się';
-  public successMessage: string = '';
-  public errorMessage: string = '';
 
   constructor(
     private bDataService: BranchService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private snackbarService:SnackbarService,
   ) {}
 
   ngOnInit() {

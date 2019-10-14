@@ -640,15 +640,6 @@
   </div>
 </div>
 
-<div class="company-component__error-container text-center col-12">
-  <p *ngIf="successMessage" class="text-success error-container__text--success">
-    {{ successMessage }}
-  </p>
-  <p *ngIf="errorMessage" class="text-danger error-container__text--danger">
-    {{ errorMessage }}
-  </p>
-</div>
-
 <div
   class="company-component container-fluid"
   *ngIf="this.canShowRouteButton()"

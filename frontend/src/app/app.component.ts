@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
 import { storage_Avaliable } from './classes/storage_checker';
 import { UserREST, PersonalData } from './classes/User';
 import { PersonalDataService } from './services/personal-data.service';
-import { SnackbarService } from './services/snackbar.service';
+import { SnackbarService, SnackbarType } from './services/snackbar.service';
 
 @Component({
   selector: 'app-root',
@@ -80,7 +80,6 @@ import { SnackbarService } from './services/snackbar.service';
   ]
 })
 export class AppComponent implements OnInit {
-  @ViewChild('logOutMessage', { read: ElementRef }) logOutMessage: ElementRef;
   public nearby_toggle = false;
   public logged = false;
   public visible = true;
@@ -92,8 +91,6 @@ export class AppComponent implements OnInit {
 
   constructor(
     private lgservice: LoginService,
-    private router: Router,
-    private renderer: Renderer2,
     private pDataService: PersonalDataService,
     private snackbarService:SnackbarService
   ) {
@@ -137,24 +134,10 @@ export class AppComponent implements OnInit {
 
   logOut() {
     this.logOut_success = true;
-    this.logOutMessageRender();
+    this.snackbarService.open({
+      message:'Pomyślnie wylogowano',
+      snackbarType:SnackbarType.success,
+    });
     this.lgservice.logoutStorageClean();
-    console.log('wylogowany');
-  }
-
-  logOutMessageRender() {
-    this.renderer.setStyle(
-      this.logOutMessage.nativeElement,
-      'visibility',
-      'visible'
-    );
-    setTimeout(() => {
-      this.logOut_success = false;
-      this.renderer.setStyle(
-        this.logOutMessage.nativeElement,
-        'visibility',
-        'hidden'
-      );
-    }, 1000);
   }
 }

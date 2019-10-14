@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
 import { storage_Avaliable } from '../classes/storage_checker';
 import { UserService } from '../services/user.service';
+import { SnackbarService, SnackbarType } from '../services/snackbar.service';
 
 @Component({
   selector: 'app-login',
@@ -19,15 +20,12 @@ import { UserService } from '../services/user.service';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
-  login_error = false;
-  login_success = false;
-  success_message: string;
-  error_message: string;
   constructor(
     private fb: FormBuilder,
     private lgservice: LoginService,
     private router: Router,
-    private uDataService: UserService
+    private uDataService: UserService,
+    private snackbarService:SnackbarService,
   ) {}
 
   ngOnInit() {
@@ -51,9 +49,10 @@ export class LoginComponent implements OnInit {
       (data: HttpResponse<any>) => {
         console.log(data.headers.get('Authorization'));
         if (data.status === 200) {
-          this.login_error = false;
-          this.login_success = true;
-          this.showRequestMessage('success', 'Pomyślnie zalogowano!', '');
+          this.snackbarService.open({
+            message:'Pomyślnie zalogowano',
+            snackbarType:SnackbarType.success,
+          });
           setTimeout(() => {
             this.loginStorageSet(data);
           }, 500);
@@ -61,24 +60,12 @@ export class LoginComponent implements OnInit {
       },
       error => {
         console.log(error);
-        this.showRequestMessage('error', '', 'Coś poszło nie tak!');
-        this.login_error = true;
+        this.snackbarService.open({
+          message:'Coś poszło nie tak!',
+          snackbarType:SnackbarType.error,
+        });
       }
     );
-  }
-
-  private showRequestMessage(
-    type: string,
-    successMessage: string = this.success_message,
-    errorMessage: string = this.error_message
-  ) {
-    if (type === 'success') {
-      this.success_message = successMessage;
-      this.error_message = '';
-    } else {
-      this.success_message = '';
-      this.error_message = errorMessage;
-    }
   }
 
   setUserData(): UserLog {
@@ -99,8 +86,10 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['']);
       console.log('Użytkownik został zalogowany');
     } else {
-      this.showRequestMessage('error', '', 'Coś poszło nie tak!');
-      this.login_error = true;
+      this.snackbarService.open({
+        message:'Coś poszło nie tak!',
+        snackbarType:SnackbarType.error,
+      });
     }
   }
 }

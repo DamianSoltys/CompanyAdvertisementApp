@@ -11,6 +11,7 @@ export interface SnackbarOptions {
   snackbarType?:SnackbarType,
   message?:string,
   isOpen?:boolean,
+  duration?:number,
 }
 
 @Injectable({
@@ -24,21 +25,21 @@ export class SnackbarService {
   });
   constructor() { }
 
-  public open(message:string,type:SnackbarType,duration?:number) {
+  public open(snackbarOptions:SnackbarOptions) {
     
     this.options.next({
       isOpen:true,
-      message:message,
-      snackbarType:type,
+      message:snackbarOptions.message,
+      snackbarType:snackbarOptions.snackbarType,
     });
 
-    if(!duration) {
-      duration = 3000;
+    if(!snackbarOptions.duration) {
+      snackbarOptions.duration = 3000;
     }
 
     setTimeout(()=>{
       this.close();
-    },duration);
+    },snackbarOptions.duration);
   }
   public close() {
     this.options.next({

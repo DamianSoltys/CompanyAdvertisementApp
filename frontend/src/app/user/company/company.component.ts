@@ -26,6 +26,7 @@ import { UserREST } from 'src/app/classes/User';
 import { UserService } from 'src/app/services/user.service';
 import { HttpEventType, HttpRequest, HttpResponse } from '@angular/common/http';
 import { LoaderService } from 'src/app/services/loader.service';
+import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
 
 export interface Position {
   latitude: number;
@@ -52,11 +53,7 @@ export class CompanyComponent implements OnInit {
   public canShowAddForm = new BehaviorSubject(false);
   public canShowWorkForm = new BehaviorSubject(false);
   private dataLoaded = new BehaviorSubject(false);
-  private successMessageText = 'Akcja została zakończona pomyślnie';
-  private errorMessageText = 'Akcja niepowiodła się';
   public companyList: GetCompany[];
-  public successMessage: string = '';
-  public errorMessage: string = '';
   public actualPosition: Position = {
     latitude: 51.246452,
     longitude: 22.568445
@@ -114,7 +111,8 @@ export class CompanyComponent implements OnInit {
     private cDataService: CompanyService,
     private uDataService: UserService,
     private loaderService: LoaderService,
-    private changeDetector: ChangeDetectorRef
+    private snackbarService:SnackbarService,
+
   ) {}
 
   ngOnInit() {
@@ -268,15 +266,20 @@ export class CompanyComponent implements OnInit {
           // },error=>{
 
           // });
-          this.showRequestMessage('success');
+          this.snackbarService.open({
+            message:'Pomyślnie dodano firmę',
+            snackbarType:SnackbarType.success,
+          });
           setTimeout(() => {
             this.uDataService.updateUser();
             location.reload();
           }, 500);
         },
         error => {
-          this.showRequestMessage('error');
-          console.log(error);
+          this.snackbarService.open({
+            message:'Coś poszło nie tak!',
+            snackbarType:SnackbarType.error,
+          });
         }
       );
   }
@@ -299,16 +302,21 @@ export class CompanyComponent implements OnInit {
         // },error=>{
 
         // });
-        this.showRequestMessage('success');
+        this.snackbarService.open({
+          message:'Dane firmy uległy edycji',
+          snackbarType:SnackbarType.success,
+        });
         setTimeout(() => {
           this.uDataService.updateUser();
           location.reload();
         }, 500);
       },
       error => {
-        this.showRequestMessage('error');
+        this.snackbarService.open({
+          message:'Coś poszło nie tak!',
+          snackbarType:SnackbarType.error,
+        });
         this.setDefaultValues();
-        console.log(error);
       }
     );
   }
@@ -321,20 +329,6 @@ export class CompanyComponent implements OnInit {
       this.companyLogo = event.target.files[0];
     } else {
       this.workLogo = event.target.files[0];
-    }
-  }
-
-  private showRequestMessage(
-    type: string,
-    successMessage: string = this.successMessageText,
-    errorMessage: string = this.errorMessageText
-  ) {
-    if (type === 'success') {
-      this.successMessage = successMessage;
-      this.errorMessage = '';
-    } else {
-      this.successMessage = '';
-      this.errorMessage = errorMessage;
     }
   }
 
@@ -364,20 +358,18 @@ export class CompanyComponent implements OnInit {
             },
             error => {
               this.havePersonalData.next(false);
-              this.showRequestMessage(
-                'error',
-                '',
-                'Aby dodać firmę musisz dodać dane osobowe!'
-              );
+              this.snackbarService.open({
+                message:'Aby dodać firmę musisz dodać dane osobowe!',
+                snackbarType:SnackbarType.error,
+              });
             }
           );
       } else {
         this.havePersonalData.next(false);
-        this.showRequestMessage(
-          'error',
-          '',
-          'Aby dodać firmę musisz dodać dane osobowe!'
-        );
+        this.snackbarService.open({
+          message:'Aby dodać firmę musisz dodać dane osobowe!',
+          snackbarType:SnackbarType.error,
+        });
       }
     }
   }

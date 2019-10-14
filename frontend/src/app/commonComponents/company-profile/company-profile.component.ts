@@ -13,6 +13,7 @@ import { BehaviorSubject } from 'rxjs';
 import { BranchService } from 'src/app/services/branch.service';
 import { EditRequestData } from 'src/app/user/company/company.component';
 import { UserREST } from 'src/app/classes/User';
+import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
 
 @Component({
   selector: 'app-company-profile',
@@ -27,10 +28,6 @@ export class CompanyProfileComponent implements OnInit {
   public branchData: Branch[];
   public userREST: UserREST;
   public isLoaded = new BehaviorSubject(false);
-  private successMessageText = 'Akcja została zakończona pomyślnie';
-  private errorMessageText = 'Akcja niepowiodła się';
-  public successMessage: string = '';
-  public errorMessage: string = '';
   public canShowBranches = new BehaviorSubject(false);
   public canShowEditForm = new BehaviorSubject(false);
   public canShowNewsletters = new BehaviorSubject(false);
@@ -41,7 +38,8 @@ export class CompanyProfileComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private cDataService: CompanyService,
     private router: Router,
-    private bDataService: BranchService
+    private bDataService: BranchService,
+    private snackbarService:SnackbarService
   ) {}
 
   ngOnInit() {
@@ -62,7 +60,10 @@ export class CompanyProfileComponent implements OnInit {
         },
         error => {
           this.checkForCompanyOwnership();
-          this.showRequestMessage('error');
+          this.snackbarService.open({
+            message:'Coś poszło nie tak!',
+            snackbarType:SnackbarType.error,
+          });
         }
       );
     }
@@ -110,8 +111,10 @@ export class CompanyProfileComponent implements OnInit {
             }
           },
           error => {
-            console.log(error);
-            this.showRequestMessage('error');
+            this.snackbarService.open({
+              message:'Coś poszło nie tak!',
+              snackbarType:SnackbarType.error,
+            });
           }
         );
       });
@@ -154,19 +157,5 @@ export class CompanyProfileComponent implements OnInit {
     };
     this.canShowEditForm.next(true);
     this.canShowCompany.next(false);
-  }
-
-  private showRequestMessage(
-    type: string,
-    successMessage: string = this.successMessageText,
-    errorMessage: string = this.errorMessageText
-  ) {
-    if (type === 'success') {
-      this.successMessage = successMessage;
-      this.errorMessage = '';
-    } else {
-      this.successMessage = '';
-      this.errorMessage = errorMessage;
-    }
   }
 }

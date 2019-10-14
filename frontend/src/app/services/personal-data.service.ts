@@ -74,7 +74,7 @@ export class PersonalDataService {
     );
   }
 
-  private getPersonalDataObject() {
+  public getPersonalDataObject() {
     if (
       storage_Avaliable('localStorage') &&
       JSON.parse(localStorage.getItem('naturalUserData'))
@@ -82,6 +82,7 @@ export class PersonalDataService {
       this.personalData.next(
         JSON.parse(localStorage.getItem('naturalUserData'))
       );
+      console.log('dud')
     } else {
       let userREST: UserREST = JSON.parse(localStorage.getItem('userREST'));
       if (userREST && userREST.naturalPersonID) {

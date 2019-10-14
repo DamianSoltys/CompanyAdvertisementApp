@@ -119,6 +119,9 @@ export class CompanyProfileComponent implements OnInit {
         );
       });
     }
+    if(!this.companyData.branchesIDs.length) {
+      this.isLoaded.next(true);
+    }
   }
 
   public goBack() {

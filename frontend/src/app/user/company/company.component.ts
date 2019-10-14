@@ -267,7 +267,7 @@ export class CompanyComponent implements OnInit {
 
           // });
           this.snackbarService.open({
-            message:'Pomyślnie dodano firmę',
+            message:'Dane firmy uległy edycji',
             snackbarType:SnackbarType.success,
           });
           setTimeout(() => {
@@ -292,8 +292,9 @@ export class CompanyComponent implements OnInit {
     let companyData: Company;
     companyData = this.companyForm.value;
     companyData.branches = this.workForms;
-    this.LogoList.unshift(this.companyLogo);
-    console.log(this.LogoList);
+    if(this.companyLogo) {
+      this.LogoList.unshift(this.companyLogo);
+    }
 
     this.cDataService.addCompany(companyData).subscribe(
       response => {
@@ -303,7 +304,7 @@ export class CompanyComponent implements OnInit {
 
         // });
         this.snackbarService.open({
-          message:'Dane firmy uległy edycji',
+          message:'Pomyślnie dodano firmę',
           snackbarType:SnackbarType.success,
         });
         setTimeout(() => {

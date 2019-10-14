@@ -5,13 +5,14 @@ import {
   FormControl,
   Validators
 } from '@angular/forms';
-import { UserLog, UserREST, UserReg } from '../classes/User';
+import { UserLog, UserREST, UserReg, PersonalData } from '../classes/User';
 import { LoginService } from '../services/login.service';
 import { Router } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
 import { storage_Avaliable } from '../classes/storage_checker';
 import { UserService } from '../services/user.service';
 import { SnackbarService, SnackbarType } from '../services/snackbar.service';
+import { PersonalDataService } from '../services/personal-data.service';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +25,7 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private lgservice: LoginService,
     private router: Router,
-    private uDataService: UserService,
+    private pDataService:PersonalDataService,
     private snackbarService:SnackbarService,
   ) {}
 

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { SnackbarOptions,SnackbarType, SnackbarComponent } from '../commonComponents/snackbar/snackbar.component';
 
 @Injectable({
   providedIn: 'root'
@@ -7,11 +8,18 @@ import { BehaviorSubject } from 'rxjs';
 export class SnackbarService {
   isOpen = new BehaviorSubject(false);
   message = new BehaviorSubject(<string>'');
+  options = new BehaviorSubject(<SnackbarOptions>{
+    isOpen:false,
+  });
   constructor() { }
 
-  public open(message:string,duration?:number) {
-    this.isOpen.next(true);
-    this.message.next(message);
+  public open(message:string,type:SnackbarType,duration?:number) {
+    
+    this.options.next({
+      isOpen:true,
+      message:message,
+      snackbarType:type,
+    });
 
     if(!duration) {
       duration = 3000;
@@ -22,6 +30,8 @@ export class SnackbarService {
     },duration);
   }
   public close() {
-    this.isOpen.next(false);
+    this.options.next({
+      isOpen:false,
+    });
   }
 }

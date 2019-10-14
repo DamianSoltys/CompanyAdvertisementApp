@@ -20,6 +20,7 @@ import { storage_Avaliable } from './classes/storage_checker';
 import { UserREST, PersonalData } from './classes/User';
 import { PersonalDataService } from './services/personal-data.service';
 import { SnackbarService } from './services/snackbar.service';
+import { SnackbarType } from './commonComponents/snackbar/snackbar.component';
 
 @Component({
   selector: 'app-root',
@@ -130,6 +131,7 @@ export class AppComponent implements OnInit {
   toggleMenu(mobile?: boolean) {
     if (!mobile) {
       this.displayDropdown.next(!this.displayDropdown.value);
+      this.snackbarService.open('Elo',SnackbarType.error);
     } else {
       this.displayHamburgerMenu.next(!this.displayHamburgerMenu.value);
     }

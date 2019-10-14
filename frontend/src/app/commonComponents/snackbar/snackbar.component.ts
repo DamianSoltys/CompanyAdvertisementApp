@@ -3,6 +3,17 @@ import { BehaviorSubject } from 'rxjs';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { trigger, style, animate, transition } from '@angular/animations';
 
+export enum SnackbarType {
+  error,
+  success,
+  information
+}
+
+export interface SnackbarOptions {
+  snackbarType?:SnackbarType,
+  message?:string,
+  isOpen?:boolean,
+}
 @Component({
   selector: 'app-snackbar',
   templateUrl: './snackbar.component.html',
@@ -22,18 +33,14 @@ import { trigger, style, animate, transition } from '@angular/animations';
     )
   ],
 })
-export class SnackbarComponent implements OnInit {
-  message:string;
-  isOpen = new BehaviorSubject(false);
 
+export class SnackbarComponent implements OnInit {
+  options:SnackbarOptions;
   constructor(private snackbarService:SnackbarService) { }
 
   ngOnInit() {
-    this.snackbarService.message.subscribe(data=>{
-      this.message = data;
-    });
-    this.snackbarService.isOpen.subscribe(data=>{
-      this.isOpen.next(data);
+    this.snackbarService.options.subscribe(data=>{
+      this.options = data;
     });
   }
 

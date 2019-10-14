@@ -1,5 +1,5 @@
 export class Company {
-    logo:File;
+    logo:FormData;
     address:Address;     
     branches:Branch[];
     category: string;
@@ -12,7 +12,7 @@ export class Company {
 
 export class GetCompany {
     address:Address;     
-    branchesIDs:Branch[];
+    branchesIDs:number[];
     category: string;
     companyId:number;
     companyWebsiteUrl: string;
@@ -28,8 +28,10 @@ export class Branch {
     geoX: string;
     geoY: string;
     name: string;
-    logo:File;
+    branchId?:number;
+    logo:FormData;
 }
+
 export class Address {
     apartmentNo: string;
     buildingNo: string;

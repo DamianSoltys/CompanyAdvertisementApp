@@ -1,19 +1,25 @@
-
-
 <!--COMPANY LIST-->
 <div class="company-component container-fluid" *ngIf="this.canShowDataList()">
   <div class="company-component__company-section" *ngIf="canShowCompanyList()">
-  <div class="company-section__company-container" *ngFor="let company of companyList">
-    <app-company-section [companyData]="company"></app-company-section>
+    <div
+      class="company-section__company-container"
+      *ngFor="let company of companyList"
+    >
+      <app-company-section [companyData]="company"></app-company-section>
+    </div>
   </div>
-  </div>
-  <div class="company-component__company-section" *ngIf="!canShowCompanyList()">
-    <p class="company-section__text-node text-center">Aktualnie nie posiadasz żadnej firmy</p>
+  <div class="company-component__company-section" *ngIf="this.canShowText()">
+    <p class="company-section__text-node text-center">
+      Aktualnie nie posiadasz żadnej firmy
+    </p>
   </div>
 
   <div class="company-component__separator"></div>
 
-  <div class="company-component__button-container" *ngIf="this.havePersonalData.getValue()">
+  <div
+    class="company-component__button-container"
+    *ngIf="this.havePersonalData.getValue()"
+  >
     <button class="btn button-container__button--add" (click)="toggleAddForm()">
       <span class="button--add__text-node">Dodaj firmę</span>
     </button>
@@ -21,9 +27,17 @@
 </div>
 
 <!--FORM-->
-<div class="company-component container-fluid" *ngIf="this.canShowAddsForm()">
+<div
+  class="company-component container-fluid"
+  [ngClass]="{ 'company-component__edit': editRequestData.companyId }"
+  *ngIf="this.canShowAddsForm()"
+>
   <div class="company-component__form">
-    <form [formGroup]='companyForm' class="form__add-form" (ngSubmit)="onSubmit($event)">
+    <form
+      [formGroup]="companyForm"
+      class="form__add-form"
+      (ngSubmit)="onSubmit($event)"
+    >
       <div class="add-form__header">
         <span class="header__text-node">Dane firmowe</span>
       </div>
@@ -35,59 +49,133 @@
           <div class="input-group__inputs" formGroupName="address">
             <div class="inputs__input-container">
               <label class="input-container__label" for="city">Miasto</label>
-              <input formControlName="city" name="city" type="text" class="input-container__input form-control" />
-              <div class="input-container__error-container" *ngIf="
-              (this._companyAddress.city.touched || this._companyAddress.city.dirty) &&
-              this._companyAddress.city.errors">
-                <p class="text-danger error-container__text--danger" *ngIf="this._companyAddress.city.errors.required">
+              <input
+                formControlName="city"
+                name="city"
+                type="text"
+                class="input-container__input form-control"
+              />
+              <div
+                class="input-container__error-container"
+                *ngIf="
+                  (this._companyAddress.city.touched ||
+                    this._companyAddress.city.dirty) &&
+                  this._companyAddress.city.errors
+                "
+              >
+                <p
+                  class="text-danger error-container__text--danger"
+                  *ngIf="this._companyAddress.city.errors.required"
+                >
                   Pole nie może być puste
                 </p>
               </div>
             </div>
             <div class="inputs__input-container">
               <label class="input-container__label" for="street">Ulica</label>
-              <input formControlName="street" name="street" type="text" class="input-container__input form-control" />
-              <div class="input-container__error-container" *ngIf="
-              (this._companyAddress.street.touched || this._companyAddress.street.dirty) &&
-              this._companyAddress.street.errors">
-                <p class="text-danger error-container__text--danger" *ngIf="this._companyAddress.street.errors.required">
+              <input
+                formControlName="street"
+                name="street"
+                type="text"
+                class="input-container__input form-control"
+              />
+              <div
+                class="input-container__error-container"
+                *ngIf="
+                  (this._companyAddress.street.touched ||
+                    this._companyAddress.street.dirty) &&
+                  this._companyAddress.street.errors
+                "
+              >
+                <p
+                  class="text-danger error-container__text--danger"
+                  *ngIf="this._companyAddress.street.errors.required"
+                >
                   Pole nie może być puste
                 </p>
               </div>
             </div>
             <div class="inputs__input-container select-wrapper">
               <div class="input-container__select-wrapper">
-                <label class="input-container__label" for="voivodeship">Województwo</label>
-                <select formControlName="voivodeship" name="voivodeship" class="form-control select-wrapper__select-input">
-                  <option class="select-input__option" *ngFor="let item of _voivodeships">{{ item }}</option>
+                <label class="input-container__label" for="voivodeship"
+                  >Województwo</label
+                >
+                <select
+                  formControlName="voivodeship"
+                  name="voivodeship"
+                  class="form-control select-wrapper__select-input"
+                >
+                  <option
+                    class="select-input__option"
+                    *ngFor="let item of _voivodeships"
+                    >{{ item }}</option
+                  >
                 </select>
               </div>
-              <div class="input-container__error-container" *ngIf="
-              (this._companyAddress.voivodeship.touched || this._companyAddress.voivodeship.dirty) &&
-              this._companyAddress.voivodeship.errors">
-                <p class="text-danger error-container__text--danger" *ngIf="this._companyAddress.voivodeship.errors.required">
+              <div
+                class="input-container__error-container"
+                *ngIf="
+                  (this._companyAddress.voivodeship.touched ||
+                    this._companyAddress.voivodeship.dirty) &&
+                  this._companyAddress.voivodeship.errors
+                "
+              >
+                <p
+                  class="text-danger error-container__text--danger"
+                  *ngIf="this._companyAddress.voivodeship.errors.required"
+                >
                   Pole nie może być puste
                 </p>
               </div>
             </div>
             <div class="inputs__input-container">
-              <label class="input-container__label" for="buildingNo">Nr.Budynku</label>
-              <input formControlName="buildingNo" name="buildingNo" type="text" class="input-container__input form-control" />
-              <div class="input-container__error-container" *ngIf="
-              (this._companyAddress.buildingNo.touched || this._companyAddress.buildingNo.dirty) &&
-              this._companyAddress.buildingNo.errors">
-                <p class="text-danger error-container__text--danger" *ngIf="this._companyAddress.buildingNo.errors.required">
+              <label class="input-container__label" for="buildingNo"
+                >Nr.Budynku</label
+              >
+              <input
+                formControlName="buildingNo"
+                name="buildingNo"
+                type="text"
+                class="input-container__input form-control"
+              />
+              <div
+                class="input-container__error-container"
+                *ngIf="
+                  (this._companyAddress.buildingNo.touched ||
+                    this._companyAddress.buildingNo.dirty) &&
+                  this._companyAddress.buildingNo.errors
+                "
+              >
+                <p
+                  class="text-danger error-container__text--danger"
+                  *ngIf="this._companyAddress.buildingNo.errors.required"
+                >
                   Pole nie może być puste
                 </p>
               </div>
             </div>
             <div class="inputs__input-container">
-              <label class="input-container__label" for="apartmentNo">Nr.Siedziby</label>
-              <input formControlName="apartmentNo" name="apartmentNo" type="text" class="input-container__input form-control" />
-              <div class="input-container__error-container" *ngIf="
-              (this._companyAddress.apartmentNo.touched || this._companyAddress.apartmentNo.dirty) &&
-              this._companyAddress.apartmentNo.errors">
-                <p class="text-danger error-container__text--danger" *ngIf="this._companyAddress.apartmentNo.errors.required">
+              <label class="input-container__label" for="apartmentNo"
+                >Nr.Siedziby</label
+              >
+              <input
+                formControlName="apartmentNo"
+                name="apartmentNo"
+                type="text"
+                class="input-container__input form-control"
+              />
+              <div
+                class="input-container__error-container"
+                *ngIf="
+                  (this._companyAddress.apartmentNo.touched ||
+                    this._companyAddress.apartmentNo.dirty) &&
+                  this._companyAddress.apartmentNo.errors
+                "
+              >
+                <p
+                  class="text-danger error-container__text--danger"
+                  *ngIf="this._companyAddress.apartmentNo.errors.required"
+                >
                   Pole nie może być puste
                 </p>
               </div>
@@ -99,112 +187,212 @@
             <span class="header__text-node">Dane główne</span>
           </div>
           <div class="input-group__inputs">
-              <div class="inputs__input-container">
-                  <label class="input-container__label" for="name">Logo</label>
-                  <input formControlName="logo" name="logo" type="file" class="input-container__input form-control-file" (change)="onFileSelected($event,true)"/>
-                  <div class="input-container__error-container" *ngIf="
-                  (this._companyForm.logo.touched || this._companyForm.logo.dirty) &&
-                  this._companyForm.logo.errors">
-                    <p class="text-danger error-container__text--danger" *ngIf="this._companyForm.logo.errors.required">
-                      Pole nie może być puste
-                    </p>
-                  </div>
-                </div>
+            <div class="inputs__input-container">
+              <label class="input-container__label" for="logo">Logo</label>
+              <input
+                name="logo"
+                type="file"
+                class="input-container__input input-container__file form-control-file"
+                (change)="onFileSelected($event, true)"
+              />
+            </div>
             <div class="inputs__input-container">
               <label class="input-container__label" for="name">Nazwa</label>
-              <input formControlName="name" name="name" type="text" class="input-container__input form-control" />
-              <div class="input-container__error-container" *ngIf="
-              (this._companyForm.name.touched || this._companyForm.name.dirty) &&
-              this._companyForm.name.errors">
-                <p class="text-danger error-container__text--danger" *ngIf="this._companyForm.name.errors.required">
+              <input
+                formControlName="name"
+                name="name"
+                type="text"
+                class="input-container__input form-control"
+              />
+              <div
+                class="input-container__error-container"
+                *ngIf="
+                  (this._companyForm.name.touched ||
+                    this._companyForm.name.dirty) &&
+                  this._companyForm.name.errors
+                "
+              >
+                <p
+                  class="text-danger error-container__text--danger"
+                  *ngIf="this._companyForm.name.errors.required"
+                >
                   Pole nie może być puste
                 </p>
               </div>
             </div>
             <div class="inputs__input-container select-wrapper">
               <div class="input-container__select-wrapper">
-                <label class="input-container__label" for="category">Kategoria</label>
-                <select formControlName="category" name="category" class="form-control select-wrapper__select-input">
-                  <option class="select-input__option" *ngFor="let item of _categories">{{ item }}</option>
+                <label class="input-container__label" for="category"
+                  >Kategoria</label
+                >
+                <select
+                  formControlName="category"
+                  name="category"
+                  class="form-control select-wrapper__select-input"
+                >
+                  <option
+                    class="select-input__option"
+                    *ngFor="let item of _categories"
+                    >{{ item }}</option
+                  >
                 </select>
               </div>
-              <div class="input-container__error-container" *ngIf="
-              (this._companyForm.category.touched || this._companyForm.category.dirty) &&
-              this._companyForm.category.errors">
-                <p class="text-danger error-container__text--danger" *ngIf="this._companyForm.category.errors.required">
+              <div
+                class="input-container__error-container"
+                *ngIf="
+                  (this._companyForm.category.touched ||
+                    this._companyForm.category.dirty) &&
+                  this._companyForm.category.errors
+                "
+              >
+                <p
+                  class="text-danger error-container__text--danger"
+                  *ngIf="this._companyForm.category.errors.required"
+                >
                   Pole nie może być puste
                 </p>
               </div>
             </div>
             <div class="inputs__input-container">
-              <label class="input-container__label" for="companyWebsiteUrl">Strona firmy</label>
-              <input formControlName="companyWebsiteUrl" name="companyWebsiteUrl" type="text" class="input-container__input form-control" />
-              <div class="input-container__error-container" *ngIf="
-              (this._companyForm.companyWebsiteUrl.touched || this._companyForm.companyWebsiteUrl.dirty) &&
-              this._companyForm.companyWebsiteUrl.errors">
-                <p class="text-danger error-container__text--danger" *ngIf="this._companyForm.companyWebsiteUrl.errors.required">
+              <label class="input-container__label" for="companyWebsiteUrl"
+                >Strona firmy</label
+              >
+              <input
+                formControlName="companyWebsiteUrl"
+                name="companyWebsiteUrl"
+                type="text"
+                class="input-container__input form-control"
+              />
+              <div
+                class="input-container__error-container"
+                *ngIf="
+                  (this._companyForm.companyWebsiteUrl.touched ||
+                    this._companyForm.companyWebsiteUrl.dirty) &&
+                  this._companyForm.companyWebsiteUrl.errors
+                "
+              >
+                <p
+                  class="text-danger error-container__text--danger"
+                  *ngIf="this._companyForm.companyWebsiteUrl.errors.required"
+                >
                   Pole nie może być puste
                 </p>
               </div>
             </div>
             <div class="inputs__input-container">
               <label class="input-container__label" for="NIP">NIP</label>
-              <input formControlName="nip" name="NIP" type="text" class="input-container__input form-control" />
-              <div class="input-container__error-container" *ngIf="
-              (this._companyForm.nip.touched || this._companyForm.nip.dirty) &&
-              this._companyForm.nip.errors">
-                <p class="text-danger error-container__text--danger" *ngIf="this._companyForm.nip.errors.required">
+              <input
+                formControlName="nip"
+                name="NIP"
+                type="text"
+                class="input-container__input form-control"
+              />
+              <div
+                class="input-container__error-container"
+                *ngIf="
+                  (this._companyForm.nip.touched ||
+                    this._companyForm.nip.dirty) &&
+                  this._companyForm.nip.errors
+                "
+              >
+                <p
+                  class="text-danger error-container__text--danger"
+                  *ngIf="this._companyForm.nip.errors.required"
+                >
                   Pole nie może być puste
                 </p>
               </div>
             </div>
             <div class="inputs__input-container">
               <label class="input-container__label" for="REGON">REGON</label>
-              <input formControlName="regon" name="REGON" type="text" class="input-container__input form-control" />
-              <div class="input-container__error-container" *ngIf="
-              (this._companyForm.regon.touched || this._companyForm.regon.dirty) &&
-              this._companyForm.regon.errors">
-                <p class="text-danger error-container__text--danger" *ngIf="this._companyForm.regon.errors.required">
+              <input
+                formControlName="regon"
+                name="REGON"
+                type="text"
+                class="input-container__input form-control"
+              />
+              <div
+                class="input-container__error-container"
+                *ngIf="
+                  (this._companyForm.regon.touched ||
+                    this._companyForm.regon.dirty) &&
+                  this._companyForm.regon.errors
+                "
+              >
+                <p
+                  class="text-danger error-container__text--danger"
+                  *ngIf="this._companyForm.regon.errors.required"
+                >
                   Pole nie może być puste
                 </p>
               </div>
             </div>
           </div>
           <div class="input-group__description-container">
-            <label class="description-container__label" for="description">Opis</label>
-            <quill-editor class="description-container__editor" formControlName='description' [modules]="config"></quill-editor>
+            <label class="description-container__label" for="description"
+              >Opis</label
+            >
+            <quill-editor
+              class="description-container__editor"
+              formControlName="description"
+              [modules]="config"
+            ></quill-editor>
           </div>
         </div>
       </div>
       <div class="company-component__button-container">
-        <button type="submit" class="btn button-container__button--submit" [disabled]="!this.companyForm.valid">
-          <span class="button--add__text-node">Zatwierdź</span>
+        <button
+          type="submit"
+          class="btn button-container__button--submit"
+          [disabled]="!this.companyForm.valid"
+        >
+          <span class="button--add__text-node">Dodaj firmę</span>
         </button>
       </div>
       <div class="company-component__rodo-container text-center col-12">
-        <p class="rodo-container__text-node"><span class="text-node__star">*</span> Zapisując dane zgadzasz się na przetwarzanie twoich danych osobowych w celach naukowych(praca inżynierska), których administratorem
-          są Damian Sołtysiuk oraz Mateusz Szałkowski.
+        <p class="rodo-container__text-node">
+          <span class="text-node__star">*</span> Zapisując dane zgadzasz się na
+          przetwarzanie twoich danych osobowych w celach naukowych(praca
+          inżynierska), których administratorem są Damian Sołtysiuk oraz Mateusz
+          Szałkowski.
         </p>
       </div>
     </form>
   </div>
   <div class="company-component__separator"></div>
-  <div class="company-component__button-container" *ngIf="!editRequestData.companyId">
+  <div
+    class="company-component__button-container"
+    *ngIf="!editRequestData.companyId"
+  >
     <button class="btn button-container__button--add" (click)="toggleAddForm()">
-      <span class="button--add__text-node">Wróć</span>
+      <span class="button--add__text-node">Wróć do listy firm</span>
     </button>
-    <button class="btn button-container__button--add" [disabled]="!this.companyForm.valid" (click)="toggleWorkForm()">
+    <button
+      class="btn button-container__button--add"
+      [disabled]="!this.companyForm.valid"
+      (click)="toggleWorkForm()"
+    >
       <span class="button--add__text-node">Dodaj zakład</span>
     </button>
   </div>
 </div>
 
 <!--WORK-FORM-->
-<div class="company-component container-fluid" *ngIf="this.canShowWorkForm.getValue()">
+<div
+  class="company-component container-fluid"
+  [ngClass]="{
+    'company-component__edit': editRequestData.workId || editRequestData.addWork
+  }"
+  *ngIf="this.canShowWorkForm.getValue()"
+>
   <div class="company-component__form">
-    <form [formGroup]="workForm" class="form__add-form" (ngSubmit)="onSubmit($event)">
+    <form
+      [formGroup]="workForm"
+      class="form__add-form"
+      (ngSubmit)="onSubmit($event)"
+    >
       <div class="add-form__header">
-        <span class="header__text-node">Dane zakładu {{workNumber}}</span>
+        <span class="header__text-node">Dane zakładu {{ workNumber }}</span>
       </div>
       <div class="add-form__input-container">
         <div class="input-container__input-group">
@@ -215,59 +403,133 @@
             <div class="input-group__inputs" formGroupName="address">
               <div class="inputs__input-container">
                 <label class="input-container__label" for="city">Miasto</label>
-                <input formControlName="city" name="city" type="text" class="input-container__input form-control" />
-                <div class="input-container__error-container" *ngIf="
-                (this._workAddress.city.touched || this._workAddress.city.dirty) &&
-                this._workAddress.city.errors">
-                  <p class="text-danger error-container__text--danger" *ngIf="this._workAddress.city.errors.required">
+                <input
+                  formControlName="city"
+                  name="city"
+                  type="text"
+                  class="input-container__input form-control"
+                />
+                <div
+                  class="input-container__error-container"
+                  *ngIf="
+                    (this._workAddress.city.touched ||
+                      this._workAddress.city.dirty) &&
+                    this._workAddress.city.errors
+                  "
+                >
+                  <p
+                    class="text-danger error-container__text--danger"
+                    *ngIf="this._workAddress.city.errors.required"
+                  >
                     Pole nie może być puste
                   </p>
                 </div>
               </div>
               <div class="inputs__input-container">
                 <label class="input-container__label" for="street">Ulica</label>
-                <input formControlName="street" name="street" type="text" class="input-container__input form-control" />
-                <div class="input-container__error-container" *ngIf="
-                (this._workAddress.street.touched || this._workAddress.street.dirty) &&
-                this._workAddress.street.errors">
-                  <p class="text-danger error-container__text--danger" *ngIf="this._workAddress.street.errors.required">
+                <input
+                  formControlName="street"
+                  name="street"
+                  type="text"
+                  class="input-container__input form-control"
+                />
+                <div
+                  class="input-container__error-container"
+                  *ngIf="
+                    (this._workAddress.street.touched ||
+                      this._workAddress.street.dirty) &&
+                    this._workAddress.street.errors
+                  "
+                >
+                  <p
+                    class="text-danger error-container__text--danger"
+                    *ngIf="this._workAddress.street.errors.required"
+                  >
                     Pole nie może być puste
                   </p>
                 </div>
               </div>
               <div class="inputs__input-container select-wrapper">
                 <div class="input-container__select-wrapper">
-                  <label class="input-container__label" for="voivodeship">Województwo</label>
-                  <select formControlName="voivodeship" name="voivodeship" class="form-control select-wrapper__select-input">
-                    <option class="select-input__option" *ngFor="let item of _voivodeships">{{ item }}</option>
+                  <label class="input-container__label" for="voivodeship"
+                    >Województwo</label
+                  >
+                  <select
+                    formControlName="voivodeship"
+                    name="voivodeship"
+                    class="form-control select-wrapper__select-input"
+                  >
+                    <option
+                      class="select-input__option"
+                      *ngFor="let item of _voivodeships"
+                      >{{ item }}</option
+                    >
                   </select>
                 </div>
-                <div class="input-container__error-container" *ngIf="
-                (this._workAddress.voivodeship.touched || this._workAddress.voivodeship.dirty) &&
-                this._workAddress.voivodeship.errors">
-                  <p class="text-danger error-container__text--danger" *ngIf="this._workAddress.voivodeship.errors.required">
+                <div
+                  class="input-container__error-container"
+                  *ngIf="
+                    (this._workAddress.voivodeship.touched ||
+                      this._workAddress.voivodeship.dirty) &&
+                    this._workAddress.voivodeship.errors
+                  "
+                >
+                  <p
+                    class="text-danger error-container__text--danger"
+                    *ngIf="this._workAddress.voivodeship.errors.required"
+                  >
                     Pole nie może być puste
                   </p>
                 </div>
               </div>
               <div class="inputs__input-container">
-                <label class="input-container__label" for="buildingNo">Nr.Budynku</label>
-                <input formControlName="buildingNo" name="buildingNo" type="text" class="input-container__input form-control" />
-                <div class="input-container__error-container" *ngIf="
-                (this._workAddress.buildingNo.touched || this._workAddress.buildingNo.dirty) &&
-                this._workAddress.buildingNo.errors">
-                  <p class="text-danger error-container__text--danger" *ngIf="this._workAddress.buildingNo.errors.required">
+                <label class="input-container__label" for="buildingNo"
+                  >Nr.Budynku</label
+                >
+                <input
+                  formControlName="buildingNo"
+                  name="buildingNo"
+                  type="text"
+                  class="input-container__input form-control"
+                />
+                <div
+                  class="input-container__error-container"
+                  *ngIf="
+                    (this._workAddress.buildingNo.touched ||
+                      this._workAddress.buildingNo.dirty) &&
+                    this._workAddress.buildingNo.errors
+                  "
+                >
+                  <p
+                    class="text-danger error-container__text--danger"
+                    *ngIf="this._workAddress.buildingNo.errors.required"
+                  >
                     Pole nie może być puste
                   </p>
                 </div>
               </div>
               <div class="inputs__input-container">
-                <label class="input-container__label" for="apartmentNo">Nr.Siedziby</label>
-                <input formControlName="apartmentNo" name="apartmentNo" type="text" class="input-container__input form-control" />
-                <div class="input-container__error-container" *ngIf="
-                (this._workAddress.apartmentNo.touched || this._workAddress.apartmentNo.dirty) &&
-                this._workAddress.apartmentNo.errors">
-                  <p class="text-danger error-container__text--danger" *ngIf="this._workAddress.apartmentNo.errors.required">
+                <label class="input-container__label" for="apartmentNo"
+                  >Nr.Siedziby</label
+                >
+                <input
+                  formControlName="apartmentNo"
+                  name="apartmentNo"
+                  type="text"
+                  class="input-container__input form-control"
+                />
+                <div
+                  class="input-container__error-container"
+                  *ngIf="
+                    (this._workAddress.apartmentNo.touched ||
+                      this._workAddress.apartmentNo.dirty) &&
+                    this._workAddress.apartmentNo.errors
+                  "
+                >
+                  <p
+                    class="text-danger error-container__text--danger"
+                    *ngIf="this._workAddress.apartmentNo.errors.required"
+                  >
                     Pole nie może być puste
                   </p>
                 </div>
@@ -280,80 +542,111 @@
             <span class="header__text-node">Dane główne</span>
           </div>
           <div class="input-group__inputs">
-              <div class="inputs__map-container">              
-                  <label class="map-container__label" for="name">lokalizacja</label>
-                  <div class="map-container__map-wrapper">
-                  <agm-map [latitude]="actualPosition.latitude" [longitude]="actualPosition.longitude" class="map-wrapper__map" (mapClick)="mapClickEvent($event)">
-                    <agm-marker *ngIf="mapMarker" 
-                    [latitude]="mapMarker.latitude" 
-                    [longitude]="mapMarker.longitude" 
-                    [label]="mapMarker.label">
-                    </agm-marker>
-                  </agm-map>
-                  </div>
-                  <div class="map-container__error-container">
-                    <p class="text-danger error-container__text--danger">
-                    </p>
-                </div>
+            <div class="inputs__map-container">
+              <label class="map-container__label" for="name">lokalizacja</label>
+              <div class="map-container__map-wrapper">
+                <agm-map
+                  [latitude]="actualPosition.latitude"
+                  [longitude]="actualPosition.longitude"
+                  class="map-wrapper__map"
+                  (mapClick)="mapClickEvent($event)"
+                >
+                  <agm-marker
+                    *ngIf="mapMarker"
+                    [latitude]="mapMarker.latitude"
+                    [longitude]="mapMarker.longitude"
+                    [label]="mapMarker.label"
+                  >
+                  </agm-marker>
+                </agm-map>
               </div>
-              <div class="inputs__input-container">
-                  <label class="input-container__label" for="name">nazwa</label>
-                  <input formControlName="name" name="name" type="text" class="input-container__input form-control" />
-                  <div class="input-container__error-container" *ngIf="
+              <div class="map-container__error-container">
+                <p class="text-danger error-container__text--danger"></p>
+              </div>
+            </div>
+            <div class="inputs__input-container">
+              <label class="input-container__label" for="name">nazwa</label>
+              <input
+                formControlName="name"
+                name="name"
+                type="text"
+                class="input-container__input form-control"
+              />
+              <div
+                class="input-container__error-container"
+                *ngIf="
                   (this._workForm.name.touched || this._workForm.name.dirty) &&
-                  this._workForm.name.errors">
-                    <p class="text-danger error-container__text--danger" *ngIf="this._workForm.name.errors.required">
-                      Pole nie może być puste
-                    </p>
-                  </div>
+                  this._workForm.name.errors
+                "
+              >
+                <p
+                  class="text-danger error-container__text--danger"
+                  *ngIf="this._workForm.name.errors.required"
+                >
+                  Pole nie może być puste
+                </p>
               </div>
-              <div class="inputs__input-container">
-                  <label class="input-container__label" for="name">Logo</label>
-                  <input formControlName="logo" name="logo" type="file" class="input-container__input form-control-file" (change)="onFileSelected($event,false)"/>
-                  <div class="input-container__error-container" *ngIf="
-                  (this._workForm.logo.touched || this._workForm.logo.dirty) &&
-                  this._workForm.logo.errors">
-                    <p class="text-danger error-container__text--danger" *ngIf="this._workForm.logo.errors.required">
-                      Pole nie może być puste
-                    </p>
-                  </div>
-                </div>
+            </div>
+            <div class="inputs__input-container">
+              <label class="input-container__label" for="name">Logo</label>
+              <input
+                name="logo"
+                type="file"
+                class="input-container__input input-container__file form-control-file"
+                (change)="onFileSelected($event, false)"
+              />
+            </div>
           </div>
         </div>
       </div>
-      <div class="company-component__button-container">
-        <button type="submit" class="btn button-container__button--submit" [disabled]="!this.workForm.valid">
-          <span class="button--add__text-node">Zatwierdź</span>
+      <div
+        class="company-component__button-container company-component__buttons-work"
+      >
+        <button
+          class="btn button-container__button--submit"
+          (click)="addAnotherWork()"
+          [disabled]="!this.workForm.valid"
+        >
+          <span class="button--add__text-node">Dodaj następny zakład</span>
+        </button>
+        <button
+          type="submit"
+          class="btn button-container__button--submit"
+          *ngIf="editRequestData.addWork"
+          [disabled]="!this.workForm.valid"
+        >
+          <span class="button--add__text-node">Dodaj zakład</span>
         </button>
       </div>
       <div class="company-component__rodo-container text-center col-12">
-        <p class="rodo-container__text-node"><span class="text-node__star">*</span> Zapisując dane zgadzasz się na przetwarzanie twoich danych osobowych w celach naukowych(praca inżynierska), których administratorem
-          są Damian Sołtysiuk oraz Mateusz Szałkowski.
+        <p class="rodo-container__text-node">
+          <span class="text-node__star">*</span> Zapisując dane zgadzasz się na
+          przetwarzanie twoich danych osobowych w celach naukowych(praca
+          inżynierska), których administratorem są Damian Sołtysiuk oraz Mateusz
+          Szałkowski.
         </p>
       </div>
     </form>
   </div>
   <div class="company-component__separator"></div>
-  <div class="company-component__button-container" *ngIf="!editRequestData.workId">
-    <button class="btn button-container__button--add" (click)="toggleWorkForm()">
-      <span class="button--add__text-node">Wróć</span>
-    </button>
-    <button class="btn button-container__button--add" [disabled]="!this.workForm.valid" (click)="addAnotherWork()">
-      <span class="button--add__text-node">Następny zakład</span>
+  <div class="company-component__button-container">
+    <button
+      class="btn button-container__button--add"
+      (click)="toggleWorkForm()"
+      *ngIf="canShowBranchBackBtn()"
+    >
+      <span class="button--add__text-node">Wróć do formularza firmy</span>
     </button>
   </div>
 </div>
 
-<div class="company-component__error-container text-center col-12">
-    <p *ngIf="successMessage" class="text-success error-container__text--success">
-      {{ successMessage }}
-    </p>
-    <p *ngIf="errorMessage" class="text-danger error-container__text--danger">
-      {{ errorMessage }}
-    </p>
-  </div>
-
-  <div class="company-component container-fluid" *ngIf="this.canShowRouteButton()">
-    <a [routerLink]="[ '/user/personalData']" class="btn btn-primary company-component__button--personal"><p class="button--personal__text-node">Dodaj dane osobowe</p></a>
- </div>
-
+<div
+  class="company-component container-fluid"
+  *ngIf="this.canShowRouteButton()"
+>
+  <a
+    [routerLink]="['/user/personalData']"
+    class="btn btn-primary company-component__button--personal"
+    ><p class="button--personal__text-node">Dodaj dane osobowe</p></a
+  >
+</div>

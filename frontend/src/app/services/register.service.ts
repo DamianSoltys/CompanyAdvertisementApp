@@ -6,13 +6,17 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class RegisterService {
-
-  constructor(private http: HttpClient) {
-
-  }
+  constructor(private http: HttpClient) {}
 
   Register(User_Data: UserReg): Observable<any> {
-    return this.http.post('http://localhost:8090/auth/registration',
-    {'name': User_Data.name, 'email': User_Data.email, 'password': User_Data.password}, {observe: 'response'});
+    return this.http.post(
+      'http://localhost:8090/auth/registration',
+      {
+        name: User_Data.name,
+        email: User_Data.email,
+        password: User_Data.password
+      },
+      { observe: 'response' }
+    );
   }
 }

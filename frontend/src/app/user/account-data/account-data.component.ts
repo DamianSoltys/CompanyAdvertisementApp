@@ -21,6 +21,7 @@ import { UserService } from 'src/app/services/user.service';
 import { AccountDataService } from 'src/app/services/account-data.service';
 import { Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login.service';
+import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
 
 @Component({
   selector: 'app-account-data',
@@ -33,11 +34,6 @@ export class AccountDataComponent implements OnInit {
   public accountDataForm: FormGroup;
   public userObject: UserREST;
 
-  public successMessage: string = '';
-  public errorMessage: string = '';
-  private successMessageText = 'Akcja została zakończona pomyślnie';
-  private errorMessageText = 'Akcja niepowiodła się';
-
   constructor(
     private fb: FormBuilder,
     private renderer: Renderer2,
@@ -45,6 +41,7 @@ export class AccountDataComponent implements OnInit {
     private accountService: AccountDataService,
     private router: Router,
     private lgService: LoginService,
+    private snackbarService:SnackbarService
   ) {}
 
   ngOnInit() {
@@ -69,27 +66,11 @@ export class AccountDataComponent implements OnInit {
     if (storage_Avaliable('localStorage') && this.userObject) {
       this.showAccountData();
     } else {
-      this.showRequestMessage('error', '', 'Coś poszło nie tak');
+      this.snackbarService.open({
+        message:'Coś poszło nie tak!',
+        snackbarType:SnackbarType.error,
+      });
     }
-  }
-
-  private showRequestMessage(
-    type: string,
-    successMessage: string = this.successMessageText,
-    errorMessage: string = this.errorMessageText
-  ) {
-    if (type === 'success') {
-      this.successMessage = successMessage;
-      this.errorMessage = '';
-    } else {
-      this.successMessage = '';
-      this.errorMessage = errorMessage;
-    }
-  }
-
-  private clearRequestMessage() {
-    this.successMessage = '';
-    this.errorMessage = '';
   }
 
   private updateUserObject() {
@@ -113,13 +94,11 @@ export class AccountDataComponent implements OnInit {
     if (e) {
       e.preventDefault();
     }
-    this.clearRequestMessage();
     this.showEditingForm.next(false);
     this.showData.next(true);
   }
 
   public showEditForm() {
-    this.clearRequestMessage();
     this.showData.next(false);
     this.showEditingForm.next(true);
   }
@@ -138,9 +117,14 @@ export class AccountDataComponent implements OnInit {
         )
         .subscribe(
           response => {
-            this.showRequestMessage('success', 'Hasło zostało zmienione');
-            let newToken = window.btoa(`${this.userObject.emailAddress}:${this.form.newPassword.value}`);
-            localStorage.setItem('token',newToken);
+            this.snackbarService.open({
+              message:'Hasło zostało zmienione',
+              snackbarType:SnackbarType.success,
+            });
+            let newToken = window.btoa(
+              `${this.userObject.emailAddress}:${this.form.newPassword.value}`
+            );
+            localStorage.setItem('token', newToken);
             this.updateUserObject();
             this.accountDataForm.reset();
             setTimeout(() => {
@@ -148,11 +132,17 @@ export class AccountDataComponent implements OnInit {
             }, 1000);
           },
           error => {
-            this.showRequestMessage('error', '', 'Hasło nie uległo zmianie');
+            this.snackbarService.open({
+              message:'Coś poszło nie tak!',
+              snackbarType:SnackbarType.error,
+            });
           }
         );
     } else {
-      this.showRequestMessage('error', '', 'Hasła różnią się od siebie');
+      this.snackbarService.open({
+        message:'Hasła się różnią!',
+        snackbarType:SnackbarType.error,
+      });
     }
   }
 
@@ -160,12 +150,17 @@ export class AccountDataComponent implements OnInit {
     this.accountService.deleteAccount(this.userObject.userID).subscribe(
       response => {
         console.log(response);
-        this.showRequestMessage('success', 'Konto zostało usunięte');
+        this.snackbarService.open({
+          message:'Konto zostało usunięte!',
+          snackbarType:SnackbarType.success,
+        });
         this.lgService.logoutStorageClean();
       },
       error => {
-        console.log(error);
-        this.showRequestMessage('error', '', 'Konto nie zostało usunięte');
+        this.snackbarService.open({
+          message:'Coś poszło nie tak!',
+          snackbarType:SnackbarType.error,
+        });
       }
     );
   }

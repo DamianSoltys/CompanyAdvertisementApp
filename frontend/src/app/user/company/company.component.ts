@@ -1,9 +1,23 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import {
+  Component,
+  OnInit,
+  Input,
+  AfterViewInit,
+  AfterViewChecked,
+  ChangeDetectorRef,
+  ViewChild,
+  ElementRef
+} from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
 import { voivodeships } from 'src/app/classes/Voivodeship';
 import { categories } from 'src/app/classes/Category';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormControl,
+  FormBuilder,
+  Validators
+} from '@angular/forms';
 import { MouseEvent } from '@agm/core';
 import { Company, Branch, GetCompany } from 'src/app/classes/Company';
 import { PersonalDataService } from 'src/app/services/personal-data.service';
@@ -11,20 +25,23 @@ import { CompanyService } from 'src/app/services/company.service';
 import { UserREST } from 'src/app/classes/User';
 import { UserService } from 'src/app/services/user.service';
 import { HttpEventType, HttpRequest, HttpResponse } from '@angular/common/http';
+import { LoaderService } from 'src/app/services/loader.service';
+import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
 
-interface Position {
-  latitude:number,
-  longitude:number,
+export interface Position {
+  latitude: number;
+  longitude: number;
 }
-interface Marker {
-  latitude:number,
-  longitude:number,
-  label:string,
+export interface Marker {
+  latitude: number;
+  longitude: number;
+  label: string;
 }
 
-interface EditRequestData {
-  companyId:number;
-  workId:number;
+export interface EditRequestData {
+  companyId: number;
+  workId: number;
+  addWork: boolean;
 }
 @Component({
   selector: 'app-company',
@@ -35,135 +52,145 @@ export class CompanyComponent implements OnInit {
   public havePersonalData = new BehaviorSubject(false);
   public canShowAddForm = new BehaviorSubject(false);
   public canShowWorkForm = new BehaviorSubject(false);
-  private successMessageText = 'Akcja została zakończona pomyślnie';
-  private errorMessageText = 'Akcja niepowiodła się';
-  public companyList:GetCompany[];
-  public successMessage: string = '';
-  public errorMessage: string = '';
-  public actualPosition:Position;
-  public mapMarker:Marker;
-  public workForms:Branch[];
-  public workNumber:number = 1;
-  private companyLogo:File;
-  private workLogo:File;
-  @Input() editRequestData:EditRequestData = {
-    companyId:null,
-    workId:null,
+  private dataLoaded = new BehaviorSubject(false);
+  public companyList: GetCompany[];
+  public actualPosition: Position = {
+    latitude: 51.246452,
+    longitude: 22.568445
   };
-  //dodać formularze do firmy/zakładu
-  //funkcja do dodawania wielu zakładów dla jednej firmy
-  //edycja/usuwanie firmy/zakładu
-  //profil zakładu-wyświetlanie oddzielny komponent wraz do wyszukiwarki
+  public mapMarker: Marker;
+  public workForms: Branch[];
+  public workNumber: number = 1;
+  private LogoList: File[];
+  private companyLogo: File;
+  private workLogo: File;
+  @Input() editRequestData: EditRequestData = {
+    companyId: null,
+    workId: null,
+    addWork: false
+  };
   public _voivodeships = voivodeships;
   public _categories = categories;
 
   public companyForm = this.fb.group({
-    logo:[null,[Validators.required]],
-    description:['',[Validators.required]],
-    category:['',[Validators.required]],
-    name:['',[Validators.required]],
-    nip:['',[Validators.required]],
-    regon:['',[Validators.required]],
-    companyWebsiteUrl:['',[Validators.required]],
-    address:this.fb.group({
-      apartmentNo:['',[Validators.required]],
-      buildingNo:['',[Validators.required]],
-      city:['',[Validators.required]],
-      street:['',[Validators.required]],
-      voivodeship:['',[Validators.required]],
-    }),
+    description: ['', [Validators.required]],
+    category: ['', [Validators.required]],
+    name: ['', [Validators.required]],
+    nip: ['', [Validators.required]],
+    regon: ['', [Validators.required]],
+    companyWebsiteUrl: ['', [Validators.required]],
+    address: this.fb.group({
+      apartmentNo: ['', [Validators.required]],
+      buildingNo: ['', [Validators.required]],
+      city: ['', [Validators.required]],
+      street: ['', [Validators.required]],
+      voivodeship: ['', [Validators.required]]
+    })
   });
 
   public workForm = this.fb.group({
-    address:this.fb.group({
-      apartmentNo:['',[Validators.required]],
-      buildingNo:['',[Validators.required]],
-      city:['',[Validators.required]],
-      street:['',[Validators.required]],
-      voivodeship:['',[Validators.required]],
+    address: this.fb.group({
+      apartmentNo: ['', [Validators.required]],
+      buildingNo: ['', [Validators.required]],
+      city: ['', [Validators.required]],
+      street: ['', [Validators.required]],
+      voivodeship: ['', [Validators.required]]
     }),
-    geoX:[''],
-    geoY:[''],
-    name:['',[Validators.required]],
-    logo:[null,[Validators.required]],
+    geoX: [''],
+    geoY: [''],
+    name: ['', [Validators.required]]
   });
 
-  config ={
-    toolbar:[
-      ['bold','italic','underline']
-    ] 
-  }
+  config = {
+    toolbar: [['bold', 'italic', 'underline']]
+  };
 
-  constructor(private fb:FormBuilder,private pDataService:PersonalDataService,private cDataService:CompanyService,private uDataService:UserService) {}
+  constructor(
+    private fb: FormBuilder,
+    private pDataService: PersonalDataService,
+    private cDataService: CompanyService,
+    private uDataService: UserService,
+    private loaderService: LoaderService,
+    private snackbarService:SnackbarService,
+
+  ) {}
 
   ngOnInit() {
     this.checkForPersonalData();
-    this.getCompanyList();
     this.getActualPosition();
-    this.showEditForm(); 
+    this.getCompanyList();
+    this.showEditForm();
   }
 
   private getActualPosition() {
     let navigatorObject = window.navigator;
 
-    if(storage_Avaliable('localStorage')) {     
-      if(!localStorage.getItem('actualPosition') && !this.actualPosition){
-        navigatorObject.geolocation.getCurrentPosition((position)=>{
-           this.actualPosition = {
-            latitude:position.coords.latitude,
-            longitude:position.coords.longitude,
-          };
-          localStorage.setItem('actualPosition',JSON.stringify(this.actualPosition));          
-        },error =>{
-          this.showRequestMessage('error');
-          console.log("Coś poszło nie tak !");
-        })
+    if (storage_Avaliable('localStorage')) {
+      if (!localStorage.getItem('actualPosition') && !this.actualPosition) {
+        navigatorObject.geolocation.getCurrentPosition(
+          position => {
+            this.actualPosition = {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude
+            };
+            localStorage.setItem(
+              'actualPosition',
+              JSON.stringify(this.actualPosition)
+            );
+          },
+          error => {}
+        );
       } else {
         let position = JSON.parse(localStorage.getItem('actualPosition'));
 
-        this.actualPosition = {
-          latitude:position.latitude,
-          longitude:position.longitude,
-        };
+        if (position) {
+          this.actualPosition = {
+            latitude: position.latitude,
+            longitude: position.longitude
+          };
+        }
       }
-      
     }
   }
   private getCompanyList() {
-    if(storage_Avaliable('localStorage')) {
-      let userREST:UserREST = JSON.parse(localStorage.getItem('userREST'));
-      if(userREST.companiesIDs) {
-      this.companyList = [];
-      userREST.companiesIDs.forEach(companyId=>{
-       this.cDataService.getCompany(companyId).subscribe(response=>{
-        this.companyList.push(<GetCompany>response.body);
-        this.companyList.sort(this.companySort);       
-       },error=>{
-        console.log(error);
-       });
-      });
-    }      
+    if (storage_Avaliable('localStorage')) {
+      let userREST: UserREST = JSON.parse(localStorage.getItem('userREST'));
+      if (userREST.companiesIDs) {
+        this.companyList = [];
+        userREST.companiesIDs.forEach((companyId, index) => {
+          this.cDataService.getCompany(companyId).subscribe(
+            response => {
+              this.companyList.push(<GetCompany>response.body);
+              this.companyList.sort(this.companySort);
+              this.cDataService.storeCompanyData(<GetCompany>response.body);
+              if (index === userREST.companiesIDs.length) {
+                this.dataLoaded.next(true);
+              }
+            },
+            error => {
+              console.log(error);
+            }
+          );
+        });
+      }
+      if (
+        !userREST.companiesIDs ||
+        (userREST.companiesIDs && !userREST.companiesIDs.length)
+      ) {
+        this.dataLoaded.next(true);
+      }
     }
   }
-
-  public canShowCompanyList() {
-    if(this.companyList && this.companyList.length !==0) {
-      return true;
-    } else {
-      return false;
-    }
+  private companySort(item1: GetCompany, item2: GetCompany) {
+    return item1.companyId - item2.companyId;
   }
 
-  private companySort(item1:GetCompany,item2:GetCompany) {
-    return item1.companyId-item2.companyId;
-  }
-
-  public mapClickEvent($event:MouseEvent) {
+  public mapClickEvent($event: MouseEvent) {
     this.mapMarker = {
-      latitude:$event.coords.lat,
-      longitude:$event.coords.lng,
-      label:"Pozycja zakładu",
-    }
+      latitude: $event.coords.lat,
+      longitude: $event.coords.lng,
+      label: 'Pozycja zakładu'
+    };
   }
 
   public get _companyForm() {
@@ -182,11 +209,11 @@ export class CompanyComponent implements OnInit {
   }
 
   public addAnotherWork() {
-    if(!this.workForms) {
+    if (!this.workForms) {
       this.workForms = [];
     }
-    if(this.workForm) {
-      if(this.mapMarker){
+    if (this.workForm) {
+      if (this.mapMarker) {
         this._workForm.geoX.setValue(this.mapMarker.latitude);
         this._workForm.geoY.setValue(this.mapMarker.longitude);
         this.mapMarker = null;
@@ -196,62 +223,122 @@ export class CompanyComponent implements OnInit {
       }
       this.workNumber++;
       this.workForms.push(this.workForm.value);
-      this.workForms[this.workForms.length-1].logo = this.workLogo;
+      if (this.workLogo) {
+        this.LogoList.push(this.workLogo);
+      }
       this.workForm.reset();
-    }    
+      if (!this.editRequestData.addWork) {
+        this.toggleWorkForm();
+      }
+    }
   }
 
   public onSubmit(event: Event) {
     event.preventDefault();
-    if(this.workForm.valid) {
+    if (this.editRequestData.companyId) {
+      this.patchCompanyData();
+    } else if (this.editRequestData.workId) {
+      this.patchWorkIdData();
+    } else if (this.editRequestData.addWork) {
+      this.addWorks();
+    } else {
+      this.postData();
+    }
+  }
+
+  private addWorks() {
+    if (this.workForm.valid) {
       this.addAnotherWork();
     }
-    let companyData:Company;
+    console.log('Dodawanko');
+  }
+
+  private patchCompanyData() {
+    let companyData: Company;
+    companyData = this.companyForm.value;
+
+    this.cDataService
+      .editCompany(companyData, this.editRequestData.companyId)
+      .subscribe(
+        response => {
+          // this.cDataService.putFile('',this.companyLogo).subscribe(response=>{
+
+          // },error=>{
+
+          // });
+          this.snackbarService.open({
+            message:'Dane firmy uległy edycji',
+            snackbarType:SnackbarType.success,
+          });
+          setTimeout(() => {
+            this.uDataService.updateUser();
+            location.reload();
+          }, 500);
+        },
+        error => {
+          this.snackbarService.open({
+            message:'Coś poszło nie tak!',
+            snackbarType:SnackbarType.error,
+          });
+        }
+      );
+  }
+
+  private patchWorkIdData() {
+    console.log('patchWorkID');
+  }
+
+  private postData() {
+    let companyData: Company;
     companyData = this.companyForm.value;
     companyData.branches = this.workForms;
-    companyData.logo = this.companyLogo;
-    console.log(companyData);
+    if(this.companyLogo) {
+      this.LogoList.unshift(this.companyLogo);
+    }
 
-      this.cDataService.addCompany(companyData).subscribe(response=>{
-        this.showRequestMessage('success');
-        setTimeout(()=>{
+    this.cDataService.addCompany(companyData).subscribe(
+      response => {
+        // this.cDataService.putFile('',this.LogoList).subscribe(response=>{
+
+        // },error=>{
+
+        // });
+        this.snackbarService.open({
+          message:'Pomyślnie dodano firmę',
+          snackbarType:SnackbarType.success,
+        });
+        setTimeout(() => {
           this.uDataService.updateUser();
           location.reload();
-        },500);
-      },error=>{
-        this.showRequestMessage('error');
+        }, 500);
+      },
+      error => {
+        this.snackbarService.open({
+          message:'Coś poszło nie tak!',
+          snackbarType:SnackbarType.error,
+        });
         this.setDefaultValues();
-        console.log(error);
-      });     
+      }
+    );
   }
-  public onFileSelected(event,companyForm:boolean) {
-    if(companyForm) {
+
+  public onFileSelected(event, companyForm: boolean) {
+    if (!this.LogoList) {
+      this.LogoList = [];
+    }
+    if (companyForm) {
       this.companyLogo = event.target.files[0];
-    }else {
+    } else {
       this.workLogo = event.target.files[0];
     }
   }
 
-  private showRequestMessage(
-    type: string,
-    successMessage: string = this.successMessageText,
-    errorMessage: string = this.errorMessageText
-  ) {
-    if (type === 'success') {
-      this.successMessage = successMessage;
-      this.errorMessage = '';
-    } else {
-      this.successMessage = '';
-      this.errorMessage = errorMessage;
-    }
-  }
-
-  private setDefaultValues(){
-      this.workForm.reset();
-      this.companyForm.reset();
-      this.workNumber = 1;
-      this.workForms = null;
-      this.toggleDataList();
+  private setDefaultValues() {
+    this.workForm.reset();
+    this.companyForm.reset();
+    this.workNumber = 1;
+    this.workForms = null;
+    this.toggleDataList();
   }
 
   private checkForPersonalData() {
@@ -259,20 +346,31 @@ export class CompanyComponent implements OnInit {
       storage_Avaliable('localStorage') &&
       localStorage.getItem('naturalUserData')
     ) {
-      this.havePersonalData.next(true);      
+      this.havePersonalData.next(true);
     } else {
-      let userRest:UserREST = JSON.parse(localStorage.getItem('userREST'));
+      let userRest: UserREST = JSON.parse(localStorage.getItem('userREST'));
 
-      if(userRest.naturalPersonID) {
-        this.pDataService.getPersonalData(userRest.userID,userRest.naturalPersonID).subscribe(response=>{
-          this.havePersonalData.next(true);
-        },error=>{
-          this.havePersonalData.next(false);
-          this.showRequestMessage('error','','Aby dodać firmę musisz dodać dane osobowe!');
-        });
+      if (userRest.naturalPersonID) {
+        this.pDataService
+          .getPersonalData(userRest.userID, userRest.naturalPersonID)
+          .subscribe(
+            response => {
+              this.havePersonalData.next(true);
+            },
+            error => {
+              this.havePersonalData.next(false);
+              this.snackbarService.open({
+                message:'Aby dodać firmę musisz dodać dane osobowe!',
+                snackbarType:SnackbarType.error,
+              });
+            }
+          );
       } else {
         this.havePersonalData.next(false);
-        this.showRequestMessage('error','','Aby dodać firmę musisz dodać dane osobowe!');
+        this.snackbarService.open({
+          message:'Aby dodać firmę musisz dodać dane osobowe!',
+          snackbarType:SnackbarType.error,
+        });
       }
     }
   }
@@ -281,7 +379,7 @@ export class CompanyComponent implements OnInit {
     this.canShowWorkForm.next(false);
     this.canShowAddForm.next(!this.canShowAddForm.value);
   }
-  
+
   public toggleWorkForm() {
     this.canShowWorkForm.next(!this.canShowWorkForm.value);
   }
@@ -308,18 +406,47 @@ export class CompanyComponent implements OnInit {
   }
 
   public canShowRouteButton() {
-    if(!this.canShowAddForm.value && !this.canShowWorkForm.value && !this.havePersonalData.value) {
+    if (
+      !this.canShowAddForm.value &&
+      !this.canShowWorkForm.value &&
+      !this.havePersonalData.value
+    ) {
       return true;
-    }else{
+    } else {
       return false;
     }
   }
 
   private showEditForm() {
-    if(this.editRequestData.companyId) {
+    console.log(this.editRequestData);
+    if (this.editRequestData.companyId) {
       this.toggleAddForm();
-    }else if(this.editRequestData.workId) {
+    } else if (this.editRequestData.workId || this.editRequestData.addWork) {
       this.toggleWorkForm();
+    }
+  }
+
+  public canShowCompanyList() {
+    if (this.companyList && this.companyList.length !== 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public canShowText() {
+    if (!this.canShowCompanyList() && this.dataLoaded.getValue()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public canShowBranchBackBtn() {
+    if (!this.editRequestData.workId && !this.editRequestData.addWork) {
+      return true;
+    } else {
+      return false;
     }
   }
 }

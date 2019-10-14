@@ -7,10 +7,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [SearchComponent],
-  imports: [
-    CommonModule,
-    SearchRoutingModule,
-    ReactiveFormsModule
-  ]
+  imports: [CommonModule, SearchRoutingModule, ReactiveFormsModule]
 })
-export class SearchModule { }
+export class SearchModule {}

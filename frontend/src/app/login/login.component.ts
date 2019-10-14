@@ -5,11 +5,14 @@ import {
   FormControl,
   Validators
 } from '@angular/forms';
-import { UserLog, UserREST, UserReg } from '../classes/User';
+import { UserLog, UserREST, UserReg, PersonalData } from '../classes/User';
 import { LoginService } from '../services/login.service';
 import { Router } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
 import { storage_Avaliable } from '../classes/storage_checker';
+import { UserService } from '../services/user.service';
+import { SnackbarService, SnackbarType } from '../services/snackbar.service';
+import { PersonalDataService } from '../services/personal-data.service';
 
 @Component({
   selector: 'app-login',
@@ -18,14 +21,12 @@ import { storage_Avaliable } from '../classes/storage_checker';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
-  login_error = false;
-  login_success = false;
-  success_message: string;
-  error_message: string;
   constructor(
     private fb: FormBuilder,
     private lgservice: LoginService,
-    private router: Router
+    private router: Router,
+    private pDataService:PersonalDataService,
+    private snackbarService:SnackbarService,
   ) {}
 
   ngOnInit() {
@@ -49,34 +50,24 @@ export class LoginComponent implements OnInit {
       (data: HttpResponse<any>) => {
         console.log(data.headers.get('Authorization'));
         if (data.status === 200) {
-          this.login_error = false;
-          this.login_success = true;
-          this.showRequestMessage('success','Pomyślnie zalogowano!','');        
+          this.snackbarService.open({
+            message:'Pomyślnie zalogowano',
+            snackbarType:SnackbarType.success,
+          });          
           setTimeout(() => {
             this.loginStorageSet(data);
+            this.pDataService.getPersonalDataObject();
           }, 500);
         }
       },
       error => {
         console.log(error);
-        this.showRequestMessage('error','','Coś poszło nie tak!');
-        this.login_error = true;
+        this.snackbarService.open({
+          message:'Coś poszło nie tak!',
+          snackbarType:SnackbarType.error,
+        });
       }
     );
-  }
-
-  private showRequestMessage(
-    type: string,
-    successMessage: string = this.success_message,
-    errorMessage: string = this.error_message
-  ) {
-    if (type === 'success') {
-      this.success_message = successMessage;
-      this.error_message = '';
-    } else {
-      this.success_message = '';
-      this.error_message = errorMessage;
-    }
   }
 
   setUserData(): UserLog {
@@ -97,8 +88,10 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['']);
       console.log('Użytkownik został zalogowany');
     } else {
-      this.showRequestMessage('error','','Coś poszło nie tak!');
-      this.login_error = true;
+      this.snackbarService.open({
+        message:'Coś poszło nie tak!',
+        snackbarType:SnackbarType.error,
+      });
     }
   }
 }

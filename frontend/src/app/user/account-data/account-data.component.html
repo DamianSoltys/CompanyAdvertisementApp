@@ -1,7 +1,11 @@
 <div class="container-fluid account-data-component">
   <div class="account-data-component__form">
-    <form (ngSubmit)="onSubmit()" class=" col-12 col-xl-4 col-md-5 form__account-data-form"
-      *ngIf="showEditingForm.getValue()" [formGroup]="accountDataForm">
+    <form
+      (ngSubmit)="onSubmit()"
+      class=" col-12 col-xl-4 col-md-5 form__account-data-form"
+      *ngIf="showEditingForm.getValue()"
+      [formGroup]="accountDataForm"
+    >
       <div class="account-data-form__header col-12 text-center">
         <p class="header__text-node">
           <i class="fas fa-id-card header__icon"></i>Dane Konta
@@ -15,76 +19,119 @@
         </div>
         <div class="input-group__section-container row col-12">
           <div class="form-group section-container__container">
-            <label class="section-container__label" for="oldPassword">Aktualne hasło</label>
-            <input type="password" name="oldPassword" class="form-control section-container__input"
-              formControlName="oldPassword" />
-            <div *ngIf="
+            <label class="section-container__label" for="oldPassword"
+              >Aktualne hasło</label
+            >
+            <input
+              type="password"
+              name="oldPassword"
+              class="form-control section-container__input"
+              formControlName="oldPassword"
+            />
+            <div
+              *ngIf="
                 (this.form.oldPassword.touched ||
                   this.form.oldPassword.dirty) &&
                 this.form.oldPassword.errors
-              " class="section-container__error-container">
-              <p *ngIf="this.form.oldPassword.errors.required" class="text-danger error-container__text--danger">
+              "
+              class="section-container__error-container"
+            >
+              <p
+                *ngIf="this.form.oldPassword.errors.required"
+                class="text-danger error-container__text--danger"
+              >
                 Pole nie może być puste
               </p>
-              <p *ngIf="this.form.oldPassword.errors.pattern" class="text-danger error-container__text--danger">
+              <p
+                *ngIf="this.form.oldPassword.errors.pattern"
+                class="text-danger error-container__text--danger"
+              >
                 Proszę poprawnie uzupełnić pole
               </p>
             </div>
           </div>
           <div class="form-group section-container__container">
-            <label class="section-container__label" for="newPassword">Nowe hasło</label>
-            <input type="password" name="newPassword" class="form-control section-container__input"
-              formControlName="newPassword" />
-            <div *ngIf="
+            <label class="section-container__label" for="newPassword"
+              >Nowe hasło</label
+            >
+            <input
+              type="password"
+              name="newPassword"
+              class="form-control section-container__input"
+              formControlName="newPassword"
+            />
+            <div
+              *ngIf="
                 (this.form.newPassword.touched ||
                   this.form.newPassword.dirty) &&
                 this.form.newPassword.errors
-              " class="section-container__error-container">
-              <p *ngIf="this.form.newPassword.errors.required" class="text-danger error-container__text--danger">
+              "
+              class="section-container__error-container"
+            >
+              <p
+                *ngIf="this.form.newPassword.errors.required"
+                class="text-danger error-container__text--danger"
+              >
                 Pole nie może być puste
               </p>
-              <p *ngIf="this.form.newPassword.errors.pattern" class="text-danger error-container__text--danger">
+              <p
+                *ngIf="this.form.newPassword.errors.pattern"
+                class="text-danger error-container__text--danger"
+              >
                 Proszę poprawnie uzupełnić pole
               </p>
             </div>
           </div>
           <div class="form-group section-container__container">
-            <label class="section-container__label" for="checkPassword">Potwierdź hasło</label>
-            <input type="password" name="checkPassword" class="form-control section-container__input"
-              formControlName="checkPassword" />
-            <div *ngIf="
+            <label class="section-container__label" for="checkPassword"
+              >Potwierdź hasło</label
+            >
+            <input
+              type="password"
+              name="checkPassword"
+              class="form-control section-container__input"
+              formControlName="checkPassword"
+            />
+            <div
+              *ngIf="
                 (this.form.checkPassword.touched ||
                   this.form.checkPassword.dirty) &&
                 this.form.checkPassword.errors
-              " class="section-container__error-container">
-              <p *ngIf="this.form.checkPassword.errors.required" class="text-danger error-container__text--danger">
+              "
+              class="section-container__error-container"
+            >
+              <p
+                *ngIf="this.form.checkPassword.errors.required"
+                class="text-danger error-container__text--danger"
+              >
                 Pole nie może być puste
               </p>
             </div>
           </div>
         </div>
       </div>
-      <div class="account-data-form__error-container text-center col-12">
-        <p *ngIf="successMessage" class="text-success error-container__text--success">
-          {{ successMessage }}
-        </p>
-        <p *ngIf="errorMessage" class="text-danger error-container__text--danger">
-          {{ errorMessage }}
-        </p>
-      </div>
       <div class="account-data-form__button-container text-center col-12 row">
-        <button class="btn btn-primary account-data-form__button--submit" [disabled]="!this.accountDataForm.valid"
-          type="submit">
+        <button
+          class="btn btn-primary account-data-form__button--submit"
+          [disabled]="!this.accountDataForm.valid"
+          type="submit"
+        >
           <span class="button--submit__text-node">Zmień hasło</span>
         </button>
-        <button class="btn btn-primary account-data-form__button--submit" (click)="showAccountData()">
+        <button
+          class="btn btn-primary account-data-form__button--submit"
+          (click)="showAccountData()"
+        >
           <span class="button--submit__text-node">Pokaż dane</span>
         </button>
       </div>
     </form>
   </div>
 
-  <div class="row account-data-component__data-container col-12 col-xl-4 col-md-5" *ngIf="showData.getValue()">
+  <div
+    class="row account-data-component__data-container col-12 col-xl-4 col-md-5"
+    *ngIf="showData.getValue()"
+  >
     <div class="data-container__header col-12 text-center">
       <p class="header__text-node">
         <i class="fas fa-id-card header__icon"></i>Dane Konta
@@ -93,33 +140,35 @@
     <div class="col-12 data-container__data-group-container">
       <div class="row data-group-container__data-group col-12">
         <div class="data-group__header col-12">
-          <span class="header__text-node"><i class="fas fa-user-tag text-node__icon"></i>Aktualne dane</span>
+          <span class="header__text-node"
+            ><i class="fas fa-user-tag text-node__icon"></i>Aktualne dane</span
+          >
         </div>
         <div class="data-group__container col-12">
           <ul class="container__data-list">
             <li class="data-list__item">
-              <span class="data-list__caption">Nazwa użytkownika:</span>{{ userObject.loginName }}
+              <span class="data-list__caption">Nazwa użytkownika:</span
+              >{{ userObject.loginName }}
             </li>
             <li class="data-list__item">
-              <span class="data-list__caption">Adres email:</span>{{ userObject.emailAddress }}
+              <span class="data-list__caption">Adres email:</span
+              >{{ userObject.emailAddress }}
             </li>
           </ul>
         </div>
       </div>
     </div>
-    <div class="account-data-component__error-container text-center col-12">
-      <p *ngIf="successMessage" class="text-success error-container__text--success">
-        {{ successMessage }}
-      </p>
-      <p *ngIf="errorMessage" class="text-danger error-container__text--danger">
-        {{ errorMessage }}
-      </p>
-    </div>
     <div class="data-container__button-container text-center col-12 row">
-      <button class="button__button--edit btn btn-primary" (click)="showEditForm()">
+      <button
+        class="button__button--edit btn btn-primary"
+        (click)="showEditForm()"
+      >
         <span class="button--submit__text-node">Zmień hasło</span>
       </button>
-      <button class="button__button--delete btn btn-primary" (click)="deleteAccount()">
+      <button
+        class="button__button--delete btn btn-primary"
+        (click)="deleteAccount()"
+      >
         <span class="button--submit__text-node">Usuń konto</span>
       </button>
     </div>

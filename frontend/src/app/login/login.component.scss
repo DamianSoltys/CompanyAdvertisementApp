@@ -1,4 +1,4 @@
-@import "../../commonStyles/shared";
+@import '../../commonStyles/shared';
 
 .form__login-form {
   text-align: center;
@@ -43,7 +43,7 @@
       width: 60%;
       margin: auto;
       text-align: left;
-      transition: all .2s ease-in-out;
+      transition: all 0.2s ease-in-out;
 
       .input-group__input {
         width: 100%;
@@ -57,15 +57,15 @@
           transform: translate(-25px);
 
           .input-group__input {
-            width:calc(100% + 50px);
+            width: calc(100% + 50px);
           }
         }
-        
+
         @include desktop() {
           transform: translate(-25px);
 
           .input-group__input {
-            width:calc(100% + 50px);
+            width: calc(100% + 50px);
           }
         }
       }

@@ -3,26 +3,44 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './guards/auth-guard.service';
 
 const routes: Routes = [
-  {path: '', redirectTo: 'home', pathMatch: 'full'},
-  {path: 'home', loadChildren: './home/home.module#HomeModule'},
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'home', loadChildren: './home/home.module#HomeModule' },
   {
-    path: 'login', loadChildren: './login/login.module#LoginModule'
+    path: 'login',
+    loadChildren: './login/login.module#LoginModule'
   },
   {
-    path: 'register', loadChildren: './register/register.module#RegisterModule'
+    path: 'register',
+    loadChildren: './register/register.module#RegisterModule'
   },
   {
-    path: 'search', loadChildren: './search/search.module#SearchModule'
+    path: 'search',
+    loadChildren: './search/search.module#SearchModule'
   },
   {
-    path: 'registerConfirm/:auth', loadChildren: './user/register-confirm/register-confirm.module#RegisterConfirmModule'
+    path: 'registerConfirm/:auth',
+    loadChildren:
+      './user/register-confirm/register-confirm.module#RegisterConfirmModule'
   },
   {
-    path: 'companyProfile/:id', loadChildren: './commonComponents/company-profile/company-profile.module#CompanyProfileModule'
+    path: 'companyProfile/:id',
+    loadChildren:
+      './commonComponents/company-profile/company-profile.module#CompanyProfileModule'
+  },
+  {
+    path: 'branchProfile/:idCompany/:idBranch',
+    loadChildren:
+      './commonComponents/branch-profile/branch-profile.module#BranchProfileModule'
+  },
+  {
+    path: 'branchProfile/:idBranch',
+    loadChildren:
+      './commonComponents/branch-profile/branch-profile.module#BranchProfileModule'
   },
   {
     path: 'user/personalData',
-    loadChildren: './user/personal-data/personal-data.module#PersonalDataModule',
+    loadChildren:
+      './user/personal-data/personal-data.module#PersonalDataModule',
     canActivate: [AuthGuard]
   },
   {
@@ -35,11 +53,11 @@ const routes: Routes = [
     loadChildren: './user/company/company.module#CompanyModule',
     canActivate: [AuthGuard]
   },
-  {path: '**', redirectTo: 'home', pathMatch: 'full'},
+  { path: '**', redirectTo: 'home', pathMatch: 'full' }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

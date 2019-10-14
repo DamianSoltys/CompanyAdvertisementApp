@@ -2,269 +2,269 @@
 .account-data-component {
   width: 95%;
 }
-.account-data-component__form { 
-  margin-top:5%;
+.account-data-component__form {
+  margin-top: 3%;
 
-.account-data-form__header {
-  position: relative;
-  min-height: 30px;
-  height: 6vh;
-  max-height: 60px;
-  background-color: $bgcolor;
-  border: 0;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
-
-  .header__text-node {
-    color: white;
+  .account-data-form__header {
     position: relative;
-    top: 50%;
-    transform: translate(0, -50%);
-    font-size: 1.2em;
+    min-height: 30px;
+    height: 6vh;
+    max-height: 60px;
+    background-color: $bgcolor;
+    border: 0;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+
+    .header__text-node {
+      color: white;
+      position: relative;
+      top: 50%;
+      transform: translate(0, -50%);
+      font-size: 1.2em;
+    }
+
+    .fa-id-card {
+      margin-right: 5px;
+    }
   }
 
-  .fa-id-card {
-    margin-right: 5px;
+  .form__account-data-form {
+    @include boxShadow(0px 4px 5px 0px rgba(187, 185, 191, 1));
+    border: 0;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    align-self: center;
+    margin: auto;
+    padding: 0;
+    .account-data-form__button-container {
+      margin: 0;
+      justify-content: space-evenly;
+      .account-data-form__button--submit {
+        width: 45%;
+        margin-bottom: 5%;
+        border-radius: 50px;
+        border: 0;
+        background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
+        animation: button-background-animation 16s linear infinite;
+        background-size: 600%;
+
+        @include phone {
+          width: 85%;
+        }
+      }
+    }
+
+    .account-data-form__input-group {
+      padding: 3%;
+      margin-top: 2%;
+
+      .input_group__group-label {
+        .group-label__text-node {
+          font-size: 1.1rem;
+          margin: 0 15px;
+          font-weight: bold;
+          color: darken($bgcolor, 10);
+
+          .text-node__icon {
+            padding-right: 5px;
+          }
+        }
+      }
+
+      .input-group__section-container {
+        border: 1px solid darken($bgcolor, 10);
+        border-width: 1px 0 0 0;
+        border-radius: 6px;
+        padding: 20px;
+        margin: auto;
+        margin-bottom: 5px;
+        justify-content: space-evenly;
+        z-index: 1;
+
+        @include phone {
+          padding: 20px 0;
+        }
+        @include boxShadow(inset 0px 15px 8px -15px rgba(32, 99, 143, 0.66));
+
+        .section-container__error-container {
+          .error-container__text--danger,
+          .error-container__text--success {
+            margin-bottom: 0;
+          }
+        }
+
+        .section-container__container {
+          width: 60%;
+          margin: 0 1rem 5px 1rem;
+          position: relative;
+          left: 0px;
+          transition: all 0.2s ease-in-out;
+
+          .section-container__select-wrapper {
+            position: relative;
+            left: -10px;
+            width: calc(100% + 20px);
+
+            @include phone() {
+              left: 0;
+              width: 100%;
+            }
+
+            &:before {
+              content: '\f078';
+              font-family: 'Font Awesome 5 Free';
+              font-weight: 900;
+              position: absolute;
+              top: 8px;
+              right: 10px;
+              color: $bgcolor;
+            }
+            .section-container__select-input {
+              -moz-appearance: none;
+              -webkit-appearance: none;
+              appearance: none;
+
+              &::-ms-expand {
+                display: none;
+              }
+            }
+          }
+          .section-container__input {
+            padding: 0;
+          }
+
+          &:focus-within {
+            color: $bgcolor;
+
+            @include tablet() {
+              &:not(.section-container__with--select) {
+                left: -15px;
+
+                .section-container__input {
+                  width: calc(100% + 30px);
+                }
+              }
+            }
+
+            @include desktop() {
+              &:not(.section-container__with--select) {
+                left: -25px;
+
+                .section-container__input {
+                  width: calc(100% + 50px);
+                }
+              }
+            }
+          }
+
+          @include phone {
+            width: 100%;
+            margin: auto;
+          }
+        }
+      }
+    }
   }
 }
 
-.form__account-data-form {
+.account-data-component__data-container {
+  margin: auto;
   @include boxShadow(0px 4px 5px 0px rgba(187, 185, 191, 1));
   border: 0;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
   align-self: center;
-  margin: auto;
-  padding:0;
-  .account-data-form__button-container {
-    margin:0;
+  padding: 0;
+  .data-container__header {
+    position: relative;
+    min-height: 30px;
+    height: 6vh;
+    max-height: 60px;
+    background-color: $bgcolor;
+    border: 0;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+
+    .header__text-node {
+      color: white;
+      position: relative;
+      top: 50%;
+      transform: translate(0, -50%);
+      font-size: 1.2em;
+    }
+
+    .fa-id-card {
+      margin-right: 5px;
+    }
+  }
+
+  .data-container__button-container {
+    display: flex;
     justify-content: space-evenly;
-    .account-data-form__button--submit {
-      width: 45%;
-      margin-bottom:5%;
+    padding: 0;
+    margin-left: 0;
+
+    .button__button--edit,
+    .button__button--delete {
+      width: 40%;
+      margin-bottom: 5%;
       border-radius: 50px;
       border: 0;
-      background: linear-gradient(-45deg, #FFA63D, #FF3D77, #338AFF, #3CF0C5);
+      background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
       animation: button-background-animation 16s linear infinite;
       background-size: 600%;
-  
+
       @include phone {
         width: 85%;
       }
     }
   }
 
-  .account-data-form__input-group {
-    padding:3%;
-    margin-top:2%;
+  .data-container__data-group-container {
+    padding: 3%;
+    margin-top: 2%;
+  }
+  .data-group-container__data-group {
+    margin: auto;
 
-    .input_group__group-label {
-      .group-label__text-node {
-        font-size:1.1rem;
+    .data-group__header {
+      padding: 0;
+      .header__text-node {
+        font-size: 1.1rem;
         margin: 0 15px;
         font-weight: bold;
-        color:darken($bgcolor,10);
-
+        color: darken($bgcolor, 10);
         .text-node__icon {
           padding-right: 5px;
         }
       }
     }
- 
-    .input-group__section-container {
-      border:1px solid darken($bgcolor,10);
+
+    .data-group__container {
+      border: 1px solid darken($bgcolor, 10);
       border-width: 1px 0 0 0;
       border-radius: 6px;
-      padding:20px;
-      margin:auto;
-      margin-bottom:5px;
-      justify-content: space-evenly;
+      padding: 20px 40px;
+      margin: auto;
+      margin-bottom: 5px;
       z-index: 1;
-      
-      @include phone {
-        padding: 20px 0;
-      }
       @include boxShadow(inset 0px 15px 8px -15px rgba(32, 99, 143, 0.66));
-
-      .section-container__error-container {
-        .error-container__text--danger,.error-container__text--success {
-          margin-bottom:0;
-        }
-      }
-    
-      .section-container__container {
-        width: 60%;
-        margin:0 1rem 5px 1rem;
-        position: relative;
-        left:0px;
-        transition: all .2s ease-in-out;
-
-        .section-container__select-wrapper {
-          position: relative;
-          left:-10px;
-          width:calc(100% + 20px);
-
-          @include phone() {
-            left:0;
-            width:100%;
-          }
-
-          &:before {
-            content: "\f078";
-            font-family: 'Font Awesome 5 Free';
-            font-weight: 900;
-            position: absolute;
-            top: 8px;
-            right: 10px;
-            color:$bgcolor;
-          }
-          .section-container__select-input {
-            -moz-appearance: none;
-            -webkit-appearance: none;
-            appearance: none;
-
-            &::-ms-expand {
-              display: none;
-            }
-          }
-        }
-        .section-container__input {
-          padding:0;    
-        }   
-        
-        &:focus-within {
-          color: $bgcolor;
-
-          @include tablet() {
-            &:not(.section-container__with--select){
-              left:-15px;
-
-              .section-container__input {
-                width:calc(100% + 30px);
-              }
-            }
-          }
-
-          @include desktop() {
-            &:not(.section-container__with--select){
-              left:-25px;
-
-              .section-container__input {
-                width:calc(100% + 50px);
-              }
-            }
-          }
-        }
-
-        @include phone {
-          width: 100%;
-          margin:auto;
-        }
-      }
-    }
-  }    
-}     
-}
-
-
-
-.account-data-component__data-container {
-    margin:auto;
-    @include boxShadow(0px 4px 5px 0px rgba(187, 185, 191, 1));
-    border: 0;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-    align-self: center;
-    padding:0;
-    .data-container__header {
-      position: relative;
-      min-height: 30px;
-      height: 6vh;
-      max-height: 60px;
-      background-color: $bgcolor;
-      border: 0;
-      border-bottom-left-radius: 20px;
-      border-bottom-right-radius: 20px;
-    
-      .header__text-node {
-        color: white;
-        position: relative;
-        top: 50%;
-        transform: translate(0, -50%);
-        font-size: 1.2em;
-      }
-  
-      .fa-id-card {
-        margin-right: 5px;
-      }
-    }
-  
-    .data-container__button-container {
-      display:flex;
-      justify-content: space-evenly;
-      padding: 0;
-      margin-left: 0;
-  
-        .button__button--edit,.button__button--delete {    
-          width:40%;   
-          margin-bottom:5%;
-          border-radius: 50px;
-          border: 0;
-          background: linear-gradient(-45deg, #FFA63D, #FF3D77, #338AFF, #3CF0C5);
-          animation: button-background-animation 16s linear infinite;
-          background-size: 600%;
-      
-          @include phone {
-            width: 85%;
-          }    
-      }
-    } 
-  
-    .data-container__data-group-container {
-      padding:3%;
-        margin-top:2%;
-    }
-    .data-group-container__data-group {
-      margin:auto;
-  
-      .data-group__header {
+      .container__data-list {
+        list-style: none;
         padding: 0;
-        .header__text-node {
-          font-size:1.1rem;
-          margin: 0 15px;
-          font-weight: bold;
-          color:darken($bgcolor,10);
-          .text-node__icon {
-            padding-right: 5px;
+        justify-content: space-evenly;
+        .data-list__item {
+          padding: 10px;
+          .data-list__caption {
+            padding-right: 10px;
+            font-size: 1.1rem;
+            color: darken($bgcolor, 15);
           }
         }
       }
-  
-      .data-group__container {
-        border:1px solid darken($bgcolor,10);
-        border-width: 1px 0 0 0;
-        border-radius: 6px;
-        padding:20px 40px;
-        margin:auto;
-        margin-bottom:5px;
-        z-index: 1;
-        @include boxShadow(inset 0px 15px 8px -15px rgba(32, 99, 143, 0.66));
-        .container__data-list {
-          list-style:none;
-          padding: 0;
-          justify-content: space-evenly;
-          .data-list__item {
-            padding: 10px;
-            .data-list__caption {
-              padding-right: 10px;
-              font-size: 1.1rem;
-              color:darken($bgcolor,15);
-            }
-          }
-        }
-        @include phone() {
-          padding:10px;
-        }
+      @include phone() {
+        padding: 10px;
       }
     }
   }
+}

@@ -7,12 +7,14 @@ import local.project.Inzynierka.persistence.entity.Voivoideship;
 import local.project.Inzynierka.persistence.repository.AddressRepository;
 import local.project.Inzynierka.persistence.repository.BranchRepository;
 import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
+import local.project.Inzynierka.shared.utils.EntityName;
+import local.project.Inzynierka.shared.utils.LogoFilePathCreator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class BranchPersistenceService {
+class BranchPersistenceService {
 
     private final VoivodeshipRepository voivodeshipRepository;
 
@@ -20,16 +22,17 @@ public class BranchPersistenceService {
 
     private final BranchRepository branchRepository;
 
-    public BranchPersistenceService(VoivodeshipRepository voivodeshipRepository, AddressRepository addressRepository, BranchRepository branchRepository) {
+    BranchPersistenceService(VoivodeshipRepository voivodeshipRepository, AddressRepository addressRepository, BranchRepository branchRepository) {
         this.voivodeshipRepository = voivodeshipRepository;
         this.addressRepository = addressRepository;
         this.branchRepository = branchRepository;
     }
 
-    public void buildAllCompanyBranches(List<Branch> branches, Company createdCompany) {
+    void buildAllCompanyBranches(List<Branch> branches, Company createdCompany) {
         branches.forEach(branch -> {
             branch.setCompany(createdCompany);
             branch.setRegisterer(createdCompany.getRegisterer());
+            branch.setPhotoPath(LogoFilePathCreator.buildEntityLogoURL(EntityName.BRANCH));
             Voivoideship branchVoivodeship = this.voivodeshipRepository.findByName(branch.getAddress().getVoivodeship_id().getName());
             branch.getAddress().setVoivodeship_id(branchVoivodeship);
             Address branchAddress = this.addressRepository.save(branch.getAddress());
@@ -37,11 +40,11 @@ public class BranchPersistenceService {
         });
     }
 
-    public Iterable<Branch> saveAll(List<Branch> branches) {
+    Iterable<Branch> saveAll(List<Branch> branches) {
         return this.branchRepository.saveAll(branches);
     }
 
-    public List<Long> getCompanyBranchesIds(Long id) {
+    List<Long> getCompanyBranchesIds(Long id) {
         return this.branchRepository.getAllByCompanyId(id);
     }
 }

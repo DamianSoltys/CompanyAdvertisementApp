@@ -4,13 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
-
+@Builder
 @Data
 @AllArgsConstructor
-@Builder
-public class CompanyBuildDto {
+public class BranchBuildDto {
     private Long id;
     private String logoFilePath;
-    private List<BranchBuildDto> branchBuildDTOs;
 }

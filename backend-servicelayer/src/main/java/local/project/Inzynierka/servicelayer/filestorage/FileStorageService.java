@@ -1,6 +1,7 @@
 package local.project.Inzynierka.servicelayer.filestorage;
 
-import local.project.Inzynierka.shared.utils.CompanyLogoPathCreator;
+import local.project.Inzynierka.shared.utils.EntityName;
+import local.project.Inzynierka.shared.utils.LogoFilePathCreator;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,8 +19,8 @@ public class FileStorageService {
 
         validateLogoFile(file);
 
-        Files.createDirectories(Paths.get(CompanyLogoPathCreator.getCompanyLogoDirectory(companyUUID)));
-        Files.write(Paths.get(CompanyLogoPathCreator.getCompanyLogoFilePath(companyUUID, logoUUID)),
+        Files.createDirectories(Paths.get(LogoFilePathCreator.getEntityLogoFileDirectory(companyUUID, EntityName.COMPANY)));
+        Files.write(Paths.get(LogoFilePathCreator.getLogoFilePath(companyUUID, logoUUID, EntityName.COMPANY)),
                     file.getBytes());
     }
 
@@ -30,6 +31,7 @@ public class FileStorageService {
     }
 
     public byte[] getCompanyLogo(String companyUUID, String logoUUID) throws IOException {
-        return Files.readAllBytes(Paths.get(CompanyLogoPathCreator.getCompanyLogoFilePath(companyUUID, logoUUID)));
+        return Files.readAllBytes(Paths.get(
+                LogoFilePathCreator.getLogoFilePath(companyUUID, logoUUID, EntityName.COMPANY)));
     }
 }

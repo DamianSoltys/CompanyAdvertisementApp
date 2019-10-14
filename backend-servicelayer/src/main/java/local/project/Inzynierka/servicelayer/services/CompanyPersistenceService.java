@@ -11,7 +11,8 @@ import local.project.Inzynierka.persistence.repository.CompanyRepository;
 import local.project.Inzynierka.persistence.repository.UserRepository;
 import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
 import local.project.Inzynierka.shared.UserAccount;
-import local.project.Inzynierka.shared.utils.CompanyLogoPathCreator;
+import local.project.Inzynierka.shared.utils.EntityName;
+import local.project.Inzynierka.shared.utils.LogoFilePathCreator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,7 +52,7 @@ public class CompanyPersistenceService {
                                                    .name(company.getName())
                                                    .NIP(company.getNIP())
                                                    .registerer(user.getNaturalPerson())
-                                                   .logoPath(CompanyLogoPathCreator.buildCompanyLogoURL())
+                                                   .logoPath(LogoFilePathCreator.buildEntityLogoURL(EntityName.COMPANY))
                                                    .REGON(company.getREGON())
                                                    .build());
     }

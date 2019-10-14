@@ -26,6 +26,7 @@ import { UserREST } from 'src/app/classes/User';
 import { UserService } from 'src/app/services/user.service';
 import { HttpEventType, HttpRequest, HttpResponse } from '@angular/common/http';
 import { LoaderService } from 'src/app/services/loader.service';
+import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
 
 export interface Position {
   latitude: number;
@@ -52,11 +53,7 @@ export class CompanyComponent implements OnInit {
   public canShowAddForm = new BehaviorSubject(false);
   public canShowWorkForm = new BehaviorSubject(false);
   private dataLoaded = new BehaviorSubject(false);
-  private successMessageText = 'Akcja została zakończona pomyślnie';
-  private errorMessageText = 'Akcja niepowiodła się';
   public companyList: GetCompany[];
-  public successMessage: string = '';
-  public errorMessage: string = '';
   public actualPosition: Position = {
     latitude: 51.246452,
     longitude: 22.568445
@@ -101,7 +98,7 @@ export class CompanyComponent implements OnInit {
     }),
     geoX: [''],
     geoY: [''],
-    name: ['', [Validators.required]],
+    name: ['', [Validators.required]]
   });
 
   config = {
@@ -114,7 +111,8 @@ export class CompanyComponent implements OnInit {
     private cDataService: CompanyService,
     private uDataService: UserService,
     private loaderService: LoaderService,
-    private changeDetector: ChangeDetectorRef
+    private snackbarService:SnackbarService,
+
   ) {}
 
   ngOnInit() {
@@ -159,14 +157,13 @@ export class CompanyComponent implements OnInit {
       let userREST: UserREST = JSON.parse(localStorage.getItem('userREST'));
       if (userREST.companiesIDs) {
         this.companyList = [];
-        userREST.companiesIDs.forEach((companyId,index) => {
+        userREST.companiesIDs.forEach((companyId, index) => {
           this.cDataService.getCompany(companyId).subscribe(
             response => {
               this.companyList.push(<GetCompany>response.body);
               this.companyList.sort(this.companySort);
               this.cDataService.storeCompanyData(<GetCompany>response.body);
-              index++;
-              if(index === userREST.companiesIDs.length) {
+              if (index === userREST.companiesIDs.length) {
                 this.dataLoaded.next(true);
               }
             },
@@ -175,11 +172,13 @@ export class CompanyComponent implements OnInit {
             }
           );
         });
-      } 
-      if(!userREST.companiesIDs || (userREST.companiesIDs && !userREST.companiesIDs.length)) {
+      }
+      if (
+        !userREST.companiesIDs ||
+        (userREST.companiesIDs && !userREST.companiesIDs.length)
+      ) {
         this.dataLoaded.next(true);
       }
-
     }
   }
   private companySort(item1: GetCompany, item2: GetCompany) {
@@ -224,23 +223,23 @@ export class CompanyComponent implements OnInit {
       }
       this.workNumber++;
       this.workForms.push(this.workForm.value);
-      if(this.workLogo) {
+      if (this.workLogo) {
         this.LogoList.push(this.workLogo);
       }
       this.workForm.reset();
-      if(!this.editRequestData.addWork) {
+      if (!this.editRequestData.addWork) {
         this.toggleWorkForm();
       }
     }
   }
 
   public onSubmit(event: Event) {
-    event.preventDefault(); 
+    event.preventDefault();
     if (this.editRequestData.companyId) {
       this.patchCompanyData();
-    } else if(this.editRequestData.workId){
+    } else if (this.editRequestData.workId) {
       this.patchWorkIdData();
-    } else if(this.editRequestData.addWork) {
+    } else if (this.editRequestData.addWork) {
       this.addWorks();
     } else {
       this.postData();
@@ -248,34 +247,41 @@ export class CompanyComponent implements OnInit {
   }
 
   private addWorks() {
-    if(this.workForm.valid){
+    if (this.workForm.valid) {
       this.addAnotherWork();
     }
-    console.log("Dodawanko");
+    console.log('Dodawanko');
   }
 
   private patchCompanyData() {
     let companyData: Company;
     companyData = this.companyForm.value;
 
-    this.cDataService.editCompany(companyData,this.editRequestData.companyId).subscribe(
-      response => {
-        // this.cDataService.putFile('',this.companyLogo).subscribe(response=>{
+    this.cDataService
+      .editCompany(companyData, this.editRequestData.companyId)
+      .subscribe(
+        response => {
+          // this.cDataService.putFile('',this.companyLogo).subscribe(response=>{
 
-        // },error=>{
+          // },error=>{
 
-        // });
-        this.showRequestMessage('success');
-        setTimeout(() => {
-          this.uDataService.updateUser();
-          location.reload();
-        }, 500);
-      },
-      error => {
-        this.showRequestMessage('error');
-        console.log(error);
-      }
-    );
+          // });
+          this.snackbarService.open({
+            message:'Dane firmy uległy edycji',
+            snackbarType:SnackbarType.success,
+          });
+          setTimeout(() => {
+            this.uDataService.updateUser();
+            location.reload();
+          }, 500);
+        },
+        error => {
+          this.snackbarService.open({
+            message:'Coś poszło nie tak!',
+            snackbarType:SnackbarType.error,
+          });
+        }
+      );
   }
 
   private patchWorkIdData() {
@@ -286,8 +292,9 @@ export class CompanyComponent implements OnInit {
     let companyData: Company;
     companyData = this.companyForm.value;
     companyData.branches = this.workForms;
-    this.LogoList.unshift(this.companyLogo);
-    console.log(this.LogoList);
+    if(this.companyLogo) {
+      this.LogoList.unshift(this.companyLogo);
+    }
 
     this.cDataService.addCompany(companyData).subscribe(
       response => {
@@ -296,42 +303,33 @@ export class CompanyComponent implements OnInit {
         // },error=>{
 
         // });
-        this.showRequestMessage('success');
+        this.snackbarService.open({
+          message:'Pomyślnie dodano firmę',
+          snackbarType:SnackbarType.success,
+        });
         setTimeout(() => {
           this.uDataService.updateUser();
           location.reload();
         }, 500);
       },
       error => {
-        this.showRequestMessage('error');
+        this.snackbarService.open({
+          message:'Coś poszło nie tak!',
+          snackbarType:SnackbarType.error,
+        });
         this.setDefaultValues();
-        console.log(error);
       }
     );
   }
 
-  public onFileSelected(event,companyForm:boolean) {    
-    if(!this.LogoList) {
+  public onFileSelected(event, companyForm: boolean) {
+    if (!this.LogoList) {
       this.LogoList = [];
     }
-    if(companyForm) {
+    if (companyForm) {
       this.companyLogo = event.target.files[0];
     } else {
       this.workLogo = event.target.files[0];
-    }
-  }
-
-  private showRequestMessage(
-    type: string,
-    successMessage: string = this.successMessageText,
-    errorMessage: string = this.errorMessageText
-  ) {
-    if (type === 'success') {
-      this.successMessage = successMessage;
-      this.errorMessage = '';
-    } else {
-      this.successMessage = '';
-      this.errorMessage = errorMessage;
     }
   }
 
@@ -361,20 +359,18 @@ export class CompanyComponent implements OnInit {
             },
             error => {
               this.havePersonalData.next(false);
-              this.showRequestMessage(
-                'error',
-                '',
-                'Aby dodać firmę musisz dodać dane osobowe!'
-              );
+              this.snackbarService.open({
+                message:'Aby dodać firmę musisz dodać dane osobowe!',
+                snackbarType:SnackbarType.error,
+              });
             }
           );
       } else {
         this.havePersonalData.next(false);
-        this.showRequestMessage(
-          'error',
-          '',
-          'Aby dodać firmę musisz dodać dane osobowe!'
-        );
+        this.snackbarService.open({
+          message:'Aby dodać firmę musisz dodać dane osobowe!',
+          snackbarType:SnackbarType.error,
+        });
       }
     }
   }
@@ -394,10 +390,7 @@ export class CompanyComponent implements OnInit {
   }
 
   public canShowDataList() {
-    if (
-      !this.canShowAddForm.value &&
-      !this.canShowWorkForm.value
-    ) {
+    if (!this.canShowAddForm.value && !this.canShowWorkForm.value) {
       return true;
     } else {
       return false;
@@ -442,7 +435,7 @@ export class CompanyComponent implements OnInit {
   }
 
   public canShowText() {
-    if(!this.canShowCompanyList() && this.dataLoaded.getValue()) {
+    if (!this.canShowCompanyList() && this.dataLoaded.getValue()) {
       return true;
     } else {
       return false;

@@ -16,10 +16,10 @@ import { NewsletterComponent } from '../newsletter/newsletter.component';
   ],
   imports: [
     CommonModule,
-    CompanyProfileRoutingModule,  
+    CompanyProfileRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    CompanyModule,
+    CompanyModule
   ]
 })
-export class CompanyProfileModule { }
+export class CompanyProfileModule {}

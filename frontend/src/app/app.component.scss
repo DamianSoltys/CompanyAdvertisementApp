@@ -9,8 +9,8 @@ html {
 
 .app-component {
   min-height: calc(100vh - 60px);
-  overflow:hidden;
-  
+  overflow: hidden;
+
   .app-component__router-outlet {
     position: relative;
   }
@@ -19,21 +19,21 @@ html {
 .app-component__navbar {
   background: linear-gradient(-50deg, $bgcolor, $bgcolor1);
   border-bottom: 2px solid whitesmoke;
-  position: relative; 
-  display: flex;   
-  flex-wrap: wrap;  
-  align-items: center;   
-  justify-content: space-between;  
-  padding: .5rem 1rem;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
 }
 
 .app-component__footer {
   height: 40px;
-  margin:0;
-  color:white;
-  margin-top:20px;
-  background:linear-gradient(-50deg, $bgcolor1, $bgcolor);
-  width:100%;
+  margin: 0;
+  color: white;
+  margin-top: 20px;
+  background: linear-gradient(-50deg, $bgcolor1, $bgcolor);
+  width: 100%;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 
@@ -42,15 +42,14 @@ html {
   }
 }
 
-
 .navbar__button-group {
-    position: relative;
-    
+  position: relative;
+
   .navbar__button-link {
     background-color: $bgcolor1;
     border: 1px solid $btborder;
-    transition: 0.5s; 
-    position: relative;  
+    transition: 0.5s;
+    position: relative;
 
     .button-link__dropdown {
       padding-top: 10px;
@@ -59,7 +58,7 @@ html {
       left: -50px;
       text-align: left;
       width: calc(100% + 50px);
-      background:#fff;
+      background: #fff;
       list-style: none;
       top: 37px;
       border-radius: 5px;
@@ -68,23 +67,24 @@ html {
       @include boxShadow(0px 4px 5px 0px #bbb9bf);
 
       &:before {
-        content:'';
+        content: '';
         display: block;
         width: 20px;
-        background: radial-gradient(circle at 0 0, rgba(204,0,0,0) 20px, #fff 21px);
+        background: radial-gradient(
+          circle at 0 0,
+          rgba(204, 0, 0, 0) 20px,
+          #fff 21px
+        );
         position: absolute;
         height: 21px;
         right: 0;
         top: -21px;
       }
 
-
-
-
       .dropdown__item {
-        border: 0;        
+        border: 0;
         all: initial;
-        width: 100%;     
+        width: 100%;
         &:first-of-type li {
           border-top-left-radius: 20px;
         }
@@ -103,30 +103,31 @@ html {
           list-style: none;
           font-weight: bold;
           color: $bgcolor;
-          cursor: pointer;         
+          cursor: pointer;
 
           &:hover {
             background-color: whitesmoke;
-            color:$linkcolor;
+            color: $linkcolor;
           }
         }
       }
     }
-    
-    &:hover,&:focus {
-      background-color: $bgcolor;   
+
+    &:hover,
+    &:focus {
+      background-color: $bgcolor;
     }
 
     &:first-child {
       border-top-left-radius: 20px;
     }
-  
+
     &:last-of-type {
       border-bottom-right-radius: 20px;
     }
 
-    @include phone {     
-      display: none;      
+    @include phone {
+      display: none;
     }
   }
 }
@@ -140,7 +141,7 @@ html {
   left: -10px;
   transition: 0.5s;
   position: absolute;
-  top:-70px;
+  top: -70px;
 
   @include tablet {
     max-width: 300px;
@@ -174,11 +175,11 @@ html {
   }
 
   &:focus {
-    outline:none;
+    outline: none;
   }
 
-  &:hover+.logo-container__logo-img {
-    opacity: 0.8;  
+  &:hover + .logo-container__logo-img {
+    opacity: 0.8;
   }
 
   @include phone {
@@ -206,15 +207,15 @@ html {
   background: #fff;
 
   .dropdown__item:not(.dropdown__username) {
-    float:right;
-    width:100%;
-    background-color:transparent;
-    border:0;
-    padding:5px;
+    float: right;
+    width: 100%;
+    background-color: transparent;
+    border: 0;
+    padding: 5px;
     font-weight: bold;
     font-size: 1.2rem;
-    color:$bgcolor;
-    
+    color: $bgcolor;
+
     .item__icon {
       margin-right: 5px;
     }
@@ -231,23 +232,23 @@ html {
 
     &:hover {
       background-color: whitesmoke;
-      color: $linkcolor;  
+      color: $linkcolor;
     }
 
-    &:focus{
+    &:focus {
       outline: none;
     }
   }
 
   .dropdown__username {
-    float:right;
-    width:100%;
-    background-color:transparent;
-    border:0;
-    padding:5px;
+    float: right;
+    width: 100%;
+    background-color: transparent;
+    border: 0;
+    padding: 5px;
     font-size: 1rem;
 
-    &:focus{
+    &:focus {
       outline: none;
     }
     cursor: default;
@@ -270,13 +271,13 @@ html {
     background-color: $bgcolor1;
     border: 1px solid $btborder;
     width: 60px;
-    float:right;
+    float: right;
 
     &:before {
       font-family: 'Font Awesome 5 Free';
       font-weight: 900;
-      content:"\f0c9";
-      font-size:1.2rem;
+      content: '\f0c9';
+      font-size: 1.2rem;
     }
 
     &:hover {
@@ -306,7 +307,6 @@ html {
   &:hover {
     background-color: $bgcolor1;
     opacity: 0.8;
-
   }
 }
 

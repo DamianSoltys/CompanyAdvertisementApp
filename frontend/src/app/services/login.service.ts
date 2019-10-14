@@ -9,19 +9,19 @@ import { Route, Router } from '@angular/router';
   providedIn: 'root'
 })
 export class LoginService {
-
   Logged = new BehaviorSubject(this.CheckLogged());
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     observe: 'response' as 'response'
   };
-  constructor(private http: HttpClient,private router:Router) {
-
-   }
+  constructor(private http: HttpClient, private router: Router) {}
 
   public Login(User_Data: UserLog): Observable<any> {
-    return this.http.post('http://localhost:8090/auth/login',
-    {'email': User_Data.email, 'password': User_Data.password}, this.httpOptions);
+    return this.http.post(
+      'http://localhost:8090/auth/login',
+      { email: User_Data.email, password: User_Data.password },
+      this.httpOptions
+    );
   }
   public ChangeLogged() {
     this.Logged.next(!this.Logged.value);
@@ -34,7 +34,7 @@ export class LoginService {
     }
   }
   public logoutStorageClean() {
-    if(storage_Avaliable('localStorage')) {
+    if (storage_Avaliable('localStorage')) {
       localStorage.removeItem('token');
       localStorage.removeItem('userREST');
       localStorage.removeItem('naturalUserData');
@@ -44,8 +44,7 @@ export class LoginService {
         this.router.navigate(['']);
       }, 1000);
     } else {
-      console.log('Storage nie jest dostępny')
+      console.log('Storage nie jest dostępny');
     }
   }
-
 }

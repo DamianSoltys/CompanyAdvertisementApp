@@ -6,17 +6,15 @@ import { BranchProfileComponent } from './branch-profile.component';
 import { BranchProfileRoutingModule } from './branch-profile-routing.module';
 import { AgmCoreModule } from '@agm/core';
 @NgModule({
-  declarations: [
-    BranchProfileComponent
-  ],
+  declarations: [BranchProfileComponent],
   imports: [
     CommonModule,
     BranchProfileRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     AgmCoreModule.forRoot({
-      apiKey:'AIzaSyDymmSbQ_6KBgygpEZwcztemgH3HXTOYrI'
-    }), 
+      apiKey: 'AIzaSyDymmSbQ_6KBgygpEZwcztemgH3HXTOYrI'
+    })
   ]
 })
-export class BranchProfileModule { }
+export class BranchProfileModule {}

@@ -1,306 +1,304 @@
-@import "../../../commonStyles/shared";
+@import '../../../commonStyles/shared';
 .company-component__edit {
-    width:100% !important;
-    margin-top:0 !important;
+  width: 100% !important;
+  margin-top: 0 !important;
 }
 .company-component {
-    display: flex;
-    flex-direction: column;
-    width:75%;
-    margin-top: 2%;
-    max-width: 1000px;
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+  margin-top: 3%;
+  max-width: 1000px;
 
-    @include tablet {
-        width: 85%
+  @include tablet {
+    width: 85%;
+  }
+  @include phone {
+    width: 95%;
+    padding: 0;
+  }
+  .company-component__company-section {
+    max-height: 50vh;
+    overflow: auto;
+    .company-section__text-node {
+      font-size: 1.2rem;
+      color: $bgcolor;
     }
-    @include phone {
-        width: 95%;
-        padding: 0;
-    }
-    .company-component__company-section {
-        max-height: 50vh;
-        overflow: auto;
-        .company-section__text-node {
-            font-size: 1.2rem;
-            color:$bgcolor;
-        }
-    }
-    .company-component__rodo-container {
-        .rodo-container__text-node {
-          font-size: 0.8rem;
-          margin: 15px 1rem;
-          text-align: justify;
-          .text-node__star{
-            font-size:1rem;
-            color:red;
-          }
-        }
+  }
+  .company-component__rodo-container {
+    .rodo-container__text-node {
+      font-size: 0.8rem;
+      margin: 15px 1rem;
+      text-align: justify;
+      .text-node__star {
+        font-size: 1rem;
+        color: red;
       }
-
-    .company-component__button--personal {
-        width: 20%;
-        align-self: center;
-        margin-bottom:5%;
-        border-radius: 50px;
-        border: 0;
-        margin-left: 5px;
-        margin-right: 5px;
-        background: linear-gradient(-45deg, #FFA63D, #FF3D77, #338AFF, #3CF0C5);
-        animation: button-background-animation 16s linear infinite;
-        background-size: 600%;
-
-        .button--personal__text-node {
-            color:white;
-            margin: 0;
-        }  
     }
+  }
 
-    .company-component__form {
-        @include boxShadow(0px 4px 5px 0px #bbb9bf);
+  .company-component__button--personal {
+    width: 20%;
+    align-self: center;
+    margin-bottom: 5%;
+    border-radius: 50px;
+    border: 0;
+    margin-left: 5px;
+    margin-right: 5px;
+    background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
+    animation: button-background-animation 16s linear infinite;
+    background-size: 600%;
+
+    .button--personal__text-node {
+      color: white;
+      margin: 0;
+    }
+  }
+
+  .company-component__form {
+    @include boxShadow(0px 4px 5px 0px #bbb9bf);
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+
+    .form__add-form {
+      display: flex;
+      flex-direction: column;
+
+      .add-form__header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 30px;
+        height: 6vh;
+        max-height: 60px;
+        background-color: $bgcolor;
+        border: 0;
         border-bottom-left-radius: 20px;
         border-bottom-right-radius: 20px;
 
-        .form__add-form {
-            display: flex;
-            flex-direction: column;
-            
-            .add-form__header {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                min-height: 30px;
-                height: 6vh;
-                max-height: 60px;
-                background-color: $bgcolor;
-                border: 0;
-                border-bottom-left-radius: 20px;
-                border-bottom-right-radius: 20px;
-                
-
-                .header__text-node {
-                    color:#fff;
-                    font-size: 1.2rem;
-                }
-            }
-            
-            .add-form__input-container {
-                display:flex;
-                flex-direction: column;
-                padding: 20px;
-
-                @include phone {
-                    padding: 20px 5px;
-                }
-
-                .input-container__input-group {
-                    display:flex;
-                    flex-direction: column;
-
-                    .input-group__header {
-
-                        .header__text-node {
-                            font-size: 1.1rem;
-                            margin: 0 15px;
-                            font-weight: bold;
-                            color:darken($bgcolor,10);
-                        }
-                    }
-
-                    .input-group__inputs {
-                        border: 1px solid darken($bgcolor,10);
-                        border-width: 1px 0 0 0;
-                        border-radius: 6px;
-                        padding: 20px;
-                        @include boxShadow(inset 0px 15px 8px -15px rgba(32, 99, 143, 0.66));
-                        display:flex;
-                        flex-wrap: wrap;
-                        justify-content: space-evenly;
-
-                        @include phone {
-                            padding:20px 0;
-                        }
-
-                        .inputs__map-container {                             
-                           &:focus-within {
-                               .map-container__label {                                                                  
-                                   color:$bgcolor;
-                               }
-                               .map-container__map-wrapper {
-                                   border-color: $bgcolor;
-                               }
-                           }
-                           .map-container__label {
-                            transition: all .2s ease-in-out;
-                           }
-                           .map-container__map-wrapper {
-                               transition: all .2s ease-in-out;
-                               border:2px solid black;
-
-                               .map-wrapper__map {
-                               height:300px;
-                               width:300px;
-
-                                @include phone {
-                                height: 300px;
-                                width: 85vw;
-                            }
-                            }
-                        }                      
-                        }
-
-                        .inputs__input-container {
-                            display:flex;
-                            flex-direction: column;
-                            position: relative;
-                            left:0px;
-                            transition: all .2s ease-in-out;
-                            margin:5px 20px;
-                            flex-basis: 25%;                           
-
-                            @include phone {
-                                margin:5px 0;
-                                width: 95%;
-                                flex-basis: 100%; 
-                            }
-                            @include tablet{
-                                flex-basis: 40%;
-                            }
-
-                            .input-container__select-wrapper {
-                                display:flex;
-                                flex-direction: column;
-                                position: relative;
-
-                                @include phone {
-                                    width: 100%;
-                                    left: unset;
-                                }
-
-                                &:before {
-                                    content: "\f078";
-                                    font-family: 'Font Awesome 5 Free';
-                                    font-weight: 900;
-                                    position: absolute;
-                                    bottom:6px;
-                                    right: 10px;
-                                    color:$bgcolor;
-                                  }
-                                  .select-wrapper__select-input {
-                                    -moz-appearance: none;
-                                    -webkit-appearance: none;
-                                    appearance: none;
-                        
-                                    &::-ms-expand {
-                                      display: none;
-                                    }
-                                  }
-                            }
-
-                            .input-container__label {
-                                font-size: 1rem;
-                            }
-
-                            .input-container__input {
-                                font-size: 1rem;
-                            }
-
-                            .input-container__error-container {
-                                font-size: 1rem;
-                            }
-
-                            &:focus-within {
-                                color: $bgcolor;
-                      
-                                @include tablet() {
-                                  &:not(.select-wrapper){
-                                    left:-15px;
-                      
-                                    .input-container__input {
-                                      width:calc(100% + 30px);
-                                    }
-                                  }
-                                }
-                      
-                                @include desktop() {
-                                  &:not(.select-wrapper){
-                                    left:-25px;
-                      
-                                    .input-container__input {
-                                      width:calc(100% + 50px);
-                                    }
-                                  }
-                                }
-                            }
-                        }
-                    }
-                    .input-group__description-container {
-                        display:flex;
-                        flex-direction: column;
-                        width:60%;
-                        margin: auto; 
-
-                        @include tablet {
-                            width:80%;
-                        }
-
-                        @include phone {
-                            width: 100%;
-                            padding:0 5px;
-                        }                                              
-                        .description-container__editor {
-                            height: 150px;
-                            @include phone {
-                                height: 100px;
-                            } 
-                        }
-                    }
-                }
-            }
+        .header__text-node {
+          color: #fff;
+          font-size: 1.2rem;
         }
-    }
-    
-    .company-component__button-container {
+      }
+
+      .add-form__input-container {
         display: flex;
-        align-self: center;       
-        width: 40%;
-        justify-content: center;
-        padding-top:30px;
+        flex-direction: column;
+        padding: 20px;
 
         @include phone {
-            width:90%;
-            flex-direction: column;
-            align-items: center;
+          padding: 20px 5px;
         }
 
-        .button-container__button--add,.button-container__button--submit {
-            width:100%;
-            height: 35px;   
-            border-radius: 50px;
-            border: 0;
-            margin-left: 5px;
-            margin-right: 5px;
-            background: linear-gradient(-45deg, #FFA63D, #FF3D77, #338AFF, #3CF0C5);
-            animation: button-background-animation 16s linear infinite;
-            background-size: 600%;
+        .input-container__input-group {
+          display: flex;
+          flex-direction: column;
 
-            .button--add__text-node {
-                color:white;
+          .input-group__header {
+            .header__text-node {
+              font-size: 1.1rem;
+              margin: 0 15px;
+              font-weight: bold;
+              color: darken($bgcolor, 10);
             }
+          }
+
+          .input-group__inputs {
+            border: 1px solid darken($bgcolor, 10);
+            border-width: 1px 0 0 0;
+            border-radius: 6px;
+            padding: 20px;
+            @include boxShadow(
+              inset 0px 15px 8px -15px rgba(32, 99, 143, 0.66)
+            );
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+
             @include phone {
-                margin:10px;
-            }   
+              padding: 20px 0;
+            }
+
+            .inputs__map-container {
+              &:focus-within {
+                .map-container__label {
+                  color: $bgcolor;
+                }
+                .map-container__map-wrapper {
+                  border-color: $bgcolor;
+                }
+              }
+              .map-container__label {
+                transition: all 0.2s ease-in-out;
+              }
+              .map-container__map-wrapper {
+                transition: all 0.2s ease-in-out;
+                border: 2px solid black;
+
+                .map-wrapper__map {
+                  height: 300px;
+                  width: 300px;
+
+                  @include phone {
+                    height: 300px;
+                    width: 85vw;
+                  }
+                }
+              }
+            }
+
+            .inputs__input-container {
+              display: flex;
+              flex-direction: column;
+              position: relative;
+              left: 0px;
+              transition: all 0.2s ease-in-out;
+              margin: 5px 20px;
+              flex-basis: 25%;
+
+              @include phone {
+                margin: 5px 0;
+                width: 95%;
+                flex-basis: 100%;
+              }
+              @include tablet {
+                flex-basis: 40%;
+              }
+
+              .input-container__select-wrapper {
+                display: flex;
+                flex-direction: column;
+                position: relative;
+
+                @include phone {
+                  width: 100%;
+                  left: unset;
+                }
+
+                &:before {
+                  content: '\f078';
+                  font-family: 'Font Awesome 5 Free';
+                  font-weight: 900;
+                  position: absolute;
+                  bottom: 6px;
+                  right: 10px;
+                  color: $bgcolor;
+                }
+                .select-wrapper__select-input {
+                  -moz-appearance: none;
+                  -webkit-appearance: none;
+                  appearance: none;
+
+                  &::-ms-expand {
+                    display: none;
+                  }
+                }
+              }
+
+              .input-container__label {
+                font-size: 1rem;
+              }
+
+              .input-container__input {
+                font-size: 1rem;
+              }
+
+              .input-container__error-container {
+                font-size: 1rem;
+              }
+
+              &:focus-within {
+                color: $bgcolor;
+
+                @include tablet() {
+                  &:not(.select-wrapper) {
+                    left: -15px;
+
+                    .input-container__input {
+                      width: calc(100% + 30px);
+                    }
+                  }
+                }
+
+                @include desktop() {
+                  &:not(.select-wrapper) {
+                    left: -25px;
+
+                    .input-container__input {
+                      width: calc(100% + 50px);
+                    }
+                  }
+                }
+              }
+            }
+          }
+          .input-group__description-container {
+            display: flex;
+            flex-direction: column;
+            width: 60%;
+            margin: auto;
+
+            @include tablet {
+              width: 80%;
+            }
+
+            @include phone {
+              width: 100%;
+              padding: 0 5px;
+            }
+            .description-container__editor {
+              height: 150px;
+              @include phone {
+                height: 100px;
+              }
+            }
+          }
         }
+      }
     }
-    
-    .company-component__buttons-work {
-        width:60%
+  }
+
+  .company-component__button-container {
+    display: flex;
+    align-self: center;
+    width: 100%;
+    justify-content: center;
+    padding-top: 30px;
+
+    @include phone {
+      width: 90%;
+      flex-direction: column;
+      align-items: center;
     }
 
-    .company-component__separator {
-        height: 100%;
+    .button-container__button--add,
+    .button-container__button--submit {
+      width: 30%;
+      height: 35px;
+      border-radius: 50px;
+      border: 0;
+      margin-left: 5px;
+      margin-right: 5px;
+      background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
+      animation: button-background-animation 16s linear infinite;
+      background-size: 600%;
+
+      .button--add__text-node {
+        color: white;
+      }
+      @include phone {
+        margin: 10px;
+        width: 95%;
+      }
     }
-    .company-component__information-container {
-        display:flex;
-        align-self: center;
-    }
+  }
+
+  .company-component__separator {
+    height: 100%;
+  }
+  .company-component__information-container {
+    display: flex;
+    align-self: center;
+  }
 }

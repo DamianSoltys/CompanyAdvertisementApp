@@ -1,40 +1,71 @@
 <div class="company-section__company-container" *ngIf="!showWorks">
-    <div class="company-container__company-logo">
-        <p class="company-logo__text-node">Logo</p>       
-        </div>
+  <div class="company-container__company-logo">
+    <p class="company-logo__text-node">Logo</p>
+  </div>
   <div class="company-container__company-data">
     <div class="company-data__data-container">
-    <p class="data-container__text-node">Nazwa:{{companyData.companyName}}</p>
-    <p class="data-container__text-node">Kategoria:{{companyData.category}}</p>
-    <p class="data-container__text-node">Rejestrujący:{{companyData.registererFullname}}</p>
-  </div>
+      <p class="data-container__text-node">
+        Nazwa:{{ companyData.companyName }}
+      </p>
+      <p class="data-container__text-node">
+        Kategoria:{{ companyData.category }}
+      </p>
+      <p class="data-container__text-node">
+        Rejestrujący:{{ companyData.registererFullname }}
+      </p>
+    </div>
   </div>
   <div class="company-container__company-action">
     <div class="company-action__button-container">
-        <a [routerLink]="[ '/companyProfile', companyData.companyId]" class="btn btn-primary company-action__button--profile">Profil</a>
-        <button class="btn btn-primary company-action__button--delete" *ngIf="owner.value" (click)="deleteCompany()">Usuń</button>
-    </div>   
+      <a
+        [routerLink]="['/companyProfile', companyData.companyId]"
+        class="btn btn-primary company-action__button--profile"
+        >Profil</a
+      >
+      <button
+        class="btn btn-primary company-action__button--delete"
+        *ngIf="owner.value"
+        (click)="deleteCompany()"
+      >
+        Usuń
+      </button>
     </div>
-    
+  </div>
 </div>
 
 <div class="branch-section__branch-container" *ngIf="showWorks">
-      <div class="branch-container__branch-logo">
-          <p class="branch-logo__text-node">Logo</p>       
-        </div>
-      <div class="branch-container__branch-data">
-          <div class="branch-data__data-container">
-          <p class="data-container__text-node">Nazwa:{{branchData.name}}</p>
-          <p class="data-container__text-node">Kategoria:{{companyData.category}}</p>
-          <p class="data-container__text-node">Rejestrujący:{{companyData.registererFullname}}</p>
-        </div>
-        </div>
-        <div class="branch-container__branch-action">
-          <div class="branch-action__button-container">
-              <a [routerLink]="['/branchProfile',companyData.companyId,branchData.branchId]" class="btn btn-primary branch-action__button--profile">Profil</a>
-              <button class="btn btn-primary branch-action__button--delete" *ngIf="owner.value" (click)="deleteBranch()">Usuń</button>
-          </div>
-        
-          </div>
-          
+  <div class="branch-container__branch-logo">
+    <p class="branch-logo__text-node">Logo</p>
   </div>
+  <div class="branch-container__branch-data">
+    <div class="branch-data__data-container">
+      <p class="data-container__text-node">Nazwa:{{ branchData.name }}</p>
+      <p class="data-container__text-node">
+        Kategoria:{{ companyData.category }}
+      </p>
+      <p class="data-container__text-node">
+        Rejestrujący:{{ companyData.registererFullname }}
+      </p>
+    </div>
+  </div>
+  <div class="branch-container__branch-action">
+    <div class="branch-action__button-container">
+      <a
+        [routerLink]="[
+          '/branchProfile',
+          companyData.companyId,
+          branchData.branchId
+        ]"
+        class="btn btn-primary branch-action__button--profile"
+        >Profil</a
+      >
+      <button
+        class="btn btn-primary branch-action__button--delete"
+        *ngIf="owner.value"
+        (click)="deleteBranch()"
+      >
+        Usuń
+      </button>
+    </div>
+  </div>
+</div>

@@ -53,9 +53,10 @@ export class LoginComponent implements OnInit {
           this.snackbarService.open({
             message:'Pomyślnie zalogowano',
             snackbarType:SnackbarType.success,
-          });
+          });          
           setTimeout(() => {
             this.loginStorageSet(data);
+            this.pDataService.getPersonalDataObject();
           }, 500);
         }
       },

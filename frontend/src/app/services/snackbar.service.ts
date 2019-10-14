@@ -18,15 +18,19 @@ export interface SnackbarOptions {
   providedIn: 'root'
 })
 export class SnackbarService {
-  isOpen = new BehaviorSubject(false);
-  message = new BehaviorSubject(<string>'');
-  options = new BehaviorSubject(<SnackbarOptions>{
+  public options = new BehaviorSubject(<SnackbarOptions>{
     isOpen:false,
   });
   constructor() { }
 
   public open(snackbarOptions:SnackbarOptions) {
-    
+    if(this.options.value.isOpen) {
+      this.close();
+
+      setTimeout(()=>{
+        this.open(snackbarOptions);
+      },200);
+    } else {
     this.options.next({
       isOpen:true,
       message:snackbarOptions.message,
@@ -40,6 +44,7 @@ export class SnackbarService {
     setTimeout(()=>{
       this.close();
     },snackbarOptions.duration);
+  }
   }
   public close() {
     this.options.next({

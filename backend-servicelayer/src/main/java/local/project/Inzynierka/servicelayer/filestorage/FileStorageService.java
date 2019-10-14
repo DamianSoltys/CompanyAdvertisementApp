@@ -28,4 +28,8 @@ public class FileStorageService {
             throw new UnsupportedLogoFileFormat();
         }
     }
+
+    public byte[] getCompanyLogo(String companyUUID, String logoUUID) throws IOException {
+        return Files.readAllBytes(Paths.get(CompanyLogoPathCreator.getCompanyLogoFilePath(companyUUID, logoUUID)));
+    }
 }

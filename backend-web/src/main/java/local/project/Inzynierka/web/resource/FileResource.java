@@ -29,12 +29,15 @@ public class FileResource {
                                     @PathVariable(value = "logoUUID") String logoUUID,
                                     StandardMultipartHttpServletRequest request) throws IOException {
 
-        MultiValueMap<String, MultipartFile> filesMap = request.getMultiFileMap();
-        var file = filesMap.get(logoUUID.split("\\.")[0]).get(0);
-
+        MultipartFile file = getLogoMultiPartFile(logoUUID, request);
         fileStorageService.saveCompanyLogo(companyUUID, logoUUID, file);
 
         return SimpleJsonFromStringCreator.toJson("OK");
+    }
+
+    private MultipartFile getLogoMultiPartFile(String logoUUID, StandardMultipartHttpServletRequest request) {
+        MultiValueMap<String, MultipartFile> filesMap = request.getMultiFileMap();
+        return filesMap.get(logoUUID.split("\\.")[0]).get(0);
     }
 
     @GetMapping(value = "/company/{companyUUID}/{logoUUID}", produces = MediaType.IMAGE_PNG_VALUE)

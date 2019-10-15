@@ -5,6 +5,8 @@ import local.project.Inzynierka.persistence.entity.Category;
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.repository.CompanyRepository;
 import local.project.Inzynierka.servicelayer.dto.AddCompanyDto;
+import local.project.Inzynierka.servicelayer.dto.BranchBuildDto;
+import local.project.Inzynierka.servicelayer.dto.CompanyBuildDto;
 import local.project.Inzynierka.servicelayer.dto.CompanyInfoDto;
 import local.project.Inzynierka.servicelayer.dto.CompanyRelatedDeletedEntities;
 import local.project.Inzynierka.servicelayer.dto.UpdateCompanyInfoDto;
@@ -14,9 +16,11 @@ import local.project.Inzynierka.shared.UserAccount;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CompanyManagementService {
@@ -34,21 +38,46 @@ public class CompanyManagementService {
     }
 
     @Transactional
-    public void registerCompany(AddCompanyDto addCompanyDto, UserAccount registerer) {
+    public CompanyBuildDto registerCompany(AddCompanyDto addCompanyDto, UserAccount registerer) {
 
-        CompanyExtractor companyExtractor = new CompanyExtractor(addCompanyDto);
+        var companyExtractor = new CompanyExtractor(addCompanyDto);
         List<Branch> branches = companyExtractor.getBranches();
         Company company = companyExtractor.getCompany();
 
         Company createdCompany = this.companyPersistenceService.getPersistedCompany(company, registerer);
 
         if (!createdCompany.hasBranch()) {
-            return;
+            return mapToCompanyBuildDto(createdCompany);
         }
 
         this.branchPersistenceService.buildAllCompanyBranches(branches, createdCompany);
 
-        this.branchPersistenceService.saveAll(branches);
+        Iterable<Branch> persistedBranches = this.branchPersistenceService.saveAll(branches);
+        var branchCollection = new ArrayList<Branch>();
+        persistedBranches.forEach(branchCollection::add);
+
+        return mapToCompanyBuildDto(createdCompany, branchCollection);
+    }
+
+    private CompanyBuildDto mapToCompanyBuildDto(Company createdCompany) {
+        return CompanyBuildDto.builder()
+                .id(createdCompany.getId())
+                .logoFilePath(createdCompany.getLogoPath())
+                .build();
+    }
+
+    private CompanyBuildDto mapToCompanyBuildDto(Company createdCompany, List<Branch> branches) {
+        return CompanyBuildDto.builder()
+                .branchBuildDTOs(
+                        branches.stream()
+                                .map(branch -> BranchBuildDto.builder()
+                                        .id(branch.getId())
+                                        .logoFilePath(branch.getPhotoPath())
+                                        .build())
+                                .collect(Collectors.toList()))
+                .id(createdCompany.getId())
+                .logoFilePath(createdCompany.getLogoPath())
+                .build();
     }
 
     public boolean companyExists(Long id) {

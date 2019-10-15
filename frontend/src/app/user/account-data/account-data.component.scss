@@ -36,12 +36,12 @@
     align-self: center;
     margin: auto;
     padding: 0;
+    padding-bottom: 20px;
     .account-data-form__button-container {
       margin: 0;
       justify-content: space-evenly;
       .account-data-form__button--submit {
         width: 45%;
-        margin-bottom: 5%;
         border-radius: 50px;
         border: 0;
         background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
@@ -175,6 +175,7 @@
   border-bottom-right-radius: 20px;
   align-self: center;
   padding: 0;
+  padding-bottom: 20px;
   .data-container__header {
     position: relative;
     min-height: 30px;
@@ -207,7 +208,6 @@
     .button__button--edit,
     .button__button--delete {
       width: 40%;
-      margin-bottom: 5%;
       border-radius: 50px;
       border: 0;
       background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);

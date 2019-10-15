@@ -1,0 +1,11 @@
+@import '../../../commonStyles/shared';
+
+.form-error-component {
+    .form-error-component__container {
+        text-align: center;
+        .container__text-node {
+            color:red;
+            margin:10px;
+        }
+    }
+}

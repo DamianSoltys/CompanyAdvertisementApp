@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { PersonalData, UserREST, UserReg } from '../classes/User';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { storage_Avaliable } from '../classes/storage_checker';
 
 @Injectable({
@@ -19,8 +19,9 @@ export class UserService {
     });
   }
 
-  public updateUser() {
+  public updateUser():Subject<boolean> {
     let userObject: UserREST = JSON.parse(localStorage.getItem('userREST'));
+    let subject = new Subject<boolean>();
     this.getActualUser(userObject.userID).subscribe(
       response => {
         if (storage_Avaliable('localStorage')) {
@@ -28,12 +29,15 @@ export class UserService {
           console.log(userNewObject);
           localStorage.setItem('userREST', JSON.stringify(userNewObject));
           this.userREST.next(userNewObject);
+          subject.next(true);
         }
       },
       error => {
         console.log(error);
+        subject.next(false);
       }
     );
+    return subject;
   }
 
   private getUserObject() {

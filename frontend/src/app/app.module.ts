@@ -8,13 +8,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpConfigInterceptor } from './interceptor/http.interceptor';
 import { LoaderComponent } from './commonComponents/loader/loader.component';
-import { SnackbarComponent } from './commonComponents/snackbar/snackbar.component';
+import { SnackbarModule } from './commonComponents/snackbar/snackbar.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoaderComponent,
-    SnackbarComponent,
   ],
   imports: [
     BrowserModule,
@@ -22,6 +21,7 @@ import { SnackbarComponent } from './commonComponents/snackbar/snackbar.componen
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    SnackbarModule,
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true}

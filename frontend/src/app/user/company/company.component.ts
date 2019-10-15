@@ -27,6 +27,7 @@ import { UserService } from 'src/app/services/user.service';
 import { HttpEventType, HttpRequest, HttpResponse } from '@angular/common/http';
 import { LoaderService } from 'src/app/services/loader.service';
 import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
+import { FormErrorService } from 'src/app/services/form-error.service';
 
 export interface Position {
   latitude: number;
@@ -112,6 +113,7 @@ export class CompanyComponent implements OnInit {
     private uDataService: UserService,
     private loaderService: LoaderService,
     private snackbarService:SnackbarService,
+    private formErrorService:FormErrorService
 
   ) {}
 
@@ -272,13 +274,12 @@ export class CompanyComponent implements OnInit {
           });
           setTimeout(() => {
             this.uDataService.updateUser();
-            location.reload();
+            this.getCompanyList();
           }, 500);
         },
         error => {
-          this.snackbarService.open({
-            message:'Coś poszło nie tak!',
-            snackbarType:SnackbarType.error,
+          this.formErrorService.open({
+            message:'Nie udało się zmienić danych!'
           });
         }
       );
@@ -307,15 +308,17 @@ export class CompanyComponent implements OnInit {
           message:'Pomyślnie dodano firmę',
           snackbarType:SnackbarType.success,
         });
+        this.uDataService.updateUser().subscribe(data=>{
+          console.log(data);
+        });
         setTimeout(() => {
-          this.uDataService.updateUser();
-          location.reload();
+          this.getCompanyList();
+          
         }, 500);
       },
       error => {
-        this.snackbarService.open({
-          message:'Coś poszło nie tak!',
-          snackbarType:SnackbarType.error,
+        this.formErrorService.open({
+          message:'Nie udało się dodać firmy!',
         });
         this.setDefaultValues();
       }
@@ -338,7 +341,6 @@ export class CompanyComponent implements OnInit {
     this.companyForm.reset();
     this.workNumber = 1;
     this.workForms = null;
-    this.toggleDataList();
   }
 
   private checkForPersonalData() {

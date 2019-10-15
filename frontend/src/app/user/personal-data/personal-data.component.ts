@@ -230,8 +230,10 @@ export class PersonalDataComponent implements OnInit {
           });
           this.setStoragePersonalData(this.personalDataForm.value);
           this.personalDataForm.reset();
-          this.userService.updateUser();
-          this.checkForPersonalData();
+          this.userService.updateUser().subscribe(()=>{
+            this.checkForPersonalData();
+          });
+          
         },
         error => {
           this.formErrorService.open({
@@ -283,9 +285,7 @@ export class PersonalDataComponent implements OnInit {
           });
           this.userService.updateUser();
           this.deleteStoragePersonalData();
-          setTimeout(() => {
-            this.showAddForm();
-          }, 200);
+          this.showAddForm();
         },
         error => {
           this.formErrorService.open({

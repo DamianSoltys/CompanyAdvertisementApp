@@ -50,20 +50,14 @@ export class LoginComponent implements OnInit {
   checkIfLoginSuccess(User_data: UserLog) {
     this.lgservice.Login(User_data).subscribe(
       (data: HttpResponse<any>) => {
-        console.log(data.headers.get('Authorization'));
-        if (data.status === 200) {
           this.snackbarService.open({
             message:'Pomyślnie zalogowano',
             snackbarType:SnackbarType.success,
           });          
-          setTimeout(() => {
-            this.loginStorageSet(data);
-            this.pDataService.getPersonalDataObject();
-          }, 500);
-        }
+          this.loginStorageSet(data);
+          this.pDataService.getPersonalDataObject();       
       },
       error => {
-        console.log(error);
         this.formErrorService.open({
           message:'Coś poszło nie tak!',
         });

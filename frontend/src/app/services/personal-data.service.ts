@@ -85,7 +85,6 @@ export class PersonalDataService {
       console.log('dud')
     } else {
       let userREST: UserREST = JSON.parse(localStorage.getItem('userREST'));
-      console.log(userREST)
       if (userREST && userREST.naturalPersonID) {
         this.getPersonalData(
           userREST.userID,

@@ -110,11 +110,10 @@ export class AccountDataComponent implements OnInit {
               `${this.userObject.emailAddress}:${this.form.newPassword.value}`
             );
             localStorage.setItem('token', newToken);
-            this.uDataService.updateUser();
-            this.accountDataForm.reset();
-            setTimeout(() => {
+            this.uDataService.updateUser().subscribe(()=>{
+              this.accountDataForm.reset();
               this.showAccountData();
-            }, 1000);
+            });           
           },
           error => {
             this.formErrorService.open({

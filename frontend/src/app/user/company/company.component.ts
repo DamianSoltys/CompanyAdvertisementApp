@@ -122,6 +122,7 @@ export class CompanyComponent implements OnInit {
     this.getActualPosition();
     this.getCompanyList();
     this.showEditForm();
+    this.registerGetCompanyListener();
   }
 
   private getActualPosition() {
@@ -153,6 +154,12 @@ export class CompanyComponent implements OnInit {
         }
       }
     }
+  }
+
+  private registerGetCompanyListener() {
+    this.cDataService.getCompanyData.subscribe(()=>{
+      this.getCompanyList();
+    });
   }
   private getCompanyList() {
     if (storage_Avaliable('localStorage')) {
@@ -272,10 +279,9 @@ export class CompanyComponent implements OnInit {
             message:'Dane firmy uległy edycji',
             snackbarType:SnackbarType.success,
           });
-          setTimeout(() => {
-            this.uDataService.updateUser();
+          this.uDataService.updateUser().subscribe(data=>{
             this.getCompanyList();
-          }, 500);
+          });
         },
         error => {
           this.formErrorService.open({
@@ -310,11 +316,8 @@ export class CompanyComponent implements OnInit {
           snackbarType:SnackbarType.success,
         });
         this.uDataService.updateUser().subscribe(data=>{
-          console.log(data);
+          this.getCompanyList();
         });
-        setTimeout(() => {
-          this.getCompanyList();        
-        }, 500);
       },
       error => {
         this.formErrorService.open({
@@ -420,7 +423,6 @@ export class CompanyComponent implements OnInit {
   }
 
   private showEditForm() {
-    console.log(this.editRequestData);
     if (this.editRequestData.companyId) {
       this.toggleAddForm();
     } else if (this.editRequestData.workId || this.editRequestData.addWork) {

@@ -41,10 +41,9 @@ export class CompanySectionComponent implements OnInit, OnDestroy {
   public deleteCompany() {
     this.cDataService.deleteCompany(this.companyData.companyId).subscribe(
       response => {
-        this.uDataService.updateUser();
-        setTimeout(() => {
-          location.reload();
-        }, 200);
+        this.uDataService.updateUser().subscribe(()=>{
+          this.cDataService.getCompanyData.next(true);
+        });
       },
       error => {
         console.log(error);

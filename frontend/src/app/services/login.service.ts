@@ -40,9 +40,7 @@ export class LoginService {
       localStorage.removeItem('naturalUserData');
       localStorage.removeItem('actualPosition');
       this.ChangeLogged();
-      setTimeout(() => {
-        this.router.navigate(['']);
-      }, 1000);
+      this.router.navigate(['']);
     } else {
       console.log('Storage nie jest dostępny');
     }

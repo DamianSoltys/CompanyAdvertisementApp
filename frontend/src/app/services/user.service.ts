@@ -26,7 +26,6 @@ export class UserService {
       response => {
         if (storage_Avaliable('localStorage')) {
           const userNewObject: UserREST = response.body;
-          console.log(userNewObject);
           localStorage.setItem('userREST', JSON.stringify(userNewObject));
           this.userREST.next(userNewObject);
           subject.next(true);

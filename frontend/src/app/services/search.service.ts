@@ -8,6 +8,7 @@ export class SearchService {
   constructor(private http: HttpClient) {}
 
   sendSearchData(searchData: Array<string>) {
-    console.log(searchData);
+    let query:string = searchData.join('%');
+    return this.http.get(`http://localhost:8090/api/search?q=${query}`,{observe:'response'});
   }
 }

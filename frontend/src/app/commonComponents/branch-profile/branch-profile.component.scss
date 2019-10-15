@@ -33,9 +33,12 @@
         width: 25%;
         border-radius: 50px;
         border: 0;
-        background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
-        animation: button-background-animation 16s linear infinite;
-        background-size: 600%;
+        background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
+        transition: all .4s ease-in-out;
+        background-size: 200%;
+        &:hover {
+          background-position: 100% 0;
+        }
         @include phone {
           width: 85%;
         }
@@ -51,9 +54,12 @@
       margin-bottom: 2%;
       border-radius: 50px;
       border: 0;
-      background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
-      animation: button-background-animation 16s linear infinite;
-      background-size: 600%;
+      background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
+      transition: all .4s ease-in-out;
+      background-size: 200%;
+      &:hover {
+        background-position: 100% 0;
+      }
       margin-top: 4%;
 
       @include phone {
@@ -133,15 +139,12 @@
               width: 100%;
               border-radius: 50px;
               border: 0;
-              background: linear-gradient(
-                -45deg,
-                #ffa63d,
-                #ff3d77,
-                #338aff,
-                #3cf0c5
-              );
-              animation: button-background-animation 16s linear infinite;
-              background-size: 600%;
+              background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
+              transition: all .4s ease-in-out;
+              background-size: 200%;
+              &:hover {
+                background-position: 100% 0;
+              }
               color: #fff;
               min-width: 125px;
               &:hover {
@@ -159,15 +162,12 @@
             margin: 10px;
             border-radius: 50px;
             border: 0;
-            background: linear-gradient(
-              -45deg,
-              #ffa63d,
-              #ff3d77,
-              #338aff,
-              #3cf0c5
-            );
-            animation: button-background-animation 16s linear infinite;
-            background-size: 600%;
+            background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
+            transition: all .4s ease-in-out;
+            background-size: 200%;
+            &:hover {
+              background-position: 100% 0;
+            }
             @include phone {
               width: 95%;
             }

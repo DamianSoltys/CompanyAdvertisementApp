@@ -304,6 +304,7 @@ export class CompanyComponent implements OnInit {
         // },error=>{
 
         // });
+        console.log(response);
         this.snackbarService.open({
           message:'Pomyślnie dodano firmę',
           snackbarType:SnackbarType.success,

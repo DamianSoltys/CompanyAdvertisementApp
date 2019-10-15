@@ -114,8 +114,9 @@
         Firma nie posiada żadnego zakładu
       </p>
     </div>
+    <div class="branch-sections__branch-section">
     <div
-      class="branch-sections__branch-section"
+      class="branch-section__branch"
       *ngFor="let branch of branchData"
     >
       <app-company-section
@@ -124,6 +125,7 @@
         [companyData]="companyData"
       ></app-company-section>
     </div>
+  </div>
     <div class="branch-sections__button-container">
       <button
         class="btn btn-primary button-container__button--add"

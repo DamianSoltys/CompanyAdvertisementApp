@@ -38,7 +38,7 @@
           background-position: 100% 0;
         }
         @include phone {
-          width: 85%;
+          width: 95%;
         }
       }
     }
@@ -71,6 +71,7 @@
   .company-profile-component__shared--buttons {
     display: flex;
     justify-content: center;
+    padding:0;
     .shared--buttons__button--back {
       width: 30%;
       margin-bottom: 2%;

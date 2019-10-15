@@ -2,7 +2,8 @@
 
 .snackbar-component {
     position: fixed;
-    height: 40px;
+    z-index:10000;
+    min-height: 40px;
     bottom: 20px;
     left: 50%;
     transform: translate(-50%);
@@ -26,6 +27,7 @@
             margin:0;
             position: relative;
             top: 5px;
+            margin-bottom:5px;
         }
 
         .message-container__text {

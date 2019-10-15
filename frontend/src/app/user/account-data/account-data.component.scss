@@ -47,6 +47,7 @@
         background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
         transition: all .4s ease-in-out;
         background-size: 200%;
+        margin-bottom:10px;
         &:hover {
           background-position: 100% 0;
         }
@@ -216,6 +217,7 @@
       background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
       transition: all .4s ease-in-out;
       background-size: 200%;
+      margin-bottom:10px;
       &:hover {
         background-position: 100% 0;
       }

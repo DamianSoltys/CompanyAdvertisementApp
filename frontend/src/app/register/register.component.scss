@@ -1,15 +1,12 @@
 @import '../../commonStyles/shared';
 .register-component__form {
-  margin-top: 5%;
-  height: 100%;
 
   .form__register-form {
     text-align: center;
     margin: auto;
-
+    margin-top: 5%;
     width: 30vw;
     min-width: 20%;
-    min-height: 550px;
     @include boxShadow(0px 4px 5px 0px rgba(187, 185, 191, 1));
     border: 0;
     border-bottom-left-radius: 20px;
@@ -121,7 +118,7 @@
     }
 
     @include phone {
-      width: 90vw;
+      width: 95vw;
       margin-top: 20px;
     }
 

@@ -161,6 +161,7 @@ export class CompanyComponent implements OnInit {
       this.getCompanyList();
     });
   }
+  
   private getCompanyList() {
     if (storage_Avaliable('localStorage')) {
       let userREST: UserREST = JSON.parse(localStorage.getItem('userREST'));

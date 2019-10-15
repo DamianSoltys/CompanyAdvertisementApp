@@ -296,8 +296,8 @@ export class CompanyComponent implements OnInit {
     if(this.companyLogo) {
       this.LogoList.unshift(this.companyLogo);
     }
-
-    this.cDataService.addCompany(companyData).subscribe(
+    let file:File = this.LogoList?this.LogoList[0]:undefined;
+    this.cDataService.addCompany(companyData,file).subscribe(
       response => {
         // this.cDataService.putFile('',this.LogoList).subscribe(response=>{
 
@@ -312,8 +312,7 @@ export class CompanyComponent implements OnInit {
           console.log(data);
         });
         setTimeout(() => {
-          this.getCompanyList();
-          
+          this.getCompanyList();        
         }, 500);
       },
       error => {

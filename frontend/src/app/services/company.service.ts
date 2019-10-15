@@ -15,7 +15,10 @@ export class CompanyService {
 
   constructor(private http: HttpClient) {}
 
-  public addCompany(companyData: Company) {
+  public addCompany(companyData: Company,logo?:File) {
+    console.log(logo);
+    let logoData = new FormData();
+    logoData.append('logoFile',logo,logo.name);
     return this.http.post(`http://localhost:8090/api/companies`, companyData);
   }
 

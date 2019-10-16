@@ -12,5 +12,6 @@ import java.util.List;
 public class CompanyBuildDto {
     private Long id;
     private String logoFilePath;
+    private String logoKey;
     private List<BranchBuildDto> branchBuildDTOs;
 }

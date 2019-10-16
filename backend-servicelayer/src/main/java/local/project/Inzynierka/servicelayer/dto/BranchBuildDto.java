@@ -10,4 +10,5 @@ import lombok.Data;
 public class BranchBuildDto {
     private Long id;
     private String logoFilePath;
+    private String logoKey;
 }

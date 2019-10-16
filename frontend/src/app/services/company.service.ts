@@ -17,11 +17,13 @@ export class CompanyService {
 
   constructor(private http: HttpClient) {}
 
-  public addCompany(companyData: Company,logo?:File) {
-    console.log(logo);
+  public addCompany(companyData: Company,logoList?:File[]) {
+
     let logoData = new FormData();
-    logoData.append('logoFile',logo,logo.name);
+    if(logoList) {
+    }
     return this.http.post(`http://localhost:8090/api/companies`, companyData);
+
   }
 
   public putFile(Url: string, file: File[]) {

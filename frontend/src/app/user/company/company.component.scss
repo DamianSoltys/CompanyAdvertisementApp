@@ -347,6 +347,9 @@
 }
 
 .company-component__branches {
-  width:85%;
+  width:100%;
   max-width: 1500px;
+  @include phone {
+    width:95%;
+  }
  }

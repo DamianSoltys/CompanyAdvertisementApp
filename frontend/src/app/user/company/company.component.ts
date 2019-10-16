@@ -313,10 +313,9 @@ export class CompanyComponent implements OnInit {
     if(this.companyLogo) {
       this.LogoList.unshift(this.companyLogo);
     }
-    let file:File = this.LogoList?this.LogoList[0]:undefined;
-    this.cDataService.addCompany(companyData,file).subscribe(
+    this.cDataService.addCompany(companyData,this.LogoList).subscribe(
       response => {
-        console.log(response); 
+        console.log(companyData);
         this.snackbarService.open({
           message:'Pomyślnie dodano firmę',
           snackbarType:SnackbarType.success,
@@ -328,6 +327,7 @@ export class CompanyComponent implements OnInit {
       },
       error => {
         console.log(error);
+        console.log(companyData);
         this.formErrorService.open({
           message:'Nie udało się dodać firmy!',
         });
@@ -430,6 +430,13 @@ export class CompanyComponent implements OnInit {
     }
   }
 
+  public canShowBranchData() {
+    if(this.workForms && (this.editRequestData.addWork || this.editRequestData.workId)) {
+      return true;
+    }else {
+      return false;
+    }
+  }
   private showEditForm() {
     if (this.editRequestData.companyId) {
       this.toggleAddForm();

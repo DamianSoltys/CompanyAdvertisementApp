@@ -49,15 +49,15 @@ import { SnackbarService, SnackbarType } from './services/snackbar.service';
       state(
         'visible',
         style({
-          transform: 'scaleY(1)',
-          top: '48px'
+          height:'*',
+          overflow:'hidden'
         })
       ),
       state(
         'hidden',
         style({
-          transform: 'scaleY(0)',
-          top: '-200px'
+          height:'0px',
+          overflow:'hidden'
         })
       ),
       transition('visible <=> hidden', [animate('.2s')])
@@ -66,13 +66,15 @@ import { SnackbarService, SnackbarType } from './services/snackbar.service';
       state(
         'visible',
         style({
-          transform: 'scaleY(1)'
+          height:'*',
+          overflow:'hidden'
         })
       ),
       state(
         'hidden',
         style({
-          transform: 'scaleY(0)'
+          height:'0px',
+          overflow:'hidden'
         })
       ),
       transition('visible <=> hidden', [animate('.2s')])

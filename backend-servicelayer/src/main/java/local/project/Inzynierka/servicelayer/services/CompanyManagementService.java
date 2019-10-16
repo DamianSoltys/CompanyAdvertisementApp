@@ -16,7 +16,9 @@ import local.project.Inzynierka.shared.UserAccount;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -62,6 +64,7 @@ public class CompanyManagementService {
     private CompanyBuildDto mapToCompanyBuildDto(Company createdCompany) {
         return CompanyBuildDto.builder()
                 .id(createdCompany.getId())
+                .logoKey(getLogoKey(createdCompany.getLogoPath()))
                 .logoFilePath(createdCompany.getLogoPath())
                 .build();
     }
@@ -73,11 +76,19 @@ public class CompanyManagementService {
                                 .map(branch -> BranchBuildDto.builder()
                                         .id(branch.getId())
                                         .logoFilePath(branch.getPhotoPath())
+                                        .logoKey(getLogoKey(branch.getPhotoPath()))
                                         .build())
                                 .collect(Collectors.toList()))
                 .id(createdCompany.getId())
                 .logoFilePath(createdCompany.getLogoPath())
+                .logoKey(getLogoKey(createdCompany.getLogoPath()))
                 .build();
+    }
+
+    private String getLogoKey(String logoPath) {
+        List<String> backslashSplitPath = Arrays.asList(logoPath.split(File.separator));
+        String logoFileName = backslashSplitPath.get(backslashSplitPath.size() - 1);
+        return logoFileName.substring(0, logoFileName.length() - 4);
     }
 
     public boolean companyExists(Long id) {

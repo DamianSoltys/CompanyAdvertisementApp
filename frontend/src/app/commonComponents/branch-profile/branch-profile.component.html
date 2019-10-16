@@ -59,9 +59,9 @@
               <agm-marker
                 *ngIf="mapMarker"
                 [latitude]="mapMarker.latitude"
-                [longitude]="mapMarker.longitude"
-                [label]="mapMarker.label"
+                [longitude]="mapMarker.longitude"             
               >
+              <agm-info-window>Lokalizacvja</agm-info-window>
               </agm-marker>
             </agm-map>
           </div>
@@ -70,8 +70,7 @@
       <div class="content__section--buttons col-12">
         <button
           class="btn btn-primary section--buttons__button--comments"
-          (click)="showComments()"
-        >
+           [routerLink]="['comments']">      
           Komentarze
         </button>
         <span class="section--buttons__owner-buttons" *ngIf="owner.value">
@@ -92,14 +91,14 @@
       (click)="goBack(true)"
       *ngIf="companyId"
     >
-      Wróć
+      Wróć do profilu firmy
     </button>
     <button
       class="btn btn-primary shared--buttons__button--back"
       (click)="goBack(false)"
       *ngIf="!companyId"
     >
-      Wróć
+      Wróć do wyszukiwarki
     </button>
   </div>
 </div>

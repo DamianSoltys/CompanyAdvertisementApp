@@ -31,7 +31,6 @@ export class CompanyProfileComponent implements OnInit {
   public isLoaded = new BehaviorSubject(false);
   public canShowBranches = new BehaviorSubject(false);
   public canShowEditForm = new BehaviorSubject(false);
-  public canShowNewsletters = new BehaviorSubject(false);
   public canShowAddBranchForm = new BehaviorSubject(false);
   public canShowCompany = new BehaviorSubject(true);
 
@@ -130,7 +129,6 @@ export class CompanyProfileComponent implements OnInit {
     this.canShowBranches.next(false);
     this.canShowEditForm.next(false);
     this.canShowAddBranchForm.next(false);
-    this.canShowNewsletters.next(false);
     this.canShowCompany.next(true);
   }
 
@@ -144,23 +142,21 @@ export class CompanyProfileComponent implements OnInit {
     this.editData = {
       companyId: null,
       workId: null,
-      addWork: true
+      addWork: true,
+      backId:this.companyData.companyId,
     };
-    this.canShowBranches.next(false);
-    this.canShowAddBranchForm.next(true);
-  }
-  public showNewsletters() {
-    this.canShowCompany.next(false);
-    this.canShowNewsletters.next(true);
+    this.router.navigate(['branchEdit'],{relativeTo:this.activatedRoute,queryParams:this.editData});
   }
 
   public showEditForm() {
     this.editData = {
       companyId: this.companyData.companyId,
       workId: null,
-      addWork: false
+      addWork: false,
+      backId:null,
     };
-    this.canShowEditForm.next(true);
-    this.canShowCompany.next(false);
+    //this.canShowEditForm.next(true);
+    //this.canShowCompany.next(false);
+    this.router.navigate(['companyEdit'],{relativeTo:this.activatedRoute,queryParams:this.editData});
   }
 }

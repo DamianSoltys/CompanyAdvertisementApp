@@ -12,6 +12,13 @@
 
   .home-component__main-container {
     border: 1px solid red;
+    background:lightgray;
     height: 70vh;
+    .carousel-item {
+      padding:50px 0;
+    }
+    .card {
+      margin:auto;
+    }
   }
 }

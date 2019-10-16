@@ -84,8 +84,7 @@
       <div class="content__section--buttons col-12">
         <button
           class="btn btn-primary section--buttons__button--newsletters"
-          (click)="showNewsletters()"
-        >
+          [routerLink]="[ 'newsletter']">  
           Newsletter
         </button>
         <button
@@ -146,7 +145,6 @@
     *ngIf="canShowAddBranchForm.value"
     [editRequestData]="editData"
   ></app-company>
-  <app-newsletter *ngIf="canShowNewsletters.value"></app-newsletter>
 
   <div
     class="company-profile-component__shared--buttons col-12"
@@ -156,7 +154,7 @@
       class="btn btn-primary shared--buttons__button--back"
       (click)="goBack()"
     >
-      Wróć
+      Wróć do profilu firmy
     </button>
   </div>
 </div>

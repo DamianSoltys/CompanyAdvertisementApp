@@ -6,6 +6,7 @@ import { Company, Branch, Address, GetCompany } from '../classes/Company';
 import { UserREST } from '../classes/User';
 import { BehaviorSubject, Subject } from 'rxjs';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -29,6 +30,11 @@ export class CompanyService {
       data.append(`Logo${index}`, file, file.name);
     });
     return this.http.put(Url, data);
+  }
+  public deleteStorageData() {
+    if(storage_Avaliable('localStorage')) {
+      localStorage.removeItem('companyData');
+    }
   }
 
   public storeCompanyData(company: GetCompany) {

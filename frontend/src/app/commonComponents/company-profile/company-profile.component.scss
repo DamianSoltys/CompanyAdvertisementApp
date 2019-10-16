@@ -20,7 +20,7 @@
 
   .company-profile-component__branch-sections {
     .branch-sections__branch-section {
-      height:50vh;
+      max-height:50vh;
       overflow: auto;
     }
     .branch-sections__button-container {

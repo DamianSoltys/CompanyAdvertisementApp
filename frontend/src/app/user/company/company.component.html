@@ -29,7 +29,6 @@
 <!--FORM-->
 <div
   class="company-component container-fluid"
-  [ngClass]="{ 'company-component__edit': editRequestData.companyId }"
   *ngIf="this.canShowAddsForm()"
 >
   <div class="company-component__form">
@@ -345,8 +344,17 @@
           type="submit"
           class="btn button-container__button--submit"
           [disabled]="!this.companyForm.valid"
+          *ngIf="!editRequestData.companyId"
         >
           <span class="button--add__text-node">Dodaj firmę</span>
+        </button>
+        <button
+          type="submit"
+          class="btn button-container__button--submit"
+          [disabled]="!this.companyForm.valid"
+          *ngIf="editRequestData.companyId"
+        >
+          <span class="button--add__text-node">Edytuj dane</span>
         </button>
       </div>
       <div class="company-component__rodo-container text-center col-12">
@@ -368,6 +376,7 @@
     <button class="btn button-container__button--add" (click)="toggleAddForm()">
       <span class="button--add__text-node">Wróć do listy firm</span>
     </button>
+
     <button
       class="btn button-container__button--add"
       [disabled]="!this.companyForm.valid"
@@ -376,14 +385,16 @@
       <span class="button--add__text-node">Dodaj zakład</span>
     </button>
   </div>
+  <div class="company-component__button-container" *ngIf="editRequestData.companyId">
+    <button class="btn button-container__button--add" [routerLink]="['/companyProfile',editRequestData.companyId]">
+      <span class="button--add__text-node">Wróć do profilu firmy</span>
+    </button>
+  </div>
 </div>
 
 <!--WORK-FORM-->
 <div
   class="company-component container-fluid"
-  [ngClass]="{
-    'company-component__edit': editRequestData.workId || editRequestData.addWork
-  }"
   *ngIf="this.canShowWorkForm.getValue()"
 >
   <div class="company-component__form">
@@ -556,8 +567,12 @@
                     *ngIf="mapMarker"
                     [latitude]="mapMarker.latitude"
                     [longitude]="mapMarker.longitude"
-                    [label]="mapMarker.label"
+                    [animation]="'BOUNCE'"
                   >
+                  <agm-info-window><div>
+                    Wybrana lokalizacja
+                  </div>
+                </agm-info-window>
                   </agm-marker>
                 </agm-map>
               </div>
@@ -631,13 +646,17 @@
     </form>
   </div>
   <div class="company-component__separator"></div>
-  <div class="company-component__button-container">
+  <div class="company-component__button-container" *ngIf="canShowBranchBackBtn()">
     <button
       class="btn button-container__button--add"
       (click)="toggleWorkForm()"
-      *ngIf="canShowBranchBackBtn()"
     >
       <span class="button--add__text-node">Wróć do formularza firmy</span>
+    </button>
+  </div>
+  <div class="company-component__button-container" *ngIf="!canShowBranchBackBtn()">
+    <button class="btn button-container__button--add" [routerLink]="['/companyProfile',editRequestData.backId]">
+      <span class="button--add__text-node">Wróć do profilu firmy</span>
     </button>
   </div>
 </div>

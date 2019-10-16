@@ -67,9 +67,6 @@ export class BranchProfileComponent implements OnInit {
   public showEditForm() {
     console.log('edit');
   }
-  public showComments() {
-    console.log('comment');
-  }
 
   private getBranchData() {
     this.getStorageBranchData();

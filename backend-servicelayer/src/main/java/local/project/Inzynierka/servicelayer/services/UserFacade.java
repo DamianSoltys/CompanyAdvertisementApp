@@ -19,6 +19,7 @@ import local.project.Inzynierka.servicelayer.dto.UpdateUserDto;
 import local.project.Inzynierka.servicelayer.dto.UserInfoDto;
 import local.project.Inzynierka.servicelayer.dto.mapper.NaturalPersonDtoMapper;
 import local.project.Inzynierka.servicelayer.errors.IllegalPasswordException;
+import local.project.Inzynierka.servicelayer.errors.InvalidVoivodeshipException;
 import local.project.Inzynierka.servicelayer.errors.PasswordsNotMatchingException;
 import local.project.Inzynierka.servicelayer.validation.PasswordCreatorService;
 import local.project.Inzynierka.shared.UserAccount;
@@ -118,10 +119,7 @@ public class UserFacade {
 
     private Address buildAddress(NaturalPerson naturalPerson) {
 
-        Voivoideship voivoideship = this.voivodeshipRepository.findByName(naturalPerson.getAddress().getVoivodeship_id().getName());
-        if (voivoideship == null) {
-            throw new IllegalArgumentException("Voivodeship with that name doesn't exist!");
-        }
+        Voivoideship voivoideship = this.voivodeshipRepository.findByName(naturalPerson.getAddress().getVoivodeship_id().getName()).orElseThrow(InvalidVoivodeshipException::new);
         return Address.builder()
                 .apartmentNo(naturalPerson.getAddress().getApartmentNo())
                 .buildingNo(naturalPerson.getAddress().getBuildingNo())
@@ -214,7 +212,7 @@ public class UserFacade {
             }
             if (addressDto.getVoivodeship() != null) {
                 if (!addressDto.getVoivodeship().toString().equals(address.getVoivodeship_id().getName())) {
-                    Voivoideship voivoideship = this.voivodeshipRepository.findByName(addressDto.getVoivodeship().toString());
+                    Voivoideship voivoideship = this.voivodeshipRepository.findByName(addressDto.getVoivodeship().toString()).orElseThrow(InvalidVoivodeshipException::new);
                     address.setVoivodeship_id(voivoideship);
                 }
             }

@@ -10,6 +10,7 @@ import local.project.Inzynierka.persistence.repository.CategoryRepository;
 import local.project.Inzynierka.persistence.repository.CompanyRepository;
 import local.project.Inzynierka.persistence.repository.UserRepository;
 import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
+import local.project.Inzynierka.servicelayer.errors.InvalidVoivodeshipException;
 import local.project.Inzynierka.shared.UserAccount;
 import local.project.Inzynierka.shared.utils.EntityName;
 import local.project.Inzynierka.shared.utils.LogoFilePathCreator;
@@ -62,7 +63,7 @@ public class CompanyPersistenceService {
     }
 
     public Address getPersistedAddress(Address address) {
-        Voivoideship voivoideship = this.voivodeshipRepository.findByName(address.getVoivodeship_id().getName());
+        Voivoideship voivoideship = this.voivodeshipRepository.findByName(address.getVoivodeship_id().getName()).orElseThrow(InvalidVoivodeshipException::new);
 
         Address addressToPersist = Address.builder()
                 .apartmentNo(address.getApartmentNo())

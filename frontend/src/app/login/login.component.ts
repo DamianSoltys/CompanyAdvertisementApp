@@ -13,6 +13,7 @@ import { storage_Avaliable } from '../classes/storage_checker';
 import { UserService } from '../services/user.service';
 import { SnackbarService, SnackbarType } from '../services/snackbar.service';
 import { PersonalDataService } from '../services/personal-data.service';
+import { FormErrorService } from '../services/form-error.service';
 
 @Component({
   selector: 'app-login',
@@ -27,6 +28,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private pDataService:PersonalDataService,
     private snackbarService:SnackbarService,
+    private formErrorService:FormErrorService
   ) {}
 
   ngOnInit() {
@@ -48,23 +50,16 @@ export class LoginComponent implements OnInit {
   checkIfLoginSuccess(User_data: UserLog) {
     this.lgservice.Login(User_data).subscribe(
       (data: HttpResponse<any>) => {
-        console.log(data.headers.get('Authorization'));
-        if (data.status === 200) {
           this.snackbarService.open({
             message:'Pomyślnie zalogowano',
             snackbarType:SnackbarType.success,
           });          
-          setTimeout(() => {
-            this.loginStorageSet(data);
-            this.pDataService.getPersonalDataObject();
-          }, 500);
-        }
+          this.loginStorageSet(data);
+          this.pDataService.getPersonalDataObject();       
       },
       error => {
-        console.log(error);
-        this.snackbarService.open({
+        this.formErrorService.open({
           message:'Coś poszło nie tak!',
-          snackbarType:SnackbarType.error,
         });
       }
     );
@@ -83,14 +78,14 @@ export class LoginComponent implements OnInit {
 
       localStorage.setItem('token', data.headers.get('Authorization'));
       localStorage.setItem('userREST', JSON.stringify(userObject));
+      console.log(userObject)
 
       this.lgservice.ChangeLogged();
       this.router.navigate(['']);
       console.log('Użytkownik został zalogowany');
     } else {
-      this.snackbarService.open({
+      this.formErrorService.open({
         message:'Coś poszło nie tak!',
-        snackbarType:SnackbarType.error,
       });
     }
   }

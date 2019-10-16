@@ -4,7 +4,8 @@ import { Route, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Company, Branch, Address, GetCompany } from '../classes/Company';
 import { UserREST } from '../classes/User';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +13,28 @@ import { BehaviorSubject } from 'rxjs';
 export class CompanyService {
   public CompanyData: GetCompany[] = [];
   private isCompany = new BehaviorSubject(false);
+  public getCompanyData = new Subject<boolean>();
 
   constructor(private http: HttpClient) {}
 
-  public addCompany(companyData: Company) {
+  public addCompany(companyData: Company,logo?:File) {
+    console.log(logo);
+    let logoData = new FormData();
+    logoData.append('logoFile',logo,logo.name);
     return this.http.post(`http://localhost:8090/api/companies`, companyData);
+  }
+
+  public putFile(Url: string, file: File[]) {
+    let data = new FormData();
+    file.forEach((file, index) => {
+      data.append(`Logo${index}`, file, file.name);
+    });
+    return this.http.put(Url, data);
+  }
+  public deleteStorageData() {
+    if(storage_Avaliable('localStorage')) {
+      localStorage.removeItem('companyData');
+    }
   }
 
   public storeCompanyData(company: GetCompany) {
@@ -43,14 +61,6 @@ export class CompanyService {
     } else {
       console.log('Store niedostępny');
     }
-  }
-
-  public putFile(Url: string, file: File[]) {
-    let data = new FormData();
-    file.forEach((file, index) => {
-      data.append(`Logo${index}`, file, file.name);
-    });
-    return this.http.put(Url, data);
   }
 
   public getCompany(companyId: number) {

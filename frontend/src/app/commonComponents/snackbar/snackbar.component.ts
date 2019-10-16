@@ -24,12 +24,12 @@ import { trigger, style, animate, transition } from '@angular/animations';
 })
 
 export class SnackbarComponent implements OnInit {
-  options:SnackbarOptions;
+  snackbarOptions:SnackbarOptions;
   constructor(private snackbarService:SnackbarService) { }
 
   ngOnInit() {
-    this.snackbarService.options.subscribe(data=>{
-      this.options = data;
+    this.snackbarService.snackbarOptions.subscribe(data=>{
+      this.snackbarOptions = data;
     });
   }
 

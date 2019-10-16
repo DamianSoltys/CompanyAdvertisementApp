@@ -7,6 +7,7 @@ import { CompanySectionComponent } from '../../commonComponents/company-section/
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
 import { AgmCoreModule } from '@agm/core';
+import { FormErrorModule } from 'src/app/commonComponents/form-error/form-error.module';
 
 @NgModule({
   declarations: [CompanyComponent, CompanySectionComponent],
@@ -18,7 +19,8 @@ import { AgmCoreModule } from '@agm/core';
     QuillModule.forRoot(),
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDymmSbQ_6KBgygpEZwcztemgH3HXTOYrI'
-    })
+    }),
+    FormErrorModule
   ],
   exports: [CompanyComponent, CompanySectionComponent]
 })

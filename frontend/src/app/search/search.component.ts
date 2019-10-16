@@ -34,7 +34,13 @@ export class SearchComponent implements OnInit {
   }
   onSubmit() {
     let searchData = this.searchform.value['search'];
-    searchData = searchData.split(',');
-    this.searchS.sendSearchData(searchData);
+    searchData = searchData.split([' ',',','.']);
+    this.searchS.sendSearchData(searchData).subscribe(response=>{
+      console.log(response);
+      
+    },error=>{
+      console.log(error);
+
+    });
   }
 }

@@ -22,6 +22,7 @@ import { AccountDataService } from 'src/app/services/account-data.service';
 import { Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login.service';
 import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
+import { FormErrorService } from 'src/app/services/form-error.service';
 
 @Component({
   selector: 'app-account-data',
@@ -41,7 +42,9 @@ export class AccountDataComponent implements OnInit {
     private accountService: AccountDataService,
     private router: Router,
     private lgService: LoginService,
-    private snackbarService:SnackbarService
+    private snackbarService:SnackbarService,
+    private formErrorService:FormErrorService,
+    private uDataService:UserService,
   ) {}
 
   ngOnInit() {
@@ -66,28 +69,10 @@ export class AccountDataComponent implements OnInit {
     if (storage_Avaliable('localStorage') && this.userObject) {
       this.showAccountData();
     } else {
-      this.snackbarService.open({
-        message:'Coś poszło nie tak!',
-        snackbarType:SnackbarType.error,
+      this.formErrorService.open({
+        message:'Nie udało się pobrać danych!'
       });
     }
-  }
-
-  private updateUserObject() {
-    this.userService.getActualUser(this.userObject.userID).subscribe(
-      response => {
-        console.log(response);
-        if (storage_Avaliable('localStorage')) {
-          const userNewObject: UserREST = response.body;
-          localStorage.setItem('userREST', JSON.stringify(userNewObject));
-        } else {
-          console.log('Nie udało się zapisać nowych danych usera');
-        }
-      },
-      error => {
-        console.log(error);
-      }
-    );
   }
 
   public showAccountData(e?: Event) {
@@ -125,23 +110,20 @@ export class AccountDataComponent implements OnInit {
               `${this.userObject.emailAddress}:${this.form.newPassword.value}`
             );
             localStorage.setItem('token', newToken);
-            this.updateUserObject();
-            this.accountDataForm.reset();
-            setTimeout(() => {
+            this.uDataService.updateUser().subscribe(()=>{
+              this.accountDataForm.reset();
               this.showAccountData();
-            }, 1000);
+            });           
           },
           error => {
-            this.snackbarService.open({
-              message:'Coś poszło nie tak!',
-              snackbarType:SnackbarType.error,
+            this.formErrorService.open({
+              message:'Nie udało się zmienić danych!'
             });
           }
         );
     } else {
-      this.snackbarService.open({
-        message:'Hasła się różnią!',
-        snackbarType:SnackbarType.error,
+      this.formErrorService.open({
+        message:'Hasła się od siebie różnią!'
       });
     }
   }
@@ -157,9 +139,8 @@ export class AccountDataComponent implements OnInit {
         this.lgService.logoutStorageClean();
       },
       error => {
-        this.snackbarService.open({
-          message:'Coś poszło nie tak!',
-          snackbarType:SnackbarType.error,
+        this.formErrorService.open({
+          message:'Nie udało się usunąć danych!'
         });
       }
     );

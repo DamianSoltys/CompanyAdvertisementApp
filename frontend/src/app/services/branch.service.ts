@@ -50,6 +50,5 @@ export class BranchService {
     } else {
       console.log('Store niedostępny');
     }
-    console.log(JSON.parse(localStorage.getItem('branchData')));
   }
 }

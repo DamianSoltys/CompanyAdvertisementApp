@@ -14,6 +14,7 @@ import { BranchService } from 'src/app/services/branch.service';
 import { EditRequestData } from 'src/app/user/company/company.component';
 import { UserREST } from 'src/app/classes/User';
 import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
+import { FormErrorService } from 'src/app/services/form-error.service';
 
 @Component({
   selector: 'app-company-profile',
@@ -30,7 +31,6 @@ export class CompanyProfileComponent implements OnInit {
   public isLoaded = new BehaviorSubject(false);
   public canShowBranches = new BehaviorSubject(false);
   public canShowEditForm = new BehaviorSubject(false);
-  public canShowNewsletters = new BehaviorSubject(false);
   public canShowAddBranchForm = new BehaviorSubject(false);
   public canShowCompany = new BehaviorSubject(true);
 
@@ -39,7 +39,8 @@ export class CompanyProfileComponent implements OnInit {
     private cDataService: CompanyService,
     private router: Router,
     private bDataService: BranchService,
-    private snackbarService:SnackbarService
+    private snackbarService:SnackbarService,
+    private formErrorService:FormErrorService
   ) {}
 
   ngOnInit() {
@@ -61,7 +62,7 @@ export class CompanyProfileComponent implements OnInit {
         error => {
           this.checkForCompanyOwnership();
           this.snackbarService.open({
-            message:'Coś poszło nie tak!',
+            message:'Nie udało się załadować danych!',
             snackbarType:SnackbarType.error,
           });
         }
@@ -112,7 +113,7 @@ export class CompanyProfileComponent implements OnInit {
           },
           error => {
             this.snackbarService.open({
-              message:'Coś poszło nie tak!',
+              message:'Nie udało się załadować danych!',
               snackbarType:SnackbarType.error,
             });
           }
@@ -128,7 +129,6 @@ export class CompanyProfileComponent implements OnInit {
     this.canShowBranches.next(false);
     this.canShowEditForm.next(false);
     this.canShowAddBranchForm.next(false);
-    this.canShowNewsletters.next(false);
     this.canShowCompany.next(true);
   }
 
@@ -142,23 +142,21 @@ export class CompanyProfileComponent implements OnInit {
     this.editData = {
       companyId: null,
       workId: null,
-      addWork: true
+      addWork: true,
+      backId:this.companyData.companyId,
     };
-    this.canShowBranches.next(false);
-    this.canShowAddBranchForm.next(true);
-  }
-  public showNewsletters() {
-    this.canShowCompany.next(false);
-    this.canShowNewsletters.next(true);
+    this.router.navigate(['branchEdit'],{relativeTo:this.activatedRoute,queryParams:this.editData});
   }
 
   public showEditForm() {
     this.editData = {
       companyId: this.companyData.companyId,
       workId: null,
-      addWork: false
+      addWork: false,
+      backId:null,
     };
-    this.canShowEditForm.next(true);
-    this.canShowCompany.next(false);
+    //this.canShowEditForm.next(true);
+    //this.canShowCompany.next(false);
+    this.router.navigate(['companyEdit'],{relativeTo:this.activatedRoute,queryParams:this.editData});
   }
 }

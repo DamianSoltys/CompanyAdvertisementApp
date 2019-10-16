@@ -3,9 +3,21 @@ import { Routes, RouterModule } from '@angular/router';
 import { CompanyProfileComponent } from './company-profile.component';
 import { AuthGuard } from 'src/app/guards/auth-guard.service';
 import { NewsletterComponent } from '../newsletter/newsletter.component';
+import { CompanyComponent } from 'src/app/user/company/company.component';
 
 const routes: Routes = [
   { path: '', component: CompanyProfileComponent },
+  { path: 'newsletter', component: NewsletterComponent },
+  {
+    path: 'companyEdit',
+    component:CompanyComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'branchEdit',
+    component:CompanyComponent,
+    canActivate: [AuthGuard]
+  },
   { path: '**', redirectTo: 'guest', pathMatch: 'full' }
 ];
 

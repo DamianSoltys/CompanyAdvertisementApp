@@ -19,22 +19,26 @@
   }
 
   .company-profile-component__branch-sections {
-    height: 50vh;
-    overflow: auto;
-
+    .branch-sections__branch-section {
+      max-height:50vh;
+      overflow: auto;
+    }
     .branch-sections__button-container {
       display: flex;
       justify-content: center;
-      padding-top: 30px;
+      padding-top: 10px;
       .button-container__button--add {
         width: 30%;
         border-radius: 50px;
         border: 0;
-        background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
-        animation: button-background-animation 16s linear infinite;
-        background-size: 600%;
+        background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
+        transition: all .4s ease-in-out;
+        background-size: 200%;
+        &:hover {
+          background-position: 100% 0;
+        }
         @include phone {
-          width: 85%;
+          width: 95%;
         }
       }
     }
@@ -51,9 +55,12 @@
         width: 25%;
         border-radius: 50px;
         border: 0;
-        background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
-        animation: button-background-animation 16s linear infinite;
-        background-size: 600%;
+        background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
+        transition: all .4s ease-in-out;
+        background-size: 200%;
+        &:hover {
+          background-position: 100% 0;
+        }
         @include phone {
           width: 85%;
         }
@@ -64,14 +71,19 @@
   .company-profile-component__shared--buttons {
     display: flex;
     justify-content: center;
+    padding:0;
     .shared--buttons__button--back {
       width: 30%;
       margin-bottom: 2%;
       border-radius: 50px;
+      border-radius: 50px;
       border: 0;
-      background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
-      animation: button-background-animation 16s linear infinite;
-      background-size: 600%;
+      background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
+      transition: all .4s ease-in-out;
+      background-size: 200%;
+      &:hover {
+        background-position: 100% 0;
+      }
       margin-top: 4%;
 
       @include phone {
@@ -147,15 +159,12 @@
               width: 100%;
               border-radius: 50px;
               border: 0;
-              background: linear-gradient(
-                -45deg,
-                #ffa63d,
-                #ff3d77,
-                #338aff,
-                #3cf0c5
-              );
-              animation: button-background-animation 16s linear infinite;
-              background-size: 600%;
+              background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
+              transition: all .4s ease-in-out;
+              background-size: 200%;
+              &:hover {
+                background-position: 100% 0;
+              }
               color: #fff;
               min-width: 125px;
               &:hover {
@@ -173,15 +182,12 @@
             margin: 10px;
             border-radius: 50px;
             border: 0;
-            background: linear-gradient(
-              -45deg,
-              #ffa63d,
-              #ff3d77,
-              #338aff,
-              #3cf0c5
-            );
-            animation: button-background-animation 16s linear infinite;
-            background-size: 600%;
+            background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
+            transition: all .4s ease-in-out;
+            background-size: 200%;
+            &:hover {
+              background-position: 100% 0;
+            }
             @include phone {
               width: 95%;
             }

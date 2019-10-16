@@ -27,6 +27,8 @@ import { UserService } from 'src/app/services/user.service';
 import { HttpEventType, HttpRequest, HttpResponse } from '@angular/common/http';
 import { LoaderService } from 'src/app/services/loader.service';
 import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
+import { FormErrorService } from 'src/app/services/form-error.service';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 
 export interface Position {
   latitude: number;
@@ -42,6 +44,7 @@ export interface EditRequestData {
   companyId: number;
   workId: number;
   addWork: boolean;
+  backId:number;
 }
 @Component({
   selector: 'app-company',
@@ -67,7 +70,8 @@ export class CompanyComponent implements OnInit {
   @Input() editRequestData: EditRequestData = {
     companyId: null,
     workId: null,
-    addWork: false
+    addWork: false,
+    backId:null,
   };
   public _voivodeships = voivodeships;
   public _categories = categories;
@@ -112,14 +116,22 @@ export class CompanyComponent implements OnInit {
     private uDataService: UserService,
     private loaderService: LoaderService,
     private snackbarService:SnackbarService,
+    private formErrorService:FormErrorService,
+    private activatedRoute:ActivatedRoute,
+    private router:Router,
 
   ) {}
 
   ngOnInit() {
+    this.activatedRoute.queryParams.subscribe(params=>{
+      this.editRequestData = <EditRequestData>params;
+      console.log(this.editRequestData);
+    });
     this.checkForPersonalData();
     this.getActualPosition();
     this.getCompanyList();
     this.showEditForm();
+    this.registerGetCompanyListener();
   }
 
   private getActualPosition() {
@@ -152,17 +164,29 @@ export class CompanyComponent implements OnInit {
       }
     }
   }
-  private getCompanyList() {
+
+  private registerGetCompanyListener() {
+    this.cDataService.getCompanyData.subscribe(()=>{
+      this.getCompanyList();
+    });
+  }
+  
+  private getCompanyList(clearDataStorage?:boolean) {
     if (storage_Avaliable('localStorage')) {
+      if(clearDataStorage) {
+        this.cDataService.deleteStorageData();
+      }
       let userREST: UserREST = JSON.parse(localStorage.getItem('userREST'));
       if (userREST.companiesIDs) {
         this.companyList = [];
         userREST.companiesIDs.forEach((companyId, index) => {
+
           this.cDataService.getCompany(companyId).subscribe(
             response => {
               this.companyList.push(<GetCompany>response.body);
               this.companyList.sort(this.companySort);
               this.cDataService.storeCompanyData(<GetCompany>response.body);
+
               if (index === userREST.companiesIDs.length) {
                 this.dataLoaded.next(true);
               }
@@ -261,24 +285,18 @@ export class CompanyComponent implements OnInit {
       .editCompany(companyData, this.editRequestData.companyId)
       .subscribe(
         response => {
-          // this.cDataService.putFile('',this.companyLogo).subscribe(response=>{
-
-          // },error=>{
-
-          // });
           this.snackbarService.open({
             message:'Dane firmy uległy edycji',
             snackbarType:SnackbarType.success,
           });
-          setTimeout(() => {
-            this.uDataService.updateUser();
-            location.reload();
-          }, 500);
+          this.getCompanyList(true);
+          this.uDataService.updateUser().subscribe(data=>{
+            this.router.navigate(['companyProfile',this.editRequestData.companyId]);      
+          });
         },
         error => {
-          this.snackbarService.open({
-            message:'Coś poszło nie tak!',
-            snackbarType:SnackbarType.error,
+          this.formErrorService.open({
+            message:'Nie udało się zmienić danych!'
           });
         }
       );
@@ -295,27 +313,21 @@ export class CompanyComponent implements OnInit {
     if(this.companyLogo) {
       this.LogoList.unshift(this.companyLogo);
     }
-
-    this.cDataService.addCompany(companyData).subscribe(
+    let file:File = this.LogoList?this.LogoList[0]:undefined;
+    this.cDataService.addCompany(companyData,file).subscribe(
       response => {
-        // this.cDataService.putFile('',this.LogoList).subscribe(response=>{
-
-        // },error=>{
-
-        // });
         this.snackbarService.open({
           message:'Pomyślnie dodano firmę',
           snackbarType:SnackbarType.success,
         });
-        setTimeout(() => {
-          this.uDataService.updateUser();
-          location.reload();
-        }, 500);
+        this.getCompanyList();
+        this.uDataService.updateUser().subscribe(data=>{
+          this.toggleDataList();
+        });
       },
       error => {
-        this.snackbarService.open({
-          message:'Coś poszło nie tak!',
-          snackbarType:SnackbarType.error,
+        this.formErrorService.open({
+          message:'Nie udało się dodać firmy!',
         });
         this.setDefaultValues();
       }
@@ -338,7 +350,6 @@ export class CompanyComponent implements OnInit {
     this.companyForm.reset();
     this.workNumber = 1;
     this.workForms = null;
-    this.toggleDataList();
   }
 
   private checkForPersonalData() {
@@ -418,7 +429,6 @@ export class CompanyComponent implements OnInit {
   }
 
   private showEditForm() {
-    console.log(this.editRequestData);
     if (this.editRequestData.companyId) {
       this.toggleAddForm();
     } else if (this.editRequestData.workId || this.editRequestData.addWork) {

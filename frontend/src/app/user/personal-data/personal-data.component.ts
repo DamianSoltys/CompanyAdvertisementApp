@@ -21,6 +21,7 @@ import { voivodeships } from 'src/app/classes/Voivodeship';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
 import { UserService } from 'src/app/services/user.service';
 import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
+import { FormErrorService } from 'src/app/services/form-error.service';
 
 @Component({
   selector: 'app-personal-data',
@@ -41,7 +42,8 @@ export class PersonalDataComponent implements OnInit {
     private pdataService: PersonalDataService,
     private renderer: Renderer2,
     private userService: UserService,
-    private snackbarService:SnackbarService
+    private snackbarService:SnackbarService,
+    private formErrorService:FormErrorService
   ) {}
 
   ngOnInit() {
@@ -228,13 +230,14 @@ export class PersonalDataComponent implements OnInit {
           });
           this.setStoragePersonalData(this.personalDataForm.value);
           this.personalDataForm.reset();
-          this.userService.updateUser();
-          this.checkForPersonalData();
+          this.userService.updateUser().subscribe(()=>{
+            this.checkForPersonalData();
+          });
+          
         },
         error => {
-          this.snackbarService.open({
-            message:'Coś poszło nie tak!',
-            snackbarType:SnackbarType.error,
+          this.formErrorService.open({
+            message:'Nie udało się zapisać danych!',
           });
         }
       );
@@ -261,9 +264,8 @@ export class PersonalDataComponent implements OnInit {
           this.checkForPersonalData();
         },
         error => {
-          this.snackbarService.open({
-            message:'Coś poszło nie tak!',
-            snackbarType:SnackbarType.error,
+          this.formErrorService.open({
+            message:'Nie udało się zmienić danych!',
           });
         }
       );
@@ -283,14 +285,11 @@ export class PersonalDataComponent implements OnInit {
           });
           this.userService.updateUser();
           this.deleteStoragePersonalData();
-          setTimeout(() => {
-            this.showAddForm();
-          }, 200);
+          this.showAddForm();
         },
         error => {
-          this.snackbarService.open({
-            message:'Nie udało się usunąć danych',
-            snackbarType:SnackbarType.error,
+          this.formErrorService.open({
+            message:'Nie udało się usunąć danych!',
           });
         }
       );

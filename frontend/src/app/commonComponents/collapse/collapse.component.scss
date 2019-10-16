@@ -1,0 +1,28 @@
+@import '../../../commonStyles/shared';
+
+.collapse-component__container {
+    overflow: hidden;
+.container__button {
+    background-color: $bgcolor;
+    width:100%;
+    border:0;
+    border-radius: 0;
+    border-bottom: 1px solid darken($bgcolor,15%);
+    &:focus {
+        box-shadow: none;
+    }
+}
+.container__data {
+    border:1px solid $bgcolor;
+    .text_node--label {
+        padding-right: 10px;
+        color: darken($bgcolor, 10);
+        font-size: 1.1rem;
+    }
+    .data__map {
+        agm-map {
+            height:200px;
+        }
+    }
+}
+}

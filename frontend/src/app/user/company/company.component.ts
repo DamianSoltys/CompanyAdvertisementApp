@@ -316,6 +316,7 @@ export class CompanyComponent implements OnInit {
     let file:File = this.LogoList?this.LogoList[0]:undefined;
     this.cDataService.addCompany(companyData,file).subscribe(
       response => {
+        console.log(response); 
         this.snackbarService.open({
           message:'Pomyślnie dodano firmę',
           snackbarType:SnackbarType.success,
@@ -326,6 +327,7 @@ export class CompanyComponent implements OnInit {
         });
       },
       error => {
+        console.log(error);
         this.formErrorService.open({
           message:'Nie udało się dodać firmy!',
         });

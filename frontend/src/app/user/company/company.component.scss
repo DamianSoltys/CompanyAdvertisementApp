@@ -8,6 +8,7 @@
   flex-direction: column;
   width: 75%;
   margin-top: 3%;
+  max-width: 1000px;
 
   @include tablet {
     width: 85%;
@@ -344,3 +345,8 @@
     align-self: center;
   }
 }
+
+.company-component__branches {
+  width:85%;
+  max-width: 1500px;
+ }

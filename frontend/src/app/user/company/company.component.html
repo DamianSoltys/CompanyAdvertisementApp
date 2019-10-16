@@ -21,7 +21,7 @@
 </div>
 
 <!--FORM-->
-<div class="company-component container-fluid" *ngIf="this.canShowAddsForm()">
+<div class="company-component container-fluid" *ngIf="this.canShowAddsForm()" [ngClass]="{'company-component__branches': workForms}">
   <div class="company-component__form-container">
   <div class="company-component__form">
     <form [formGroup]="companyForm" class="form__add-form" (ngSubmit)="onSubmit($event)">

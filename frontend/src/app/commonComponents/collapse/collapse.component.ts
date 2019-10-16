@@ -3,7 +3,6 @@ import { Branch } from 'src/app/classes/Company';
 import { BehaviorSubject } from 'rxjs';
 import { trigger, style, animate, transition } from '@angular/animations';
 import { CollapseService } from 'src/app/services/collapse.service';
-import { timingSafeEqual } from 'crypto';
 
 @Component({
   selector: 'app-collapse',

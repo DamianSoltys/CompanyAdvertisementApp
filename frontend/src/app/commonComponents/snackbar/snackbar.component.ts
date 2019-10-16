@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { SnackbarService, SnackbarOptions } from 'src/app/services/snackbar.service';
 import { trigger, style, animate, transition } from '@angular/animations';
 

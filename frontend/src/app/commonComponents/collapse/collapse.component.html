@@ -1,0 +1,27 @@
+<div class= "collapse-component">
+    <div class="collapse-component__container">
+      <button class="container__button btn btn-primary" (click)="open($event)">Zakład:{{branchData.name}}</button>
+      <div class="container__data" *ngIf="isOpen.value" [@collapseAnimate]>
+        <p class="data__text-node"><span class="text_node--label">Nazwa: </span>{{branchData.name}}</p>
+        <p class="data__text-node"><span class="text_node--label">Województwo: </span>{{branchData.address.voivodeship}}</p>
+        <p class="data__text-node"><span class="text_node--label">Miasto: </span>{{branchData.address.city}}</p>
+        <p class="data__text-node"><span class="text_node--label">Ulica: </span>{{branchData.address.street}}</p>
+        <p class="data__text-node"><span class="text_node--label">Nr.Domu: </span>{{branchData.address.apartmentNo}}</p>
+        <p class="data__text-node"><span class="text_node--label">Nr.Budynku/Biura: </span>{{branchData.address.buildingNo}}</p>
+        <div class="data__map">
+            <agm-map
+            [latitude]="branchData.geoX"
+            [longitude]="branchData.geoY"
+            class="map-container__map"
+          >
+            <agm-marker
+              [latitude]="branchData.geoX"
+              [longitude]="branchData.geoY"             
+            >
+            <agm-info-window>Lokalizacja</agm-info-window>
+            </agm-marker>
+          </agm-map>
+        </div>
+      </div>
+    </div>
+  </div>

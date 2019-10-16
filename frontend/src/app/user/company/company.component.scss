@@ -17,6 +17,39 @@
     width: 95%;
     padding: 0;
   }
+  .form-container__form-collapse {
+    display: flex;
+    @include phone {
+      flex-direction: column;
+    }
+    .form-container__collapse {
+      width:50%;
+      border-left:1px solid $bgcolor;
+      padding:0 10px;
+      margin:20px 0;
+      @include phone {
+        width:100%;
+        border:none;
+        border-top:1px solid $bgcolor;
+        margin:20px 0;
+      }
+      .collapse__container {
+        border:1px solid darken($bgcolor, 10);
+        padding:15px 0;
+        @include boxShadow(inset 0px 15px 8px -15px rgba(32, 99, 143, 0.66));
+        border-radius: 6px;
+        border-width: 1px 0 0 0;
+      }
+      .collapse__header {
+        .header__text-node {
+          font-size: 1.1rem;
+          margin: 0 15px;
+          font-weight: bold;
+          color: darken($bgcolor, 10);
+        }
+      }
+    }
+  }
   .company-component__company-section {
     max-height: 50vh;
     overflow: auto;
@@ -273,7 +306,8 @@
     padding-top: 30px;
 
     @include phone {
-      width: 95%;
+      padding-left: 15px;
+      padding-right: 15px;
       flex-direction: column;
       align-items: center;
     }
@@ -311,3 +345,8 @@
     align-self: center;
   }
 }
+
+.company-component__branches {
+  width:85%;
+  max-width: 1500px;
+ }

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Branch } from 'src/app/classes/Company';
 import { BehaviorSubject } from 'rxjs';
-import { trigger, style, animate, transition } from '@angular/animations';
+import { trigger, style, animate, transition ,state } from '@angular/animations';
 import { CollapseService } from 'src/app/services/collapse.service';
 
 @Component({
@@ -9,18 +9,23 @@ import { CollapseService } from 'src/app/services/collapse.service';
   templateUrl: './collapse.component.html',
   styleUrls: ['./collapse.component.scss'],
   animations: [
-    trigger(
-      'collapseAnimate', [
-        transition(':enter', [
-          style({height: '0px',overflow:'hidden'}),
-          animate('200ms', style({height: '*'}))
-        ]),
-        transition(':leave', [
-          style({height: '*'}),
-          animate('200ms', style({height: '0px',overflow:'hidden'}))
-        ])
-      ]
-    )
+    trigger('collapseAnimate', [
+      state(
+        'visible',
+        style({
+          height:'*',
+          overflow:'hidden'
+        })
+      ),
+      state(
+        'hidden',
+        style({
+          height:'0px',
+          overflow:'hidden'
+        })
+      ),
+      transition('visible <=> hidden', [animate('.2s')])
+    ]),
   ],
 })
 export class CollapseComponent implements OnInit {

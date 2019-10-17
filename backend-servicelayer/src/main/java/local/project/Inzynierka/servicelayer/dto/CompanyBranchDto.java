@@ -15,6 +15,6 @@ public class CompanyBranchDto {
 
     private Address address;
 
-    private float geoX;
-    private float geoY;
+    private Double geoX;
+    private Double geoY;
 }

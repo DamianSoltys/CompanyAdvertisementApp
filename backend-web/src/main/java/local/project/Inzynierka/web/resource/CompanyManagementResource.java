@@ -8,6 +8,7 @@ import local.project.Inzynierka.servicelayer.newsletter.event.CreatingNewsletter
 import local.project.Inzynierka.servicelayer.services.CompanyManagementPermissionService;
 import local.project.Inzynierka.servicelayer.services.CompanyManagementService;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
 
 @RestController
 @RequestMapping(value = "/api")
+@Slf4j
 public class CompanyManagementResource {
 
     private static final String LACK_OF_ADDING_PERMISSION_MESSAGE = "Użytkownik nie ma pozwolenia na dodawanie firm.";
@@ -64,6 +66,7 @@ public class CompanyManagementResource {
             return ResponseEntity.ok().body(companyBuildDto);
 
         } catch (Exception e) {
+            log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(SimpleJsonFromStringCreator.toJson(COMPANY_ADDING_FAILURE_MESSAGE));
         }

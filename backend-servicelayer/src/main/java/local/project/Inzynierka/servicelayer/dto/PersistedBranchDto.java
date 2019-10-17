@@ -7,7 +7,7 @@ public class PersistedBranchDto {
 
     private String name;
     private Address address;
-    private float geoX;
-    private float geoY;
+    private Double geoX;
+    private Double geoY;
     private Long branchId;
 }

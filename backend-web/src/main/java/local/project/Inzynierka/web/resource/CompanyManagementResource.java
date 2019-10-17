@@ -67,6 +67,7 @@ public class CompanyManagementResource {
 
         } catch (Exception e) {
             log.error(e.getMessage());
+            log.error(String.valueOf(e));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(SimpleJsonFromStringCreator.toJson(COMPANY_ADDING_FAILURE_MESSAGE));
         }

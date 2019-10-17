@@ -182,11 +182,11 @@
       </div>
     </div>
   </div>
-  <div class="app-component__router-outlet">
+  <div class="app-component__router-outlet" [@routeAnimations] = prepareRoute(outlet)>
     <app-loader></app-loader>
-    <router-outlet class="app-component__outlet"></router-outlet>
+    <router-outlet #outlet="outlet" class="app-component__outlet"></router-outlet>
   </div>
-
+<!--
   <div class="app-component__nearby-container container-fluid">
     <h5 class="text-center nearby_container__text">Obok ciebie</h5>
     <button
@@ -202,7 +202,9 @@
       <div>Dane firmy</div>
     </div>
   </div>
+  -->
 </div>
+
 
 <div class="row app-component__footer">
   <p class="footer__text">

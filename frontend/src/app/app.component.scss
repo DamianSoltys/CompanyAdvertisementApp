@@ -1,5 +1,7 @@
 @import '../commonStyles/shared';
-
+:host {
+  display: block;
+}
 body,
 html {
   height: 100%;

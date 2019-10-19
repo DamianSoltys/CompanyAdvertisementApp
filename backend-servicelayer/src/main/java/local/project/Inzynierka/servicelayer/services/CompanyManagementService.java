@@ -4,11 +4,13 @@ import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.persistence.entity.Category;
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.repository.CompanyRepository;
+import local.project.Inzynierka.servicelayer.dto.AddBranchDto;
 import local.project.Inzynierka.servicelayer.dto.AddCompanyDto;
 import local.project.Inzynierka.servicelayer.dto.BranchBuildDto;
 import local.project.Inzynierka.servicelayer.dto.CompanyBuildDto;
 import local.project.Inzynierka.servicelayer.dto.CompanyInfoDto;
 import local.project.Inzynierka.servicelayer.dto.CompanyRelatedDeletedEntities;
+import local.project.Inzynierka.servicelayer.dto.PersistedBranchDto;
 import local.project.Inzynierka.servicelayer.dto.UpdateCompanyInfoDto;
 import local.project.Inzynierka.servicelayer.dto.mapper.AddressMapper;
 import local.project.Inzynierka.servicelayer.dto.mapper.CompanyExtractor;
@@ -183,4 +185,9 @@ public class CompanyManagementService {
                 .build();
     }
 
+    @Transactional
+    public Optional<PersistedBranchDto> addBranch(Long id, AddBranchDto addBranchDto, UserAccount userAccount) {
+
+        return this.branchPersistenceService.saveBranch(addBranchDto, id, userAccount.personId());
+    }
 }

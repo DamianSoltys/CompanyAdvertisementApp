@@ -36,7 +36,7 @@ public class AddCompanyDto {
     @NotEmpty
     private String category;
 
-    List<CompanyBranchDto> branches;
+    List<AddBranchDto> branches;
 
     @ValidWebProtocolUrl
     private String companyWebsiteUrl;

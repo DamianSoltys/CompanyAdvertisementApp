@@ -1,8 +1,13 @@
 package local.project.Inzynierka.servicelayer.dto.mapper;
 
+import local.project.Inzynierka.persistence.entity.Address;
 import local.project.Inzynierka.persistence.entity.Branch;
+import local.project.Inzynierka.persistence.entity.Company;
+import local.project.Inzynierka.persistence.entity.NaturalPerson;
+import local.project.Inzynierka.servicelayer.dto.AddBranchDto;
 import local.project.Inzynierka.servicelayer.dto.CompanyBranchDto;
 import local.project.Inzynierka.servicelayer.dto.PersistedBranchDto;
+import local.project.Inzynierka.shared.utils.EntityName;
 import local.project.Inzynierka.shared.utils.LogoFilePathCreator;
 import org.springframework.stereotype.Component;
 
@@ -36,6 +41,8 @@ public class BranchMapper {
         persistedBranchDto.setGeoY(branch.getGeoY());
         persistedBranchDto.setName(branch.getName());
         persistedBranchDto.setBranchId(branch.getId());
+        persistedBranchDto.setLogoPath(branch.getPhotoPath());
+        persistedBranchDto.setLogoKey(LogoFilePathCreator.getLogoKey(branch.getPhotoPath()));
         return persistedBranchDto;
     }
 
@@ -43,5 +50,18 @@ public class BranchMapper {
         return branches.stream()
                 .map(this::mapPersistedBranch)
                 .collect(Collectors.toList());
+    }
+
+    public Branch mapAddBranchDto(AddBranchDto addBranchDto, Long companyId, Long personId, Address address) {
+
+        return Branch.builder()
+                .name(addBranchDto.getName())
+                .address(address)
+                .company(Company.builder().id(companyId).build())
+                .geoX(addBranchDto.getGeoX())
+                .geoY(addBranchDto.getGeoY())
+                .registerer(NaturalPerson.builder().id(personId).build())
+                .photoPath(LogoFilePathCreator.buildEntityLogoURL(EntityName.BRANCH))
+                .build();
     }
 }

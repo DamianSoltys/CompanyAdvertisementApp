@@ -7,6 +7,10 @@ import local.project.Inzynierka.persistence.entity.Voivoideship;
 import local.project.Inzynierka.persistence.repository.AddressRepository;
 import local.project.Inzynierka.persistence.repository.BranchRepository;
 import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
+import local.project.Inzynierka.servicelayer.dto.AddBranchDto;
+import local.project.Inzynierka.servicelayer.dto.PersistedBranchDto;
+import local.project.Inzynierka.servicelayer.dto.mapper.AddressMapper;
+import local.project.Inzynierka.servicelayer.dto.mapper.BranchMapper;
 import local.project.Inzynierka.servicelayer.errors.InvalidVoivodeshipException;
 import local.project.Inzynierka.shared.utils.EntityName;
 import local.project.Inzynierka.shared.utils.LogoFilePathCreator;
@@ -24,10 +28,16 @@ class BranchPersistenceService {
 
     private final BranchRepository branchRepository;
 
-    BranchPersistenceService(VoivodeshipRepository voivodeshipRepository, AddressRepository addressRepository, BranchRepository branchRepository) {
+    private final BranchMapper branchMapper;
+
+    private final AddressService addressService;
+
+    BranchPersistenceService(VoivodeshipRepository voivodeshipRepository, AddressRepository addressRepository, BranchRepository branchRepository, BranchMapper branchMapper, AddressService addressService) {
         this.voivodeshipRepository = voivodeshipRepository;
         this.addressRepository = addressRepository;
         this.branchRepository = branchRepository;
+        this.branchMapper = branchMapper;
+        this.addressService = addressService;
     }
 
     void buildAllCompanyBranches(List<Branch> branches, Company createdCompany) {
@@ -52,5 +62,15 @@ class BranchPersistenceService {
 
     Optional<Branch> getPersistedBranch(Long branchId) {
         return this.branchRepository.findById(branchId);
+    }
+
+    Optional<PersistedBranchDto> saveBranch(AddBranchDto addBranchDto, Long companyId, Long personId) {
+
+        Voivoideship voivoideship = addressService.getVoivodeshipByName(
+                addBranchDto.getAddress().getVoivodeship().toString())
+                .orElseThrow(InvalidVoivodeshipException::new);
+        Address address = addressRepository.save(new AddressMapper().map(addBranchDto.getAddress(), voivoideship));
+        Branch branch = branchMapper.mapAddBranchDto(addBranchDto, companyId, personId, address);
+        return Optional.of(this.branchRepository.save(branch)).map(branchMapper::mapPersistedBranch);
     }
 }

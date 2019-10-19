@@ -41,9 +41,13 @@ public class LogoFilePathCreator {
 
     public static String getLogoKey(String logoPath) {
 
-        final String URL_PATH_SEPARATOR = "/";
-        List<String> backslashSplitPath = Arrays.asList(logoPath.split(URL_PATH_SEPARATOR));
-        String logoFileName = backslashSplitPath.get(backslashSplitPath.size() - 1);
-        return logoFileName.substring(0, logoFileName.length() - 4);
+        if (logoPath != null) {
+            final String URL_PATH_SEPARATOR = "/";
+            List<String> backslashSplitPath = Arrays.asList(logoPath.split(URL_PATH_SEPARATOR));
+            String logoFileName = backslashSplitPath.get(backslashSplitPath.size() - 1);
+            return logoFileName.substring(0, logoFileName.length() - 4);
+        }
+        return "";
+
     }
 }

@@ -1,12 +1,15 @@
 package local.project.Inzynierka.web.resource;
 
 import local.project.Inzynierka.auth.AuthFacade;
+import local.project.Inzynierka.servicelayer.dto.AddBranchDto;
 import local.project.Inzynierka.servicelayer.dto.AddCompanyDto;
 import local.project.Inzynierka.servicelayer.dto.NewsletterItemDto;
 import local.project.Inzynierka.servicelayer.dto.UpdateCompanyInfoDto;
+import local.project.Inzynierka.servicelayer.errors.UnsuccessfulBranchSaveException;
 import local.project.Inzynierka.servicelayer.newsletter.event.CreatingNewsletterMailEvent;
 import local.project.Inzynierka.servicelayer.services.CompanyManagementPermissionService;
 import local.project.Inzynierka.servicelayer.services.CompanyManagementService;
+import local.project.Inzynierka.shared.UserAccount;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +27,7 @@ import javax.validation.Valid;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -53,7 +56,7 @@ public class CompanyManagementResource {
         this.authFacade = authFacade;
     }
 
-    @RequestMapping(value = "/companies", method = RequestMethod.POST)
+    @RequestMapping(value = "/companies", method = POST)
     public ResponseEntity<?> addCompany(@Valid @RequestBody final AddCompanyDto addCompanyDto) {
 
 
@@ -74,7 +77,7 @@ public class CompanyManagementResource {
 
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/companies/{id}/newsletters")
+    @RequestMapping(method = POST, value = "/companies/{id}/newsletters")
     public ResponseEntity<String> sendEmailToNewsletterRecipients(final @PathVariable(value = "id") Long id,
                                                                   @Valid @RequestBody NewsletterItemDto newsletterItemDto,
                                                                   HttpServletRequest request){
@@ -127,5 +130,16 @@ public class CompanyManagementResource {
 
         return this.companyManagementService.deleteCompany(id)
                 .map(ResponseEntity::ok).orElse(null);
+    }
+
+    @RequestMapping(method = POST, value = "/companies/{id}/branches")
+    public ResponseEntity<?> addBranchToCompany(final @PathVariable(value = "id") Long id, @RequestBody AddBranchDto companyBranchDto) {
+
+        if (!this.companyManagementPermissionService.hasManagingAuthority(id, this.authFacade.getAuthenticatedUser())) {
+            return new ResponseEntity<>(SimpleJsonFromStringCreator.toJson(LACK_OF_MANAGING_PERMISSION_MESSAGE), HttpStatus.FORBIDDEN);
+        }
+
+        UserAccount userAccount = this.authFacade.getAuthenticatedUser();
+        return this.companyManagementService.addBranch(id, companyBranchDto, userAccount).map(ResponseEntity::ok).orElseThrow(UnsuccessfulBranchSaveException::new);
     }
 }

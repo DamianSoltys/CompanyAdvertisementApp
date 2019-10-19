@@ -63,5 +63,13 @@ public class BranchResource {
 
     }
 
+    @RequestMapping(method = RequestMethod.DELETE, value = "/branch/{id}")
+    public ResponseEntity<?> deleteBranch(@PathVariable(value = "id") Long branchId) {
+
+        branchManagementService.deleteBranch(branchId);
+
+        return ResponseEntity.ok(SimpleJsonFromStringCreator.toJson(branchId.toString()));
+    }
+
 }
 

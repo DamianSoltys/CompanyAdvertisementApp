@@ -1,6 +1,8 @@
 package local.project.Inzynierka.shared.utils;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class LogoFilePathCreator {
@@ -37,4 +39,11 @@ public class LogoFilePathCreator {
         return String.format("%s%s%s", getEntityLogoFileDirectoryURLPath(entityUUID, entityName), logoUUID, extension);
     }
 
+    public static String getLogoKey(String logoPath) {
+
+        final String URL_PATH_SEPARATOR = "/";
+        List<String> backslashSplitPath = Arrays.asList(logoPath.split(URL_PATH_SEPARATOR));
+        String logoFileName = backslashSplitPath.get(backslashSplitPath.size() - 1);
+        return logoFileName.substring(0, logoFileName.length() - 4);
+    }
 }

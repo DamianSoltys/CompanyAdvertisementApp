@@ -3,6 +3,7 @@ package local.project.Inzynierka.servicelayer.dto.mapper;
 import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.servicelayer.dto.CompanyBranchDto;
 import local.project.Inzynierka.servicelayer.dto.PersistedBranchDto;
+import local.project.Inzynierka.shared.utils.LogoFilePathCreator;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,6 +18,8 @@ public class BranchMapper {
         companyBranchDto.setGeoX(branch.getGeoX());
         companyBranchDto.setGeoY(branch.getGeoY());
         companyBranchDto.setName(branch.getName());
+        companyBranchDto.setLogoURL(branch.getPhotoPath());
+        companyBranchDto.setLogoKey(LogoFilePathCreator.getLogoKey(branch.getPhotoPath()));
         return companyBranchDto;
     }
 

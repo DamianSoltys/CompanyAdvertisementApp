@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -133,13 +134,13 @@ public class CompanyManagementResource {
     }
 
     @RequestMapping(method = POST, value = "/companies/{id}/branches")
-    public ResponseEntity<?> addBranchToCompany(final @PathVariable(value = "id") Long id, @RequestBody AddBranchDto companyBranchDto) {
+    public ResponseEntity<?> addBranchToCompany(final @PathVariable(value = "id") Long id, @RequestBody List<AddBranchDto> branchDtos) {
 
-        if (!this.companyManagementPermissionService.hasManagingAuthority(id, this.authFacade.getAuthenticatedUser())) {
+        UserAccount userAccount = this.authFacade.getAuthenticatedUser();
+        if (!this.companyManagementPermissionService.hasManagingAuthority(id, userAccount)) {
             return new ResponseEntity<>(SimpleJsonFromStringCreator.toJson(LACK_OF_MANAGING_PERMISSION_MESSAGE), HttpStatus.FORBIDDEN);
         }
 
-        UserAccount userAccount = this.authFacade.getAuthenticatedUser();
-        return this.companyManagementService.addBranch(id, companyBranchDto, userAccount).map(ResponseEntity::ok).orElseThrow(UnsuccessfulBranchSaveException::new);
+        return this.companyManagementService.addBranch(id, branchDtos, userAccount).map(ResponseEntity::ok).orElseThrow(UnsuccessfulBranchSaveException::new);
     }
 }

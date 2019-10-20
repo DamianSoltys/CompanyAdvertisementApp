@@ -186,7 +186,7 @@ public class CompanyManagementService {
     }
 
     @Transactional
-    public Optional<PersistedBranchDto> addBranch(Long id, AddBranchDto addBranchDto, UserAccount userAccount) {
+    public Optional<List<PersistedBranchDto>> addBranch(Long id, List<AddBranchDto> addBranchDto, UserAccount userAccount) {
 
         return this.branchPersistenceService.saveBranch(addBranchDto, id, userAccount.personId());
     }

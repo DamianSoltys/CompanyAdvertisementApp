@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Component
 public class BranchMapper {
@@ -46,8 +47,8 @@ public class BranchMapper {
         return persistedBranchDto;
     }
 
-    public List<PersistedBranchDto> mapPersistedBranch(List<Branch> branches) {
-        return branches.stream()
+    public List<PersistedBranchDto> mapPersistedBranch(Iterable<Branch> branches) {
+        return StreamSupport.stream(branches.spliterator(), false)
                 .map(this::mapPersistedBranch)
                 .collect(Collectors.toList());
     }

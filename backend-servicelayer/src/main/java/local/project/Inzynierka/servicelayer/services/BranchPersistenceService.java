@@ -16,6 +16,7 @@ import local.project.Inzynierka.shared.utils.EntityName;
 import local.project.Inzynierka.shared.utils.LogoFilePathCreator;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,13 +65,18 @@ class BranchPersistenceService {
         return this.branchRepository.findById(branchId);
     }
 
-    Optional<PersistedBranchDto> saveBranch(AddBranchDto addBranchDto, Long companyId, Long personId) {
+    Optional<List<PersistedBranchDto>> saveBranch(List<AddBranchDto> branchDtos, Long companyId, Long personId) {
 
-        Voivoideship voivoideship = addressService.getVoivodeshipByName(
-                addBranchDto.getAddress().getVoivodeship().toString())
-                .orElseThrow(InvalidVoivodeshipException::new);
-        Address address = addressRepository.save(new AddressMapper().map(addBranchDto.getAddress(), voivoideship));
-        Branch branch = branchMapper.mapAddBranchDto(addBranchDto, companyId, personId, address);
-        return Optional.of(this.branchRepository.save(branch)).map(branchMapper::mapPersistedBranch);
+        List<Branch> branches = new ArrayList<>();
+        branchDtos.stream().forEach(branch -> {
+            Voivoideship voivoideship = addressService.getVoivodeshipByName(
+                    branch.getAddress().getVoivodeship().toString())
+                    .orElseThrow(InvalidVoivodeshipException::new);
+            Address address = addressRepository.save(new AddressMapper().map(branch.getAddress(), voivoideship));
+            Branch mappedBranch = branchMapper.mapAddBranchDto(branch, companyId, personId, address);
+            branches.add(mappedBranch);
+        });
+
+        return Optional.of(this.branchRepository.saveAll(branches)).map(branchMapper::mapPersistedBranch);
     }
 }

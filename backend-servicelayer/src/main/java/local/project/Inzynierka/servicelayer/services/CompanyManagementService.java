@@ -124,8 +124,8 @@ public class CompanyManagementService {
                                     this.companyPersistenceService.getPersistedCategory(new Category(updateCompanyInfoDto.getCategory())));
         company.setDescription(updateCompanyInfoDto.getDescription() == null ? company.getDescription() :
                                        updateCompanyInfoDto.getDescription());
-        company.setName(updateCompanyInfoDto.getCompanyName() == null ? company.getName() :
-                                updateCompanyInfoDto.getCompanyName());
+        company.setName(updateCompanyInfoDto.getName() == null ? company.getName() :
+                                updateCompanyInfoDto.getName());
 
 
         return this.companyRepository.save(company);

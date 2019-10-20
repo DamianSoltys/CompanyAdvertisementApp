@@ -5,8 +5,8 @@ import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.persistence.entity.Category;
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.Voivoideship;
+import local.project.Inzynierka.servicelayer.dto.AddBranchDto;
 import local.project.Inzynierka.servicelayer.dto.AddCompanyDto;
-import local.project.Inzynierka.servicelayer.dto.CompanyBranchDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,20 +38,20 @@ public class CompanyExtractor {
 
         checkForAddressesDuplicates(addCompanyDto);
 
-        for(CompanyBranchDto companyBranchDto: addCompanyDto.getBranches()) {
+        for (AddBranchDto addBranchDto : addCompanyDto.getBranches()) {
             Branch branch = Branch.builder()
                     .address(Address.builder()
-                            .city(companyBranchDto.getAddress().getCity())
-                            .buildingNo(companyBranchDto.getAddress().getBuildingNo())
-                            .street(companyBranchDto.getAddress().getStreet())
-                            .apartmentNo(companyBranchDto.getAddress().getApartmentNo())
-                            .voivodeship_id(new Voivoideship(companyBranchDto.getAddress().getVoivodeship().toString()))
+                                     .city(addBranchDto.getAddress().getCity())
+                                     .buildingNo(addBranchDto.getAddress().getBuildingNo())
+                                     .street(addBranchDto.getAddress().getStreet())
+                                     .apartmentNo(addBranchDto.getAddress().getApartmentNo())
+                                     .voivodeship_id(new Voivoideship(addBranchDto.getAddress().getVoivodeship().toString()))
                             .build()
                     )
                     .company(company)
-                    .geoX(companyBranchDto.getGeoX())
-                    .geoY(companyBranchDto.getGeoY())
-                    .name(companyBranchDto.getName())
+                    .geoX(addBranchDto.getGeoX())
+                    .geoY(addBranchDto.getGeoY())
+                    .name(addBranchDto.getName())
                     .build();
 
             branches.add(branch);
@@ -62,7 +62,7 @@ public class CompanyExtractor {
 
         long addressesNo = addCompanyDto.getBranches()
                 .stream()
-                .map(CompanyBranchDto::getAddress)
+                .map(AddBranchDto::getAddress)
                 .distinct()
                 .count();
 

@@ -1,13 +1,17 @@
 package local.project.Inzynierka.web.resource;
 
 import local.project.Inzynierka.auth.AuthFacade;
+import local.project.Inzynierka.servicelayer.dto.AddBranchDto;
 import local.project.Inzynierka.servicelayer.dto.AddCompanyDto;
 import local.project.Inzynierka.servicelayer.dto.NewsletterItemDto;
 import local.project.Inzynierka.servicelayer.dto.UpdateCompanyInfoDto;
+import local.project.Inzynierka.servicelayer.errors.UnsuccessfulBranchSaveException;
 import local.project.Inzynierka.servicelayer.newsletter.event.CreatingNewsletterMailEvent;
 import local.project.Inzynierka.servicelayer.services.CompanyManagementPermissionService;
 import local.project.Inzynierka.servicelayer.services.CompanyManagementService;
+import local.project.Inzynierka.shared.UserAccount;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -15,18 +19,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 @RequestMapping(value = "/api")
+@Slf4j
 public class CompanyManagementResource {
 
     private static final String LACK_OF_ADDING_PERMISSION_MESSAGE = "Użytkownik nie ma pozwolenia na dodawanie firm.";
@@ -51,7 +57,7 @@ public class CompanyManagementResource {
         this.authFacade = authFacade;
     }
 
-    @RequestMapping(value = "/companies", method = RequestMethod.POST)
+    @RequestMapping(value = "/companies", method = POST)
     public ResponseEntity<?> addCompany(@Valid @RequestBody final AddCompanyDto addCompanyDto) {
 
 
@@ -64,13 +70,15 @@ public class CompanyManagementResource {
             return ResponseEntity.ok().body(companyBuildDto);
 
         } catch (Exception e) {
+            log.error(e.getMessage());
+            log.error(String.valueOf(e));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(SimpleJsonFromStringCreator.toJson(COMPANY_ADDING_FAILURE_MESSAGE));
         }
 
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/companies/{id}/newsletters")
+    @RequestMapping(method = POST, value = "/companies/{id}/newsletters")
     public ResponseEntity<String> sendEmailToNewsletterRecipients(final @PathVariable(value = "id") Long id,
                                                                   @Valid @RequestBody NewsletterItemDto newsletterItemDto,
                                                                   HttpServletRequest request){
@@ -123,5 +131,16 @@ public class CompanyManagementResource {
 
         return this.companyManagementService.deleteCompany(id)
                 .map(ResponseEntity::ok).orElse(null);
+    }
+
+    @RequestMapping(method = POST, value = "/companies/{id}/branches")
+    public ResponseEntity<?> addBranchToCompany(final @PathVariable(value = "id") Long id, @RequestBody List<AddBranchDto> branchDtos) {
+
+        UserAccount userAccount = this.authFacade.getAuthenticatedUser();
+        if (!this.companyManagementPermissionService.hasManagingAuthority(id, userAccount)) {
+            return new ResponseEntity<>(SimpleJsonFromStringCreator.toJson(LACK_OF_MANAGING_PERMISSION_MESSAGE), HttpStatus.FORBIDDEN);
+        }
+
+        return this.companyManagementService.addBranch(id, branchDtos, userAccount).map(ResponseEntity::ok).orElseThrow(UnsuccessfulBranchSaveException::new);
     }
 }

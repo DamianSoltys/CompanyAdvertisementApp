@@ -14,7 +14,7 @@ import javax.validation.Valid;
 public class UpdateCompanyInfoDto {
 
     @NullOrNotBlank
-    private String companyName;
+    private String name;
 
     @Valid
     private Address address;

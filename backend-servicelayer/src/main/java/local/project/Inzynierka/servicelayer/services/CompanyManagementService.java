@@ -4,21 +4,22 @@ import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.persistence.entity.Category;
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.repository.CompanyRepository;
+import local.project.Inzynierka.servicelayer.dto.AddBranchDto;
 import local.project.Inzynierka.servicelayer.dto.AddCompanyDto;
 import local.project.Inzynierka.servicelayer.dto.BranchBuildDto;
 import local.project.Inzynierka.servicelayer.dto.CompanyBuildDto;
 import local.project.Inzynierka.servicelayer.dto.CompanyInfoDto;
 import local.project.Inzynierka.servicelayer.dto.CompanyRelatedDeletedEntities;
+import local.project.Inzynierka.servicelayer.dto.PersistedBranchDto;
 import local.project.Inzynierka.servicelayer.dto.UpdateCompanyInfoDto;
 import local.project.Inzynierka.servicelayer.dto.mapper.AddressMapper;
 import local.project.Inzynierka.servicelayer.dto.mapper.CompanyExtractor;
 import local.project.Inzynierka.shared.UserAccount;
+import local.project.Inzynierka.shared.utils.LogoFilePathCreator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -61,34 +62,28 @@ public class CompanyManagementService {
         return mapToCompanyBuildDto(createdCompany, branchCollection);
     }
 
-    private CompanyBuildDto mapToCompanyBuildDto(Company createdCompany) {
+    private static CompanyBuildDto mapToCompanyBuildDto(Company createdCompany) {
         return CompanyBuildDto.builder()
                 .id(createdCompany.getId())
-                .logoKey(getLogoKey(createdCompany.getLogoPath()))
+                .logoKey(LogoFilePathCreator.getLogoKey(createdCompany.getLogoPath()))
                 .logoFilePath(createdCompany.getLogoPath())
                 .build();
     }
 
-    private CompanyBuildDto mapToCompanyBuildDto(Company createdCompany, List<Branch> branches) {
+    private static CompanyBuildDto mapToCompanyBuildDto(Company createdCompany, List<Branch> branches) {
         return CompanyBuildDto.builder()
                 .branchBuildDTOs(
                         branches.stream()
                                 .map(branch -> BranchBuildDto.builder()
                                         .id(branch.getId())
                                         .logoFilePath(branch.getPhotoPath())
-                                        .logoKey(getLogoKey(branch.getPhotoPath()))
+                                        .logoKey(LogoFilePathCreator.getLogoKey(branch.getPhotoPath()))
                                         .build())
                                 .collect(Collectors.toList()))
                 .id(createdCompany.getId())
                 .logoFilePath(createdCompany.getLogoPath())
-                .logoKey(getLogoKey(createdCompany.getLogoPath()))
+                .logoKey(LogoFilePathCreator.getLogoKey(createdCompany.getLogoPath()))
                 .build();
-    }
-
-    private String getLogoKey(String logoPath) {
-        List<String> backslashSplitPath = Arrays.asList(logoPath.split(File.separator));
-        String logoFileName = backslashSplitPath.get(backslashSplitPath.size() - 1);
-        return logoFileName.substring(0, logoFileName.length() - 4);
     }
 
     public boolean companyExists(Long id) {
@@ -129,8 +124,8 @@ public class CompanyManagementService {
                                     this.companyPersistenceService.getPersistedCategory(new Category(updateCompanyInfoDto.getCategory())));
         company.setDescription(updateCompanyInfoDto.getDescription() == null ? company.getDescription() :
                                        updateCompanyInfoDto.getDescription());
-        company.setName(updateCompanyInfoDto.getCompanyName() == null ? company.getName() :
-                                updateCompanyInfoDto.getCompanyName());
+        company.setName(updateCompanyInfoDto.getName() == null ? company.getName() :
+                                updateCompanyInfoDto.getName());
 
 
         return this.companyRepository.save(company);
@@ -140,6 +135,8 @@ public class CompanyManagementService {
 
         AddressMapper addressMapper = new AddressMapper();
         return CompanyInfoDto.builder()
+                .logoURL(company.getLogoPath())
+                .logoKey(LogoFilePathCreator.getLogoKey(company.getLogoPath()))
                 .category(company.getCategory().getName())
                 .companyId(company.getId())
                 .companyName(company.getName())
@@ -188,4 +185,9 @@ public class CompanyManagementService {
                 .build();
     }
 
+    @Transactional
+    public Optional<List<PersistedBranchDto>> addBranch(Long id, List<AddBranchDto> addBranchDto, UserAccount userAccount) {
+
+        return this.branchPersistenceService.saveBranch(addBranchDto, id, userAccount.personId());
+    }
 }

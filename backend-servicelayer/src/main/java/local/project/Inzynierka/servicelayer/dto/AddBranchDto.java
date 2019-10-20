@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CompanyBranchDto {
+public class AddBranchDto {
 
     private String name;
 
@@ -17,6 +17,4 @@ public class CompanyBranchDto {
 
     private Double geoX;
     private Double geoY;
-    private String logoURL;
-    private String logoKey;
 }

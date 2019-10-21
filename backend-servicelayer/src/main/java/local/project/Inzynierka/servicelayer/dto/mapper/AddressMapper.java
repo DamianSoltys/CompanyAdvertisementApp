@@ -18,6 +18,17 @@ public class AddressMapper {
         return address1;
     }
 
+    public local.project.Inzynierka.persistence.entity.Address map(Address address, Voivoideship voivoideship) {
+        local.project.Inzynierka.persistence.entity.Address address1 = new local.project.Inzynierka.persistence.entity.Address();
+        address1.setApartmentNo(address.getApartmentNo());
+        address1.setBuildingNo(address.getBuildingNo());
+        address1.setCity(address.getCity());
+        address1.setStreet(address.getStreet());
+        address1.setVoivodeship_id(voivoideship);
+
+        return address1;
+    }
+
     public Address map(local.project.Inzynierka.persistence.entity.Address addressEntity) {
         Address address = new Address();
         address.setVoivodeship(Voivodeship.fromVoivodeship(addressEntity.getVoivodeship_id().getName()));

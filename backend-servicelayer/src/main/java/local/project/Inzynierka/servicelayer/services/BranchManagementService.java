@@ -95,4 +95,8 @@ public class BranchManagementService {
         return this.branchRepository.save(branch);
     }
 
+    public void deleteBranch(Long branchId) {
+        this.branchRepository.deleteById(branchId);
+    }
+
 }

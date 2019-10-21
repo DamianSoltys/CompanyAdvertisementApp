@@ -1,4 +1,4 @@
-package local.project.Inzynierka.web.resource;
+package local.project.Inzynierka.resource;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

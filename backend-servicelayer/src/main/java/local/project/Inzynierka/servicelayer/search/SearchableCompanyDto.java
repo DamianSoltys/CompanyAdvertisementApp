@@ -11,4 +11,5 @@ class SearchableCompanyDto {
     private Long id;
     private final String type = "Company";
     private Address address;
+    private String category;
 }

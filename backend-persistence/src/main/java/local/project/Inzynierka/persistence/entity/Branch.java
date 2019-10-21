@@ -62,8 +62,8 @@ public class Branch extends FullTimestampingAudit implements IEntity<Long>, Sear
     private String photoPath;
 
     @Column(name = "x_geo_coordinate")
-    private Float geoX;
+    private Double geoX;
 
     @Column(name = "y_geo_coordinate")
-    private Float geoY;
+    private Double geoY;
 }

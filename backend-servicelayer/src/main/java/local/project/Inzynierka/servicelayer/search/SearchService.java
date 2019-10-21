@@ -49,12 +49,14 @@ public class SearchService {
     private org.apache.lucene.search.Query buildFinalQuery(String term, QueryBuilder branchBuilder, QueryBuilder companyBuilder) {
         org.apache.lucene.search.Query branchQuery = branchBuilder
                 .keyword()
+                .fuzzy()
                 .onFields("name", "address.city", "address.street")
                 .matching(term)
                 .createQuery();
 
         org.apache.lucene.search.Query companyQuery = companyBuilder
                 .keyword()
+                .fuzzy()
                 .onFields("name", "category.name", "address.city", "address.street")
                 .matching(term)
                 .createQuery();
@@ -80,6 +82,7 @@ public class SearchService {
             Company company = (Company) entity;
             res.add(SearchableCompanyDto.builder()
                             .id(company.getId())
+                            .category(company.getCategory().getName())
                             .name(company.getName())
                             .address(addressMapper.map(company.getAddress()))
                             .build());

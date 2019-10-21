@@ -29,6 +29,7 @@ import { LoaderService } from 'src/app/services/loader.service';
 import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
 import { FormErrorService } from 'src/app/services/form-error.service';
 import { ActivatedRoute, Route, Router } from '@angular/router';
+import { BranchService } from 'src/app/services/branch.service';
 
 export interface Position {
   latitude: number;
@@ -114,7 +115,7 @@ export class CompanyComponent implements OnInit {
     private pDataService: PersonalDataService,
     private cDataService: CompanyService,
     private uDataService: UserService,
-    private loaderService: LoaderService,
+    private bDataService:BranchService,
     private snackbarService:SnackbarService,
     private formErrorService:FormErrorService,
     private activatedRoute:ActivatedRoute,
@@ -167,7 +168,7 @@ export class CompanyComponent implements OnInit {
 
   private registerGetCompanyListener() {
     this.cDataService.getCompanyData.subscribe(()=>{
-      this.getCompanyList();
+      this.getCompanyList(true);
     });
   }
   
@@ -186,10 +187,6 @@ export class CompanyComponent implements OnInit {
               this.companyList.push(<GetCompany>response.body);
               this.companyList.sort(this.companySort);
               this.cDataService.storeCompanyData(<GetCompany>response.body);
-
-              if (index === userREST.companiesIDs.length) {
-                this.dataLoaded.next(true);
-              }
             },
             error => {
               console.log(error);
@@ -274,7 +271,22 @@ export class CompanyComponent implements OnInit {
     if (this.workForm.valid) {
       this.addAnotherWork();
     }
-    console.log('Dodawanko');
+    let branches:Branch[] = this.workForms;
+    this.bDataService.addBranches(this.editRequestData.backId,branches).subscribe(response=>{
+      this.snackbarService.open({
+        message:'Pomyślnie dodano nowe zakłady',
+        snackbarType:SnackbarType.success,
+      });
+      this.uDataService.updateUser().subscribe(data=>{
+        this.cDataService.getCompanyData.next(true);
+        this.bDataService.getBranchData.next(true);
+        this.router.navigate(['companyProfile',this.editRequestData.backId]); 
+      });
+    },error=>{
+      this.formErrorService.open({
+        message:'Nie udało się zmienić danych!'
+      });
+    });
   }
 
   private patchCompanyData() {
@@ -291,7 +303,7 @@ export class CompanyComponent implements OnInit {
           });
           this.getCompanyList(true);
           this.uDataService.updateUser().subscribe(data=>{
-            this.router.navigate(['companyProfile',this.editRequestData.companyId]);      
+          this.router.navigate(['companyProfile',this.editRequestData.companyId]);      
           });
         },
         error => {
@@ -320,8 +332,8 @@ export class CompanyComponent implements OnInit {
           message:'Pomyślnie dodano firmę',
           snackbarType:SnackbarType.success,
         });
-        this.getCompanyList();
         this.uDataService.updateUser().subscribe(data=>{
+          this.cDataService.getCompanyData.next(true);
           this.toggleDataList();
         });
       },

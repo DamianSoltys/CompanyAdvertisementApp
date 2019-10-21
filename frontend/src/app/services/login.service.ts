@@ -39,6 +39,8 @@ export class LoginService {
       localStorage.removeItem('userREST');
       localStorage.removeItem('naturalUserData');
       localStorage.removeItem('actualPosition');
+      localStorage.removeItem('companyData');
+      localStorage.removeItem('branchData');
       this.ChangeLogged();
       this.router.navigate(['']);
     } else {

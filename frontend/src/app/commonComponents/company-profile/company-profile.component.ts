@@ -48,8 +48,21 @@ export class CompanyProfileComponent implements OnInit {
       this.paramId = params['id'];
     });
     this.getCompanyData();
+    this.registerListeners();
   }
-  private getCompanyData() {
+
+  private registerListeners() {
+    this.bDataService.getBranchData.subscribe(()=>{
+      this.getCompanyData(true);
+    });
+  }
+
+  private getCompanyData(clearCompanyStorage?:boolean) {
+    if(clearCompanyStorage) {
+      localStorage.removeItem('companyData');
+      this.companyData = undefined;
+    }
+
     this.getStorageCompanyData();
 
     if (!this.companyData) {
@@ -58,6 +71,7 @@ export class CompanyProfileComponent implements OnInit {
           this.companyData = <GetCompany>response.body;
           this.cDataService.storeCompanyData(<GetCompany>response.body);
           this.checkForCompanyOwnership();
+          this.getBranchData();
         },
         error => {
           this.checkForCompanyOwnership();
@@ -75,12 +89,15 @@ export class CompanyProfileComponent implements OnInit {
       let companyData: GetCompany[] = JSON.parse(
         localStorage.getItem('companyData')
       );
-      companyData.forEach(company => {
-        if (this.paramId == company.companyId) {
-          this.companyData = company;
-          this.checkForCompanyOwnership();
-        }
-      });
+      if(companyData) {
+        companyData.forEach(company => {
+          if (this.paramId == company.companyId) {
+            this.companyData = company;
+            this.checkForCompanyOwnership();
+            this.getBranchData();
+          }
+        });
+      }
     }
   }
 
@@ -99,25 +116,26 @@ export class CompanyProfileComponent implements OnInit {
   }
 
   private getBranchData() {
+
     if (this.companyData) {
       this.branchData = [];
-      this.companyData.branchesIDs.forEach((branchId, index) => {
-        this.bDataService.getBranch(branchId).subscribe(
-          response => {
-            let branchData: Branch = <Branch>response.body;
-            branchData.branchId = branchId;
-            this.branchData.push(branchData);
-            if (index == this.companyData.branchesIDs.length) {
-              this.isLoaded.next(true);
+      this.companyData.branchesIDs.forEach((branchId, index) => {       
+          this.bDataService.getBranch(branchId).subscribe(
+            response => {
+              let branchData: Branch = <Branch>response.body;
+              branchData.branchId = branchId;
+              this.branchData.push(branchData);
+              if (index == this.companyData.branchesIDs.length) {
+                this.isLoaded.next(true);
+              }
+            },
+            error => {
+              this.snackbarService.open({
+                message:'Nie udało się załadować danych!',
+                snackbarType:SnackbarType.error,
+              });
             }
-          },
-          error => {
-            this.snackbarService.open({
-              message:'Nie udało się załadować danych!',
-              snackbarType:SnackbarType.error,
-            });
-          }
-        );
+          );      
       });
     }
     if(!this.companyData.branchesIDs.length) {
@@ -133,7 +151,6 @@ export class CompanyProfileComponent implements OnInit {
   }
 
   public showBranches() {
-    this.getBranchData();
     this.canShowCompany.next(false);
     this.canShowBranches.next(true);
   }

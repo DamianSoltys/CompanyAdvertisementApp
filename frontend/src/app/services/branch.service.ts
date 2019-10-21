@@ -4,7 +4,7 @@ import { Route, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Company, Branch, Address, GetCompany } from '../classes/Company';
 import { UserREST } from '../classes/User';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +12,8 @@ import { BehaviorSubject } from 'rxjs';
 export class BranchService {
   public branchData: Branch[] = [];
   private isBranch = new BehaviorSubject(false);
+  public getBranchData = new Subject<boolean>();
+  public deletedId:number;
 
   constructor(private http: HttpClient) {}
 
@@ -24,6 +26,16 @@ export class BranchService {
     return this.http.get(`http://localhost:8090/api/branch/${branchId}`, {
       observe: 'response'
     });
+  }
+
+  public deleteBranch(branchId:number) {
+    return this.http.delete(`http://localhost:8090/api/branch/${branchId}`, {
+      observe: 'response'
+    });
+  }
+
+  public addBranches(companyId:number,branches:Branch[]) {
+    return this.http.post(`http://localhost:8090/api/companies/${companyId}/branches`,branches);
   }
 
   public storeBranchData(branch: Branch) {
@@ -49,6 +61,12 @@ export class BranchService {
       }
     } else {
       console.log('Store niedostępny');
+    }
+  }
+
+  public deleteStorageData() {
+    if(storage_Avaliable('localStorage')) {
+      localStorage.removeItem('branchData');
     }
   }
 }

@@ -25,14 +25,6 @@ export class CompanyService {
     return this.http.post(`http://localhost:8090/api/companies`, companyData);
 
   }
-
-  public putFile(Url: string, file: File[]) {
-    let data = new FormData();
-    file.forEach((file, index) => {
-      data.append(`Logo${index}`, file, file.name);
-    });
-    return this.http.put(Url, data);
-  }
   public deleteStorageData() {
     if(storage_Avaliable('localStorage')) {
       localStorage.removeItem('companyData');

@@ -11,4 +11,5 @@ class SearchableBranchDto {
     private Long id;
     private final String type = "Branch";
     private Address address;
+    private Long companyId;
 }

@@ -95,6 +95,7 @@ public class SearchService {
             AddressMapper addressMapper = new AddressMapper();
             Branch branch = (Branch) entity;
             res.add(SearchableBranchDto.builder()
+                            .companyId(branch.getCompany().getId())
                             .id(branch.getId())
                             .name(branch.getName())
                             .address(addressMapper.map(branch.getAddress()))

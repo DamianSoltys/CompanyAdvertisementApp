@@ -70,11 +70,11 @@ export class CompanyProfileComponent implements OnInit {
       this.cDataService.getCompany(this.paramId).subscribe(
         response => {
           this.companyData = <GetCompany>response.body;
+          console.log(this.companyData);
           this.cDataService.getCompanyLogo(this.companyData).subscribe(response=>{
             let reader = new FileReader();
                 reader.addEventListener("load", () => {
                     this.companyData.logo = reader.result;
-                    console.log(this.companyData.logo)
                     this.cDataService.storeCompanyData(this.companyData);
                     this.checkForCompanyOwnership();
                     this.getBranchData();
@@ -137,25 +137,41 @@ export class CompanyProfileComponent implements OnInit {
     let subject = new Subject<any>();
     subject.subscribe(()=>{
       this.isLoaded.next(true);
+      console.log('co tu sie dzieje')
     });
 
     if (this.companyData) {
       this.branchData = [];
+      console.log(this.companyData.branchesIDs)
+
+      if(!this.companyData.branchesIDs.length) {
+        subject.next(true);
+      }
+
       this.companyData.branchesIDs.forEach((branchId, index) => {       
           this.bDataService.getBranch(branchId).subscribe(
-            response => {
-              let branchData: Branch = <Branch>response.body;
+            response => { 
+              let branchData: Branch = <Branch>response.body;             
               this.bDataService.getBranchLogo(branchData).subscribe(response=>{
-                let reader = new FileReader();
-                reader.addEventListener("load", () => {
+                if(response.status != 204) {
+                  let reader = new FileReader();
+                  reader.addEventListener("load", () => {
+                    console.log('elo')
                     branchData.logo = reader.result;
                     branchData.branchId = branchId;
                     this.branchData.push(branchData);
                     subject.next(true);
+                    
                 }, false);
 
                 if (response.body) {
                     reader.readAsDataURL(response.body);
+                }
+                } else {
+                  branchData.logo = this.bDataService.defaultLogoUrl;
+                branchData.branchId = branchId;
+                this.branchData.push(branchData);
+                subject.next(true);
                 }
 
               },error=>{

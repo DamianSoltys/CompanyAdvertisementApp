@@ -31,7 +31,7 @@ export class BranchService {
   }
 
   public getBranchLogo(branchData:Branch) {
-    let url = this.removeDot(branchData.logoURL);
+    let url = branchData.logoURL;
     return this.http.get(url,{observe: 'response',responseType:'blob'});
   }
 
@@ -48,7 +48,7 @@ export class BranchService {
       let branches:Branch[] = <Branch[]>response;
       let counter:number = 0;
       branches.forEach((branch,index)=>{
-        let url = this.removeDot(branch.logoPath);
+        let url = branch.logoPath;
         let logoData = new FormData();
         logoData.append(branch.logoKey,logoList[index]);
 
@@ -71,23 +71,20 @@ export class BranchService {
     return subject;
   }
 
-  public removeDot(text:string):string {
-    return text = text.split('.')[0];
-  }
-
   public editBranch(editRequestData:EditRequestData,branch:Branch,workLogo:File):Subject<any> {
     let subject = new Subject<any>();
     this.http.patch(`http://localhost:8090/api/branch/${editRequestData.workId}`,branch).subscribe(response=>{
       if(workLogo) {
-        console.log(editRequestData);
-        let url = this.removeDot(editRequestData.logoURL);
+        console.log(response);
+        let url = editRequestData.logoURL;
         let logoData = new FormData();
         logoData.append(editRequestData.logoKey,workLogo);
         this.http.put(url,logoData).subscribe(response=>{
           console.log("dodano plcizek");
-        subject.next(true);
+          subject.next(true);
         },error=>{
-          subject.next(false);
+          console.log(error)
+          subject.next(true);
         });
       } else {
         subject.next(true);

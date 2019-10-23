@@ -180,20 +180,31 @@ export class CompanyComponent implements OnInit {
         this.cDataService.deleteStorageData();
       }
       let userREST: UserREST = JSON.parse(localStorage.getItem('userREST'));
+      let subject = new Subject<any>();
+
+      subject.subscribe(()=>{
+        this.dataLoaded.next(true);
+      });
+
       if (userREST.companiesIDs) {
         this.companyList = [];
+        let counter:number = 0;
         userREST.companiesIDs.forEach((companyId, index) => {
-
           this.cDataService.getCompany(companyId).subscribe(
             response => {
               let companyData:GetCompany = <GetCompany>response.body;
-              this.cDataService.getCompanyLogo(companyData).subscribe(response=>{
+              this.cDataService.getCompanyLogo(companyData).subscribe(response=>{             
                 let reader = new FileReader();
                 reader.addEventListener("load", () => {
+                    counter++;
                     companyData.logo = reader.result;
                     this.companyList.push(companyData);
                     this.companyList.sort(this.companySort);
                     this.cDataService.storeCompanyData(companyData);
+
+                    if(counter === userREST.companiesIDs.length) {
+                      subject.next(true);
+                    }
                 }, false);
 
                 if (response.body) {
@@ -201,14 +212,19 @@ export class CompanyComponent implements OnInit {
                 }
                 
               },error=>{
+                counter++;
                 companyData.logo = this.cDataService.defaultCListUrl;
                 this.companyList.push(companyData);
                 this.companyList.sort(this.companySort);
                 this.cDataService.storeCompanyData(<GetCompany>response.body);
-
+                
+                if(counter === userREST.companiesIDs.length) {
+                  subject.next(true);
+                }
               });
             },
             error => {
+              subject.next(true);
               console.log(error);
             }
           );
@@ -218,7 +234,7 @@ export class CompanyComponent implements OnInit {
         !userREST.companiesIDs ||
         (userREST.companiesIDs && !userREST.companiesIDs.length)
       ) {
-        this.dataLoaded.next(true);
+        subject.next(true);
       }
     }
   }
@@ -327,6 +343,7 @@ export class CompanyComponent implements OnInit {
           });
           this.getCompanyList(true);
           this.uDataService.updateUser().subscribe(data=>{
+            this.cDataService.getCompanyData.next(true);
           this.router.navigate(['companyProfile',this.editRequestData.companyId]);      
           });
         } else {

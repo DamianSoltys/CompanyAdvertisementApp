@@ -13,4 +13,9 @@ public interface AddressRepository extends ApplicationBigRepository<Address> {
     @Modifying
     @Query(value = "delete from addresses where id in ?1", nativeQuery = true)
     void deleteAllById(List<Long> addresses);
+
+    @Query(value = "select * from addresses a " +
+            "JOIN voivodeships v on a.voivodeship_id = v.voivodeship_id " +
+            "WHERE v.name = ?1", nativeQuery = true)
+    List<Address> findByVoivodeship_id(String voivoideship);
 }

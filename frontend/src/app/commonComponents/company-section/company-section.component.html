@@ -1,6 +1,7 @@
 <div class="company-section__company-container" *ngIf="!showWorks">
   <div class="company-container__company-logo">
-    <p class="company-logo__text-node">Logo</p>
+    
+    <img class="company-logo__logo" src="{{companyData.logo}}" alt="{{companyData.companyName}}_logo">
   </div>
   <div class="company-container__company-data">
     <div class="company-data__data-container">
@@ -33,9 +34,9 @@
   </div>
 </div>
 
-<div class="branch-section__branch-container" *ngIf="showWorks">
+<div class="branch-section__branch-container" *ngIf="showBranches()">
   <div class="branch-container__branch-logo">
-    <p class="branch-logo__text-node">Logo</p>
+    <img *ngIf="branchData.logo" class="branch-logo__logo" src="{{branchData.logo}}" alt="{{branchData.name}}_logo">
   </div>
   <div class="branch-container__branch-data">
     <div class="branch-data__data-container">

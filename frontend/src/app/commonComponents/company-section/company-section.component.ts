@@ -36,6 +36,14 @@ export class CompanySectionComponent implements OnInit, OnDestroy {
         }
       }
     }
+    console.log(this.branchData)
+  }
+  public showBranches() {
+    if(this.showWorks && this.companyData && this.branchData) {
+      return true;
+    }else {
+      return false;
+    }
   }
 
   public deleteCompany() {
@@ -52,7 +60,16 @@ export class CompanySectionComponent implements OnInit, OnDestroy {
   }
 
   public deleteBranch() {
-    console.log('delete');
+    this.bDataService.deleteBranch(this.branchData.branchId).subscribe(
+      response => {
+        this.uDataService.updateUser().subscribe(()=>{
+          this.bDataService.getBranchData.next(true);
+        });
+      },
+      error => {
+        console.log(error);
+      }
+    );
   }
   ngOnDestroy() {
     if (this.companyData && !this.showWorks) {

@@ -8,7 +8,7 @@
     </div>
     <div class="main-container__content" *ngIf="companyData">
       <div class="content__section--logo col-12 col-md-4">
-        LOGO
+        <img *ngIf="companyData.logo" class="content__section--logo__logo" src="{{companyData.logo}}" alt="{{companyData.companyName}}_logo">
       </div>
       <div class="content__section--main col-12 col-md-4">
         <div class="section--main__data">
@@ -113,7 +113,7 @@
         Firma nie posiada żadnego zakładu
       </p>
     </div>
-    <div class="branch-sections__branch-section">
+    <div class="branch-sections__branch-section" *ngIf="isLoaded.value">
     <div
       class="branch-section__branch"
       *ngFor="let branch of branchData"

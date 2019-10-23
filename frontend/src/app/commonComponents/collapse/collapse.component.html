@@ -1,7 +1,7 @@
 <div class= "collapse-component">
     <div class="collapse-component__container">
       <button class="container__button btn btn-primary" (click)="open($event)">Zakład:{{branchData.name}}</button>
-      <div class="container__data" *ngIf="isOpen.value" [@collapseAnimate]>
+      <div class="container__data" [@collapseAnimate] = "isOpen.value?'visible':'hidden'">
         <p class="data__text-node"><span class="text_node--label">Nazwa: </span>{{branchData.name}}</p>
         <p class="data__text-node"><span class="text_node--label">Województwo: </span>{{branchData.address.voivodeship}}</p>
         <p class="data__text-node"><span class="text_node--label">Miasto: </span>{{branchData.address.city}}</p>

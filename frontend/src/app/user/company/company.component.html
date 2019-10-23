@@ -255,10 +255,12 @@
 <!--WORK-FORM-->
 <div class="company-component container-fluid" *ngIf="this.canShowWorkForm.getValue()">
   <div class="company-component__form">
-    <form [formGroup]="workForm" class="form__add-form" (ngSubmit)="onSubmit($event)">
+    <form [formGroup]="workForm" class="form__add-form" (ngSubmit)="onSubmit($event)">   
       <div class="add-form__header">
         <span class="header__text-node">Dane zakładu {{ workNumber }}</span>
       </div>
+      <div class="form-container__form-collapse">
+          <div>
       <div class="add-form__input-container">
         <div class="input-container__input-group">
           <div class="input-container__input-group">
@@ -390,12 +392,17 @@
       </div>
       <div class="company-component__button-container company-component__buttons-work">
         <button class="btn button-container__button--submit" (click)="addAnotherWork()"
-          [disabled]="!this.workForm.valid">
+          [disabled]="!this.workForm.valid"
+          *ngIf="!editRequestData.workId">
           <span class="button--add__text-node">Dodaj następny zakład</span>
         </button>
         <button type="submit" class="btn button-container__button--submit" *ngIf="editRequestData.addWork"
           [disabled]="!this.workForm.valid">
           <span class="button--add__text-node">Dodaj zakład</span>
+        </button>
+        <button type="submit" class="btn button-container__button--submit" *ngIf="editRequestData.workId"
+          [disabled]="!this.workForm.valid">
+          <span class="button--add__text-node">Edytuj zakład</span>
         </button>
       </div>
       <div class="company-component__rodo-container text-center col-12">
@@ -407,6 +414,16 @@
         </p>
       </div>
       <app-form-error></app-form-error>
+    </div>
+      <div class="form-container__collapse" *ngIf="canShowBranchData()">
+        <div class="collapse__header">
+          <p class="header__text-node">Dodane zakłady</p>
+        </div>
+        <div class="collapse__container">
+          <app-collapse *ngFor="let branch of workForms" [branchData]="branch"></app-collapse>
+        </div>
+      </div>
+    </div>
     </form>
   </div>
   <div class="company-component__separator"></div>

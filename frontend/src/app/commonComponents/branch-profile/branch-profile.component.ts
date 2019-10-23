@@ -4,7 +4,7 @@ import { BranchService } from 'src/app/services/branch.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
 import { BehaviorSubject } from 'rxjs';
-import { Position, Marker } from 'src/app/user/company/company.component';
+import { Position, Marker, EditRequestData } from 'src/app/user/company/company.component';
 import { UserREST } from 'src/app/classes/User';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
@@ -24,6 +24,7 @@ export class BranchProfileComponent implements OnInit {
   private branchId: number;
   private companyId: number;
   public owner = new BehaviorSubject(false);
+  public editData:EditRequestData;
 
   constructor(
     private bDataService: BranchService,
@@ -37,9 +38,17 @@ export class BranchProfileComponent implements OnInit {
       this.branchId = params['idBranch'];
       this.companyId = params['idCompany'];
     });
+
     this.getBranchData();
+    this.registerBranchListener();
+    console.log(this.branchData)
   }
 
+  public registerBranchListener() {
+    this.bDataService.getBranchData.subscribe(()=>{
+      this.getBranchData(true);
+    });
+  }
   public goBack(isCompany: boolean) {
     if (isCompany) {
       this.router.navigate(['/companyProfile', this.companyId]);
@@ -65,37 +74,77 @@ export class BranchProfileComponent implements OnInit {
   }
 
   public showEditForm() {
-    console.log('edit');
+    this.editData = {
+      companyId: null,
+      workId: this.branchData.branchId,
+      addWork: null,
+      backId:this.companyId,
+      logoKey:this.branchData.logoKey,
+      logoURL:this.branchData.logoURL,
+    };
+    this.router.navigate(['edit'],{relativeTo:this.activatedRoute,queryParams:this.editData});
   }
 
-  private getBranchData() {
+  private getBranchData(clearDataStorage?:boolean) {
+    if(clearDataStorage) {
+      this.bDataService.deleteStorageData();
+    }
     this.getStorageBranchData();
     if (!this.branchData) {
       this.bDataService.getBranch(this.branchId).subscribe(
         response => {
           this.branchData = <Branch>response.body;
+          this.bDataService.getBranchLogo(this.branchData).subscribe(response=>{
+            let reader = new FileReader();
+            reader.addEventListener("load", () => {
+                this.branchData.logo = reader.result;
+                this.checkBranchOwnership();
+                this.mapMarker = {
+                  latitude: Number(this.branchData.geoX),
+                  longitude: Number(this.branchData.geoY),
+                  label: 'Zakład'
+                };
+            }, false);
+
+            if (response.body) {
+                reader.readAsDataURL(response.body);
+            }
+          
+          },error=>{
+            this.branchData.logo = this.bDataService.defaultLogoUrl;
+            this.checkBranchOwnership();
+            this.mapMarker = {
+              latitude: Number(this.branchData.geoX),
+              longitude: Number(this.branchData.geoY),
+              label: 'Zakład'
+            };
+          });
         },
         error => {
           console.log(error);
         }
       );
+    } else {
+      this.checkBranchOwnership();
+      this.mapMarker = {
+        latitude: Number(this.branchData.geoX),
+        longitude: Number(this.branchData.geoY),
+        label: 'Zakład'
+      };
     }
-    this.checkBranchOwnership();
-    this.mapMarker = {
-      latitude: Number(this.branchData.geoX),
-      longitude: Number(this.branchData.geoY),
-      label: 'Zakład'
-    };
+    
   }
 
   private getStorageBranchData() {
     if (storage_Avaliable('localStorage')) {
       let branchData: Branch[] = JSON.parse(localStorage.getItem('branchData'));
-      branchData.forEach(branch => {
-        if (this.branchId == branch.branchId) {
-          this.branchData = branch;
-        }
-      });
+      if(branchData) {
+        branchData.forEach(branch => {
+          if (this.branchId == branch.branchId) {
+            this.branchData = branch;
+          }
+        });
+      }
     }
   }
 }

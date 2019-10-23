@@ -133,6 +133,13 @@
             }
           }
         }
+
+        &--logo {
+          .content__section--logo__logo {
+            width:100%;
+            height:100%;
+          }
+        }
       }
 
       .section--description__data {

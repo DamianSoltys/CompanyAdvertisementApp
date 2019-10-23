@@ -11,15 +11,17 @@ import {
   state,
   style,
   animate,
-  transition
+  transition,
+  query
 } from '@angular/animations';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LoginService } from './services/login.service';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { storage_Avaliable } from './classes/storage_checker';
 import { UserREST, PersonalData } from './classes/User';
 import { PersonalDataService } from './services/personal-data.service';
 import { SnackbarService, SnackbarType } from './services/snackbar.service';
+import { slideInAnimation } from './animations/route-animation';
 
 @Component({
   selector: 'app-root',
@@ -49,15 +51,15 @@ import { SnackbarService, SnackbarType } from './services/snackbar.service';
       state(
         'visible',
         style({
-          transform: 'scaleY(1)',
-          top: '48px'
+          height:'*',
+          overflow:'hidden'
         })
       ),
       state(
         'hidden',
         style({
-          transform: 'scaleY(0)',
-          top: '-200px'
+          height:'0px',
+          overflow:'hidden'
         })
       ),
       transition('visible <=> hidden', [animate('.2s')])
@@ -66,17 +68,20 @@ import { SnackbarService, SnackbarType } from './services/snackbar.service';
       state(
         'visible',
         style({
-          transform: 'scaleY(1)'
+          height:'*',
+          overflow:'hidden'
         })
       ),
       state(
         'hidden',
         style({
-          transform: 'scaleY(0)'
+          height:'0px',
+          overflow:'hidden'
         })
       ),
       transition('visible <=> hidden', [animate('.2s')])
-    ])
+    ]),
+    slideInAnimation,
   ]
 })
 export class AppComponent implements OnInit {
@@ -139,5 +144,9 @@ export class AppComponent implements OnInit {
       snackbarType:SnackbarType.success,
     });
     this.lgservice.logoutStorageClean();
+  }
+
+  prepareRoute(outlet: RouterOutlet) {
+    return outlet && outlet.activatedRouteData;
   }
 }

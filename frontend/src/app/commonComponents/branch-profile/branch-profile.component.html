@@ -5,7 +5,7 @@
     </div>
     <div class="main-container__content" *ngIf="branchData">
       <div class="content__section--logo col-12 col-md-4">
-        LOGO
+        <img *ngIf="branchData.logo" class="content__section--logo__logo" src="{{branchData.logo}}" alt="{{branchData.companyName}}_logo">
       </div>
       <div class="content__section--main col-12 col-md-4">
         <div class="section--main__data">

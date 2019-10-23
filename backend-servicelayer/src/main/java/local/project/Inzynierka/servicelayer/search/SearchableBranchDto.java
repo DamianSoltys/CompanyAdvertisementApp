@@ -7,9 +7,13 @@ import lombok.Data;
 @Data
 @Builder
 class SearchableBranchDto {
+    private final String type = "Branch";
     private String name;
     private Long id;
-    private final String type = "Branch";
     private Address address;
     private Long companyId;
+    private String logoPath;
+    private String logoKey;
+    private Boolean hasLogoAdded;
+    private String category;
 }

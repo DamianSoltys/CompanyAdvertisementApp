@@ -3,6 +3,7 @@ package local.project.Inzynierka.servicelayer.search;
 import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.servicelayer.dto.mapper.AddressMapper;
+import local.project.Inzynierka.shared.utils.LogoFilePathCreator;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.data.domain.Page;
@@ -81,6 +82,9 @@ public class SearchService {
             AddressMapper addressMapper = new AddressMapper();
             Company company = (Company) entity;
             res.add(SearchableCompanyDto.builder()
+                            .hasLogoAdded(company.isHasLogoAdded())
+                            .logoPath(company.getLogoPath())
+                            .logoKey(LogoFilePathCreator.getLogoKey(company.getLogoPath()))
                             .id(company.getId())
                             .category(company.getCategory().getName())
                             .name(company.getName())
@@ -95,6 +99,10 @@ public class SearchService {
             AddressMapper addressMapper = new AddressMapper();
             Branch branch = (Branch) entity;
             res.add(SearchableBranchDto.builder()
+                            .category(branch.getCompany().getCategory().getName())
+                            .hasLogoAdded(branch.isHasLogoAdded())
+                            .logoPath(branch.getPhotoPath())
+                            .logoKey(LogoFilePathCreator.getLogoKey(branch.getPhotoPath()))
                             .companyId(branch.getCompany().getId())
                             .id(branch.getId())
                             .name(branch.getName())

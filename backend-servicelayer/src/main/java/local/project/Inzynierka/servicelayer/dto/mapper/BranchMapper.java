@@ -12,6 +12,7 @@ import local.project.Inzynierka.shared.utils.LogoFilePathCreator;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -25,6 +26,7 @@ public class BranchMapper {
         companyBranchDto.setGeoY(branch.getGeoY());
         companyBranchDto.setName(branch.getName());
         companyBranchDto.setLogoURL(branch.getPhotoPath());
+        companyBranchDto.setHasLogoAdded(branch.isHasLogoAdded());
         companyBranchDto.setLogoKey(LogoFilePathCreator.getLogoKey(branch.getPhotoPath()));
         return companyBranchDto;
     }
@@ -38,6 +40,7 @@ public class BranchMapper {
     public PersistedBranchDto mapPersistedBranch(Branch branch) {
         PersistedBranchDto persistedBranchDto = new PersistedBranchDto();
         persistedBranchDto.setAddress(new AddressMapper().map(branch.getAddress()));
+        persistedBranchDto.setHasLogoAdded(branch.isHasLogoAdded());
         persistedBranchDto.setGeoX(branch.getGeoX());
         persistedBranchDto.setGeoY(branch.getGeoY());
         persistedBranchDto.setName(branch.getName());
@@ -55,14 +58,17 @@ public class BranchMapper {
 
     public Branch mapAddBranchDto(AddBranchDto addBranchDto, Long companyId, Long personId, Address address) {
 
+        String entityUUID = UUID.randomUUID().toString();
+
         return Branch.builder()
                 .name(addBranchDto.getName())
                 .address(address)
+                .hasLogoAdded(false)
                 .company(Company.builder().id(companyId).build())
                 .geoX(addBranchDto.getGeoX())
                 .geoY(addBranchDto.getGeoY())
                 .registerer(NaturalPerson.builder().id(personId).build())
-                .photoPath(LogoFilePathCreator.buildEntityLogoURL(EntityName.BRANCH))
+                .photoPath(LogoFilePathCreator.buildEntityLogoURL(entityUUID, EntityName.BRANCH))
                 .build();
     }
 }

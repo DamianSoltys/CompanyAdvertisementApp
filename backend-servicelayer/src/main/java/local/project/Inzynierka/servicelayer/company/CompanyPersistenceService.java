@@ -1,4 +1,4 @@
-package local.project.Inzynierka.servicelayer.services;
+package local.project.Inzynierka.servicelayer.company;
 
 import local.project.Inzynierka.persistence.entity.Address;
 import local.project.Inzynierka.persistence.entity.Category;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CompanyPersistenceService {
@@ -44,6 +45,7 @@ public class CompanyPersistenceService {
     Company getPersistedCompany(Company company, UserAccount userAccount) {
 
         User user = this.userRepository.getByAddressEmail(userAccount.getEmail());
+        String entityUUID = UUID.randomUUID().toString();
 
         return this.companyRepository.save(Company.builder()
                                                    .address(this.getPersistedAddress(company.getAddress()))
@@ -53,7 +55,8 @@ public class CompanyPersistenceService {
                                                    .name(company.getName())
                                                    .NIP(company.getNIP())
                                                    .registerer(user.getNaturalPerson())
-                                                   .logoPath(LogoFilePathCreator.buildEntityLogoURL(EntityName.COMPANY))
+                                                   .companyUUID(entityUUID)
+                                                   .logoPath(LogoFilePathCreator.buildEntityLogoURL(entityUUID, EntityName.COMPANY))
                                                    .REGON(company.getREGON())
                                                    .build());
     }

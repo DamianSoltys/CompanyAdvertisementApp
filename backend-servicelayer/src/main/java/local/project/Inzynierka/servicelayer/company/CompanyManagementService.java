@@ -1,9 +1,10 @@
-package local.project.Inzynierka.servicelayer.services;
+package local.project.Inzynierka.servicelayer.company;
 
 import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.persistence.entity.Category;
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.repository.CompanyRepository;
+import local.project.Inzynierka.servicelayer.company.event.CompanyLogoAddedEvent;
 import local.project.Inzynierka.servicelayer.dto.AddBranchDto;
 import local.project.Inzynierka.servicelayer.dto.AddCompanyDto;
 import local.project.Inzynierka.servicelayer.dto.BranchBuildDto;
@@ -16,6 +17,8 @@ import local.project.Inzynierka.servicelayer.dto.mapper.AddressMapper;
 import local.project.Inzynierka.servicelayer.dto.mapper.CompanyExtractor;
 import local.project.Inzynierka.shared.UserAccount;
 import local.project.Inzynierka.shared.utils.LogoFilePathCreator;
+import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -135,6 +138,7 @@ public class CompanyManagementService {
 
         AddressMapper addressMapper = new AddressMapper();
         return CompanyInfoDto.builder()
+                .hasLogoAdded(company.isHasLogoAdded())
                 .logoURL(company.getLogoPath())
                 .logoKey(LogoFilePathCreator.getLogoKey(company.getLogoPath()))
                 .category(company.getCategory().getName())
@@ -190,4 +194,14 @@ public class CompanyManagementService {
 
         return this.branchPersistenceService.saveBranch(addBranchDto, id, userAccount.personId());
     }
+
+    @Async
+    @EventListener
+    public void setCompanyHasLogoFlag(CompanyLogoAddedEvent companyLogoAddedEvent) {
+        Company company = companyRepository.findByCompanyUUID(companyLogoAddedEvent.getCompanyUUID())
+                .orElseThrow(IllegalStateException::new);
+        company.setHasLogoAdded(true);
+        companyRepository.save(company);
+    }
+
 }

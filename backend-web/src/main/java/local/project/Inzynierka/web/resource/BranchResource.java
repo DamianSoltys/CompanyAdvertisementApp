@@ -66,6 +66,10 @@ public class BranchResource {
     @RequestMapping(method = RequestMethod.DELETE, value = "/branch/{id}")
     public ResponseEntity<?> deleteBranch(@PathVariable(value = "id") Long branchId) {
 
+        if (!branchManagementPermissionService.hasManagingAuthority(branchId, this.authFacade.getAuthenticatedUser())) {
+            return new ResponseEntity<>(SimpleJsonFromStringCreator.toJson(LACK_OF_MANAGING_PERMISSION_MESSAGE), HttpStatus.FORBIDDEN);
+        }
+
         branchManagementService.deleteBranch(branchId);
 
         return ResponseEntity.ok(SimpleJsonFromStringCreator.toJson(branchId.toString()));

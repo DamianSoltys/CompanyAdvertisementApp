@@ -68,6 +68,7 @@ public class BranchMapper {
                 .geoX(addBranchDto.getGeoX())
                 .geoY(addBranchDto.getGeoY())
                 .registerer(NaturalPerson.builder().id(personId).build())
+                .branchUUID(entityUUID)
                 .photoPath(LogoFilePathCreator.buildEntityLogoURL(entityUUID, EntityName.BRANCH))
                 .build();
     }

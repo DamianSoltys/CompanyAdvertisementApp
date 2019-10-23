@@ -12,4 +12,7 @@ class SearchableCompanyDto {
     private final String type = "Company";
     private Address address;
     private String category;
+    private String logoPath;
+    private String logoKey;
+    private Boolean hasLogoAdded;
 }

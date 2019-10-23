@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CompanyRepository extends ApplicationBigRepository<Company> {
@@ -39,4 +40,6 @@ public interface CompanyRepository extends ApplicationBigRepository<Company> {
 
     @Query(value = "select sp.social_profile_url from social_profiles sp where sp.company_id = ?1", nativeQuery = true)
     List<String> getSocialProfileUrlRelatedToCompany(Long id);
+
+    Optional<Company> findByCompanyUUID(String companyUUID);
 }

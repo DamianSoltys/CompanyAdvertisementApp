@@ -12,4 +12,5 @@ public class PersistedBranchDto {
     private Long branchId;
     private String logoPath;
     private String logoKey;
+    private Boolean hasLogoAdded;
 }

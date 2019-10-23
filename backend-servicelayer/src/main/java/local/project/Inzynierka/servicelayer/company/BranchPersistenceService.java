@@ -1,4 +1,4 @@
-package local.project.Inzynierka.servicelayer.services;
+package local.project.Inzynierka.servicelayer.company;
 
 import local.project.Inzynierka.persistence.entity.Address;
 import local.project.Inzynierka.persistence.entity.Branch;
@@ -12,6 +12,7 @@ import local.project.Inzynierka.servicelayer.dto.PersistedBranchDto;
 import local.project.Inzynierka.servicelayer.dto.mapper.AddressMapper;
 import local.project.Inzynierka.servicelayer.dto.mapper.BranchMapper;
 import local.project.Inzynierka.servicelayer.errors.InvalidVoivodeshipException;
+import local.project.Inzynierka.servicelayer.services.AddressService;
 import local.project.Inzynierka.shared.utils.EntityName;
 import local.project.Inzynierka.shared.utils.LogoFilePathCreator;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 class BranchPersistenceService {
@@ -44,8 +46,11 @@ class BranchPersistenceService {
     void buildAllCompanyBranches(List<Branch> branches, Company createdCompany) {
         branches.forEach(branch -> {
             branch.setCompany(createdCompany);
+            branch.setHasLogoAdded(false);
             branch.setRegisterer(createdCompany.getRegisterer());
-            branch.setPhotoPath(LogoFilePathCreator.buildEntityLogoURL(EntityName.BRANCH));
+            String entityUUID = UUID.randomUUID().toString();
+            branch.setPhotoPath(LogoFilePathCreator.buildEntityLogoURL(entityUUID, EntityName.BRANCH));
+            branch.setBranchUUID(entityUUID);
             Voivoideship branchVoivodeship = this.voivodeshipRepository.findByName(branch.getAddress().getVoivodeship_id().getName()).orElseThrow(InvalidVoivodeshipException::new);
             branch.getAddress().setVoivodeship_id(branchVoivodeship);
             Address branchAddress = this.addressRepository.save(branch.getAddress());

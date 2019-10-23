@@ -119,13 +119,15 @@ BEGIN
         company_website varchar(255)                            null,
         created_at      timestamp default current_timestamp()   not null on update current_timestamp(),
         description     varchar(10000)                          not null,
-        has_branch      bit                                     not null,
-        logo_path       varchar(255)                            null,
-        modified_at     timestamp default '0000-00-00 00:00:00' not null,
-        name            varchar(50)                             not null,
-        address_id      bigint                                  not null,
-        category_id     smallint(6)                             not null,
-        registerer_id   bigint                                  not null,
+        has_branch     bit                                     not null,
+        logo_path      varchar(255)                            null,
+        modified_at    timestamp default '0000-00-00 00:00:00' not null,
+        name           varchar(50)                             not null,
+        address_id     bigint                                  not null,
+        category_id    smallint(6)                             not null,
+        registerer_id  bigint                                  not null,
+        has_logo_added boolean                                 not null default false,
+        companyUUID    varchar(36)                             not null,
         constraint unique_regon
             unique (regon),
         constraint unique_nip
@@ -153,6 +155,8 @@ BEGIN
         address_id       bigint                                  not null,
         company_id       bigint                                  not null,
         registerer_id    bigint                                  not null,
+        has_logo_added   boolean                                 not null default false,
+        branchUUID       varchar(36)                             not null,
         constraint address_branch_FK
             foreign key (address_id) references addresses (id)
                 on delete cascade,

@@ -1,13 +1,16 @@
-package local.project.Inzynierka.servicelayer.services;
+package local.project.Inzynierka.servicelayer.company;
 
 import local.project.Inzynierka.persistence.entity.Address;
 import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.persistence.entity.Voivoideship;
 import local.project.Inzynierka.persistence.repository.BranchRepository;
 import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
+import local.project.Inzynierka.servicelayer.company.event.BranchLogoAddedEvent;
 import local.project.Inzynierka.servicelayer.dto.CompanyBranchDto;
 import local.project.Inzynierka.servicelayer.dto.UpdateBranchInfoDto;
 import local.project.Inzynierka.servicelayer.dto.mapper.AddressMapper;
+import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +43,7 @@ public class BranchManagementService {
     private CompanyBranchDto buildBranchInfoDto(Branch branch) {
         AddressMapper addressMapper = new AddressMapper();
         return CompanyBranchDto.builder()
+                .hasLogoAdded(branch.isHasLogoAdded())
                 .address(addressMapper.map(branch.getAddress()))
                 .geoX(branch.getGeoX())
                 .geoY(branch.getGeoY())
@@ -97,6 +101,15 @@ public class BranchManagementService {
 
     public void deleteBranch(Long branchId) {
         this.branchRepository.deleteById(branchId);
+    }
+
+    @Async
+    @EventListener
+    public void setBranchHasLogoFlag(BranchLogoAddedEvent branchLogoAddedEvent) {
+        Branch branch = branchRepository.findByBranchUUID(branchLogoAddedEvent.getBranchUUID())
+                .orElseThrow(IllegalStateException::new);
+        branch.setHasLogoAdded(true);
+        branchRepository.save(branch);
     }
 
 }

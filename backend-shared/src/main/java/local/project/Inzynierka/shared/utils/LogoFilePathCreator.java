@@ -12,8 +12,7 @@ public class LogoFilePathCreator {
 
     private LogoFilePathCreator() {}
 
-    public static String buildEntityLogoURL(EntityName entityName) {
-        String entityUUID = UUID.randomUUID().toString();
+    public static String buildEntityLogoURL(String entityUUID, EntityName entityName) {
         String logoUUID = UUID.randomUUID().toString();
         return String.format("%s%s", APPLICATION_URL,
                              getLogoFileURLPath(entityUUID, logoUUID, entityName));
@@ -35,8 +34,7 @@ public class LogoFilePathCreator {
     }
 
     private static String getLogoFileURLPath(String entityUUID, String logoUUID, EntityName entityName) {
-        String extension = ".png";
-        return String.format("%s%s%s", getEntityLogoFileDirectoryURLPath(entityUUID, entityName), logoUUID, extension);
+        return String.format("%s%s", getEntityLogoFileDirectoryURLPath(entityUUID, entityName), logoUUID);
     }
 
     public static String getLogoKey(String logoPath) {
@@ -44,8 +42,7 @@ public class LogoFilePathCreator {
         if (logoPath != null) {
             final String URL_PATH_SEPARATOR = "/";
             List<String> backslashSplitPath = Arrays.asList(logoPath.split(URL_PATH_SEPARATOR));
-            String logoFileName = backslashSplitPath.get(backslashSplitPath.size() - 1);
-            return logoFileName.substring(0, logoFileName.length() - 4);
+            return backslashSplitPath.get(backslashSplitPath.size() - 1);
         }
         return "";
 

@@ -1,4 +1,4 @@
-package local.project.Inzynierka.servicelayer.services;
+package local.project.Inzynierka.servicelayer.company;
 
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.NaturalPerson;
@@ -42,6 +42,23 @@ public class CompanyManagementPermissionService {
         }
 
         Company requestedCompany = companyRepository.findById(companyId).orElse(new Company());
+        List<Company> userCompanies = companyRepository.findByRegisterer(naturalPerson);
+
+        return userCompanies.stream().anyMatch(usersCompany -> usersCompany.equals(requestedCompany));
+    }
+
+    public boolean hasManagingAuthority(String companyUUID, UserAccount userAccount) {
+        User user = userRepository.getByAddressEmail(userAccount.getEmail());
+
+        if (user == null) {
+            return false;
+        }
+        NaturalPerson naturalPerson = user.getNaturalPerson();
+        if (naturalPerson == null) {
+            return false;
+        }
+
+        Company requestedCompany = companyRepository.findByCompanyUUID(companyUUID).orElse(new Company());
         List<Company> userCompanies = companyRepository.findByRegisterer(naturalPerson);
 
         return userCompanies.stream().anyMatch(usersCompany -> usersCompany.equals(requestedCompany));

@@ -67,8 +67,14 @@ public class Company extends FullTimestampingAudit implements IEntity<Long>, Sea
     @Column(name = "logo_path")
     private String logoPath;
 
+    @Column(name = "has_logo_added")
+    private boolean hasLogoAdded;
+
     @Column(name = "company_website")
     private String companyWebsiteLink;
+
+    @Column(name = "companyUUID")
+    private String companyUUID;
 
     @Getter(AccessLevel.NONE)
     @Column(name = "has_branch", nullable = false)

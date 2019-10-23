@@ -23,5 +23,6 @@ public class CompanyInfoDto {
     private List<Long> branchesIDs;
     private String logoURL;
     private String logoKey;
+    private Boolean hasLogoAdded;
 
 }

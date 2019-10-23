@@ -1,4 +1,4 @@
-package local.project.Inzynierka.servicelayer.services;
+package local.project.Inzynierka.servicelayer.company;
 
 import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.persistence.entity.NaturalPerson;
@@ -34,6 +34,23 @@ public class BranchManagementPermissionService {
         }
 
         Branch requestedBranch = branchRepository.findById(branchId).orElse(new Branch());
+        List<Branch> userBranches = branchRepository.findByRegisterer(naturalPerson);
+
+        return userBranches.stream().anyMatch(usersBranch -> usersBranch.equals(requestedBranch));
+    }
+
+    public boolean hasManagingAuthority(String branchUUID, UserAccount userAccount) {
+        User user = userRepository.getByAddressEmail(userAccount.getEmail());
+
+        if (user == null) {
+            return false;
+        }
+        NaturalPerson naturalPerson = user.getNaturalPerson();
+        if (naturalPerson == null) {
+            return false;
+        }
+
+        Branch requestedBranch = branchRepository.findByBranchUUID(branchUUID).orElse(new Branch());
         List<Branch> userBranches = branchRepository.findByRegisterer(naturalPerson);
 
         return userBranches.stream().anyMatch(usersBranch -> usersBranch.equals(requestedBranch));

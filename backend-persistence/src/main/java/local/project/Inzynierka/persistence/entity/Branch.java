@@ -61,6 +61,12 @@ public class Branch extends FullTimestampingAudit implements IEntity<Long>, Sear
     @Column(name = "photo_path")
     private String photoPath;
 
+    @Column(name = "has_logo_added")
+    private boolean hasLogoAdded;
+
+    @Column(name = "branchUUID")
+    private String branchUUID;
+
     @Column(name = "x_geo_coordinate")
     private Double geoX;
 

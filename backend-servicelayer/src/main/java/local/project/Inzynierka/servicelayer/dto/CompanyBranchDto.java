@@ -19,4 +19,5 @@ public class CompanyBranchDto {
     private Double geoY;
     private String logoURL;
     private String logoKey;
+    private Boolean hasLogoAdded;
 }

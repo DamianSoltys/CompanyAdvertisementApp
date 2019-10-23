@@ -112,11 +112,11 @@ DELIMITER |
 CREATE OR REPLACE PROCEDURE insert_companies()
 BEGIN
     INSERT IGNORE INTO companies(id, name, NIP, REGON, description, registerer_id, category_id, created_at, modified_at,
-                                 has_branch, address_id)
+                                 has_branch, address_id, companyUUID)
     VALUES (1, 'Mechanikex', '1234567890', '12345678901234', 'Najlepszy w mieście mechanik.', 2, 1, NOW(), NOW(), TRUE,
-            1),
+            1, UUID()),
            (2, 'Urodex', '2234567890', '22345678901234', 'Najlepszy w mieście zakład fryzjerski.', 3, 6, NOW(), NOW(),
-            TRUE, 3);
+            TRUE, 3, UUID());
 END |
 DELIMITER ;
 
@@ -125,11 +125,11 @@ CALL insert_companies();
 DELIMITER  |
 CREATE OR REPLACE PROCEDURE insert_branches()
 INSERT IGNORE INTO branches(branch_id, registerer_id, company_id, name, created_at, modified_at, x_geo_coordinate,
-                            y_geo_coordinate, address_id)
-VALUES (1, 2, 1, 'Mechanikex', NOW(), NOW(), 51.1079, 17.0385, 1),
-       (2, 2, 1, 'Mechanikex', NOW(), NOW(), 51.1071, 17.0383, 2),
-       (3, 3, 2, 'Urodex', NOW(), NOW(), 51.2167, 22.734, 3),
-       (4, 3, 2, 'Urodex 2', NOW(), NOW(), 51.2367, 22.534, 4);
+                            y_geo_coordinate, address_id, branchUUID)
+VALUES (1, 2, 1, 'Mechanikex', NOW(), NOW(), 51.1079, 17.0385, 1, UUID()),
+       (2, 2, 1, 'Mechanikex', NOW(), NOW(), 51.1071, 17.0383, 2, UUID()),
+       (3, 3, 2, 'Urodex', NOW(), NOW(), 51.2167, 22.734, 3, UUID()),
+       (4, 3, 2, 'Urodex 2', NOW(), NOW(), 51.2367, 22.534, 4, UUID());
 
 |
 

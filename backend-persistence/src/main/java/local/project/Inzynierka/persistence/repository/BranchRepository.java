@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BranchRepository extends ApplicationBigRepository<Branch> {
@@ -18,4 +19,6 @@ public interface BranchRepository extends ApplicationBigRepository<Branch> {
     Page<Branch> findAll(Pageable pageable);
 
     List<Branch> findByRegisterer(NaturalPerson naturalPerson);
+
+    Optional<Branch> findByBranchUUID(String branchUUID);
 }

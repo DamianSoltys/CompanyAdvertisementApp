@@ -1,11 +1,11 @@
 package local.project.Inzynierka.web.resource;
 
 import local.project.Inzynierka.auth.AuthFacade;
+import local.project.Inzynierka.servicelayer.company.BranchManagementPermissionService;
+import local.project.Inzynierka.servicelayer.company.BranchManagementService;
 import local.project.Inzynierka.servicelayer.dto.PersistedBranchDto;
 import local.project.Inzynierka.servicelayer.dto.UpdateBranchInfoDto;
 import local.project.Inzynierka.servicelayer.errors.BranchUpdateFailedException;
-import local.project.Inzynierka.servicelayer.services.BranchManagementPermissionService;
-import local.project.Inzynierka.servicelayer.services.BranchManagementService;
 import local.project.Inzynierka.servicelayer.services.BranchQueriesService;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
 import org.springframework.data.domain.Page;

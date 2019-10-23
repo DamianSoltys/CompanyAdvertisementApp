@@ -36,6 +36,7 @@ export class CompanySectionComponent implements OnInit, OnDestroy {
         }
       }
     }
+    console.log(this.branchData)
   }
   public showBranches() {
     if(this.showWorks && this.companyData && this.branchData) {

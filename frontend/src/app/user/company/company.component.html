@@ -392,12 +392,17 @@
       </div>
       <div class="company-component__button-container company-component__buttons-work">
         <button class="btn button-container__button--submit" (click)="addAnotherWork()"
-          [disabled]="!this.workForm.valid">
+          [disabled]="!this.workForm.valid"
+          *ngIf="!editRequestData.workId">
           <span class="button--add__text-node">Dodaj następny zakład</span>
         </button>
         <button type="submit" class="btn button-container__button--submit" *ngIf="editRequestData.addWork"
           [disabled]="!this.workForm.valid">
           <span class="button--add__text-node">Dodaj zakład</span>
+        </button>
+        <button type="submit" class="btn button-container__button--submit" *ngIf="editRequestData.workId"
+          [disabled]="!this.workForm.valid">
+          <span class="button--add__text-node">Edytuj zakład</span>
         </button>
       </div>
       <div class="company-component__rodo-container text-center col-12">

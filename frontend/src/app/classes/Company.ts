@@ -21,6 +21,9 @@ export class GetCompany {
     nip: string;
     regon: string;
     registererFullname:string;
+    logoKey?:string;
+    logoURL?:string;
+    logo?:any;
 }
 
 export class Branch {
@@ -29,7 +32,10 @@ export class Branch {
     geoY: string;
     name: string;
     branchId?:number;
-    logo:FormData;
+    logoKey?:string;
+    logoURL?:string;
+    logoPath?:string;
+    logo?:any;
 }
 
 export class Address {

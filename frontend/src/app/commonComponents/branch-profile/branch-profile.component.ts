@@ -38,8 +38,10 @@ export class BranchProfileComponent implements OnInit {
       this.branchId = params['idBranch'];
       this.companyId = params['idCompany'];
     });
+
     this.getBranchData();
     this.registerBranchListener();
+    console.log(this.branchData)
   }
 
   public registerBranchListener() {
@@ -75,8 +77,10 @@ export class BranchProfileComponent implements OnInit {
     this.editData = {
       companyId: null,
       workId: this.branchData.branchId,
-      addWork: false,
+      addWork: null,
       backId:this.companyId,
+      logoKey:this.branchData.logoKey,
+      logoURL:this.branchData.logoURL,
     };
     this.router.navigate(['edit'],{relativeTo:this.activatedRoute,queryParams:this.editData});
   }
@@ -90,12 +94,31 @@ export class BranchProfileComponent implements OnInit {
       this.bDataService.getBranch(this.branchId).subscribe(
         response => {
           this.branchData = <Branch>response.body;
-          this.checkBranchOwnership();
-          this.mapMarker = {
-            latitude: Number(this.branchData.geoX),
-            longitude: Number(this.branchData.geoY),
-            label: 'Zakład'
-          };
+          this.bDataService.getBranchLogo(this.branchData).subscribe(response=>{
+            let reader = new FileReader();
+            reader.addEventListener("load", () => {
+                this.branchData.logo = reader.result;
+                this.checkBranchOwnership();
+                this.mapMarker = {
+                  latitude: Number(this.branchData.geoX),
+                  longitude: Number(this.branchData.geoY),
+                  label: 'Zakład'
+                };
+            }, false);
+
+            if (response.body) {
+                reader.readAsDataURL(response.body);
+            }
+          
+          },error=>{
+            this.branchData.logo = this.bDataService.defaultLogoUrl;
+            this.checkBranchOwnership();
+            this.mapMarker = {
+              latitude: Number(this.branchData.geoX),
+              longitude: Number(this.branchData.geoY),
+              label: 'Zakład'
+            };
+          });
         },
         error => {
           console.log(error);

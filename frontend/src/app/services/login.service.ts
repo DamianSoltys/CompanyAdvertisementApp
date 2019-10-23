@@ -41,6 +41,7 @@ export class LoginService {
       localStorage.removeItem('actualPosition');
       localStorage.removeItem('companyData');
       localStorage.removeItem('branchData');
+      localStorage.removeItem('companyProfile');
       this.ChangeLogged();
       this.router.navigate(['']);
     } else {

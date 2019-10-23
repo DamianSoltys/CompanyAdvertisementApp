@@ -46,6 +46,8 @@ export interface EditRequestData {
   workId: number;
   addWork: boolean;
   backId:number;
+  logoKey?:string;
+  logoURL?:string;
 }
 @Component({
   selector: 'app-company',
@@ -184,9 +186,27 @@ export class CompanyComponent implements OnInit {
 
           this.cDataService.getCompany(companyId).subscribe(
             response => {
-              this.companyList.push(<GetCompany>response.body);
-              this.companyList.sort(this.companySort);
-              this.cDataService.storeCompanyData(<GetCompany>response.body);
+              let companyData:GetCompany = <GetCompany>response.body;
+              this.cDataService.getCompanyLogo(companyData).subscribe(response=>{
+                let reader = new FileReader();
+                reader.addEventListener("load", () => {
+                    companyData.logo = reader.result;
+                    this.companyList.push(companyData);
+                    this.companyList.sort(this.companySort);
+                    this.cDataService.storeCompanyData(companyData);
+                }, false);
+
+                if (response.body) {
+                    reader.readAsDataURL(response.body);
+                }
+                
+              },error=>{
+                companyData.logo = this.cDataService.defaultCListUrl;
+                this.companyList.push(companyData);
+                this.companyList.sort(this.companySort);
+                this.cDataService.storeCompanyData(<GetCompany>response.body);
+
+              });
             },
             error => {
               console.log(error);
@@ -202,6 +222,7 @@ export class CompanyComponent implements OnInit {
       }
     }
   }
+
   private companySort(item1: GetCompany, item2: GetCompany) {
     return item1.companyId - item2.companyId;
   }
@@ -272,7 +293,8 @@ export class CompanyComponent implements OnInit {
       this.addAnotherWork();
     }
     let branches:Branch[] = this.workForms;
-    this.bDataService.addBranches(this.editRequestData.backId,branches).subscribe(response=>{
+    this.bDataService.addBranches(this.editRequestData.backId,branches,this.LogoList).subscribe(response=>{
+      if(response) {
       this.snackbarService.open({
         message:'Pomyślnie dodano nowe zakłady',
         snackbarType:SnackbarType.success,
@@ -282,10 +304,11 @@ export class CompanyComponent implements OnInit {
         this.bDataService.getBranchData.next(true);
         this.router.navigate(['companyProfile',this.editRequestData.backId]); 
       });
-    },error=>{
+    } else {
       this.formErrorService.open({
         message:'Nie udało się zmienić danych!'
       });
+    }
     });
   }
 
@@ -294,9 +317,10 @@ export class CompanyComponent implements OnInit {
     companyData = this.companyForm.value;
 
     this.cDataService
-      .editCompany(companyData, this.editRequestData.companyId)
+      .editCompany(companyData, this.editRequestData,this.companyLogo)
       .subscribe(
         response => {
+          if(response) {
           this.snackbarService.open({
             message:'Dane firmy uległy edycji',
             snackbarType:SnackbarType.success,
@@ -305,29 +329,45 @@ export class CompanyComponent implements OnInit {
           this.uDataService.updateUser().subscribe(data=>{
           this.router.navigate(['companyProfile',this.editRequestData.companyId]);      
           });
-        },
-        error => {
+        } else {
           this.formErrorService.open({
             message:'Nie udało się zmienić danych!'
           });
+        }
         }
       );
   }
 
   private patchWorkIdData() {
-    console.log('patchWorkID');
+    let branch:Branch = this.workForm.value;
+    this.bDataService.editBranch(this.editRequestData,branch,this.workLogo).subscribe(response=>{
+      if(response) {
+      this.snackbarService.open({
+        message:'Pomyślnie zaktualizowano zakład',
+        snackbarType:SnackbarType.success,
+      });
+      this.uDataService.updateUser().subscribe(data=>{
+        this.cDataService.getCompanyData.next(true);
+        this.bDataService.getBranchData.next(true);
+        this.router.navigate(['companyProfile',this.editRequestData.backId]); 
+      });
+    } else {
+      this.formErrorService.open({
+        message:'Nie udało się zmienić danych!'
+      });
+    }
+    })
   }
+  
 
   private postData() {
     let companyData: Company;
     companyData = this.companyForm.value;
     companyData.branches = this.workForms;
-    if(this.companyLogo) {
-      this.LogoList.unshift(this.companyLogo);
-    }
-    this.cDataService.addCompany(companyData,this.LogoList).subscribe(
+
+    this.cDataService.addCompany(companyData,this.LogoList,this.companyLogo).subscribe(
       response => {
-        console.log(companyData);
+        if(response) {
         this.snackbarService.open({
           message:'Pomyślnie dodano firmę',
           snackbarType:SnackbarType.success,
@@ -336,20 +376,18 @@ export class CompanyComponent implements OnInit {
           this.cDataService.getCompanyData.next(true);
           this.toggleDataList();
         });
-      },
-      error => {
-        console.log(error);
-        console.log(companyData);
+      } else {
         this.formErrorService.open({
           message:'Nie udało się dodać firmy!',
         });
         this.setDefaultValues();
       }
+      } 
     );
   }
 
   public onFileSelected(event, companyForm: boolean) {
-    if (!this.LogoList) {
+    if (!this.LogoList && !companyForm) {
       this.LogoList = [];
     }
     if (companyForm) {

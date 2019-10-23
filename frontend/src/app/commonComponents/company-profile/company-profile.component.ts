@@ -9,7 +9,7 @@ import { Router, ParamMap, ActivatedRoute } from '@angular/router';
 import { GetCompany, Branch } from 'src/app/classes/Company';
 import { CompanyService } from 'src/app/services/company.service';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { BranchService } from 'src/app/services/branch.service';
 import { EditRequestData } from 'src/app/user/company/company.component';
 import { UserREST } from 'src/app/classes/User';
@@ -62,16 +62,34 @@ export class CompanyProfileComponent implements OnInit {
       localStorage.removeItem('companyData');
       this.companyData = undefined;
     }
-
+    
     this.getStorageCompanyData();
+    console.log(this.companyData);
 
     if (!this.companyData) {
       this.cDataService.getCompany(this.paramId).subscribe(
         response => {
           this.companyData = <GetCompany>response.body;
-          this.cDataService.storeCompanyData(<GetCompany>response.body);
-          this.checkForCompanyOwnership();
-          this.getBranchData();
+          this.cDataService.getCompanyLogo(this.companyData).subscribe(response=>{
+            let reader = new FileReader();
+                reader.addEventListener("load", () => {
+                    this.companyData.logo = reader.result;
+                    console.log(this.companyData.logo)
+                    this.cDataService.storeCompanyData(this.companyData);
+                    this.checkForCompanyOwnership();
+                    this.getBranchData();
+                }, false);
+
+                if (response.body) {
+                    reader.readAsDataURL(response.body);
+                }
+          },error=>{
+            console.log("po eewejsciem");
+            this.companyData.logo = this.cDataService.defaultCProfileUrl;
+            this.cDataService.storeCompanyData(<GetCompany>response.body);
+            this.checkForCompanyOwnership();
+            this.getBranchData();
+          });
         },
         error => {
           this.checkForCompanyOwnership();
@@ -116,6 +134,10 @@ export class CompanyProfileComponent implements OnInit {
   }
 
   private getBranchData() {
+    let subject = new Subject<any>();
+    subject.subscribe(()=>{
+      this.isLoaded.next(true);
+    });
 
     if (this.companyData) {
       this.branchData = [];
@@ -123,24 +145,38 @@ export class CompanyProfileComponent implements OnInit {
           this.bDataService.getBranch(branchId).subscribe(
             response => {
               let branchData: Branch = <Branch>response.body;
-              branchData.branchId = branchId;
-              this.branchData.push(branchData);
-              if (index == this.companyData.branchesIDs.length) {
-                this.isLoaded.next(true);
-              }
+              this.bDataService.getBranchLogo(branchData).subscribe(response=>{
+                let reader = new FileReader();
+                reader.addEventListener("load", () => {
+                    branchData.logo = reader.result;
+                    branchData.branchId = branchId;
+                    this.branchData.push(branchData);
+                    subject.next(true);
+                }, false);
+
+                if (response.body) {
+                    reader.readAsDataURL(response.body);
+                }
+
+              },error=>{
+                branchData.logo = this.bDataService.defaultLogoUrl;
+                branchData.branchId = branchId;
+                this.branchData.push(branchData);
+                subject.next(true);
+              });
+
             },
             error => {
               this.snackbarService.open({
                 message:'Nie udało się załadować danych!',
                 snackbarType:SnackbarType.error,
               });
+              subject.next(false);
             }
           );      
       });
     }
-    if(!this.companyData.branchesIDs.length) {
-      this.isLoaded.next(true);
-    }
+    
   }
 
   public goBack() {
@@ -171,6 +207,8 @@ export class CompanyProfileComponent implements OnInit {
       workId: null,
       addWork: false,
       backId:null,
+      logoKey:this.companyData.logoKey?this.companyData.logoKey:undefined,
+      logoURL:this.companyData.logoURL?this.companyData.logoURL:undefined,
     };
     //this.canShowEditForm.next(true);
     //this.canShowCompany.next(false);

@@ -4,6 +4,7 @@ import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.persistence.entity.Category;
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.repository.CompanyRepository;
+import local.project.Inzynierka.servicelayer.company.event.AllBranchesHasBeenDeletedEvent;
 import local.project.Inzynierka.servicelayer.company.event.CompanyLogoAddedEvent;
 import local.project.Inzynierka.servicelayer.dto.AddBranchDto;
 import local.project.Inzynierka.servicelayer.dto.AddCompanyDto;
@@ -192,7 +193,14 @@ public class CompanyManagementService {
     @Transactional
     public Optional<List<PersistedBranchDto>> addBranch(Long id, List<AddBranchDto> addBranchDto, UserAccount userAccount) {
 
+        updateHasBranchFlagForCompany(id);
         return this.branchPersistenceService.saveBranch(addBranchDto, id, userAccount.personId());
+    }
+
+    private void updateHasBranchFlagForCompany(Long id) {
+        Company company = companyRepository.findById(id).orElseThrow(IllegalStateException::new);
+        company.setHasBranch(true);
+        companyRepository.save(company);
     }
 
     @Async
@@ -204,4 +212,13 @@ public class CompanyManagementService {
         companyRepository.save(company);
     }
 
+    @Async
+    @EventListener
+    public void markCompanyBranchless(AllBranchesHasBeenDeletedEvent allBranchesHasBeenDeletedEvent) {
+
+        Company company = companyRepository.findById(allBranchesHasBeenDeletedEvent.getCompanyId())
+                .orElseThrow(IllegalStateException::new);
+        company.setHasBranch(false);
+        companyRepository.save(company);
+    }
 }

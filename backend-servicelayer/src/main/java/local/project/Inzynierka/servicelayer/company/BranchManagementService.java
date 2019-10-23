@@ -5,10 +5,12 @@ import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.persistence.entity.Voivoideship;
 import local.project.Inzynierka.persistence.repository.BranchRepository;
 import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
+import local.project.Inzynierka.servicelayer.company.event.AllBranchesHasBeenDeletedEvent;
 import local.project.Inzynierka.servicelayer.company.event.BranchLogoAddedEvent;
 import local.project.Inzynierka.servicelayer.dto.CompanyBranchDto;
 import local.project.Inzynierka.servicelayer.dto.UpdateBranchInfoDto;
 import local.project.Inzynierka.servicelayer.dto.mapper.AddressMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -22,12 +24,13 @@ public class BranchManagementService {
     private final BranchPersistenceService branchPersistenceService;
     private final BranchRepository branchRepository;
     private final VoivodeshipRepository voivodeshipRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-
-    public BranchManagementService(BranchPersistenceService branchPersistenceService, BranchRepository branchRepository, VoivodeshipRepository voivodeshipRepository) {
+    public BranchManagementService(BranchPersistenceService branchPersistenceService, BranchRepository branchRepository, VoivodeshipRepository voivodeshipRepository, ApplicationEventPublisher applicationEventPublisher) {
         this.branchPersistenceService = branchPersistenceService;
         this.branchRepository = branchRepository;
         this.voivodeshipRepository = voivodeshipRepository;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Transactional
@@ -100,7 +103,17 @@ public class BranchManagementService {
     }
 
     public void deleteBranch(Long branchId) {
+
+        Branch branch = branchRepository.findById(branchId).orElseThrow(IllegalStateException::new);
+        Boolean companyHasBranchesApartFromDeletedOne = branchRepository.findByCompany(branch.getCompany())
+                .stream()
+                .anyMatch(branch1 -> !branch1.equals(branch));
+        if (!companyHasBranchesApartFromDeletedOne) {
+            applicationEventPublisher.publishEvent(new AllBranchesHasBeenDeletedEvent(branch.getCompany().getId()));
+        }
+
         this.branchRepository.deleteById(branchId);
+
     }
 
     @Async

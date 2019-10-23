@@ -59,13 +59,15 @@ export class BranchService {
             subject.next(true);
           }
         },error=> {
-          subject.next(false);
+          console.log(error);
+          subject.next(true);
         })
       });
      } else {
       subject.next(true);
      }
     },error=>{
+      console.log(error);
       subject.next(false);
     });
     return subject;

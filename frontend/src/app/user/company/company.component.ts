@@ -178,22 +178,26 @@ export class CompanyComponent implements OnInit {
     if (storage_Avaliable('localStorage')) {
       if(clearDataStorage) {
         this.cDataService.deleteStorageData();
+        this.companyList = [];
       }
       let userREST: UserREST = JSON.parse(localStorage.getItem('userREST'));
       let subject = new Subject<any>();
 
       subject.subscribe(()=>{
         this.dataLoaded.next(true);
+        console.log(this.companyList)
       });
 
-      if (userREST.companiesIDs) {
+      if (userREST.companiesIDs.length) {
         this.companyList = [];
         let counter:number = 0;
         userREST.companiesIDs.forEach((companyId, index) => {
           this.cDataService.getCompany(companyId).subscribe(
             response => {
               let companyData:GetCompany = <GetCompany>response.body;
+              console.log(companyData)
               this.cDataService.getCompanyLogo(companyData).subscribe(response=>{             
+               if(response.status != 204) {
                 let reader = new FileReader();
                 reader.addEventListener("load", () => {
                     counter++;
@@ -210,13 +214,24 @@ export class CompanyComponent implements OnInit {
                 if (response.body) {
                     reader.readAsDataURL(response.body);
                 }
+               } else {
+                counter++;
+                companyData.logo = this.cDataService.defaultCListUrl;
+                this.companyList.push(companyData);
+                this.companyList.sort(this.companySort);
+                this.cDataService.storeCompanyData(companyData);
+                
+                if(counter === userREST.companiesIDs.length) {
+                  subject.next(true);
+                }
+               }
                 
               },error=>{
                 counter++;
                 companyData.logo = this.cDataService.defaultCListUrl;
                 this.companyList.push(companyData);
                 this.companyList.sort(this.companySort);
-                this.cDataService.storeCompanyData(<GetCompany>response.body);
+                this.cDataService.storeCompanyData(companyData);
                 
                 if(counter === userREST.companiesIDs.length) {
                   subject.next(true);
@@ -229,13 +244,11 @@ export class CompanyComponent implements OnInit {
             }
           );
         });
-      }
-      if (
-        !userREST.companiesIDs ||
-        (userREST.companiesIDs && !userREST.companiesIDs.length)
-      ) {
+      } else{
+        console.log('nie ma firm')
         subject.next(true);
       }
+      
     }
   }
 
@@ -316,6 +329,7 @@ export class CompanyComponent implements OnInit {
         snackbarType:SnackbarType.success,
       });
       this.uDataService.updateUser().subscribe(data=>{
+        this.workForms = undefined;
         this.cDataService.getCompanyData.next(true);
         this.bDataService.getBranchData.next(true);
         this.router.navigate(['companyProfile',this.editRequestData.backId]); 
@@ -324,6 +338,7 @@ export class CompanyComponent implements OnInit {
       this.formErrorService.open({
         message:'Nie udało się zmienić danych!'
       });
+      this.workForms = undefined;
     }
     });
   }
@@ -364,6 +379,7 @@ export class CompanyComponent implements OnInit {
         snackbarType:SnackbarType.success,
       });
       this.uDataService.updateUser().subscribe(data=>{
+        this.workForms = undefined;
         this.cDataService.getCompanyData.next(true);
         this.bDataService.getBranchData.next(true);
         this.router.navigate(['companyProfile',this.editRequestData.backId]); 
@@ -372,6 +388,7 @@ export class CompanyComponent implements OnInit {
       this.formErrorService.open({
         message:'Nie udało się zmienić danych!'
       });
+      this.workForms = undefined;
     }
     })
   }

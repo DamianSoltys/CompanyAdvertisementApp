@@ -24,6 +24,7 @@ export class GetCompany {
     logoKey?:string;
     logoURL?:string;
     logo?:any;
+    hasLogoAdded?:boolean;
 }
 
 export class Branch {
@@ -36,6 +37,7 @@ export class Branch {
     logoURL?:string;
     logoPath?:string;
     logo?:any;
+    hasLogoAdded?:boolean;
 }
 
 export class Address {

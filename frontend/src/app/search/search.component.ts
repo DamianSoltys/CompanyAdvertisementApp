@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import * as $ from 'jquery';
 import { SearchService } from '../services/search.service';
+import { SearchResponse, SectionData } from '../classes/Section';
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -9,6 +10,11 @@ import { SearchService } from '../services/search.service';
 })
 export class SearchComponent implements OnInit {
   searchform: FormGroup;
+
+  public companies:any[];
+  public branches:any[];
+  public sectionData:SectionData[];
+  public responseBody:SearchResponse;
   constructor(private fb: FormBuilder, private searchS: SearchService) {
     this.searchform = fb.group({
       search: ['']
@@ -36,8 +42,9 @@ export class SearchComponent implements OnInit {
     let searchData = this.searchform.value['search'];
     searchData = searchData.split([' ',',','.']);
     this.searchS.sendSearchData(searchData).subscribe(response=>{
-      console.log(response);
-      
+      this.responseBody = <SearchResponse>response.body     
+      this.sectionData = this.responseBody.content;
+      console.log(this.sectionData);
     },error=>{
       console.log(error);
 

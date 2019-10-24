@@ -1,6 +1,7 @@
 package local.project.Inzynierka.persistence.repository;
 
 import local.project.Inzynierka.persistence.entity.Branch;
+import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.NaturalPerson;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,4 +22,6 @@ public interface BranchRepository extends ApplicationBigRepository<Branch> {
     List<Branch> findByRegisterer(NaturalPerson naturalPerson);
 
     Optional<Branch> findByBranchUUID(String branchUUID);
+
+    List<Branch> findByCompany(Company company);
 }

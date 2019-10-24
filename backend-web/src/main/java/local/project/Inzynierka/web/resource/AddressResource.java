@@ -20,10 +20,14 @@ public class AddressResource {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/cities")
-    public ResponseEntity<?> getCities(@RequestParam(value = "voivodeship") String value) {
+    public ResponseEntity<?> getCities(@RequestParam(value = "voivodeship", required = false) String value) {
 
-        Voivodeship voivodeship = getVoivodeship(value);
-        return ResponseEntity.ok(addressService.getCitiesByVoivodeship(voivodeship));
+        if (value != null) {
+            Voivodeship voivodeship = getVoivodeship(value);
+            return ResponseEntity.ok(addressService.getCitiesByVoivodeship(voivodeship));
+        }
+        return ResponseEntity.ok(addressService.getCitiesByVoivodeshipAggregate());
+
     }
 
 

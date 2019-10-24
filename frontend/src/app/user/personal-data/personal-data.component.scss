@@ -96,7 +96,6 @@
         margin: auto;
         margin-bottom: 5px;
         justify-content: space-evenly;
-        z-index: 1;
         @include boxShadow(inset 0px 15px 8px -15px rgba(32, 99, 143, 0.66));
 
         @include phone {
@@ -113,37 +112,9 @@
           margin: 0 1rem 5px 1rem;
           position: relative;
           left: 0px;
+          width:40%;
           transition: all 0.2s ease-in-out;
 
-          .section-container__select-wrapper {
-            position: relative;
-            left: -10px;
-            width: calc(100% + 20px);
-
-            @include phone() {
-              left: 0;
-              width: 100%;
-            }
-
-            &:before {
-              content: '\f078';
-              font-family: 'Font Awesome 5 Free';
-              font-weight: 900;
-              position: absolute;
-              top: 8px;
-              right: 10px;
-              color: $bgcolor;
-            }
-            .section-container__select-input {
-              -moz-appearance: none;
-              -webkit-appearance: none;
-              appearance: none;
-
-              &::-ms-expand {
-                display: none;
-              }
-            }
-          }
           .section-container__input {
             padding: 0;
           }
@@ -269,7 +240,6 @@
       padding: 20px 40px;
       margin: auto;
       margin-bottom: 5px;
-      z-index: 1;
       @include boxShadow(inset 0px 15px 8px -15px rgba(32, 99, 143, 0.66));
       .container__data-list {
         list-style: none;

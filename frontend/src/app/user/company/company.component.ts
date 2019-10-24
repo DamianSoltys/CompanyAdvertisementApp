@@ -55,6 +55,11 @@ export interface EditRequestData {
   styleUrls: ['./company.component.scss']
 })
 export class CompanyComponent implements OnInit {
+  public voivodeshipOptions:string[] = voivodeships;
+  public categoryOptions:string[] = categories;
+  public selectConfig = {
+    height: '300px',
+  }
   public havePersonalData = new BehaviorSubject(false);
   public canShowAddForm = new BehaviorSubject(false);
   public canShowWorkForm = new BehaviorSubject(false);

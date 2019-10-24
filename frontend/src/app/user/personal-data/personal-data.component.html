@@ -189,17 +189,7 @@
               >Województwo</label
             >
             <div class="section-container__select-wrapper">
-              <select
-                name="voivodeship"
-                class="form-control section-container__select-input"
-                formControlName="voivodeship"
-              >
-                <option
-                  class="select-input__option"
-                  *ngFor="let item of _voivodeships"
-                  >{{ item }}</option
-                >
-              </select>
+                <ngx-select-dropdown name="voivodeship" formControlName="voivodeship" [config]="selectConfig" [options]="voivodeshipOptions"  [multiple]="false" ></ngx-select-dropdown>
             </div>
             <div
               *ngIf="

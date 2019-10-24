@@ -10,12 +10,31 @@
     </div>
     <div class="btn-group navbar__button-group">
       <button
-        routerLink="/search"
+      type="button"
+      class="navbar__button-link btn btn-primary"
+      (click)="toggleMenu('search',false)"
+      id="searchId"
+    >
+      Szukaj
+      <ul
+        [@showHideDropdown]="displaySearchMenu.value ? 'visible' : 'hidden'"
+        class="button-link__dropdown"
+      >        
+        <a
+          routerLink="/search"
+          type="button"
+          class="dropdown__item"
+          ><li>Szukanie podstawowe</li></a
+        >
+        <a
+        routerLink="/advancedSearch"
         type="button"
-        class="navbar__button-link btn btn-primary"
+        class="dropdown__item"
+        ><li>Szukanie zaawansowane</li></a
       >
-        Szukaj
-      </button>
+        
+      </ul>
+    </button>
       <button
         routerLink="/login"
         type="button"

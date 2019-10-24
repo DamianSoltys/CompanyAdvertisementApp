@@ -7,9 +7,12 @@
   justify-content: center;
   flex-direction: column;
   .search-component__search-data-container {
+    width: 60%;
+    @include phone {
+      width: 100%;
+    }
     .search-data-container__buttons {
       display: flex;
-      width: 100vw;
       justify-content: center;
       .buttons__button {
         &--previous,&--next {
@@ -23,6 +26,10 @@
           margin-top:10px;
           &:hover {
             background-position: 100% 0;
+          }
+
+          @include phone {
+            width:40%;
           }
         }
       
@@ -74,9 +81,8 @@
       }
 
       @include phone() {
-        width: 50%;
+        width: 95%;
         position: relative;
-        top: 80px;
       }
     }
 

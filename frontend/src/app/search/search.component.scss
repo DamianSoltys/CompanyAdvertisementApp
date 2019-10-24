@@ -1,16 +1,44 @@
 @import '../../commonStyles/shared';
 
 .search-component {
-  height: 450px;
   margin-top: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  .search-component__search-data-container {
+    .search-data-container__buttons {
+      display: flex;
+      width: 100vw;
+      justify-content: center;
+      .buttons__button {
+        &--previous,&--next {
+          border:0;
+          width: 20%;
+          border-radius: 50px;
+          background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
+          transition: all .4s ease-in-out;
+          background-size: 200%;
+          height:35px;
+          margin-top:10px;
+          &:hover {
+            background-position: 100% 0;
+          }
+        }
+      
+      }
+      .buttons__text-node {
+        font-size: 1.2rem;
+        color:darken($bgcolor,10%);
+        margin:10px;
+      }
+    }
+  }
 }
 
 .search-component__form {
   width: 50%;
   position: relative;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   text-align: center;
 
   .form__text-node {

@@ -15,7 +15,6 @@ import { CollapseComponent } from './commonComponents/collapse/collapse.componen
   declarations: [
     AppComponent,
     LoaderComponent,
-
   ],
   imports: [
     BrowserModule,

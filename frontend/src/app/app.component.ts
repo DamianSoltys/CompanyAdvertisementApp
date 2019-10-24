@@ -89,8 +89,9 @@ export class AppComponent implements OnInit {
   public logged = false;
   public visible = true;
   public logOut_success = false;
+  public displayPersonalDataMenu = new BehaviorSubject(false);
+  public displaySearchMenu = new BehaviorSubject(false);
   public displayHamburgerMenu = new BehaviorSubject(false);
-  public displayDropdown = new BehaviorSubject(false);
   public userREST: UserREST;
   public personalData: PersonalData;
 
@@ -104,7 +105,10 @@ export class AppComponent implements OnInit {
         this.displayHamburgerMenu.next(false);
       }
       if ((<HTMLElement>e.target).id !== 'dropdownId') {
-        this.displayDropdown.next(false);
+        this.displayPersonalDataMenu.next(false);
+      }
+      if ((<HTMLElement>e.target).id !== 'searchId') {
+        this.displaySearchMenu.next(false);
       }
     });
   }
@@ -129,11 +133,18 @@ export class AppComponent implements OnInit {
     this.nearby_toggle = !this.nearby_toggle;
     this.visible = !this.visible;
   }
-  toggleMenu(mobile?: boolean) {
+  toggleMenu(type:string,mobile?: boolean) {
     if (!mobile) {
-      this.displayDropdown.next(!this.displayDropdown.value);
+      switch (type) {
+        case 'personalData':{
+          this.displayPersonalDataMenu.next(!this.displayPersonalDataMenu.value);
+        }
+        case 'search':{
+          this.displaySearchMenu.next(!this.displaySearchMenu.value);
+        }
+      }
     } else {
-      this.displayHamburgerMenu.next(!this.displayHamburgerMenu.value);
+      this.displayHamburgerMenu.next(!this.displayHamburgerMenu);
     }
   }
 

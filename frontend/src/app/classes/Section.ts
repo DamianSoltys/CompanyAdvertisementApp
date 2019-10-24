@@ -8,6 +8,8 @@ export interface SectionData {
     type:string;
     category:string;
     logo?:any;
+    logoKey?:string;
+    logoPath?:string;
 }
 
 export interface SearchResponse {

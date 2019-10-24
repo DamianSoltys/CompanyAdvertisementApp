@@ -72,7 +72,8 @@ export class CompanyProfileComponent implements OnInit {
           this.companyData = <GetCompany>response.body;
           console.log(this.companyData);
           this.cDataService.getCompanyLogo(this.companyData).subscribe(response=>{
-            let reader = new FileReader();
+            if(response.status != 204) {
+              let reader = new FileReader();
                 reader.addEventListener("load", () => {
                     this.companyData.logo = reader.result;
                     this.cDataService.storeCompanyData(this.companyData);
@@ -83,10 +84,17 @@ export class CompanyProfileComponent implements OnInit {
                 if (response.body) {
                     reader.readAsDataURL(response.body);
                 }
+            } else {
+              console.log("po eewejsciem");
+            this.companyData.logo = this.cDataService.defaultCProfileUrl;
+            this.cDataService.storeCompanyData(this.companyData);
+            this.checkForCompanyOwnership();
+            this.getBranchData();
+            }
           },error=>{
             console.log("po eewejsciem");
             this.companyData.logo = this.cDataService.defaultCProfileUrl;
-            this.cDataService.storeCompanyData(<GetCompany>response.body);
+            this.cDataService.storeCompanyData(this.companyData);
             this.checkForCompanyOwnership();
             this.getBranchData();
           });

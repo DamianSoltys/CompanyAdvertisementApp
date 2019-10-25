@@ -5,13 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
 public class SearchSpecificationParameters {
 
-    private String name;
-    private Voivodeship voivodeship;
-    private String city;
-    private String category;
+    private List<String> names;
+    private List<Voivodeship> voivodeships;
+    private List<String> cities;
+    private List<String> categories;
 }

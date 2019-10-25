@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -34,20 +35,20 @@ public class SearchableResource {
 
     @RequestMapping(method = RequestMethod.GET, value = "/search-adv")
     public ResponseEntity<?> searchWithParameters(@RequestParam(value = "type", required = false) final String type,
-                                                  @RequestParam(value = "voivodeship", required = false) final String voivodeship,
-                                                  @RequestParam(value = "city", required = false) final String city,
-                                                  @RequestParam(value = "name", required = false) final String name,
-                                                  @RequestParam(value = "category", required = false) final String category,
+                                                  @RequestParam(value = "voivodeship", required = false) final List<String> voivodeships,
+                                                  @RequestParam(value = "city", required = false) final List<String> cities,
+                                                  @RequestParam(value = "name", required = false) final List<String> names,
+                                                  @RequestParam(value = "category", required = false) final List<String> categories,
                                                   Pageable pageable) {
 
         EntityName entityName = getEntityName(type);
-        Voivodeship voivodeship1 = getVoivodeship(voivodeship);
+        List<Voivodeship> voivodeships1 = getVoivodeships(voivodeships);
 
         SearchSpecificationParameters searchSpecificationParameters = SearchSpecificationParameters.builder()
-                .category(category)
-                .city(city)
-                .name(name)
-                .voivodeship(voivodeship1)
+                .categories(categories)
+                .cities(cities)
+                .names(names)
+                .voivodeships(voivodeships1)
                 .build();
         List<SearchSpecification> specifications = SearchSpecificationFactory.constructSearchSpecifications(searchSpecificationParameters, entityName);
 
@@ -56,12 +57,13 @@ public class SearchableResource {
         return ResponseEntity.ok(result);
     }
 
-    private Voivodeship getVoivodeship(String voivodeship) {
-        Voivodeship voivodeship1 = null;
-        if (voivodeship != null) {
-            voivodeship1 = Voivodeship.fromVoivodeship(voivodeship);
+    private List<Voivodeship> getVoivodeships(List<String> voivodeshipsValues) {
+        List<Voivodeship> voivodeships = null;
+
+        if (voivodeshipsValues != null) {
+            voivodeships = voivodeshipsValues.stream().map(Voivodeship::fromVoivodeship).collect(Collectors.toList());
         }
-        return voivodeship1;
+        return voivodeships;
     }
 
     private EntityName getEntityName(String type) {

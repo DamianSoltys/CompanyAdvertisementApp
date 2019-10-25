@@ -28,19 +28,19 @@ public class SearchSpecificationFactory {
 
     private static CompanySearchSpecification buildCompanySearchSpecification(SearchSpecificationParameters searchSpecificationParameters) {
         return CompanySearchSpecification.builder()
-                .category(searchSpecificationParameters.getCategory())
-                .city(searchSpecificationParameters.getCity())
-                .name(searchSpecificationParameters.getName())
-                .voivodeship(searchSpecificationParameters.getVoivodeship())
+                .categories(searchSpecificationParameters.getCategories())
+                .cities(searchSpecificationParameters.getCities())
+                .names(searchSpecificationParameters.getNames())
+                .voivodeships(searchSpecificationParameters.getVoivodeships())
                 .build();
     }
 
     private static BranchSearchSpecification buildBranchSearchSpecification(SearchSpecificationParameters searchSpecificationParameters) {
         return BranchSearchSpecification.builder()
-                .category(searchSpecificationParameters.getCategory())
-                .city(searchSpecificationParameters.getCity())
-                .name(searchSpecificationParameters.getName())
-                .voivodeship(searchSpecificationParameters.getVoivodeship())
+                .categories(searchSpecificationParameters.getCategories())
+                .cities(searchSpecificationParameters.getCities())
+                .names(searchSpecificationParameters.getNames())
+                .voivodeships(searchSpecificationParameters.getVoivodeships())
                 .build();
     }
 }

@@ -5,6 +5,7 @@ import local.project.Inzynierka.persistence.entity.Category;
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.Voivoideship;
 import lombok.experimental.SuperBuilder;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -29,37 +30,33 @@ public class CompanySearchSpecification extends SearchSpecification<Company> {
 
     @Override
     protected void categorySpecification(Root<Company> root, CriteriaBuilder criteriaBuilder) {
-        if (super.category != null) {
+        if (!CollectionUtils.isEmpty(categories)) {
             Join<Company, Category> categoryJoin = root.join("category");
-            predicates.add(criteriaBuilder.and(
-                    criteriaBuilder.equal(categoryJoin.<String>get("name"), super.category)));
+            predicates.add(categoryJoin.<String>get("name").in(categories));
         }
     }
 
     @Override
     protected void citySpecification(Root<Company> root, CriteriaBuilder criteriaBuilder) {
-        if (super.city != null) {
+        if (!CollectionUtils.isEmpty(cities)) {
             Join<Company, Address> addressJoin = root.join("address");
-            predicates.add(criteriaBuilder.and(
-                    criteriaBuilder.equal(addressJoin.<String>get("city"), super.city)));
+            predicates.add(addressJoin.<String>get("city").in(cities));
         }
     }
 
     @Override
     protected void voivodeshipSpecification(Root<Company> root, CriteriaBuilder criteriaBuilder) {
-        if (super.voivodeship != null) {
+        if (!CollectionUtils.isEmpty(voivodeships)) {
             Join<Company, Address> addressJoin = root.join("address");
             Join<Company, Voivoideship> voivodeshipJoin = addressJoin.join("voivodeship_id");
-            predicates.add(criteriaBuilder.and(
-                    criteriaBuilder.equal(voivodeshipJoin.<String>get("name"), super.voivodeship.toString())));
+            predicates.add(voivodeshipJoin.<String>get("name").in(voivodeships));
         }
     }
 
     @Override
     protected void nameSpecification(Root<Company> root, CriteriaBuilder criteriaBuilder) {
-        if (super.name != null) {
-            predicates.add(criteriaBuilder.and(
-                    criteriaBuilder.equal(root.get("name"), super.name)));
+        if (!CollectionUtils.isEmpty(names)) {
+            predicates.add(root.<String>get("name").in(names));
         }
     }
 }

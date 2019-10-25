@@ -24,10 +24,10 @@ public abstract class SearchSpecification<T extends SearchableEntity> implements
     @Builder.Default
     List<Predicate> predicates = new ArrayList<>();
 
-    protected String name;
-    protected Voivodeship voivodeship;
-    protected String category;
-    protected String city;
+    protected List<String> names;
+    protected List<Voivodeship> voivodeships;
+    protected List<String> categories;
+    protected List<String> cities;
 
     protected void nameSpecification(Root<T> root, CriteriaBuilder criteriaBuilder) {
     }

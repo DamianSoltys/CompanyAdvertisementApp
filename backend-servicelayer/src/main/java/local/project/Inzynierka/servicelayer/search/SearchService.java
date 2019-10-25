@@ -3,22 +3,23 @@ package local.project.Inzynierka.servicelayer.search;
 import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.repository.BranchRepository;
+import local.project.Inzynierka.persistence.repository.CompanyRepository;
 import local.project.Inzynierka.servicelayer.dto.mapper.AddressMapper;
-import local.project.Inzynierka.shared.utils.EntityName;
 import local.project.Inzynierka.shared.utils.LogoFilePathCreator;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SearchService {
@@ -26,11 +27,13 @@ public class SearchService {
     private final EntityManager entityManager;
     private final AddressMapper addressMapper;
     private final BranchRepository branchRepository;
+    private final CompanyRepository companyRepository;
 
-    public SearchService(EntityManager entityManager, AddressMapper addressMapper, BranchRepository branchRepository) {
+    public SearchService(EntityManager entityManager, AddressMapper addressMapper, BranchRepository branchRepository, CompanyRepository companyRepository) {
         this.entityManager = entityManager;
         this.addressMapper = addressMapper;
         this.branchRepository = branchRepository;
+        this.companyRepository = companyRepository;
     }
 
     @Transactional
@@ -125,19 +128,21 @@ public class SearchService {
     }
 
     @Transactional
-    public Page<Object> searchForEntities(SearchSpecification searchSpecification, Pageable pageable) {
+    public Page<Object> searchForEntities(Specification<?> specification, Pageable pageable) {
 
         List<Object> result = null;
-        if (searchSpecification.getType() != null) {
-            if (EntityName.BRANCH.getEntityName().equals(searchSpecification.getType())) {
-                result = Collections.singletonList(branchRepository.searchForBranch(searchSpecification.getCity()));
-            }
-            if (EntityName.COMPANY.getEntityName().equals(searchSpecification.getType())) {
-
-            }
-        } else {
-
+        if (specification instanceof BranchSearchSpecification) {
+            result = branchRepository.findAll((BranchSearchSpecification) specification, pageable)
+                    .stream()
+                    .map(this::buildSearchableBranch)
+                    .collect(Collectors.toList());
+        } else if (specification instanceof CompanySearchSpecification) {
+            result = companyRepository.findAll((CompanySearchSpecification) specification, pageable)
+                    .stream()
+                    .map(this::buildSearchableCompany)
+                    .collect(Collectors.toList());
         }
+
 
         return new PageImpl<>(result, pageable, result.size());
     }

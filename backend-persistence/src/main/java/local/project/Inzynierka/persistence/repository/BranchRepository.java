@@ -5,6 +5,7 @@ import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.NaturalPerson;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface BranchRepository extends ApplicationBigRepository<Branch> {
+public interface BranchRepository extends ApplicationBigRepository<Branch>, JpaSpecificationExecutor<Branch> {
 
     @Query("SELECT b.id from Branch b where b.company.id = ?1")
     List<Long> getAllByCompanyId(Long id);
@@ -28,6 +29,7 @@ public interface BranchRepository extends ApplicationBigRepository<Branch> {
 
     @Query("select b from Branch b " +
             "inner join b.address a" +
-            " where (:city is null or a.city = :city)")
-    List<Branch> searchForBranch(@Param("city") String city);
+            " where (:city is null or a.city = :city) and (:name is null or b.name = :city)")
+    List<Branch> searchForBranch(@Param("name") String name, @Param("city") String city, Pageable pageable);
+
 }

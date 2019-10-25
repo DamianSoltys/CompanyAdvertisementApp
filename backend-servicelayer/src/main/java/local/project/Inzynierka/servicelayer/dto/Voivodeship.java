@@ -28,13 +28,11 @@ public enum Voivodeship {
         this.voivodeship = voivodeship;
     }
 
-
     @Override
     @JsonValue
     public String toString() {
         return this.voivodeship;
     }
-
 
     @JsonCreator
     public static Voivodeship fromVoivodeship(String value) {

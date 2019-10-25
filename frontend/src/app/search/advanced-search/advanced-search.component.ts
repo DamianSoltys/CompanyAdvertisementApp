@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { SearchService } from 'src/app/services/search.service';
 import { FormBuilder } from '@angular/forms';
+import { TouchSequence } from 'selenium-webdriver';
+import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
 
 @Component({
   selector: 'app-advanced-search',
@@ -9,6 +11,7 @@ import { FormBuilder } from '@angular/forms';
 })
 
 export class AdvancedSearchComponent implements OnInit {
+
   public categoryOptions:string[] = [
     'Usługi transportowe',
     'Usługi medyczne',
@@ -56,15 +59,40 @@ export class AdvancedSearchComponent implements OnInit {
     name:[''],
   });
 
-  constructor(private sDataService:SearchService,private fb:FormBuilder) { }
+  public cityArray;
+
+  constructor(private sDataService:SearchService,private fb:FormBuilder,private snackbarService:SnackbarService) { }
 
   ngOnInit() {
-    
+    this.getCityData();
 
   }
 
   public getSearchData() {
-    console.log(this.searchForm.value)
+   
   }
 
+  public getCityData() {
+    this.sDataService.getCitiesByVoivodeship().subscribe(response=>{
+      this.cityArray = response.body;
+      console.log(this.cityArray)
+    },error=>{
+      console.log(error);
+      this.snackbarService.open({
+        snackbarType:SnackbarType.error,
+        message:'Nie udało się pobrać listy miast!',
+      })
+    });
+  }
+
+  public checkForCity() {
+    let voivodeship = this.cityArray[this.searchForm.controls.voivodeship.value];
+    if(voivodeship.length) {
+      voivodeship.forEach(element => {
+        this.cityOptions = [...this.cityOptions,element];
+      });
+    } else {
+      this.cityOptions = [];
+    }
+  }
 }

@@ -7,7 +7,7 @@
                 </div>
                 <div class="search-inputs-container__select-input">
                         <label for="voivodeship">Województwo</label>
-                    <ngx-select-dropdown name="voivodeship" formControlName="voivodeship" [config]="config" [options]="voivodeshipOptions"  [multiple]="false" ></ngx-select-dropdown>
+                    <ngx-select-dropdown name="voivodeship" formControlName="voivodeship" [config]="config" [options]="voivodeshipOptions"  (change)="checkForCity()" [multiple]="false" ></ngx-select-dropdown>
                 </div>
                 <div class="search-inputs-container__select-input">
                         <label for="city">Miasto</label>

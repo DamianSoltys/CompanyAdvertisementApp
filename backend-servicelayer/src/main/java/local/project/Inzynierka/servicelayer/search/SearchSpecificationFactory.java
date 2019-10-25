@@ -11,19 +11,19 @@ public class SearchSpecificationFactory {
     public static List<SearchSpecification> constructSearchSpecifications(SearchSpecificationParameters searchSpecificationParameters,
                                                                           EntityName entityName) {
 
-        List<SearchSpecification> specification;
+        List<SearchSpecification> specifications;
         if (EntityName.BRANCH.equals(entityName)) {
-            specification = Collections.singletonList(buildBranchSearchSpecification(searchSpecificationParameters));
+            specifications = Collections.singletonList(buildBranchSearchSpecification(searchSpecificationParameters));
         } else if (EntityName.COMPANY.equals(entityName)) {
-            specification = Collections.singletonList(buildCompanySearchSpecification(searchSpecificationParameters));
+            specifications = Collections.singletonList(buildCompanySearchSpecification(searchSpecificationParameters));
         } else {
-            specification = Arrays.asList(
+            specifications = Arrays.asList(
                     buildBranchSearchSpecification(searchSpecificationParameters),
                     buildCompanySearchSpecification(searchSpecificationParameters)
             );
         }
 
-        return specification;
+        return specifications;
     }
 
     private static CompanySearchSpecification buildCompanySearchSpecification(SearchSpecificationParameters searchSpecificationParameters) {

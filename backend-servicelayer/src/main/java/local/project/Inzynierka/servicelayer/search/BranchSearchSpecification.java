@@ -5,6 +5,7 @@ import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.persistence.entity.Category;
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.Voivoideship;
+import local.project.Inzynierka.shared.utils.CustomCollectionsUtils;
 import lombok.experimental.SuperBuilder;
 import org.springframework.util.CollectionUtils;
 
@@ -34,7 +35,8 @@ public class BranchSearchSpecification extends SearchSpecification<Branch> {
         if (!CollectionUtils.isEmpty(categories)) {
             Join<Branch, Company> companyJoin = root.join("company");
             Join<Branch, Category> categoryJoin = companyJoin.join("category");
-            predicates.add(categoryJoin.<String>get("name").in(categories));
+            predicates.add(criteriaBuilder.lower(categoryJoin.get("name"))
+                                   .in(CustomCollectionsUtils.mapToLowerCase(categories)));
         }
     }
 
@@ -43,7 +45,7 @@ public class BranchSearchSpecification extends SearchSpecification<Branch> {
         if (!CollectionUtils.isEmpty(voivodeships)) {
             Join<Branch, Address> addressJoin = root.join("address");
             Join<Branch, Voivoideship> voivodeshipJoin = addressJoin.join("voivodeship_id");
-            predicates.add(voivodeshipJoin.<String>get("name").in(voivodeships));
+            predicates.add(criteriaBuilder.lower(voivodeshipJoin.get("name")).in(voivodeships));
         }
     }
 
@@ -51,14 +53,16 @@ public class BranchSearchSpecification extends SearchSpecification<Branch> {
     protected void citySpecification(Root<Branch> root, CriteriaBuilder criteriaBuilder) {
         if (!CollectionUtils.isEmpty(cities)) {
             Join<Branch, Address> addressJoin = root.join("address");
-            predicates.add(addressJoin.<String>get("city").in(cities));
+            predicates.add(criteriaBuilder.lower(addressJoin.get("city"))
+                                   .in(CustomCollectionsUtils.mapToLowerCase(cities)));
         }
     }
 
     @Override
     protected void nameSpecification(Root<Branch> root, CriteriaBuilder criteriaBuilder) {
         if (!CollectionUtils.isEmpty(names)) {
-            predicates.add(root.get("name").in(names));
+            predicates.add(criteriaBuilder.lower(root.get("name"))
+                                   .in(CustomCollectionsUtils.mapToLowerCase(names)));
         }
     }
 }

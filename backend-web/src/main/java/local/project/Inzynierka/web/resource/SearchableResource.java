@@ -50,6 +50,8 @@ public class SearchableResource {
                 .names(names)
                 .voivodeships(voivodeships1)
                 .build();
+        searchSpecificationParameters.validateSpecificationParameters();
+
         List<SearchSpecification> specifications = SearchSpecificationFactory.constructSearchSpecifications(searchSpecificationParameters, entityName);
 
         Page<Object> result = searchService.searchForEntities(specifications, pageable);

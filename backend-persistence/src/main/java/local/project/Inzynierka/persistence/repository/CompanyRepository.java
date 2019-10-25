@@ -2,6 +2,7 @@ package local.project.Inzynierka.persistence.repository;
 
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.NaturalPerson;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CompanyRepository extends ApplicationBigRepository<Company> {
+public interface CompanyRepository extends ApplicationBigRepository<Company>, JpaSpecificationExecutor<Company> {
 
     @Query(value = "SELECT c FROM Branch b JOIN b.company c WHERE c.id = :id ")
     Company getByCompanyId(Long id);

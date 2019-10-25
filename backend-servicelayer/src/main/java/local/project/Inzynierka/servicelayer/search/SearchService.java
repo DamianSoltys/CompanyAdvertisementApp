@@ -2,6 +2,8 @@ package local.project.Inzynierka.servicelayer.search;
 
 import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.persistence.entity.Company;
+import local.project.Inzynierka.persistence.repository.BranchRepository;
+import local.project.Inzynierka.persistence.repository.CompanyRepository;
 import local.project.Inzynierka.servicelayer.dto.mapper.AddressMapper;
 import local.project.Inzynierka.shared.utils.LogoFilePathCreator;
 import org.hibernate.search.jpa.FullTextEntityManager;
@@ -16,14 +18,21 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SearchService {
 
     private final EntityManager entityManager;
+    private final AddressMapper addressMapper;
+    private final BranchRepository branchRepository;
+    private final CompanyRepository companyRepository;
 
-    public SearchService(EntityManager entityManager) {
+    public SearchService(EntityManager entityManager, AddressMapper addressMapper, BranchRepository branchRepository, CompanyRepository companyRepository) {
         this.entityManager = entityManager;
+        this.addressMapper = addressMapper;
+        this.branchRepository = branchRepository;
+        this.companyRepository = companyRepository;
     }
 
     @Transactional
@@ -79,35 +88,70 @@ public class SearchService {
 
     private void mapIfCompany(List<Object> res, Object entity) {
         if (entity instanceof Company) {
-            AddressMapper addressMapper = new AddressMapper();
             Company company = (Company) entity;
-            res.add(SearchableCompanyDto.builder()
-                            .hasLogoAdded(company.isHasLogoAdded())
-                            .logoPath(company.getLogoPath())
-                            .logoKey(LogoFilePathCreator.getLogoKey(company.getLogoPath()))
-                            .id(company.getId())
-                            .category(company.getCategory().getName())
-                            .name(company.getName())
-                            .address(addressMapper.map(company.getAddress()))
-                            .build());
+            res.add(buildSearchableCompany(company));
 
         }
     }
 
+    private SearchableCompanyDto buildSearchableCompany(Company company) {
+        return SearchableCompanyDto.builder()
+                .hasLogoAdded(company.isHasLogoAdded())
+                .logoPath(company.getLogoPath())
+                .logoKey(LogoFilePathCreator.getLogoKey(company.getLogoPath()))
+                .id(company.getId())
+                .category(company.getCategory().getName())
+                .name(company.getName())
+                .address(addressMapper.map(company.getAddress()))
+                .build();
+    }
+
     private void mapIfBranch(List<Object> res, Object entity) {
         if (entity instanceof Branch) {
-            AddressMapper addressMapper = new AddressMapper();
             Branch branch = (Branch) entity;
-            res.add(SearchableBranchDto.builder()
-                            .category(branch.getCompany().getCategory().getName())
-                            .hasLogoAdded(branch.isHasLogoAdded())
-                            .logoPath(branch.getPhotoPath())
-                            .logoKey(LogoFilePathCreator.getLogoKey(branch.getPhotoPath()))
-                            .companyId(branch.getCompany().getId())
-                            .id(branch.getId())
-                            .name(branch.getName())
-                            .address(addressMapper.map(branch.getAddress()))
-                            .build());
+            res.add(buildSearchableBranch(branch));
         }
+    }
+
+    private SearchableBranchDto buildSearchableBranch(Branch branch) {
+        return SearchableBranchDto.builder()
+                .category(branch.getCompany().getCategory().getName())
+                .hasLogoAdded(branch.isHasLogoAdded())
+                .logoPath(branch.getPhotoPath())
+                .logoKey(LogoFilePathCreator.getLogoKey(branch.getPhotoPath()))
+                .companyId(branch.getCompany().getId())
+                .id(branch.getId())
+                .name(branch.getName())
+                .address(addressMapper.map(branch.getAddress()))
+                .build();
+    }
+
+    @Transactional
+    public Page<Object> searchForEntities(List<SearchSpecification> specifications, Pageable pageable) {
+
+        List<Object> result = new ArrayList<>();
+        specifications.stream().forEach(specification -> {
+            if (specification instanceof BranchSearchSpecification) {
+                result.addAll(getBranchesAccordingToBranchSearchSpecification(specification, pageable));
+            } else if (specification instanceof CompanySearchSpecification) {
+                result.addAll(getCompaniesAccordingToCompanySearchSpecification(specification, pageable));
+            }
+        });
+
+        return new PageImpl<>(result, pageable, result.size());
+    }
+
+    private List<Object> getCompaniesAccordingToCompanySearchSpecification(SearchSpecification searchSpecification, Pageable pageable) {
+        return companyRepository.findAll((CompanySearchSpecification) searchSpecification, pageable)
+                .stream()
+                .map(this::buildSearchableCompany)
+                .collect(Collectors.toList());
+    }
+
+    private List<Object> getBranchesAccordingToBranchSearchSpecification(SearchSpecification searchSpecification, Pageable pageable) {
+        return branchRepository.findAll((BranchSearchSpecification) searchSpecification, pageable)
+                .stream()
+                .map(this::buildSearchableBranch)
+                .collect(Collectors.toList());
     }
 }

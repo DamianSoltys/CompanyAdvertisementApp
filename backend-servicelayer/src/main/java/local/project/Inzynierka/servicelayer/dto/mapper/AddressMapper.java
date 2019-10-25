@@ -1,10 +1,11 @@
 package local.project.Inzynierka.servicelayer.dto.mapper;
 
-
 import local.project.Inzynierka.persistence.entity.Voivoideship;
 import local.project.Inzynierka.servicelayer.dto.Address;
 import local.project.Inzynierka.servicelayer.dto.Voivodeship;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AddressMapper {
 
     public local.project.Inzynierka.persistence.entity.Address map(Address address) {

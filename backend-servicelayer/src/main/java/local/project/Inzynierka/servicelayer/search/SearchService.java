@@ -11,7 +11,6 @@ import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -128,22 +127,31 @@ public class SearchService {
     }
 
     @Transactional
-    public Page<Object> searchForEntities(Specification<?> specification, Pageable pageable) {
+    public Page<Object> searchForEntities(List<SearchSpecification> specifications, Pageable pageable) {
 
-        List<Object> result = null;
-        if (specification instanceof BranchSearchSpecification) {
-            result = branchRepository.findAll((BranchSearchSpecification) specification, pageable)
-                    .stream()
-                    .map(this::buildSearchableBranch)
-                    .collect(Collectors.toList());
-        } else if (specification instanceof CompanySearchSpecification) {
-            result = companyRepository.findAll((CompanySearchSpecification) specification, pageable)
-                    .stream()
-                    .map(this::buildSearchableCompany)
-                    .collect(Collectors.toList());
-        }
-
+        List<Object> result = new ArrayList<>();
+        specifications.stream().forEach(specification -> {
+            if (specification instanceof BranchSearchSpecification) {
+                result.addAll(getBranchesAccordingToBranchSearchSpecification(specification, pageable));
+            } else if (specification instanceof CompanySearchSpecification) {
+                result.addAll(getCompaniesAccordingToCompanySearchSpecification(specification, pageable));
+            }
+        });
 
         return new PageImpl<>(result, pageable, result.size());
+    }
+
+    private List<Object> getCompaniesAccordingToCompanySearchSpecification(SearchSpecification searchSpecification, Pageable pageable) {
+        return companyRepository.findAll((CompanySearchSpecification) searchSpecification, pageable)
+                .stream()
+                .map(this::buildSearchableCompany)
+                .collect(Collectors.toList());
+    }
+
+    private List<Object> getBranchesAccordingToBranchSearchSpecification(SearchSpecification searchSpecification, Pageable pageable) {
+        return branchRepository.findAll((BranchSearchSpecification) searchSpecification, pageable)
+                .stream()
+                .map(this::buildSearchableBranch)
+                .collect(Collectors.toList());
     }
 }

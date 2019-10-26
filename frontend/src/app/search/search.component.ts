@@ -120,4 +120,12 @@ public nextPage() {
     }
   }
 }
+public showEmptyMessage() {
+
+  if(this.isLoaded.value && !this.sectionData) {
+    return true;
+  } else if(this.isLoaded.value && this.sectionData){
+    return false;
+  }
+}
 }

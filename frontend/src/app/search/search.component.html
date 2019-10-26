@@ -34,6 +34,11 @@
       </button>
     </div>
   </form>
+  <div class="search-component__empty text-center" *ngIf="showEmptyMessage()">
+    <p class="empty__text-node">
+        Niestety nie znaleziono danych o podanych kryteriach
+    </p>
+</div>
   <div class="search-component__search-data-container" *ngIf="actualList">
     <div class="search-data-container__sections">
       <app-search-section *ngFor="let data of actualList" [sectionData]="data"></app-search-section>

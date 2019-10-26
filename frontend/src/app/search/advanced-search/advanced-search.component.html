@@ -1,5 +1,9 @@
 <div class="advanced-search-component">
-<div class="advanced-search-component__search-inputs-container">
+    <div class="advanced-search-component__header text-center">
+                <p class="header__text-node">Zaawansowane wyszukiwanie</p>
+    </div>
+    <div class="advanced-search-component__container">
+<div class="container__search-inputs-container">
     <form [formGroup]="searchForm">
             <div class="search-inputs-container__select-input">
                     <label for="type">Typ</label>
@@ -21,12 +25,13 @@
                         <label for="name">Nazwa</label>
                     <input type="text" name="name" formControlName="name" class="text-input__input form-control">
                 </div>
-                <div class="search-inputs-container__button-container">
-                        <button class="btn btn-primary button-container__button" (click)="getSearchData()">Szukaj</button>
-                </div>
     </form>
+    <div class="search-inputs-container__button-container">
+            <button class="btn btn-primary button-container__button" (click)="getSearchData()">Szukaj</button>
+    </div>
 </div>
-<div class="advanced-search-component__search-data-container" *ngIf="actualList">
+
+<div class="container__search-data-container" *ngIf="actualList">
     <div class="search-data-container__sections">
       <app-search-section *ngFor="let data of actualList" [sectionData]="data"></app-search-section>
     </div>
@@ -40,4 +45,10 @@
       </button>
     </div>
   </div>
+</div>
+<div class="advanced-search-component__empty text-center" *ngIf="showEmptyMessage()">
+        <p class="empty__text-node">
+            Niestety nie znaleziono danych o podanych kryteriach
+        </p>
+    </div>
 </div>

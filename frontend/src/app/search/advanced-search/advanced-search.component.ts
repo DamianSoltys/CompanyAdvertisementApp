@@ -89,9 +89,11 @@ export class AdvancedSearchComponent implements OnInit {
   public getSearchData() {
     let searchData:AdvSearchData = this.searchForm.value;
     let subject = new Subject<any>();
-    let string = this.searchForm.value['name'];
-    let nameArray = string.split(' ');
-    searchData.name = nameArray;
+    if(searchData.name) {
+      let string = this.searchForm.value['name'];
+      let nameArray = string.split(' ');
+      searchData.name = nameArray;
+    }
 
 
     subject.subscribe(()=>{
@@ -101,31 +103,37 @@ export class AdvancedSearchComponent implements OnInit {
     this.sDataService.sendAdvSearchData(searchData).subscribe(response=>{
       this.responseBody = <SearchResponse>response.body     
       this.sectionData = this.responseBody.content;
-      this.paginationTable = this.setPaginationTable(this.sectionData,3);
-      let counter:number = 0;
-      this.sectionData.map(data=>{
-        this.sDataService.getSearchSectionLogo(data).subscribe(response=>{
-          console.log(response)
-          if(response.status != 204) {
-            let reader = new FileReader();
-            reader.addEventListener("load", () => {
-              data.logo = reader.result;
-              subject.next(true);
-          }, false);
-
-          if (response.body) {
-              reader.readAsDataURL(<any>response.body);
+      if(this.sectionData.length) {
+        this.paginationTable = this.setPaginationTable(this.sectionData,3);
+        let counter:number = 0;
+        this.sectionData.forEach(data=>{
+          this.sDataService.getSearchSectionLogo(data).subscribe(response=>{
+            console.log(response)
+            if(response.status != 204) {
+              let reader = new FileReader();
+              reader.addEventListener("load", () => {
+                data.logo = reader.result;
+                subject.next(true);
+            }, false);
+  
+            if (response.body) {
+                reader.readAsDataURL(<any>response.body);
+            }
+          }else {
+            data.logo = this.sDataService.defaultSearchLogo;
+            subject.next(true);
           }
-        }else {
+        },error=>{
           data.logo = this.sDataService.defaultSearchLogo;
+          console.log(error);
           subject.next(true);
-        }
-      },error=>{
-        data.logo = this.sDataService.defaultSearchLogo;
-        console.log(error);
-        subject.next(true);
+        });
       });
-    })
+      }else {
+        this.sectionData = undefined;
+        subject.next(true);
+      }
+     
   },error=>{
     console.log(error);
     subject.next(true);
@@ -146,12 +154,14 @@ export class AdvancedSearchComponent implements OnInit {
 
   public checkForCity() {
     let voivodeship = this.cityArray[this.searchForm.controls.voivodeship.value];
-    if(voivodeship.length) {
-      voivodeship.forEach(element => {
-        this.cityOptions = [...this.cityOptions,element];
-      });
-    } else {
-      this.cityOptions = [];
+    if(voivodeship) {
+      if(voivodeship.length) {
+        voivodeship.forEach(element => {
+          this.cityOptions = [...this.cityOptions,element];
+        });
+      } else {
+        this.cityOptions = [];
+      }
     }
   }
 
@@ -183,6 +193,15 @@ export class AdvancedSearchComponent implements OnInit {
         this.pageNumber++;
   
       }
+    }
+  }
+  
+  public showEmptyMessage() {
+
+    if(this.isLoaded.value && !this.sectionData) {
+      return true;
+    } else if(this.isLoaded.value && this.sectionData){
+      return false;
     }
   }
 }

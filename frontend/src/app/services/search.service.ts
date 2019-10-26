@@ -45,7 +45,7 @@ export class SearchService {
   public setParams(formData:AdvSearchData):HttpParams {
     let httpParams:HttpParams = new HttpParams();
     Object.keys(formData).forEach(param => {
-      if (formData[param] && !formData[param][0]['value']) {
+      if (formData[param]) {
           httpParams = httpParams.set(param, formData[param]);
       }
   });

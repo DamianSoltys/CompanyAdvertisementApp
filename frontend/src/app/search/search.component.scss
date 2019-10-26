@@ -41,6 +41,14 @@
       }
     }
   }
+
+  .search-component__empty {
+    margin-top:20px;
+    .empty__text-node {
+      font-size: 1.2rem;
+      color:darken($bgcolor,10%);
+    }
+  }
 }
 
 .search-component__form {

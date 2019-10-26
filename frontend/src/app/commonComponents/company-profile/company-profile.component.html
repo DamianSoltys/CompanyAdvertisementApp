@@ -82,7 +82,7 @@
         </div>
       </div>
       <div class="content__section--save-newsletter" *ngIf="showNewsletterForm()">
-          <form class="save-newsletter__form" [formGroup]="newsletterFormUser" (submit)="saveToNewsletter()">
+          <form class="save-newsletter__form" [formGroup]="newsletterFormUser" (submit)="saveToNewsletter($event)">
               <p class="form__text-node">Zapisz się na newsletter aby otrzymywać najnowsze informacje i promocje!</p>
               <div>
                   <input formControlName="isChecked" type="checkbox" class="form__checkbox">
@@ -92,7 +92,7 @@
           </form>
         </div>
         <div class="content__section--save-newsletter" *ngIf="!this.userREST">
-            <form class="save-newsletter__form" [formGroup]="newsletterFormGuest" (submit)="saveToNewsletter()">
+            <form class="save-newsletter__form" [formGroup]="newsletterFormGuest" (submit)="saveToNewsletter($event)">
             <p class="form__text-node">Zapisz się na newsletter aby otrzymywać najnowsze informacje i promocje!</p>
             <label for="email">Email</label>
             <input formControlName="email" type="text" class="form-control form__input">

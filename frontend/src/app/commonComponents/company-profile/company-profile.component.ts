@@ -38,10 +38,10 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
   @ViewChild('checkLabel') label:ElementRef;
 
   public newsletterFormUser = this.fb.group({
-    isChecked:[null,[Validators.required]],
+    isChecked:['',[Validators.required]],
   });
   public newsletterFormGuest = this.fb.group({
-    email:[null,[Validators.required]],
+    email:['',[Validators.required]],
   });
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -228,9 +228,11 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
     
   }
 
-  public saveToNewsletter() {
+  public saveToNewsletter($event) {
+    event.preventDefault();
+
     if(this.newsletterFormGuest.valid) {
-      this.nDataService.saveToNewsletter(this.newsletterFormUser.value['email'],this.companyData.companyId).subscribe(response=>{
+      this.nDataService.saveToNewsletter(this.newsletterFormGuest.controls.email.value,this.companyData.companyId).subscribe(response=>{
         this.snackbarService.open({
           message:'Proszę potwierdzić zapis do newslettera linkiem wysłanym na podany adres!',
           snackbarType:SnackbarType.success,

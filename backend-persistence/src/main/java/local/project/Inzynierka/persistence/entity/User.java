@@ -30,7 +30,6 @@ public class User extends FullTimestampingAudit implements IEntity<Long>, UserAc
 
     @Column(nullable = false, name = "user_name", unique = true, length = 30)
     private String name;
-
     @Column(nullable = false, name = "password_hash")
     private String passwordHash;
 

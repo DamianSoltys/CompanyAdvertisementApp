@@ -5,10 +5,11 @@ import { SearchRoutingModule } from './search-routing.module';
 import { SearchComponent } from './search.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CompanyModule } from '../user/company/company.module';
-import { SearchSectionComponent } from '../commonComponents/search-section/search-section.component';
+import { SearchSectionModule } from '../commonComponents/search-section/search-section.module';
+
 
 @NgModule({
-  declarations: [SearchComponent,SearchSectionComponent],
-  imports: [CommonModule, SearchRoutingModule, ReactiveFormsModule,CompanyModule]
+  declarations: [SearchComponent],
+  imports: [CommonModule, SearchRoutingModule, ReactiveFormsModule,CompanyModule,SearchSectionModule]
 })
 export class SearchModule {}

@@ -133,7 +133,7 @@ export class AppComponent implements OnInit {
     this.nearby_toggle = !this.nearby_toggle;
     this.visible = !this.visible;
   }
-  toggleMenu(type:string,mobile?: boolean) {
+  toggleMenu(type?:string,mobile?: boolean) {
     if (!mobile) {
       switch (type) {
         case 'personalData':{
@@ -144,7 +144,8 @@ export class AppComponent implements OnInit {
         }
       }
     } else {
-      this.displayHamburgerMenu.next(!this.displayHamburgerMenu);
+      console.log('menu')
+      this.displayHamburgerMenu.next(!this.displayHamburgerMenu.value);
     }
   }
 

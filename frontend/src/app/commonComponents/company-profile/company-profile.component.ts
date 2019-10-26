@@ -238,4 +238,16 @@ export class CompanyProfileComponent implements OnInit {
     //this.canShowCompany.next(false);
     this.router.navigate(['companyEdit'],{relativeTo:this.activatedRoute,queryParams:this.editData});
   }
+
+  public showNewsletterForm() {
+    if(storage_Avaliable('localStorage')) {
+      if(this.userREST && !this.owner.value ) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
 }

@@ -3,19 +3,19 @@
     <form [formGroup]="searchForm">
             <div class="search-inputs-container__select-input">
                     <label for="type">Typ</label>
-                    <ngx-select-dropdown name="type" formControlName="type" [config]="config" [options]="typeOptions"  [multiple]="false" ></ngx-select-dropdown>
+                    <ngx-select-dropdown name="type" formControlName="type" [config]="config" [options]="typeOptions"  [multiple]="true" ></ngx-select-dropdown>
                 </div>
                 <div class="search-inputs-container__select-input">
                         <label for="voivodeship">Województwo</label>
-                    <ngx-select-dropdown name="voivodeship" formControlName="voivodeship" [config]="config" [options]="voivodeshipOptions"  (change)="checkForCity()" [multiple]="false" ></ngx-select-dropdown>
+                    <ngx-select-dropdown name="voivodeship" formControlName="voivodeship" [config]="config" [options]="voivodeshipOptions"  (change)="checkForCity()" [multiple]="true" ></ngx-select-dropdown>
                 </div>
                 <div class="search-inputs-container__select-input">
                         <label for="city">Miasto</label>
-                    <ngx-select-dropdown name="city" formControlName="city" [config]="config" [options]="cityOptions"  [multiple]="false" ></ngx-select-dropdown>
+                    <ngx-select-dropdown name="city" formControlName="city" [config]="config" [options]="cityOptions"  [multiple]="true" ></ngx-select-dropdown>
                 </div>
                 <div class="search-inputs-container__select-input">
                         <label for="category">Kategoria</label>
-                    <ngx-select-dropdown name="category" formControlName="category" [config]="config" [options]="categoryOptions"  [multiple]="false" ></ngx-select-dropdown>
+                    <ngx-select-dropdown name="category" formControlName="category" [config]="config" [options]="categoryOptions"  [multiple]="true" ></ngx-select-dropdown>
                 </div>
                 <div class="search-inputs-container__text-input">
                         <label for="name">Nazwa</label>
@@ -26,7 +26,18 @@
                 </div>
     </form>
 </div>
-<div class="advanced-search-component__data-container">
- data
-</div>
+<div class="advanced-search-component__search-data-container" *ngIf="actualList">
+    <div class="search-data-container__sections">
+      <app-search-section *ngFor="let data of actualList" [sectionData]="data"></app-search-section>
+    </div>
+    <div class="search-data-container__buttons" *ngIf="paginationTable.length > 1">
+      <button class="btn btn-primary buttons__button--previous" (click) = "previousPage();">
+        Poprzednia
+      </button>
+      <p class="buttons__text-node">{{pageNumber}}</p>
+      <button class="btn btn-primary buttons__button--next" (click) = "nextPage();">
+         Następna
+      </button>
+    </div>
+  </div>
 </div>

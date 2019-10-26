@@ -13,14 +13,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 @Service
-public class FileStorageService {
+public class LogoFileStorageService {
 
     private static final String MIME_IMAGE_JPEG = "image/jpeg";
     private static final String MIME_IMAGE_PNG = "image/png";
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public FileStorageService(ApplicationEventPublisher applicationEventPublisher) {this.applicationEventPublisher = applicationEventPublisher;}
+    public LogoFileStorageService(ApplicationEventPublisher applicationEventPublisher) {this.applicationEventPublisher = applicationEventPublisher;}
 
     public void saveCompanyLogo(String companyUUID, String logoUUID, MultipartFile file) {
 

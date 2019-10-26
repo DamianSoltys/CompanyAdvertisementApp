@@ -95,7 +95,8 @@ export class BranchProfileComponent implements OnInit {
         response => {
           this.branchData = <Branch>response.body;
           this.bDataService.getBranchLogo(this.branchData).subscribe(response=>{
-            let reader = new FileReader();
+            if(response.status !=204) {
+              let reader = new FileReader();
             reader.addEventListener("load", () => {
                 this.branchData.logo = reader.result;
                 this.checkBranchOwnership();
@@ -108,6 +109,15 @@ export class BranchProfileComponent implements OnInit {
 
             if (response.body) {
                 reader.readAsDataURL(response.body);
+            }
+            } else {
+              this.branchData.logo = this.bDataService.defaultLogoUrl;
+              this.checkBranchOwnership();
+              this.mapMarker = {
+                latitude: Number(this.branchData.geoX),
+                longitude: Number(this.branchData.geoY),
+                label: 'Zakład'
+              };
             }
           
           },error=>{

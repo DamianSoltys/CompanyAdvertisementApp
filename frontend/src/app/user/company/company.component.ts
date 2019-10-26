@@ -55,6 +55,11 @@ export interface EditRequestData {
   styleUrls: ['./company.component.scss']
 })
 export class CompanyComponent implements OnInit {
+  public voivodeshipOptions:string[] = voivodeships;
+  public categoryOptions:string[] = categories;
+  public selectConfig = {
+    height: '300px',
+  }
   public havePersonalData = new BehaviorSubject(false);
   public canShowAddForm = new BehaviorSubject(false);
   public canShowWorkForm = new BehaviorSubject(false);
@@ -178,48 +183,77 @@ export class CompanyComponent implements OnInit {
     if (storage_Avaliable('localStorage')) {
       if(clearDataStorage) {
         this.cDataService.deleteStorageData();
+        this.companyList = [];
       }
       let userREST: UserREST = JSON.parse(localStorage.getItem('userREST'));
-      if (userREST.companiesIDs) {
-        this.companyList = [];
-        userREST.companiesIDs.forEach((companyId, index) => {
+      let subject = new Subject<any>();
 
+      subject.subscribe(()=>{
+        this.dataLoaded.next(true);
+        console.log(this.companyList)
+      });
+
+      if (userREST.companiesIDs.length) {
+        this.companyList = [];
+        let counter:number = 0;
+        userREST.companiesIDs.forEach((companyId, index) => {
           this.cDataService.getCompany(companyId).subscribe(
             response => {
               let companyData:GetCompany = <GetCompany>response.body;
-              this.cDataService.getCompanyLogo(companyData).subscribe(response=>{
+              console.log(companyData)
+              this.cDataService.getCompanyLogo(companyData).subscribe(response=>{             
+               if(response.status != 204) {
                 let reader = new FileReader();
                 reader.addEventListener("load", () => {
+                    counter++;
                     companyData.logo = reader.result;
                     this.companyList.push(companyData);
                     this.companyList.sort(this.companySort);
                     this.cDataService.storeCompanyData(companyData);
+
+                    if(counter === userREST.companiesIDs.length) {
+                      subject.next(true);
+                    }
                 }, false);
 
                 if (response.body) {
                     reader.readAsDataURL(response.body);
                 }
-                
-              },error=>{
+               } else {
+                counter++;
                 companyData.logo = this.cDataService.defaultCListUrl;
                 this.companyList.push(companyData);
                 this.companyList.sort(this.companySort);
-                this.cDataService.storeCompanyData(<GetCompany>response.body);
-
+                this.cDataService.storeCompanyData(companyData);
+                
+                if(counter === userREST.companiesIDs.length) {
+                  subject.next(true);
+                }
+               }
+                
+              },error=>{
+                counter++;
+                companyData.logo = this.cDataService.defaultCListUrl;
+                this.companyList.push(companyData);
+                this.companyList.sort(this.companySort);
+                this.cDataService.storeCompanyData(companyData);
+                
+                if(counter === userREST.companiesIDs.length) {
+                  subject.next(true);
+                }
               });
             },
             error => {
+              subject.next(true);
               console.log(error);
             }
           );
         });
+      } else{
+        console.log('nie ma firm')
+        subject.next(true);
       }
-      if (
-        !userREST.companiesIDs ||
-        (userREST.companiesIDs && !userREST.companiesIDs.length)
-      ) {
-        this.dataLoaded.next(true);
-      }
+      
     }
   }
 
@@ -300,6 +334,7 @@ export class CompanyComponent implements OnInit {
         snackbarType:SnackbarType.success,
       });
       this.uDataService.updateUser().subscribe(data=>{
+        this.workForms = undefined;
         this.cDataService.getCompanyData.next(true);
         this.bDataService.getBranchData.next(true);
         this.router.navigate(['companyProfile',this.editRequestData.backId]); 
@@ -308,6 +343,7 @@ export class CompanyComponent implements OnInit {
       this.formErrorService.open({
         message:'Nie udało się zmienić danych!'
       });
+      this.workForms = undefined;
     }
     });
   }
@@ -327,6 +363,7 @@ export class CompanyComponent implements OnInit {
           });
           this.getCompanyList(true);
           this.uDataService.updateUser().subscribe(data=>{
+            this.cDataService.getCompanyData.next(true);
           this.router.navigate(['companyProfile',this.editRequestData.companyId]);      
           });
         } else {
@@ -347,6 +384,7 @@ export class CompanyComponent implements OnInit {
         snackbarType:SnackbarType.success,
       });
       this.uDataService.updateUser().subscribe(data=>{
+        this.workForms = undefined;
         this.cDataService.getCompanyData.next(true);
         this.bDataService.getBranchData.next(true);
         this.router.navigate(['companyProfile',this.editRequestData.backId]); 
@@ -355,6 +393,7 @@ export class CompanyComponent implements OnInit {
       this.formErrorService.open({
         message:'Nie udało się zmienić danych!'
       });
+      this.workForms = undefined;
     }
     })
   }

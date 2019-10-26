@@ -1,0 +1,39 @@
+<div class="section-section__section-container">
+  <div class="section-container__section-logo">
+    <img *ngIf="sectionData.logo" class="section-logo__logo" src="{{sectionData.logo}}" alt="{{sectionData.name}}_logo">
+  </div>
+  <div class="section-container__section-data">
+    <div class="section-data__data-container">
+      <p class="data-container__text-node">Nazwa:{{ sectionData.name }}</p>
+      <p class="data-container__text-node">
+        Kategoria:{{ sectionData.category }}
+      </p>
+      <p class="data-container__text-node">
+        Typ:{{ sectionData.type }}
+      </p>
+    </div>
+  </div>
+  <div class="section-container__section-action">
+    <div class="section-action__button-container" *ngIf="sectionData.type === 'Branch'">
+      <a
+        [routerLink]="[
+          '/branchProfile',
+          sectionData.companyId,
+          sectionData.id
+        ]"
+        class="btn btn-primary section-action__button--profile"
+        >Profil</a
+      >
+    </div>
+    <div class="section-action__button-container" *ngIf="sectionData.type === 'Company'">
+      <a
+        [routerLink]="[
+          '/companyProfile',
+          sectionData.id   
+        ]"
+        class="btn btn-primary section-action__button--profile"
+        >Profil</a
+      >
+    </div>
+  </div>
+</div>

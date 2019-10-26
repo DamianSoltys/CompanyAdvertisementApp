@@ -9,7 +9,7 @@ export const slideInAnimation = trigger('routeAnimations', [
           position: 'absolute',
           width: '100%',
           opacity: 0,
-          transform: 'scale(0) translateY(100%)'
+
         }),
         animateChild()
       ],
@@ -19,10 +19,10 @@ export const slideInAnimation = trigger('routeAnimations', [
       ':enter',
       [
         animate(
-          '600ms ease',
+          '1s ease',
           style({
             opacity: 1,
-            transform: 'scale(1) translateY(0)'
+
           })
         ),
         animateChild()

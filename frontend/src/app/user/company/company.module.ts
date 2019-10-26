@@ -9,6 +9,7 @@ import { QuillModule } from 'ngx-quill';
 import { AgmCoreModule } from '@agm/core';
 import { FormErrorModule } from 'src/app/commonComponents/form-error/form-error.module';
 import { CollapseComponent } from 'src/app/commonComponents/collapse/collapse.component';
+import { SelectDropDownModule } from 'ngx-select-dropdown';
 
 @NgModule({
   declarations: [CompanyComponent, CompanySectionComponent,CollapseComponent],
@@ -21,7 +22,8 @@ import { CollapseComponent } from 'src/app/commonComponents/collapse/collapse.co
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDymmSbQ_6KBgygpEZwcztemgH3HXTOYrI'
     }),
-    FormErrorModule
+    FormErrorModule,
+    SelectDropDownModule
   ],
   exports: [CompanyComponent, CompanySectionComponent]
 })

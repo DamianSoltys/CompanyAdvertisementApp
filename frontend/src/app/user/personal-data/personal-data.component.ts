@@ -36,6 +36,27 @@ export class PersonalDataComponent implements OnInit {
   public showData = new BehaviorSubject<boolean>(false);
   public showAddingForm = new BehaviorSubject<boolean>(false);
   public showEditingForm = new BehaviorSubject<boolean>(false);
+  public voivodeshipOptions:string[] = [
+    'dolnośląskie',
+    'kujawsko-pomorskie',
+    'lubelskie',
+    'lubuskie',
+    'łódzkie',
+    'małopolskie',
+    'mazowieckie',
+    'opolskie',
+    'podkarpackie',
+    'podlaskie',
+    'pomorskie',
+    'śląskie',
+    'świętokrzyskie',
+    'warmińsko-mazurskie',
+    'wielkopolskie',
+    'zachodniopomorskie'
+  ];
+  public selectConfig = {
+    height: '300px',
+  }
 
   constructor(
     private fb: FormBuilder,

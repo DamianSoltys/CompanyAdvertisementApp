@@ -1,0 +1,138 @@
+@import '../../../commonStyles/shared';
+
+.advanced-search-component{
+    margin-top: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .advanced-search-component__header {
+      .header__text-node {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+        @include phone {
+          margin-bottom: 1rem;
+        }
+      }
+    }
+    .advanced-search-component__container {
+      display: flex;
+      width:100%;
+      justify-content: center;
+      align-items: center;
+      @include phone {
+        flex-direction: column;
+      }
+      @include tablet {
+        flex-direction: column;
+      }
+    .container__search-inputs-container {
+        width:30%;
+        @include phone {
+          width:95%
+        }
+        @include tablet {
+          width:60%;
+        }
+
+        
+        .search-inputs-container__button-container {
+            .button-container__button {
+                border:0;
+                width:100%;
+                border-radius: 50px;
+                background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
+                transition: all .4s ease-in-out;
+                background-size: 200%;
+                height:35px;
+                margin-top:10px;
+                &:hover {
+                    background-position: 100% 0;
+                }
+            }
+        }
+        
+        .search-inputs-container__text-input{
+            position: relative;
+              left: 0px;
+              transition: all 0.2s ease-in-out;
+
+            &:focus-within {
+                color: $bgcolor;
+            
+                @include tablet() {
+                  &:not(.select-wrapper) {
+                    left: -15px;
+            
+                    .text-input__input {
+                      width: calc(100% + 30px);
+                    }
+                  }
+                }
+            
+                @include desktop() {
+                  &:not(.select-wrapper) {
+                    left: -25px;
+            
+                    .text-input__input {
+                      width: calc(100% + 50px);
+                    }
+                  }
+                }
+              }
+        }
+    }
+    .container__search-data-container {
+      width: 50%;
+      margin-left: 10%;
+      @include phone {
+        width: 100%;
+        margin:0;
+      }
+      @include tablet {
+        width: 80%;
+        margin:0;
+      }
+      
+      .search-data-container__buttons {
+        display: flex;
+        justify-content: center;
+        .buttons__button {
+          &--previous,&--next {
+            border:0;
+            width: 20%;
+            border-radius: 50px;
+            background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
+            transition: all .4s ease-in-out;
+            background-size: 200%;
+            height:35px;
+            margin-top:10px;
+            &:hover {
+              background-position: 100% 0;
+            }
+  
+            @include phone {
+              width:40%;
+            }
+          }
+        
+        }
+        .buttons__text-node {
+          font-size: 1.2rem;
+          color:darken($bgcolor,10%);
+          margin:10px;
+        }
+      }
+    }
+
+  }
+  .advanced-search-component__empty {
+    margin-top:20px;
+    .empty__text-node {
+      font-size: 1.2rem;
+      color:darken($bgcolor,10%);
+    }
+  }
+}
+

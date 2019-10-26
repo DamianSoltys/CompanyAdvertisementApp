@@ -47,7 +47,7 @@ export class CompanyService {
   private workLogoRequest(response,logoList:File[]) {
     let counter:number = 0;
     logoList.forEach((logo,index)=>{
-      let url = this.removeDot(response['branchBuildDTOs'][index]['logoFilePath']);
+      let url = response['branchBuildDTOs'][index]['logoFilePath'];
       let logoData = new FormData();
       logoData.append(response['branchBuildDTOs'][index]['logoKey'],logo);
       this.http.put(url,logoData).subscribe(response=>{
@@ -70,9 +70,7 @@ export class CompanyService {
   private companyLogoRequest(response,companyLogo:File,logoList?:File[]) {
     let logoData = new FormData();
     logoData.append(response['logoKey'],companyLogo);
-    let url = this.removeDot(response['logoFilePath']);
-    
-    console.log(url);
+    let url = response['logoFilePath'];
     this.http.put(url,logoData).subscribe(response2=>{
       console.log(response2)
       console.log("dodano plik")
@@ -89,10 +87,6 @@ export class CompanyService {
       console.log("niedodano pliku");
       this.isLoaded.next(true);
     });
-  }
-
-  public removeDot(text:string):string {
-    return text = text.split('.')[0];
   }
 
   public deleteStorageData() {
@@ -134,7 +128,7 @@ export class CompanyService {
   }
 
   public getCompanyLogo(companyData:GetCompany){
-    let url = this.removeDot(companyData.logoURL);
+    let url = companyData.logoURL;
     return this.http.get(url,{ observe: 'response',responseType: 'blob'}); 
   }
 
@@ -154,7 +148,7 @@ export class CompanyService {
       let companyData:GetCompany = <GetCompany>response;
       if(companyLogo) {
         let logoData = new FormData();
-        let url = this.removeDot(companyData.logoURL);
+        let url = companyData.logoURL;
         logoData.append(companyData.logoKey,companyLogo);
         this.http.put(url,logoData).subscribe(response=> {
         subject.next(true);

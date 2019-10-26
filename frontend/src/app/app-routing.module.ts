@@ -20,6 +20,10 @@ const routes: Routes = [
     loadChildren: './search/search.module#SearchModule'
   },
   {
+    path: 'advancedSearch',
+    loadChildren: './search/advanced-search/advanced-search.module#AdvancedSearchModule'
+  },
+  {
     path: 'registerConfirm/:auth',
     loadChildren:
       './user/register-confirm/register-confirm.module#RegisterConfirmModule'

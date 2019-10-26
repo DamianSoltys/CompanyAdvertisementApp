@@ -10,12 +10,31 @@
     </div>
     <div class="btn-group navbar__button-group">
       <button
-        routerLink="/search"
+      type="button"
+      class="navbar__button-link btn btn-primary"
+      (click)="toggleMenu('search',false)"
+      id="searchId"
+    >
+      Szukaj
+      <ul
+        [@showHideDropdown]="displaySearchMenu.value ? 'visible' : 'hidden'"
+        class="button-link__dropdown"
+      >        
+        <a
+          routerLink="/search"
+          type="button"
+          class="dropdown__item"
+          ><li>Szukanie podstawowe</li></a
+        >
+        <a
+        routerLink="/advancedSearch"
         type="button"
-        class="navbar__button-link btn btn-primary"
+        class="dropdown__item"
+        ><li>Szukanie zaawansowane</li></a
       >
-        Szukaj
-      </button>
+        
+      </ul>
+    </button>
       <button
         routerLink="/login"
         type="button"
@@ -33,7 +52,7 @@
     </div>
     <div class="navbar__dropdown">
       <button
-        (click)="toggleMenu(true)"
+        (click)="toggleMenu('',true)"
         class="btn btn-secondary dropdown__button"
         type="button"
         id="menuId"
@@ -78,11 +97,30 @@
     </div>
     <div class="btn-group navbar__button-group">
       <button
-        routerLink="/search"
         type="button"
         class="navbar__button-link btn btn-primary"
+        (click)="toggleMenu('search',false)"
+        id="searchId"
       >
         Szukaj
+        <ul
+          [@showHideDropdown]="displaySearchMenu.value ? 'visible' : 'hidden'"
+          class="button-link__dropdown"
+        >        
+          <a
+            routerLink="/search"
+            type="button"
+            class="dropdown__item"
+            ><li>Szukanie podstawowe</li></a
+          >
+          <a
+          routerLink="/advancedSearch"
+          type="button"
+          class="dropdown__item"
+          ><li>Szukanie zaawansowane</li></a
+        >
+          
+        </ul>
       </button>
       <button
         routerLink="/user/companyData"
@@ -99,14 +137,14 @@
         Ulubione zakłady
       </button>
       <button
-        (click)="toggleMenu(false)"
+        (click)="toggleMenu('personalData',false)"
         type="button"
         class="navbar__button-link btn btn-primary"
         id="dropdownId"
       >
         Profil użytkownika
         <ul
-          [@showHideDropdown]="displayDropdown.value ? 'visible' : 'hidden'"
+          [@showHideDropdown]="displayPersonalDataMenu.value ? 'visible' : 'hidden'"
           class="button-link__dropdown"
         >
           <a *ngIf="userREST" type="button" class="dropdown__item">
@@ -132,7 +170,7 @@
     </div>
     <div class="navbar__dropdown col-9">
       <button
-        (click)="toggleMenu(true)"
+        (click)="toggleMenu('',true)"
         class="btn btn-secondary dropdown__button"
         type="button"
         id="menuId"

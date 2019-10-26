@@ -66,10 +66,7 @@
             <div class="inputs__input-container select-wrapper">
               <div class="input-container__select-wrapper">
                 <label class="input-container__label" for="voivodeship">Województwo</label>
-                <select formControlName="voivodeship" name="voivodeship"
-                  class="form-control select-wrapper__select-input">
-                  <option class="select-input__option" *ngFor="let item of _voivodeships">{{ item }}</option>
-                </select>
+                <ngx-select-dropdown name="voivodeship" formControlName="voivodeship" [config]="selectConfig" [options]="voivodeshipOptions"  [multiple]="false" ></ngx-select-dropdown>
               </div>
               <div class="input-container__error-container" *ngIf="
                   (this._companyAddress.voivodeship.touched ||
@@ -140,9 +137,7 @@
             <div class="inputs__input-container select-wrapper">
               <div class="input-container__select-wrapper">
                 <label class="input-container__label" for="category">Kategoria</label>
-                <select formControlName="category" name="category" class="form-control select-wrapper__select-input">
-                  <option class="select-input__option" *ngFor="let item of _categories">{{ item }}</option>
-                </select>
+                <ngx-select-dropdown name="category" formControlName="category" [config]="selectConfig" [options]="categoryOptions"  [multiple]="false" ></ngx-select-dropdown>
               </div>
               <div class="input-container__error-container" *ngIf="
                   (this._companyForm.category.touched ||
@@ -297,10 +292,7 @@
               <div class="inputs__input-container select-wrapper">
                 <div class="input-container__select-wrapper">
                   <label class="input-container__label" for="voivodeship">Województwo</label>
-                  <select formControlName="voivodeship" name="voivodeship"
-                    class="form-control select-wrapper__select-input">
-                    <option class="select-input__option" *ngFor="let item of _voivodeships">{{ item }}</option>
-                  </select>
+                  <ngx-select-dropdown name="voivodeship" formControlName="voivodeship" [config]="selectConfig" [options]="voivodeshipOptions"  [multiple]="false" ></ngx-select-dropdown>
                 </div>
                 <div class="input-container__error-container" *ngIf="
                     (this._workAddress.voivodeship.touched ||

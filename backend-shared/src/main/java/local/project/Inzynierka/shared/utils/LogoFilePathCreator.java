@@ -18,9 +18,8 @@ public class LogoFilePathCreator {
                              getLogoFileURLPath(entityUUID, logoUUID, entityName));
     }
 
-    public static String getEntityLogoFileDirectory(String entityUUID, EntityName entityName) {
-        return String.format("static%s%s%s%s%s", File.separator, entityName.getEntityName(), File.separator, entityUUID,
-                             File.separator);
+    private static String getLogoFileURLPath(String entityUUID, String logoUUID, EntityName entityName) {
+        return String.format("%s%s", getEntityLogoFileDirectoryURLPath(entityUUID, entityName), logoUUID);
     }
 
     private static String getEntityLogoFileDirectoryURLPath(String entityUUID, EntityName entityName) {
@@ -33,8 +32,9 @@ public class LogoFilePathCreator {
         return String.format("%s%s%s", getEntityLogoFileDirectory(entityUUID, entityName), logoUUID, extension);
     }
 
-    private static String getLogoFileURLPath(String entityUUID, String logoUUID, EntityName entityName) {
-        return String.format("%s%s", getEntityLogoFileDirectoryURLPath(entityUUID, entityName), logoUUID);
+    public static String getEntityLogoFileDirectory(String entityUUID, EntityName entityName) {
+        return String.format("static%s%s%s%s%s", File.separator, entityName.getEntityName(), File.separator, entityUUID,
+                             File.separator);
     }
 
     public static String getLogoKey(String logoPath) {

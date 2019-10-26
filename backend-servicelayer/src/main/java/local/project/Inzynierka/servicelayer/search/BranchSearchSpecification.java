@@ -5,6 +5,7 @@ import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.persistence.entity.Category;
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.Voivoideship;
+import local.project.Inzynierka.servicelayer.dto.Voivodeship;
 import local.project.Inzynierka.shared.utils.CustomCollectionsUtils;
 import lombok.experimental.SuperBuilder;
 import org.springframework.util.CollectionUtils;
@@ -14,6 +15,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.stream.Collectors;
 
 @SuperBuilder(toBuilder = true)
 public class BranchSearchSpecification extends SearchSpecification<Branch> {
@@ -45,7 +47,9 @@ public class BranchSearchSpecification extends SearchSpecification<Branch> {
         if (!CollectionUtils.isEmpty(voivodeships)) {
             Join<Branch, Address> addressJoin = root.join("address");
             Join<Branch, Voivoideship> voivodeshipJoin = addressJoin.join("voivodeship_id");
-            predicates.add(criteriaBuilder.lower(voivodeshipJoin.get("name")).in(voivodeships));
+            predicates.add(voivodeshipJoin.get("name").in(voivodeships.stream()
+                                                                  .map(Voivodeship::toString)
+                                                                  .collect(Collectors.toList())));
         }
     }
 

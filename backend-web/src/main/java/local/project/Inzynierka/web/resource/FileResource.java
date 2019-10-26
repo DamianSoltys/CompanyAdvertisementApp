@@ -3,7 +3,7 @@ package local.project.Inzynierka.web.resource;
 import local.project.Inzynierka.auth.AuthFacade;
 import local.project.Inzynierka.servicelayer.company.BranchManagementPermissionService;
 import local.project.Inzynierka.servicelayer.company.CompanyManagementPermissionService;
-import local.project.Inzynierka.servicelayer.filestorage.FileStorageService;
+import local.project.Inzynierka.servicelayer.filestorage.LogoFileStorageService;
 import local.project.Inzynierka.shared.UserAccount;
 import local.project.Inzynierka.web.error.LogoKeyDoesNotMatchRequestParameterException;
 import lombok.extern.slf4j.Slf4j;
@@ -28,13 +28,13 @@ public class FileResource {
 
     private static final String LACK_OF_FILE_UPLOAD_PERMISSION = "User has no permission to upload logo";
 
-    private final FileStorageService fileStorageService;
+    private final LogoFileStorageService logoFileStorageService;
     private final AuthFacade authFacade;
     private final CompanyManagementPermissionService companyManagementPermissionService;
     private final BranchManagementPermissionService branchManagementPermissionService;
 
-    public FileResource(FileStorageService fileStorageService, AuthFacade authFacade, CompanyManagementPermissionService companyManagementPermissionService, BranchManagementPermissionService branchManagementPermissionService) {
-        this.fileStorageService = fileStorageService;
+    public FileResource(LogoFileStorageService logoFileStorageService, AuthFacade authFacade, CompanyManagementPermissionService companyManagementPermissionService, BranchManagementPermissionService branchManagementPermissionService) {
+        this.logoFileStorageService = logoFileStorageService;
         this.authFacade = authFacade;
         this.companyManagementPermissionService = companyManagementPermissionService;
         this.branchManagementPermissionService = branchManagementPermissionService;
@@ -50,7 +50,7 @@ public class FileResource {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(LACK_OF_FILE_UPLOAD_PERMISSION);
         }
         MultipartFile file = getLogoMultiPartFile(logoUUID, request);
-        fileStorageService.saveCompanyLogo(companyUUID, logoUUID, file);
+        logoFileStorageService.saveCompanyLogo(companyUUID, logoUUID, file);
 
         return ResponseEntity.ok("OK");
     }
@@ -68,7 +68,7 @@ public class FileResource {
     public byte[] getCompanyLogo(@PathVariable(value = "companyUUID") String companyUUID,
                                  @PathVariable(value = "logoUUID") String logoUUID) {
 
-        return fileStorageService.getCompanyLogo(companyUUID, logoUUID);
+        return logoFileStorageService.getCompanyLogo(companyUUID, logoUUID);
     }
 
     @PutMapping(value = "/branch/{branchUUID}/{logoUUID}")
@@ -83,7 +83,7 @@ public class FileResource {
         }
 
         MultipartFile file = getLogoMultiPartFile(logoUUID, request);
-        fileStorageService.saveBranchLogo(branchUUID, logoUUID, file);
+        logoFileStorageService.saveBranchLogo(branchUUID, logoUUID, file);
 
         return ResponseEntity.ok("OK");
     }
@@ -92,6 +92,6 @@ public class FileResource {
     public byte[] getBranchLogo(@PathVariable(value = "branchUUID") String branchUUID,
                                 @PathVariable(value = "logoUUID") String logoUUID) {
 
-        return fileStorageService.getBranchLogo(branchUUID, logoUUID);
+        return logoFileStorageService.getBranchLogo(branchUUID, logoUUID);
     }
 }

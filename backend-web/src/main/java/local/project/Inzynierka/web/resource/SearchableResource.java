@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,10 +61,12 @@ public class SearchableResource {
     }
 
     private List<Voivodeship> getVoivodeships(List<String> voivodeshipsValues) {
-        List<Voivodeship> voivodeships = null;
+        List<Voivodeship> voivodeships = Collections.emptyList();
 
         if (voivodeshipsValues != null) {
-            voivodeships = voivodeshipsValues.stream().map(Voivodeship::fromVoivodeship).collect(Collectors.toList());
+            voivodeships = voivodeshipsValues.stream()
+                    .map(Voivodeship::fromVoivodeship)
+                    .collect(Collectors.toList());
         }
         return voivodeships;
     }

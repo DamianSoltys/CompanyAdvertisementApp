@@ -81,10 +81,28 @@
           ></div>
         </div>
       </div>
+      <div class="content__section--save-newsletter" *ngIf="showNewsletterForm()">
+          <form class="save-newsletter__form" [formGroup]="newsletterFormUser" (submit)="saveToNewsletter()">
+              <p class="form__text-node">Zapisz się na newsletter aby otrzymywać najnowsze informacje i promocje!</p>
+              <div>
+                  <input formControlName="isChecked" type="checkbox" class="form__checkbox">
+                  <label #checkLabel class="form__label" for="email">Czy chcesz otrzymywać newsletter?</label>
+              </div>
+              <button type="submit" class="btn btn-primary form__button" [disabled]="!this.newsletterFormUser.valid">Zapisz mnie!</button>
+          </form>
+        </div>
+        <div class="content__section--save-newsletter" *ngIf="!this.userREST">
+            <form class="save-newsletter__form" [formGroup]="newsletterFormGuest" (submit)="saveToNewsletter()">
+            <p class="form__text-node">Zapisz się na newsletter aby otrzymywać najnowsze informacje i promocje!</p>
+            <label for="email">Email</label>
+            <input formControlName="email" type="text" class="form-control form__input">
+            <button type="submit" class="btn btn-primary form__button" [disabled]="!this.newsletterFormGuest.valid">Zapisz mnie!</button>
+          </form>
+          </div>
       <div class="content__section--buttons col-12">
         <button
           class="btn btn-primary section--buttons__button--newsletters"
-          [routerLink]="[ 'newsletter']">  
+          [routerLink]="[ 'newsletter']" *ngIf="owner.value">  
           Newsletter
         </button>
         <button
@@ -102,13 +120,8 @@
           </button>
         </span>
       </div>
-      <div class="content__section--save-newsletter" *ngIf="showNewsletterForm()">
-        <label for="email">Email</label>
-        <input type="text" class="form-control save-newsletter__input">
-      </div>
-      <div class="content__section--save-newsletter">
-        <label for="email">Email</label>
-        <input type="text" class="form-control save-newsletter__input">
+      <div class="content__section--error">
+          <app-form-error></app-form-error>
       </div>
     </div>
   </div>

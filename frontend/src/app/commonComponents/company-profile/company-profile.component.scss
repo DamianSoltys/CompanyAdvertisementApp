@@ -20,7 +20,7 @@
 
   .company-profile-component__branch-sections {
     .branch-sections__branch-section {
-      max-height:50vh;
+      max-height: 50vh;
       overflow: auto;
     }
     .branch-sections__button-container {
@@ -31,8 +31,8 @@
         width: 30%;
         border-radius: 50px;
         border: 0;
-        background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
-        transition: all .4s ease-in-out;
+        background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor, 20%) 51%, $bgcolor 100%);
+        transition: all 0.4s ease-in-out;
         background-size: 200%;
         &:hover {
           background-position: 100% 0;
@@ -55,8 +55,8 @@
         width: 25%;
         border-radius: 50px;
         border: 0;
-        background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
-        transition: all .4s ease-in-out;
+        background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor, 20%) 51%, $bgcolor 100%);
+        transition: all 0.4s ease-in-out;
         background-size: 200%;
         &:hover {
           background-position: 100% 0;
@@ -71,15 +71,15 @@
   .company-profile-component__shared--buttons {
     display: flex;
     justify-content: center;
-    padding:0;
+    padding: 0;
     .shared--buttons__button--back {
       width: 30%;
       margin-bottom: 2%;
       border-radius: 50px;
       border-radius: 50px;
       border: 0;
-      background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
-      transition: all .4s ease-in-out;
+      background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor, 20%) 51%, $bgcolor 100%);
+      transition: all 0.4s ease-in-out;
       background-size: 200%;
       &:hover {
         background-position: 100% 0;
@@ -136,14 +136,63 @@
 
         &--logo {
           .content__section--logo__logo {
-            width:100%;
-            height:100%;
+            width: 100%;
+            height: 100%;
           }
         }
       }
 
       .section--description__data {
-        min-height: 300px;
+        min-height: 100px;
+      }
+
+      .content__section--error {
+        margin: auto;
+      }
+
+      .content__section--save-newsletter {
+        padding-left: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width:40%;
+        @include phone {
+          width: 100%;
+          padding: 10px;
+        }
+
+        .save-newsletter__form {
+          display: flex;
+          flex-direction: column;
+
+          .form__text-node {
+            color: darken($bgcolor, 10%);
+          }
+
+          .form__label {
+            padding-left: 5px;
+          }
+          .form__checkbox {
+            display: inline;
+          }
+
+          .form__button {
+            width: 60%;
+            margin-top: 10px;
+            border-radius: 50px;
+            border-radius: 50px;
+            border: 0;
+            background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor, 20%) 51%, $bgcolor 100%);
+            transition: all 0.4s ease-in-out;
+            background-size: 200%;
+            &:hover {
+              background-position: 100% 0;
+            }
+            @include phone {
+              width: 100%;
+            }
+          }
+        }
       }
 
       .content__section--buttons {
@@ -166,8 +215,8 @@
               width: 100%;
               border-radius: 50px;
               border: 0;
-              background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
-              transition: all .4s ease-in-out;
+              background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor, 20%) 51%, $bgcolor 100%);
+              transition: all 0.4s ease-in-out;
               background-size: 200%;
               &:hover {
                 background-position: 100% 0;
@@ -189,8 +238,8 @@
             margin: 10px;
             border-radius: 50px;
             border: 0;
-            background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
-            transition: all .4s ease-in-out;
+            background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor, 20%) 51%, $bgcolor 100%);
+            transition: all 0.4s ease-in-out;
             background-size: 200%;
             &:hover {
               background-position: 100% 0;

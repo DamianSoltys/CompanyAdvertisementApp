@@ -432,6 +432,7 @@
 </div>
 
 <div class="company-component container-fluid" *ngIf="this.canShowRouteButton()">
+  <p class="company-component__personal-data-text text-center">Nie posiadasz danych osobowych!</p>
   <a [routerLink]="['/user/personalData']" class="btn btn-primary company-component__button--personal">
     <p class="button--personal__text-node">Dodaj dane osobowe</p>
   </a>

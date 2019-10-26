@@ -1,0 +1,38 @@
+@import '../../../commonStyles/shared';
+
+.newsletter-component {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin-top: 3%;
+  max-width: 1000px;
+
+  @include phone {
+    width: 95%;
+    padding: 0;
+  }
+  @include tablet {
+    width: 85%;
+  }
+  .newsletter-component__main-container {
+    @include boxShadow(0px 4px 5px 0px #bbb9bf);
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    .main-container__header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 30px;
+      height: 6vh;
+      max-height: 60px;
+      background-color: $bgcolor;
+      border: 0;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+      .header__text-node {
+        color: #fff;
+        font-size: 1.2rem;
+      }
+    }
+  }
+}

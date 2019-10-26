@@ -12,9 +12,6 @@ import java.util.Optional;
 @Repository
 public interface CompanyRepository extends ApplicationBigRepository<Company>, JpaSpecificationExecutor<Company> {
 
-    @Query(value = "SELECT c FROM Branch b JOIN b.company c WHERE c.id = :id ")
-    Company getByCompanyId(Long id);
-
     List<Company> findByRegisterer(NaturalPerson registerer);
 
     @Query(value = "select a.id from branches b\n" +

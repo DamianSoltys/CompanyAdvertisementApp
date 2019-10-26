@@ -91,7 +91,7 @@ public class CompanyManagementService {
     }
 
     public boolean companyExists(Long id) {
-        return this.companyRepository.getByCompanyId(id) != null;
+        return this.companyRepository.findById(id).isPresent();
     }
 
     public Optional<CompanyInfoDto> getCompanyInfo(Long id) {

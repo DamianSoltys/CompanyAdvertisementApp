@@ -129,14 +129,14 @@ public class SearchService {
     @Transactional
     public Page<Object> searchForEntities(List<SearchSpecification> specifications, Pageable pageable) {
 
-        List<Object> result = new ArrayList<>();
-        specifications.stream().forEach(specification -> {
+        List<Object> result = specifications.stream().map(specification -> {
             if (specification instanceof BranchSearchSpecification) {
-                result.addAll(getBranchesAccordingToBranchSearchSpecification(specification, pageable));
+                return getBranchesAccordingToBranchSearchSpecification(specification, pageable);
             } else if (specification instanceof CompanySearchSpecification) {
-                result.addAll(getCompaniesAccordingToCompanySearchSpecification(specification, pageable));
+                return getCompaniesAccordingToCompanySearchSpecification(specification, pageable);
             }
-        });
+            throw new IllegalStateException(String.format("Invalid specification: %s", specification.getClass().getName()));
+        }).flatMap(List::stream).collect(Collectors.toList());
 
         return new PageImpl<>(result, pageable, result.size());
     }

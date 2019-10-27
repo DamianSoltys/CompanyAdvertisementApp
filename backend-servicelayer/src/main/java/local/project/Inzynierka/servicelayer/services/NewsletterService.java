@@ -9,11 +9,14 @@ import local.project.Inzynierka.persistence.repository.EmailRepository;
 import local.project.Inzynierka.persistence.repository.NewsletterSubscriptionRepository;
 import local.project.Inzynierka.persistence.repository.VerificationTokenRepository;
 import local.project.Inzynierka.servicelayer.dto.SubscriptionToCreateDto;
+import local.project.Inzynierka.servicelayer.newsletter.SubscriptionState;
 import local.project.Inzynierka.servicelayer.newsletter.event.NewsletterSignUpEvent;
 import local.project.Inzynierka.shared.UserAccount;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class NewsletterService {
@@ -37,7 +40,7 @@ public class NewsletterService {
     }
 
     @Transactional
-    public void signUpForNewsletter(SubscriptionToCreateDto subscriptionToCreateDto, String originHeader) {
+    public SubscriptionState signUpForNewsletter(SubscriptionToCreateDto subscriptionToCreateDto, String originHeader) {
 
         Company company = this.companyRepository.findById(subscriptionToCreateDto.getId()).get();
 
@@ -47,10 +50,16 @@ public class NewsletterService {
                 .verified(subscriptionToCreateDto.isVerified())
                 .build();
 
-        newsletterSubscription = newsletterSubscriptionRepository.save(newsletterSubscription);
+        Optional<NewsletterSubscription> potentialSubscription = getNewsletterSubscription(subscriptionToCreateDto.getEmailToSignUp(), company.getId());
+        if (potentialSubscription.isEmpty()) {
+            newsletterSubscription = newsletterSubscriptionRepository.save(newsletterSubscription);
+            applicationEventPublisher.publishEvent(
+                    new NewsletterSignUpEvent(newsletterSubscription, originHeader, subscriptionToCreateDto.isVerified()));
 
-        applicationEventPublisher.publishEvent(
-                new NewsletterSignUpEvent(newsletterSubscription, originHeader, subscriptionToCreateDto.isVerified()));
+            return SubscriptionState.SAVED;
+        }
+
+        return potentialSubscription.get().isVerified() ? SubscriptionState.SUBSCRIBED : SubscriptionState.PENDING;
     }
 
     private EmailAddress getPersistedEmailAddress(String emailAddress) {
@@ -121,5 +130,12 @@ public class NewsletterService {
                 Company.builder().id(companyId).build(),
                 userAccount.getEmail())
                 .isPresent();
+    }
+
+    private Optional<NewsletterSubscription> getNewsletterSubscription(String email, Long companyId) {
+
+        return newsletterSubscriptionRepository.findByCompanyIdAndEmailAddressEntityEmail(
+                companyId,
+                email);
     }
 }

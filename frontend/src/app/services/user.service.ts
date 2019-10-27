@@ -22,6 +22,7 @@ export class UserService {
   public updateUser():Subject<boolean> {
     let userObject: UserREST = JSON.parse(localStorage.getItem('userREST'));
     let subject = new Subject<boolean>();
+   if(userObject) {
     this.getActualUser(userObject.userID).subscribe(
       response => {
         if (storage_Avaliable('localStorage')) {
@@ -29,6 +30,9 @@ export class UserService {
           localStorage.setItem('userREST', JSON.stringify(userNewObject));
           this.userREST.next(userNewObject);
           subject.next(true);
+        } else {
+          localStorage.clear();
+          this.updateUser();
         }
       },
       error => {
@@ -36,6 +40,9 @@ export class UserService {
         subject.next(false);
       }
     );
+   } else {
+     subject.next(false);
+   }
     return subject;
   }
 
@@ -47,6 +54,8 @@ export class UserService {
       this.userREST.next(JSON.parse(localStorage.getItem('userREST')));
     } else {
       this.userREST.next(null);
+      localStorage.clear();
+      this.updateUser();
     }
   }
 }

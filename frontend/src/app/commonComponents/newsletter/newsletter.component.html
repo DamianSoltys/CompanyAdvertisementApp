@@ -28,7 +28,7 @@
               <app-grape-editor [editorName]="'editor1'" *ngIf="!isText.value"></app-grape-editor>
             </div>
             <div class="type--information__text-form" *ngIf="isText.value">
-                text
+                <quill-editor class="text-form__editor" [modules]="config"></quill-editor>
             </div>
         </div>
         <div class="form-container__type--product" *ngIf="isProduct.value">

@@ -6,6 +6,7 @@ import local.project.Inzynierka.persistence.entity.VerificationToken;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface NewsletterSubscriptionRepository extends ApplicationBigRepository<NewsletterSubscription> {
@@ -15,4 +16,6 @@ public interface NewsletterSubscriptionRepository extends ApplicationBigReposito
     NewsletterSubscription findByUnsubscribeToken(VerificationToken verificationToken);
 
     List<NewsletterSubscription> findByCompanyAndVerified(Company company, boolean verified);
+
+    Optional<NewsletterSubscription> findByCompanyAndEmailAddressEntityEmailAndVerifiedIsTrue(Company company, String emailAddress);
 }

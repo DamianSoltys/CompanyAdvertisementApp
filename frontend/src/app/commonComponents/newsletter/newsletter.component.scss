@@ -3,16 +3,12 @@
 .newsletter-component {
   display: flex;
   flex-direction: column;
-  width: 60%;
+  width: 100%;
   margin-top: 3%;
-  max-width: 1000px;
 
   @include phone {
-    width: 95%;
+    width: 100%;
     padding: 0;
-  }
-  @include tablet {
-    width: 85%;
   }
   .newsletter-component__main-container {
     @include boxShadow(0px 4px 5px 0px #bbb9bf);
@@ -32,6 +28,149 @@
       .header__text-node {
         color: #fff;
         font-size: 1.2rem;
+      }
+    }
+    .main-container__newsletter-container {
+      display: flex;
+      flex-direction: column;
+      .newsletter-container__type-container {
+        display: flex;
+        padding-left: 10px;
+        @include phone {
+          flex-direction: column;
+          padding-left: 0;
+          align-items: center;
+        }
+        @include tablet {
+          flex-direction: column;
+          padding-left: 0;
+          align-items: center;
+        }
+        .btn-newsletter {
+          position: relative;
+          color:black;
+          background:#fff;
+          margin-top:5px;
+          border:2px solid transparent;          
+          z-index: 2;
+          transition: all 0.5s ease-in-out;
+          @include desktop {
+            border-bottom: 0;
+            border-radius: 0;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+          }
+          @include phone {
+            border-radius: 5px;
+          }
+          &:focus {
+            outline: none;
+            box-shadow: none;
+          }
+        }
+
+        .button-type--focus {
+          border:2px solid $bgcolor;
+          background-color: rgba(41, 128, 185, 0.2);
+          @include desktop {
+            border-bottom: none;
+            border-radius: 0;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+          }
+          @include phone {
+            border-radius: 5px;
+          }
+          outline: none;
+          box-shadow: none;
+        }
+
+        .type-container__type {
+          &--information {
+            .type--information__button{
+
+            }
+          }
+          &--product {
+            .type--product__button {
+              
+            }
+          }
+          &--promotion {
+            .type--promotion__button {
+
+            }
+          }
+          &--show-media {
+            display:flex;
+            align-items: flex-end;
+            padding-bottom: .3rem;
+            @include phone {
+              padding:0 10px;
+            }
+            .show-media__checkbox {
+              margin-bottom: 5px;
+            }
+            .show-media__label {
+              margin:0;
+            }
+          }
+          &--change-form {
+            padding:0 5px;
+            @include phone {
+              border-top:1px solid darken($bgcolor,15%);
+            }
+            .type--change-form__button {
+              color:#000;
+              margin-bottom: 0;
+              padding-bottom: 0;
+              transition: all 0.2s ease-in-out;
+              @include desktop {
+                border-left: 1px solid darken($bgcolor,15%);
+              }
+              &:focus {
+                color:$bgcolor;
+              }
+            }
+          }
+        }
+      }
+      .newsletter-container__form-container {
+        z-index: 1;
+        
+        .form-container__type {
+          &--information {
+
+            .type--information__editor {
+
+            }
+            .type--information__text-form {
+              border-top:3px solid darken($bgcolor,15%);
+              margin:5px;
+              margin-top:0;
+            }
+          }
+          &--product {
+            .type--product__editor {
+
+            }
+            .type--product__text-form {
+              border-top:3px solid darken($bgcolor,15%);
+              margin:5px;
+              margin-top:0;
+            }
+          }
+          &--promotion {
+            .type--promotion__editor {
+
+            }
+            .type--promotion__text-form {
+              border-top:3px solid darken($bgcolor,15%);
+              margin:5px;
+              margin-top:0;
+            }
+          }
+        }
       }
     }
   }

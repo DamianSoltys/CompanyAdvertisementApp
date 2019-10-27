@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NewsletterService {
-
+  public destroyEditor = new Subject<any>();
   constructor(private http:HttpClient) { }
 
   public saveToNewsletter(userEmail:string,companyId:number) {

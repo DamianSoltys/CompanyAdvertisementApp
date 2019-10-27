@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormErrorModule } from '../form-error/form-error.module';
 import { NewsletterComponent } from './newsletter.component';
+import { GrapeEditorModule } from './grape-editor/grape-editor.module';
 
 
 @NgModule({
@@ -10,7 +11,8 @@ import { NewsletterComponent } from './newsletter.component';
   imports: [
     CommonModule,
     RouterModule,
-    FormErrorModule
+    FormErrorModule,
+    GrapeEditorModule
   ],
   exports:[
     NewsletterComponent

@@ -18,4 +18,6 @@ public interface NewsletterSubscriptionRepository extends ApplicationBigReposito
     List<NewsletterSubscription> findByCompanyAndVerified(Company company, boolean verified);
 
     Optional<NewsletterSubscription> findByCompanyAndEmailAddressEntityEmailAndVerifiedIsTrue(Company company, String emailAddress);
+
+    Optional<NewsletterSubscription> findByCompanyIdAndEmailAddressEntityEmail(Long companyId, String email);
 }

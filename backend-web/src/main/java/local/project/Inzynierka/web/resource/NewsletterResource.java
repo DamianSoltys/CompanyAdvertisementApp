@@ -4,6 +4,7 @@ import local.project.Inzynierka.auth.AuthFacade;
 import local.project.Inzynierka.servicelayer.company.CompanyManagementService;
 import local.project.Inzynierka.servicelayer.dto.NewSubscriptionDto;
 import local.project.Inzynierka.servicelayer.dto.SubscriptionToCreateDto;
+import local.project.Inzynierka.servicelayer.newsletter.SubscriptionState;
 import local.project.Inzynierka.servicelayer.services.NewsletterService;
 import local.project.Inzynierka.shared.UserAccount;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
@@ -32,6 +33,8 @@ public class NewsletterResource {
     private static final String NEWSLETTER_SIGNOUT_SUCCESS = "Zostałe/aś wypisany z listy newslettera.";
     private static final String INVALID_TOKEN = "Nieprawidłowy token";
     private static final String LACK_PERMISSION_TO_ACCESS_THIS_INFORMATION = "Lack of permission to access this informaiton";
+    private static final String CHECK_YOUR_EMAIL_FOR_CONFIRMATION = "Check your email for confirmation.";
+    private static final String ALREADY_SUBSCRIBED = "Already subscribed.";
 
     private final AuthFacade authFacade;
 
@@ -52,10 +55,20 @@ public class NewsletterResource {
         if (!this.companyManagementService.companyExists(newSubscriptionDto.getId())) {
             return ResponseEntity.badRequest().body(SimpleJsonFromStringCreator.toJson(COMPANY_DOES_NOT_EXIST_MESSAGE));
         }
-        this.newsletterService.signUpForNewsletter(this.buildSubscriptionToCreateDto(newSubscriptionDto),
-                                                   request.getHeader(ORIGIN_HEADER));
 
-        return ResponseEntity.ok().body(SimpleJsonFromStringCreator.toJson(CHECK_EMAIL_REQUEST_MESSAGE));
+        SubscriptionState subscriptionState = this.newsletterService.signUpForNewsletter(this.buildSubscriptionToCreateDto(newSubscriptionDto),
+                                                                                         request.getHeader(ORIGIN_HEADER));
+        if (SubscriptionState.SAVED.equals(subscriptionState)) {
+            return ResponseEntity.ok().body(SimpleJsonFromStringCreator.toJson(CHECK_EMAIL_REQUEST_MESSAGE));
+        }
+
+        if (SubscriptionState.PENDING.equals(subscriptionState)) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(SimpleJsonFromStringCreator.toJson(CHECK_YOUR_EMAIL_FOR_CONFIRMATION));
+        } else if (SubscriptionState.SUBSCRIBED.equals(subscriptionState)) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(SimpleJsonFromStringCreator.toJson(ALREADY_SUBSCRIBED));
+        }
+
+        throw new IllegalStateException();
     }
 
     private SubscriptionToCreateDto buildSubscriptionToCreateDto(NewSubscriptionDto newSubscriptionDto) {

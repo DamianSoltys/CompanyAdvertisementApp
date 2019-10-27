@@ -5,8 +5,10 @@ import local.project.Inzynierka.servicelayer.company.CompanyManagementService;
 import local.project.Inzynierka.servicelayer.dto.NewSubscriptionDto;
 import local.project.Inzynierka.servicelayer.dto.SubscriptionToCreateDto;
 import local.project.Inzynierka.servicelayer.services.NewsletterService;
+import local.project.Inzynierka.shared.UserAccount;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +31,7 @@ public class NewsletterResource {
     private static final String EMAIL_CONFIRMATION_SUCCESS = "Twój e-mail został potwiedzony";
     private static final String NEWSLETTER_SIGNOUT_SUCCESS = "Zostałe/aś wypisany z listy newslettera.";
     private static final String INVALID_TOKEN = "Nieprawidłowy token";
+    private static final String LACK_PERMISSION_TO_ACCESS_THIS_INFORMATION = "Lack of permission to access this informaiton";
 
     private final AuthFacade authFacade;
 
@@ -80,5 +83,19 @@ public class NewsletterResource {
             return ResponseEntity.ok().body(SimpleJsonFromStringCreator.toJson(NEWSLETTER_SIGNOUT_SUCCESS));
         }
         return ResponseEntity.ok().body(SimpleJsonFromStringCreator.toJson(INVALID_TOKEN));
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<?> checkPresence(@RequestParam(name = "userId") Long userId,
+                                           @RequestParam(name = "companyId") Long companyId) {
+
+        if (!authFacade.hasPrincipalHavePermissionToUserResource(userId)) {
+            return new ResponseEntity<>(SimpleJsonFromStringCreator.toJson(LACK_PERMISSION_TO_ACCESS_THIS_INFORMATION),
+                                        HttpStatus.FORBIDDEN);
+        }
+
+        UserAccount userAccount = authFacade.getAuthenticatedUser();
+        return ResponseEntity.ok(newsletterService.isUserSubscribedToThisNewsletter(userAccount, companyId));
+
     }
 }

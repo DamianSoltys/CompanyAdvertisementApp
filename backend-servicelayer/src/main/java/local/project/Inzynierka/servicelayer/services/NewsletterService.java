@@ -10,6 +10,7 @@ import local.project.Inzynierka.persistence.repository.NewsletterSubscriptionRep
 import local.project.Inzynierka.persistence.repository.VerificationTokenRepository;
 import local.project.Inzynierka.servicelayer.dto.SubscriptionToCreateDto;
 import local.project.Inzynierka.servicelayer.newsletter.event.NewsletterSignUpEvent;
+import local.project.Inzynierka.shared.UserAccount;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -112,5 +113,13 @@ public class NewsletterService {
         newsletterSubscriptionRepository.save(newsletterSubscription);
 
         return true;
+    }
+
+    public boolean isUserSubscribedToThisNewsletter(UserAccount userAccount, Long companyId) {
+
+        return newsletterSubscriptionRepository.findByCompanyAndEmailAddressEntityEmailAndVerifiedIsTrue(
+                Company.builder().id(companyId).build(),
+                userAccount.getEmail())
+                .isPresent();
     }
 }

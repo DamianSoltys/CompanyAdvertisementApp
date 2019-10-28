@@ -1,0 +1,45 @@
+@import './shared';
+
+@include phone {
+    .gjs-pn-options {
+        left: 0;
+        right:unset;
+        top:unset;
+        bottom:42px;
+        width:230px;
+      }
+      .gjs-pn-views {
+        right:unset;
+        left:0;
+        bottom:0;
+        width:230px;
+      }
+      .gjs-pn-views-container {
+          transition: all .2s ease-in-out;
+          &:hover {
+              width:50%;
+          }
+      }
+}
+
+@include tablet {
+    .gjs-pn-options {
+        left: 0;
+        right:unset;
+        top:unset;
+        bottom:42px;
+        width:230px;
+      }
+      .gjs-pn-views {
+        right:unset;
+        left:0;
+        bottom:0;
+        width:230px;
+      }
+      .gjs-pn-views-container {
+        transition: all .2s ease-in-out;
+        &:hover {
+            width:25%;
+        }
+    }
+}

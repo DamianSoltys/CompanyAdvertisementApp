@@ -17,6 +17,12 @@
     width: 95%;
     padding: 0;
   }
+
+  .company-component__personal-data-text {
+    font-size: 1.2rem;
+    color:darken($bgcolor,10%);
+  }
+
   .form-container__form-collapse {
     display: flex;
     @include phone {

@@ -29,6 +29,11 @@ const routes: Routes = [
       './user/register-confirm/register-confirm.module#RegisterConfirmModule'
   },
   {
+    path: 'newsletter/:type/:token',
+    loadChildren:
+      './newsletter-auth/newsletter-auth.module#NewsletterAuthModule'
+  },
+  {
     path: 'companyProfile/:id',
     loadChildren:
       './commonComponents/company-profile/company-profile.module#CompanyProfileModule'

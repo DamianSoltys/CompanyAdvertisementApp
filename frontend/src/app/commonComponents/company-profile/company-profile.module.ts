@@ -5,19 +5,21 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CompanyProfileComponent } from './company-profile.component';
 import { CompanyProfileRoutingModule } from './company-profile-routing.module';
 import { CompanyModule } from 'src/app/user/company/company.module';
-import { NewsletterComponent } from '../newsletter/newsletter.component';
+import { NewsletterModule } from '../newsletter/newsletter.module';
+import { FormErrorModule } from '../form-error/form-error.module';
 
 @NgModule({
   declarations: [
     CompanyProfileComponent,
-    NewsletterComponent
   ],
   imports: [
     CommonModule,
     CompanyProfileRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    CompanyModule
+    CompanyModule,
+    NewsletterModule,
+    FormErrorModule
   ]
 })
 export class CompanyProfileModule {}

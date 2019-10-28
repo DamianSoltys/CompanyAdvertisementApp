@@ -113,7 +113,7 @@ export class CompanyComponent implements OnInit {
     name: ['', [Validators.required]]
   });
 
-  config = {
+  public config = {
     toolbar: [['bold', 'italic', 'underline']]
   };
 

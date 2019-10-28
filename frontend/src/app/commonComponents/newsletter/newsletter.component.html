@@ -1,3 +1,62 @@
-<p>
-  newsletter works!
-</p>
+<div class="container-fluid newsletter-component">
+  <div class="newsletter-component__main-container">
+    <div class="main-container__header">
+      <span class="header__text-node">Newsletter</span>
+    </div>
+    <div class="main-container__newsletter-container">
+      <div class="newsletter-container__type-container">
+        <div class="type-container__type--information">
+          <button class="btn btn-primary btn-newsletter type--information__button" (click)="showInfo($event)">Informacja</button>
+        </div>
+        <div class="type-container__type--product">
+            <button class="btn btn-primary btn-newsletter type--product__button"(click)="showProduct($event)">Nowy produkt</button>
+        </div>
+        <div class="type-container__type--promotion">
+            <button class="btn btn-primary btn-newsletter type--promotion__button"(click)="showPromotion($event)">Promocja</button>
+        </div>
+        <div class="type-container__type--change-form" *ngIf="showTextButton()">
+            <button class="btn btn-primary btn-newsletter type--change-form__button"(click)="showTextForm(type)">{{typeButton}}</button>
+        </div>
+        <div class="type-container__type--show-media" *ngIf="showTextButton()">
+            <input class="show-media__checkbox" type="checkbox">
+            <label class="show-media__label" for="mediaForm">Pokaż formularz portalu społecznościowego</label>
+        </div>
+      </div>
+      <div class="newsletter-container__form-container">
+        <div class="form-container__type--information" *ngIf="isInfo.value">
+            <div class="type--information__editor"> 
+              <app-grape-editor [editorName]="'infoEditor'" *ngIf="!isText.value"></app-grape-editor>
+            </div>
+            <div class="type--information__text-form text-form" *ngIf="isText.value">
+                <quill-editor class="text-form__editor" [modules]="config"></quill-editor>
+            </div>
+            <div class="type--information__submit-button button-container">
+              <button class="submit-button__button--submit btn btn-primary button-type--submit" (click)="sendNewsletter('infoEditor')">Wyśwlij newsletter</button>
+            </div>
+        </div>
+        <div class="form-container__type--product" *ngIf="isProduct.value">
+            <div class="type--product__editor"> 
+              <app-grape-editor [editorName]="'productEditor'" *ngIf="!isText.value"></app-grape-editor>
+            </div>
+            <div class="type--product__text-form text-form" *ngIf="isText.value">
+                <quill-editor class="text-form__editor" [modules]="config"></quill-editor>
+              </div>
+              <div class="type--product__submit-button button-container">
+                <button class="submit-button__button--submit btn btn-primary button-type--submit" (click)="sendNewsletter('productEditor')">Wyśwlij newsletter</button>
+              </div>
+        </div>
+        <div class="form-container__type--promotion" *ngIf="isPromotion.value">
+            <div class="type--promotion__editor"> 
+            <app-grape-editor [editorName]="'promotionEditor'" *ngIf="!isText.value"></app-grape-editor>
+          </div>
+          <div class="type--promotion__text-form text-form" *ngIf="isText.value">
+              <quill-editor class="text-form__editor" [modules]="config"></quill-editor>
+            </div>
+            <div class="type--promotion__submit-button button-container">
+              <button class="submit-button__button--submit btn btn-primary button-type--submit" (click)="sendNewsletter('promotionEditor')">Wyśwlij newsletter</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

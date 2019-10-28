@@ -9,8 +9,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpConfigInterceptor } from './interceptor/http.interceptor';
 import { LoaderComponent } from './commonComponents/loader/loader.component';
 import { SnackbarModule } from './commonComponents/snackbar/snackbar.module';
-import { CollapseComponent } from './commonComponents/collapse/collapse.component';
-
 @NgModule({
   declarations: [
     AppComponent,

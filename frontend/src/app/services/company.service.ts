@@ -6,6 +6,7 @@ import { Company, Branch, Address, GetCompany } from '../classes/Company';
 import { UserREST } from '../classes/User';
 import { BehaviorSubject, Subject, Observable } from 'rxjs';
 import { EditRequestData } from '../user/company/company.component';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +18,9 @@ export class CompanyService {
   private isLoaded = new Subject<boolean>();
   public defaultCProfileUrl = '../../../assets/Img/default_logo.png';
   public defaultCListUrl = '../../assets/Img/default_logo.png';
+  public userREST:UserREST;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private uDataService:UserService) {}
 
   public addCompany(companyData: Company,logoList?:File[],companyLogo?:File) :Subject<boolean> {
     this.isLoaded.subscribe((data)=>{
@@ -42,6 +44,37 @@ export class CompanyService {
       this.isLoaded.next(false);
     });
     return subject;
+  }
+
+  public getActualUser() {
+    if(storage_Avaliable('localStorage')) {
+      if(localStorage.getItem('userREST')) {
+        this.userREST = JSON.parse(localStorage.getItem('userREST'));
+      } else {
+        this.uDataService.updateUser();
+      }
+    } else {
+      this.uDataService.updateUser();
+    }
+  }
+
+  public checkForUserPermission(companyId:number) {
+    let haveAcces:boolean = false;
+    this.getActualUser();
+    if(this.userREST) {
+      this.userREST.companiesIDs.forEach(id=>{
+        console.log(companyId);
+        console.log(id);
+        if(companyId == id) {
+          haveAcces = true;
+        }
+      });
+      if(haveAcces) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
 
   private workLogoRequest(response,logoList:File[]) {

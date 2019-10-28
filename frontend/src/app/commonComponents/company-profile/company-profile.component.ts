@@ -15,13 +15,15 @@ import { EditRequestData } from 'src/app/user/company/company.component';
 import { UserREST } from 'src/app/classes/User';
 import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
 import { FormErrorService } from 'src/app/services/form-error.service';
+import { FormBuilder, Validators } from '@angular/forms';
+import { NewsletterService } from 'src/app/services/newsletter.service';
 
 @Component({
   selector: 'app-company-profile',
   templateUrl: './company-profile.component.html',
   styleUrls: ['./company-profile.component.scss']
 })
-export class CompanyProfileComponent implements OnInit {
+export class CompanyProfileComponent implements OnInit,AfterViewInit {
   public editData: EditRequestData;
   public paramId: number;
   public owner = new BehaviorSubject(false);
@@ -33,14 +35,23 @@ export class CompanyProfileComponent implements OnInit {
   public canShowEditForm = new BehaviorSubject(false);
   public canShowAddBranchForm = new BehaviorSubject(false);
   public canShowCompany = new BehaviorSubject(true);
+  @ViewChild('checkLabel') label:ElementRef;
 
+  public newsletterFormUser = this.fb.group({
+    isChecked:['',[Validators.required]],
+  });
+  public newsletterFormGuest = this.fb.group({
+    email:['',[Validators.required]],
+  });
   constructor(
     private activatedRoute: ActivatedRoute,
     private cDataService: CompanyService,
     private router: Router,
     private bDataService: BranchService,
     private snackbarService:SnackbarService,
-    private formErrorService:FormErrorService
+    private formErrorService:FormErrorService,
+    private fb:FormBuilder,
+    private nDataService:NewsletterService
   ) {}
 
   ngOnInit() {
@@ -49,6 +60,18 @@ export class CompanyProfileComponent implements OnInit {
     });
     this.getCompanyData();
     this.registerListeners();
+  }
+
+  ngAfterViewInit() {
+    if(this.label) {
+      this.label.nativeElement.addEventListener('click',()=>{
+        if(!this.newsletterFormUser.controls.isChecked.value) {
+          this.newsletterFormUser.controls.isChecked.setValue(true)
+        } else {
+          this.newsletterFormUser.controls.isChecked.setValue(false)
+        }
+      });
+    }
   }
 
   private registerListeners() {
@@ -133,11 +156,13 @@ export class CompanyProfileComponent implements OnInit {
       JSON.parse(localStorage.getItem('userREST'))
     ) {
       this.userREST = JSON.parse(localStorage.getItem('userREST'));
-      this.userREST.companiesIDs.forEach(companyId => {
-        if (this.companyData && this.companyData.companyId === companyId) {
-          this.owner.next(true);
-        }
-      });
+      if(this.userREST.companiesIDs) {
+        this.userREST.companiesIDs.forEach(companyId => {
+          if (this.companyData && this.companyData.companyId === companyId) {
+            this.owner.next(true);
+          }
+        });
+      }
     }
   }
 
@@ -203,6 +228,37 @@ export class CompanyProfileComponent implements OnInit {
     
   }
 
+  public saveToNewsletter($event) {
+    event.preventDefault();
+
+    if(this.newsletterFormGuest.valid) {
+      this.nDataService.saveToNewsletter(this.newsletterFormGuest.controls.email.value,this.companyData.companyId).subscribe(response=>{
+        this.snackbarService.open({
+          message:'Proszę potwierdzić zapis do newslettera linkiem wysłanym na podany adres!',
+          snackbarType:SnackbarType.success,
+        });
+      },error=>{
+        console.log(error);
+        this.formErrorService.open({
+          message:'Nie udało się zapisać do newslettera',
+        });
+      })
+
+    }else {
+      this.nDataService.saveToNewsletter(this.userREST.emailAddress,this.companyData.companyId).subscribe(response=>{
+        this.snackbarService.open({
+          message:'Proszę potwierdzić zapis do newslettera linkiem wysłanym na podany adres!',
+          snackbarType:SnackbarType.success,
+        });
+      },error=>{
+        console.log(error);
+        this.formErrorService.open({
+          message:'Nie udało się zapisać do newslettera',
+        });
+      })
+    }
+  }
+
   public goBack() {
     this.canShowBranches.next(false);
     this.canShowEditForm.next(false);
@@ -241,7 +297,7 @@ export class CompanyProfileComponent implements OnInit {
 
   public showNewsletterForm() {
     if(storage_Avaliable('localStorage')) {
-      if(this.userREST && !this.owner.value ) {
+      if(this.userREST && !this.owner.value) {
         return true;
       } else {
         return false;

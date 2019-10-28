@@ -14,9 +14,11 @@ export class GrapeEditorComponent implements OnInit,AfterViewInit,OnDestroy {
   constructor(private nDataService:NewsletterService) { }
 
   ngOnInit() {
-    this.nDataService.destroyEditor.subscribe(()=>{
-
-    })
+    this.nDataService.getHtmlTemplate.subscribe(name=>{
+      if(this.nameOfEditor === name) {
+        this.getHtmlTemplate();
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -36,8 +38,8 @@ export class GrapeEditorComponent implements OnInit,AfterViewInit,OnDestroy {
       },
       storageManager: {
         type: 'local',          // Type of the storage
-        autosave: false,         // Store data automatically
-        autoload: false,         // Autoload stored data on init
+        autosave: true,         // Store data automatically
+        autoload: true,         // Autoload stored data on init
         stepsBeforeSave: 1,     // If autosave enabled, indicates how many changes are necessary before store method is triggered
       },
       width:'auto',
@@ -51,7 +53,7 @@ export class GrapeEditorComponent implements OnInit,AfterViewInit,OnDestroy {
 
   public getHtmlTemplate() {
     let htmlWithCss = this.editor.runCommand('gjs-get-inlined-html');
-    console.log(htmlWithCss);
+    this.nDataService.template.next(htmlWithCss);
   }
 
 }

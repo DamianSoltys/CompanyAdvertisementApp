@@ -62,7 +62,7 @@ export class NewsletterComponent implements OnInit{
     this.isPromotion.next(false);
     this.isText.next(false);
     this.type = FormType.info;
-    this.typeButton = 'Wersja tekstowa';
+    this.typeButton = 'Wyświetl formularz';
   }
 
   public showInfo($event?:Event) {
@@ -73,7 +73,7 @@ export class NewsletterComponent implements OnInit{
     this.isPromotion.next(false);
     this.isText.next(false);
     this.type = FormType.info;
-    this.typeButton = 'Wersja tekstowa';
+    this.typeButton = 'Wyświetl formularz';
   }
   
   public showProduct($event?:Event) {
@@ -84,7 +84,7 @@ export class NewsletterComponent implements OnInit{
     this.isPromotion.next(false);
     this.isText.next(false);
     this.type = FormType.product;
-    this.typeButton = 'Wersja tekstowa';
+    this.typeButton = 'Wyświetl formularz';
   }
 
   public showPromotion($event?:Event) {
@@ -95,16 +95,16 @@ export class NewsletterComponent implements OnInit{
     this.isPromotion.next(true);
     this.isText.next(false);
     this.type = FormType.promotion;
-    this.typeButton = 'Wersja tekstowa';
+    this.typeButton = 'Wyświetl formularz';
   }
 
   public showTextForm(type:FormType) {
     if(this.isText.value) {
       this.isText.next(false);
-      this.typeButton = 'Wersja Tekstowa';
+      this.typeButton = 'Wyświetl formularz';
       console.log(type);
     } else {
-      this.typeButton = 'Edytor';
+      this.typeButton = 'Wyświetl edytor';
       this.isText.next(true);
       console.log(type);
     }
@@ -128,6 +128,17 @@ export class NewsletterComponent implements OnInit{
     
     let element:HTMLElement = <HTMLElement>event.currentTarget;
     element.classList.add('button-type--focus');
+  }
+
+  public sendNewsletter(editorName?:string) {
+    if(this.isText.value) {
+      console.log('news tekstowy');
+    } else {
+      this.nDataService.template.subscribe(template=>{
+        console.log(template);
+      });
+      this.nDataService.getHtmlTemplate.next(editorName);
+    }
   }
   
 

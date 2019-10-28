@@ -25,26 +25,35 @@
       <div class="newsletter-container__form-container">
         <div class="form-container__type--information" *ngIf="isInfo.value">
             <div class="type--information__editor"> 
-              <app-grape-editor [editorName]="'editor1'" *ngIf="!isText.value"></app-grape-editor>
+              <app-grape-editor [editorName]="'infoEditor'" *ngIf="!isText.value"></app-grape-editor>
             </div>
-            <div class="type--information__text-form" *ngIf="isText.value">
+            <div class="type--information__text-form text-form" *ngIf="isText.value">
                 <quill-editor class="text-form__editor" [modules]="config"></quill-editor>
+            </div>
+            <div class="type--information__submit-button button-container">
+              <button class="submit-button__button--submit btn btn-primary button-type--submit" (click)="sendNewsletter('infoEditor')">Wyśwlij newsletter</button>
             </div>
         </div>
         <div class="form-container__type--product" *ngIf="isProduct.value">
             <div class="type--product__editor"> 
-              <app-grape-editor [editorName]="'editor2'" *ngIf="!isText.value"></app-grape-editor>
+              <app-grape-editor [editorName]="'productEditor'" *ngIf="!isText.value"></app-grape-editor>
             </div>
-            <div class="type--product__text-form" *ngIf="isText.value">
-                text
+            <div class="type--product__text-form text-form" *ngIf="isText.value">
+                <quill-editor class="text-form__editor" [modules]="config"></quill-editor>
+              </div>
+              <div class="type--product__submit-button button-container">
+                <button class="submit-button__button--submit btn btn-primary button-type--submit" (click)="sendNewsletter('productEditor')">Wyśwlij newsletter</button>
               </div>
         </div>
         <div class="form-container__type--promotion" *ngIf="isPromotion.value">
             <div class="type--promotion__editor"> 
-            <app-grape-editor [editorName]="'editor3'" *ngIf="!isText.value"></app-grape-editor>
+            <app-grape-editor [editorName]="'promotionEditor'" *ngIf="!isText.value"></app-grape-editor>
           </div>
-          <div class="type--promotion__text-form" *ngIf="isText.value">
-            text
+          <div class="type--promotion__text-form text-form" *ngIf="isText.value">
+              <quill-editor class="text-form__editor" [modules]="config"></quill-editor>
+            </div>
+            <div class="type--promotion__submit-button button-container">
+              <button class="submit-button__button--submit btn btn-primary button-type--submit" (click)="sendNewsletter('promotionEditor')">Wyśwlij newsletter</button>
             </div>
         </div>
       </div>

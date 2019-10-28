@@ -134,7 +134,7 @@
         type="button"
         class="navbar__button-link btn btn-primary"
       >
-        Ulubione zakłady
+        Ulubione
       </button>
       <button
         (click)="toggleMenu('personalData',false)"
@@ -142,7 +142,7 @@
         class="navbar__button-link btn btn-primary"
         id="dropdownId"
       >
-        Profil użytkownika
+        Profil
         <ul
           [@showHideDropdown]="displayPersonalDataMenu.value ? 'visible' : 'hidden'"
           class="button-link__dropdown"
@@ -212,7 +212,7 @@
           <i class="fas fa-id-card item__icon"></i>Dane konta
         </button>
         <button routerLink="" class="dropdown__item" (click)="toggleMenu()">
-          <i class="fas fa-synagogue item__icon"></i>Ulubione zakłady
+          <i class="fas fa-synagogue item__icon"></i>Ulubione
         </button>
         <button class="dropdown__item" (click)="toggleMenu(); logOut()">
           <i class="fas fa-sign-out-alt item__icon"></i>Wyloguj

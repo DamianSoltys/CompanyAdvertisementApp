@@ -5,6 +5,7 @@
   flex-direction: column;
   width: 100%;
   margin-top: 3%;
+  margin-bottom: 1%;
 
   @include phone {
     width: 100%;
@@ -137,37 +138,98 @@
       }
       .newsletter-container__form-container {
         z-index: 1;
+        display:flex;
+        flex-direction: column;
+        align-items: center;
+        .text-form {
+          border-top:3px solid darken($bgcolor,15%);
+          margin:5px;
+          margin-top:0;
+          height: 300px;
+          margin-bottom:40px;
+          .text-form__editor {
+
+          }
+        }
+
+        .button-type--submit {
+          border:0;
+          width:30%;
+          border-radius: 50px;
+          background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
+          transition: all .4s ease-in-out;
+          background-size: 200%;
+          height:35px;
+          margin-top:40px;
+          margin-bottom: 20px;
+          &:hover {
+              background-position: 100% 0;
+          }
+
+          @include phone {
+            width:95%;
+          }
+        }
+
+        .button-container {
+          display: flex;
+          justify-content: center;
+        }
         
         .form-container__type {
-          &--information {
+
+          &--information {  
+            width:100%;
 
             .type--information__editor {
 
             }
+
             .type--information__text-form {
-              border-top:3px solid darken($bgcolor,15%);
-              margin:5px;
-              margin-top:0;
+              
+
+              .text-form__editor {
+                
+              }
+            }
+            .type--information__submit-button {
+              .submit-button__button--submit {
+                
+              }
             }
           }
           &--product {
+            width:100%;
             .type--product__editor {
 
             }
             .type--product__text-form {
-              border-top:3px solid darken($bgcolor,15%);
-              margin:5px;
-              margin-top:0;
+             
+              .text-form__editor {
+                
+              }
+            }
+            .type--product__submit-button {
+              .submit-button__button--submit {
+                              
+              }
             }
           }
           &--promotion {
+            width:100%;
             .type--promotion__editor {
 
             }
             .type--promotion__text-form {
-              border-top:3px solid darken($bgcolor,15%);
-              margin:5px;
-              margin-top:0;
+             
+              .text-form__editor {
+                
+              }
+            }
+            .type--promotion__submit-button {
+              .submit-button__button--submit {
+                
+              }
             }
           }
         }

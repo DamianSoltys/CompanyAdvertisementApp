@@ -29,7 +29,6 @@ import { FormErrorService } from 'src/app/services/form-error.service';
   styleUrls: ['./personal-data.component.scss']
 })
 export class PersonalDataComponent implements OnInit {
-  public personalDataForm: FormGroup;
   public userObject: UserREST;
   public naturalUserDataObject: PersonalData;
   public _voivodeships = voivodeships;
@@ -58,6 +57,58 @@ export class PersonalDataComponent implements OnInit {
     height: '300px',
   }
 
+  public personalDataForm = this.fb.group({
+    address: this.fb.group({
+      voivodeship: ['', [Validators.required]],
+      city: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))
+        ]
+      ],
+      street: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))
+        ]
+      ],
+      apartmentNo: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/))
+        ]
+      ],
+      buildingNo: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/))
+        ]
+      ]
+    }),
+    firstName: [
+      '',
+      [
+        Validators.required,
+        Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))
+      ]
+    ],
+    lastName: [
+      '',
+      [
+        Validators.required,
+        Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))
+      ]
+    ],
+    phoneNo: [
+      '',
+      [Validators.required, Validators.pattern(new RegExp(/^[0-9]+$/))]
+    ]
+  });
+
   constructor(
     private fb: FormBuilder,
     private pdataService: PersonalDataService,
@@ -68,57 +119,6 @@ export class PersonalDataComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.personalDataForm = this.fb.group({
-      address: this.fb.group({
-        voivodeship: ['', [Validators.required]],
-        city: [
-          '',
-          [
-            Validators.required,
-            Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))
-          ]
-        ],
-        street: [
-          '',
-          [
-            Validators.required,
-            Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))
-          ]
-        ],
-        apartmentNo: [
-          '',
-          [
-            Validators.required,
-            Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/))
-          ]
-        ],
-        buildingNo: [
-          '',
-          [
-            Validators.required,
-            Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/))
-          ]
-        ]
-      }),
-      firstName: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))
-        ]
-      ],
-      lastName: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))
-        ]
-      ],
-      phoneNo: [
-        '',
-        [Validators.required, Validators.pattern(new RegExp(/^[0-9]+$/))]
-      ]
-    });
     this.getUserObject();
     this.checkForPersonalData();
   }

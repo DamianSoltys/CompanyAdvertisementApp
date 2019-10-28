@@ -32,8 +32,20 @@ import { FormErrorService } from 'src/app/services/form-error.service';
 export class AccountDataComponent implements OnInit {
   public showEditingForm = new BehaviorSubject<boolean>(true);
   public showData = new BehaviorSubject<boolean>(false);
-  public accountDataForm: FormGroup;
   public userObject: UserREST;
+  public accountDataForm = this.fb.group({
+    oldPassword: ['', [Validators.required]],
+    newPassword: [
+      '',
+      [
+        Validators.required,
+        Validators.pattern(
+          new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{5,}$/)
+        )
+      ]
+    ],
+    checkPassword: ['', [Validators.required]]
+  });
 
   constructor(
     private fb: FormBuilder,
@@ -48,19 +60,6 @@ export class AccountDataComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.accountDataForm = this.fb.group({
-      oldPassword: ['', [Validators.required]],
-      newPassword: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(
-            new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{5,}$/)
-          )
-        ]
-      ],
-      checkPassword: ['', [Validators.required]]
-    });
     this.checkForUserData();
   }
 

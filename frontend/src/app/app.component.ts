@@ -120,7 +120,7 @@ export class AppComponent implements OnInit {
     });
   }
 
-  getStorageObjects() {
+  public getStorageObjects() {
     if (storage_Avaliable('localStorage') && this.logged) {
       this.userREST = JSON.parse(localStorage.getItem('userREST'));
       this.pDataService.personalData.subscribe(data => {
@@ -129,11 +129,11 @@ export class AppComponent implements OnInit {
     }
   }
 
-  toggleNearbyBlock() {
+  public toggleNearbyBlock() {
     this.nearby_toggle = !this.nearby_toggle;
     this.visible = !this.visible;
   }
-  toggleMenu(type?:string,mobile?: boolean) {
+  public toggleMenu(type?:string,mobile?: boolean) {
     if (!mobile) {
       switch (type) {
         case 'personalData':{
@@ -149,7 +149,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  logOut() {
+  public logOut() {
     this.logOut_success = true;
     this.snackbarService.open({
       message:'Pomyślnie wylogowano',
@@ -158,7 +158,7 @@ export class AppComponent implements OnInit {
     this.lgservice.logoutStorageClean();
   }
 
-  prepareRoute(outlet: RouterOutlet) {
+  public prepareRoute(outlet: RouterOutlet) {
     return outlet && outlet.activatedRouteData;
   }
 }

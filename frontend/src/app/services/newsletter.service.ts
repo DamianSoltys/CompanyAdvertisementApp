@@ -7,6 +7,9 @@ import { BehaviorSubject, Subject } from 'rxjs';
 })
 export class NewsletterService {
   public destroyEditor = new Subject<any>();
+  public getHtmlTemplate = new Subject<string>();
+  public template = new Subject<any>();
+
   constructor(private http:HttpClient) { }
 
   public saveToNewsletter(userEmail:string,companyId:number) {

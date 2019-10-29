@@ -4,7 +4,7 @@
     [formGroup]="searchform"
     (ngSubmit)="onSubmit()"
   >
-    <p class="form__text-node">Znajdz swoją wymarzoną firmę!</p>
+    <p class="form__text-node">Znajdź swoją wymarzoną firmę!</p>
     <div class="form_main-container">
       <span class="main-container__span-icon"
         ><i class="fas fa-search main-container__icon"></i
@@ -40,6 +40,9 @@
     </p>
 </div>
   <div class="search-component__search-data-container" *ngIf="actualList">
+    <div class="search-data-container__quantity text-center">
+      znaleziono ({{companyNumber}}) firm oraz ({{branchNumber}}) zakładów
+    </div>
     <div class="search-data-container__sections">
       <app-search-section *ngFor="let data of actualList" [sectionData]="data"></app-search-section>
     </div>

@@ -79,6 +79,7 @@ export class AdvancedSearchComponent implements OnInit {
   public paginationTable:SectionData[][];
   public actualList:SectionData[];
   public actualIndex:number = 0;
+  public dataNumber:number;
   constructor(private sDataService:SearchService,private fb:FormBuilder,private snackbarService:SnackbarService) { }
 
   ngOnInit() {
@@ -99,6 +100,7 @@ export class AdvancedSearchComponent implements OnInit {
     subject.subscribe(()=>{
       this.isLoaded.next(true);
     });
+    this.dataNumber = 0;
 
     this.sDataService.sendAdvSearchData(searchData).subscribe(response=>{
       this.responseBody = <SearchResponse>response.body     
@@ -107,6 +109,8 @@ export class AdvancedSearchComponent implements OnInit {
         this.paginationTable = this.setPaginationTable(this.sectionData,3);
         let counter:number = 0;
         this.sectionData.forEach(data=>{
+          this.dataNumber++;
+          
           this.sDataService.getSearchSectionLogo(data).subscribe(response=>{
             console.log(response)
             if(response.status != 204) {

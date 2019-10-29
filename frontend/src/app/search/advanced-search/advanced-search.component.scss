@@ -94,6 +94,11 @@
         width: 80%;
         margin:0;
       }
+
+      .search-data-container__quantity {
+        color:darken($bgcolor,10%);
+        font-size: 1.2rem;
+      }
       
       .search-data-container__buttons {
         display: flex;

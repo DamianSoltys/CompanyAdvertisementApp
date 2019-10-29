@@ -25,6 +25,7 @@ export class SearchComponent implements OnInit {
   public actualIndex:number = 0;
   public companyNumber:number;
   public branchNumber:number;
+  public isEmptyMessage = new BehaviorSubject(false);
   constructor(private fb: FormBuilder, private searchS: SearchService) {
     this.searchform = fb.group({
       search: ['']
@@ -64,6 +65,8 @@ export class SearchComponent implements OnInit {
     this.searchS.sendSearchData(searchData).subscribe(response=>{
       this.responseBody = <SearchResponse>response.body     
       this.sectionData = this.responseBody.content;
+      console.log(response)
+      this.isEmptyMessage.next(this.sectionData.length?false:true);
       this.paginationTable = this.setPaginationTable(this.sectionData,3);
       let counter:number = 0;
       this.sectionData.map(data=>{
@@ -130,17 +133,13 @@ public nextPage() {
     }
   }
 }
+
 public showEmptyMessage() {
-if(this.isLoaded.value) {
-  if(this.sectionData) {
-    if(this.sectionData.length) {
-      return false;
-    } else {
-      return true;
-    }
-  } else {
+  if(this.isLoaded.value && this.isEmptyMessage.value) {
     return true;
+  } else {
+    return false
   }
 }
-}
+
 }

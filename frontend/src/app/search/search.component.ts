@@ -121,11 +121,16 @@ public nextPage() {
   }
 }
 public showEmptyMessage() {
-
-  if(this.isLoaded.value && !this.sectionData) {
+if(this.isLoaded.value) {
+  if(this.sectionData) {
+    if(this.sectionData.length) {
+      return false;
+    } else {
+      return true;
+    }
+  } else {
     return true;
-  } else if(this.isLoaded.value && this.sectionData){
-    return false;
   }
+}
 }
 }

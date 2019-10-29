@@ -4,10 +4,13 @@
       <span class="header__text-node">Komentarze i oceny</span>
     </div>
     <div class="main-container__data-container">
-      <div class="data-container__section--rating">
-        lista
+      <div class="data-container__section--button">
+        <button class="section--button__button btn-primary btn" (click)="showForm()">Dodaj swoją opinie</button>
       </div>
-      <div class="data-container__section--form">
+      <div class="data-container__section--rating">
+      dupa
+      </div>
+      <div class="data-container__section--form" *ngIf="isForm.value" [@formAnimate]>
        <form class="section--form__form" [formGroup]="ratingForm">
         <div class="form__comment-input">
           <label for="commentText">Komentarz</label>

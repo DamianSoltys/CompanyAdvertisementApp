@@ -105,12 +105,6 @@
           [routerLink]="[ 'newsletter']" *ngIf="owner.value">  
           Newsletter
         </button>
-        <button
-          class="btn btn-primary section--buttons__button--branches"
-          (click)="showBranches()"
-        >
-          Zakłady
-        </button>
         <span class="section--buttons__owner-buttons" *ngIf="owner.value">
           <button
             class="btn btn-primary owner-buttons__button--edit"
@@ -123,11 +117,8 @@
       <div class="content__section--error">
           <app-form-error></app-form-error>
       </div>
-    </div>
-  </div>
-  <div
-    class="company-profile-component__branch-sections"
-    *ngIf="canShowBranches.value"
+      <div
+    class="company-profile-component__branch-sections col-12"
   >
     <div class="branch-sections__empty-branches" *ngIf="!branchData.length">
       <p class="empty-branches__text-node text-center" *ngIf="isLoaded.value">
@@ -154,6 +145,8 @@
       >
         Dodaj zakład
       </button>
+    </div>
+  </div>
     </div>
   </div>
   <app-company

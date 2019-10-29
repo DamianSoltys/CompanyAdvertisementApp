@@ -76,7 +76,6 @@ export class SearchComponent implements OnInit {
           this.branchNumber++;
         }
         this.searchS.getSearchSectionLogo(data).subscribe(response=>{
-          console.log(response)
           if(response.status != 204) {
             let reader = new FileReader();
             reader.addEventListener("load", () => {

@@ -68,11 +68,6 @@
         </div>
       </div>
       <div class="content__section--buttons col-12">
-        <button
-          class="btn btn-primary section--buttons__button--comments"
-           [routerLink]="['comments']">      
-          Komentarze
-        </button>
         <span class="section--buttons__owner-buttons" *ngIf="owner.value">
           <button
             class="btn btn-primary owner-buttons__button--edit"
@@ -81,6 +76,9 @@
             Edycja danych
           </button>
         </span>
+      </div>
+      <div class="content__section--comments col-12">
+        <app-comments></app-comments>
       </div>
     </div>
   </div>

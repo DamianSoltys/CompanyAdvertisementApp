@@ -3,8 +3,9 @@
 .company-profile-component {
   display: flex;
   flex-direction: column;
-  width: 60%;
+  width: 75%;
   margin-top: 3%;
+  margin-bottom: 1%;
   max-width: 1000px;
 
   @include phone {
@@ -19,6 +20,7 @@
   }
 
   .company-profile-component__branch-sections {
+    padding-top:10px;
     .branch-sections__branch-section {
       max-height: 50vh;
       overflow: auto;
@@ -27,6 +29,7 @@
       display: flex;
       justify-content: center;
       padding-top: 10px;
+      padding-bottom: 20px;
       .button-container__button--add {
         width: 30%;
         border-radius: 50px;

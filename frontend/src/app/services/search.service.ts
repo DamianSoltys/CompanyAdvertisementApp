@@ -13,7 +13,12 @@ export class SearchService {
 
   public sendSearchData(searchData: Array<string>) {
     let query: string = searchData.join('%');
-    return this.http.get(`http://localhost:8090/api/search?q=${query}`, { observe: 'response' });
+    return this.http.get(`http://localhost:8090/api/search?q=${query}&size=3`, { observe: 'response' });
+  }
+
+  public getActualPageData(searchData: Array<string>,pageNumber:number) {
+    let query: string = searchData.join('%');
+    return this.http.get(`http://localhost:8090/api/search?q=${query}&size=3&page=${pageNumber}`, { observe: 'response' });
   }
 
   public getSearchSectionLogo(searchData: SectionData) {
@@ -42,13 +47,36 @@ export class SearchService {
     );
 
   }
-  public setParams(formData:AdvSearchData):HttpParams {
+  public getActualAdvSearchPage(formData: AdvSearchData, pageNumber:number) {
+    if(formData.type) {
+      formData.type = formData.type.map(value=>{  
+        if(value == 'Firma') {
+          return value = 'company';
+        } else {
+          return value = 'branch';
+        }
+      });
+    }
+    let httpParams = this.setParams(formData,pageNumber);
+    console.log(httpParams)
+    return this.http.get(
+      `http://localhost:8090/api/search-adv`,
+      { observe: 'response' ,params: httpParams}
+    );
+
+  }
+  public setParams(formData:AdvSearchData,pageNumber?:number):HttpParams {
     let httpParams:HttpParams = new HttpParams();
     Object.keys(formData).forEach(param => {
       if (formData[param]) {
           httpParams = httpParams.set(param, formData[param]);
       }
   });
+  httpParams = httpParams.set('size','3');
+
+    if(pageNumber) {
+      httpParams = httpParams.set('page',`${pageNumber}`);
+    }
     return httpParams;
   }
 

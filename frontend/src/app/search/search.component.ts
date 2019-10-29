@@ -23,6 +23,8 @@ export class SearchComponent implements OnInit {
   public paginationTable:SectionData[][];
   public actualList:SectionData[];
   public actualIndex:number = 0;
+  public companyNumber:number;
+  public branchNumber:number;
   constructor(private fb: FormBuilder, private searchS: SearchService) {
     this.searchform = fb.group({
       search: ['']
@@ -56,12 +58,20 @@ export class SearchComponent implements OnInit {
     });
 
     searchData = searchData.split([' ',',','.']);
+    this.companyNumber = 0;
+    this.branchNumber = 0;
+    
     this.searchS.sendSearchData(searchData).subscribe(response=>{
       this.responseBody = <SearchResponse>response.body     
       this.sectionData = this.responseBody.content;
       this.paginationTable = this.setPaginationTable(this.sectionData,3);
       let counter:number = 0;
       this.sectionData.map(data=>{
+        if(data.type == 'Company') {
+          this.companyNumber++;
+        } else {
+          this.branchNumber++;
+        }
         this.searchS.getSearchSectionLogo(data).subscribe(response=>{
           console.log(response)
           if(response.status != 204) {

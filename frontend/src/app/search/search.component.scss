@@ -11,6 +11,12 @@
     @include phone {
       width: 100%;
     }
+
+    .search-data-container__quantity {
+      color:darken($bgcolor,10%);
+      font-size: 1.2rem;
+      padding-top:10px;
+    }
     .search-data-container__buttons {
       display: flex;
       justify-content: center;

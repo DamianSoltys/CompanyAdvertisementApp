@@ -32,6 +32,9 @@
 </div>
 
 <div class="container__search-data-container" *ngIf="actualList">
+        <div class="search-data-container__quantity text-center">
+                znaleziono ({{dataNumber}}) wyników
+              </div>
     <div class="search-data-container__sections">
       <app-search-section *ngFor="let data of actualList" [sectionData]="data"></app-search-section>
     </div>

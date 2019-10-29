@@ -53,7 +53,19 @@ public class SearchService {
 
         List<Object> res = extractEntities(result);
 
-        return new PageImpl<>(res, pageable, res.size());
+        return toPage(res, pageable);
+    }
+
+    private Page<Object> toPage(List<Object> list, Pageable pageable) {
+        if (pageable.getOffset() >= list.size()) {
+            return Page.empty();
+        }
+        int startIndex = (int) pageable.getOffset();
+        int endIndex = (int) ((pageable.getOffset() + pageable.getPageSize()) > list.size() ?
+                list.size() :
+                pageable.getOffset() + pageable.getPageSize());
+        List<Object> subList = list.subList(startIndex, endIndex);
+        return new PageImpl<>(subList, pageable, list.size());
     }
 
     private org.apache.lucene.search.Query buildFinalQuery(String term, QueryBuilder branchBuilder, QueryBuilder companyBuilder) {
@@ -138,7 +150,7 @@ public class SearchService {
             throw new IllegalStateException(String.format("Invalid specification: %s", specification.getClass().getName()));
         }).flatMap(List::stream).collect(Collectors.toList());
 
-        return new PageImpl<>(result, pageable, result.size());
+        return toPage(result, pageable);
     }
 
     private List<Object> getCompaniesAccordingToCompanySearchSpecification(SearchSpecification searchSpecification, Pageable pageable) {

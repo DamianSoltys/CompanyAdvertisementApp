@@ -47,87 +47,33 @@ html {
 .navbar__button-group {
   position: relative;
 
+  .item__username {
+    font-size: 1rem;
+    font-weight: 450;
+    padding: 5px 10px;
+    white-space: nowrap;
+  }
+
   .navbar__button-link {
     background-color: $bgcolor1;
     border: 1px solid $btborder;
     transition: 0.5s;
     position: relative;
-    width:140px;
 
     .button-link__dropdown {
-      padding-top: 10px;
-      position: absolute;
-      padding: 0;
-      z-index: 2000;
-      left: -49px;
-      text-align: left;
-      width: calc(100% + 50px);
-      background: #fff;
-      list-style: none;
-      top: 37px;
-      border-radius: 5px;
-      border-top-left-radius: 20px;
-      border-top-right-radius: 0;
-      @include boxShadow(0px 4px 5px 0px #bbb9bf);
-
-      &:before {
-        content: '';
-        display: block;
-        width: 20px;
-        background: radial-gradient(
-          circle at 0 0,
-          rgba(204, 0, 0, 0) 20px,
-          #fff 21px
-        );
-        position: absolute;
-        height: 21px;
-        right: 0;
-        top: -21px;
-      }
-
       .dropdown__item {
         border: 0;
         all: initial;
         width: 100%;
-        &:first-of-type li {
-          border-top-left-radius: 20px;
-        }
-        &:last-of-type li {
-          border-bottom-left-radius: 5px;
-          border-bottom-right-radius: 5px;
-        }
-        li.item__username {
-          padding: 5px 10px;
-          list-style: none;
-          font-size: 1rem;
-          font-weight: 450;
-        }
-        li:not(.item__username) {
-          padding: 5px 10px;
-          list-style: none;
-          font-weight: bold;
-          color: $bgcolor;
-          cursor: pointer;
-
-          &:hover {
-            background-color: whitesmoke;
-            color: $linkcolor;
-          }
-        }
       }
+      border-radius: 0;
     }
+    
+    border-radius: 0;
 
     &:hover,
     &:focus {
       background-color: $bgcolor;
-    }
-
-    &:first-child {
-      border-top-left-radius: 0;
-    }
-
-    &:last-of-type {
-      border-bottom-right-radius: 0;
     }
 
     @include phone {

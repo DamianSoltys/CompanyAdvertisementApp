@@ -14,11 +14,12 @@
        <form class="section--form__form" [formGroup]="ratingForm">
         <div class="form__comment-input">
           <label for="commentText">Komentarz</label>
-          <input type="text" formControlName="commentText">
+          <quill-editor class="comment-input__input" formControlName="commentText" [modules]="config">
+          </quill-editor>
         </div>
         <div class="form__rating-input">
-          <label for="rating">Ocena</label>
-          <ngb-rating [(rate)]="currentRate"></ngb-rating>
+          <label class="text-center" for="rating">Ocena</label>
+          <ngb-rating class="rating-input__rating" [(rate)]="currentRate" [max]="5"></ngb-rating>
         </div>
         <div class="form__button-container">
         <button type="submit" class="button-container__button--submit btn btn-primary">Dodaj</button>

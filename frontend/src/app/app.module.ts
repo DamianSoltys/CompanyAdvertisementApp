@@ -9,6 +9,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpConfigInterceptor } from './interceptor/http.interceptor';
 import { LoaderComponent } from './commonComponents/loader/loader.component';
 import { SnackbarModule } from './commonComponents/snackbar/snackbar.module';
+import { NgbDropdown, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,6 +23,7 @@ import { SnackbarModule } from './commonComponents/snackbar/snackbar.module';
     HttpClientModule,
     BrowserAnimationsModule,
     SnackbarModule,
+    NgbDropdownModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true}

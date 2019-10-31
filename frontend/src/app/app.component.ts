@@ -64,23 +64,6 @@ import { slideInAnimation } from './animations/route-animation';
       ),
       transition('visible <=> hidden', [animate('.2s')])
     ]),
-    trigger('showHideDropdown', [
-      state(
-        'visible',
-        style({
-          height:'*',
-          overflow:'hidden'
-        })
-      ),
-      state(
-        'hidden',
-        style({
-          height:'0px',
-          overflow:'hidden'
-        })
-      ),
-      transition('visible <=> hidden', [animate('.2s')])
-    ]),
     slideInAnimation,
   ]
 })
@@ -103,12 +86,6 @@ export class AppComponent implements OnInit {
     document.body.addEventListener('click', e => {
       if ((<HTMLElement>e.target).id !== 'menuId') {
         this.displayHamburgerMenu.next(false);
-      }
-      if ((<HTMLElement>e.target).id !== 'dropdownId') {
-        this.displayPersonalDataMenu.next(false);
-      }
-      if ((<HTMLElement>e.target).id !== 'searchId') {
-        this.displaySearchMenu.next(false);
       }
     });
   }
@@ -133,20 +110,8 @@ export class AppComponent implements OnInit {
     this.nearby_toggle = !this.nearby_toggle;
     this.visible = !this.visible;
   }
-  public toggleMenu(type?:string,mobile?: boolean) {
-    if (!mobile) {
-      switch (type) {
-        case 'personalData':{
-          this.displayPersonalDataMenu.next(!this.displayPersonalDataMenu.value);
-        }
-        case 'search':{
-          this.displaySearchMenu.next(!this.displaySearchMenu.value);
-        }
-      }
-    } else {
-      console.log('menu')
+  public toggleMenu() {   
       this.displayHamburgerMenu.next(!this.displayHamburgerMenu.value);
-    }
   }
 
   public logOut() {

@@ -39,11 +39,9 @@ export class CommentsComponent implements OnInit {
   });
   public isForm=new BehaviorSubject(false);
   public currentRate=4;
-  public ratingConfig:NgbRatingConfig = {
-    max:5,
-    readonly:false,
-    resettable:false
-  }
+  public config = {
+    toolbar: [['bold', 'italic', 'underline']]
+  };
   constructor(private fb:FormBuilder) { }
 
   ngOnInit() {

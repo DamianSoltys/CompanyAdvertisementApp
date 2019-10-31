@@ -15,7 +15,7 @@
         </div>
         <div class="form__rating-input">
           <label for="rating">Ocena</label>
-          <input type="text" formControlName="rating">
+          <ngb-rating [(rate)]="currentRate"></ngb-rating>
         </div>
         <div class="form__button-container">
         <button type="submit" class="button-container__button--submit btn btn-primary">Dodaj</button>

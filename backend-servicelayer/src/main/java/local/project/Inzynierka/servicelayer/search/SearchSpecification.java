@@ -1,7 +1,7 @@
 package local.project.Inzynierka.servicelayer.search;
 
 import local.project.Inzynierka.persistence.entity.SearchableEntity;
-import local.project.Inzynierka.servicelayer.dto.Voivodeship;
+import local.project.Inzynierka.servicelayer.dto.address.Voivodeship;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

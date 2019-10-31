@@ -1,9 +1,9 @@
 package local.project.Inzynierka.web.resource;
 
 import local.project.Inzynierka.auth.AuthFacade;
-import local.project.Inzynierka.servicelayer.dto.CommentGetDto;
-import local.project.Inzynierka.servicelayer.dto.CreateCommentDto;
-import local.project.Inzynierka.servicelayer.dto.EditCommentDto;
+import local.project.Inzynierka.servicelayer.dto.rating.CommentGetDto;
+import local.project.Inzynierka.servicelayer.dto.rating.CreateCommentDto;
+import local.project.Inzynierka.servicelayer.dto.rating.EditCommentDto;
 import local.project.Inzynierka.servicelayer.rating.CommentService;
 import local.project.Inzynierka.servicelayer.rating.event.CommentCreatedEvent;
 import local.project.Inzynierka.servicelayer.rating.event.CommentDeletedEvent;

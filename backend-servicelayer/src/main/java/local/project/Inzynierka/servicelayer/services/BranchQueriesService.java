@@ -1,8 +1,8 @@
 package local.project.Inzynierka.servicelayer.services;
 
 import local.project.Inzynierka.persistence.repository.BranchRepository;
-import local.project.Inzynierka.servicelayer.dto.CompanyBranchDto;
-import local.project.Inzynierka.servicelayer.dto.PersistedBranchDto;
+import local.project.Inzynierka.servicelayer.dto.branch.CompanyBranchDto;
+import local.project.Inzynierka.servicelayer.dto.branch.PersistedBranchDto;
 import local.project.Inzynierka.servicelayer.dto.mapper.BranchMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

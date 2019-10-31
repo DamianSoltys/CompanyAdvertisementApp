@@ -1,6 +1,6 @@
 package local.project.Inzynierka.servicelayer.search;
 
-import local.project.Inzynierka.servicelayer.dto.Voivodeship;
+import local.project.Inzynierka.servicelayer.dto.address.Voivodeship;
 import local.project.Inzynierka.servicelayer.errors.TooManySearchParameterValuesException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

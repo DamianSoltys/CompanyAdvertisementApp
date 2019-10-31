@@ -2,9 +2,9 @@ package local.project.Inzynierka.web.resource;
 
 import local.project.Inzynierka.auth.AuthorizationHeader;
 import local.project.Inzynierka.auth.UserPrincipal;
-import local.project.Inzynierka.servicelayer.dto.LoginDto;
-import local.project.Inzynierka.servicelayer.dto.UserInfoDto;
-import local.project.Inzynierka.servicelayer.dto.UserRegistrationDto;
+import local.project.Inzynierka.servicelayer.dto.user.LoginDto;
+import local.project.Inzynierka.servicelayer.dto.user.UserInfoDto;
+import local.project.Inzynierka.servicelayer.dto.user.UserRegistrationDto;
 import local.project.Inzynierka.servicelayer.registration.event.OnRegistrationEvent;
 import local.project.Inzynierka.servicelayer.services.UserAuthenticationService;
 import local.project.Inzynierka.shared.UsernamePasswordAuthentication;

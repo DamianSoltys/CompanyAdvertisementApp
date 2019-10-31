@@ -4,7 +4,7 @@ import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.persistence.entity.Comment;
 import local.project.Inzynierka.persistence.entity.User;
 import local.project.Inzynierka.persistence.repository.CommentRepository;
-import local.project.Inzynierka.servicelayer.dto.CommentGetDto;
+import local.project.Inzynierka.servicelayer.dto.rating.CommentGetDto;
 import local.project.Inzynierka.servicelayer.rating.event.CommentCreatedEvent;
 import local.project.Inzynierka.servicelayer.rating.event.CommentDeletedEvent;
 import local.project.Inzynierka.servicelayer.rating.event.CommentEditedEvent;

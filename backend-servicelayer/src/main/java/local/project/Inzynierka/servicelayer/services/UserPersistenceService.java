@@ -4,7 +4,7 @@ import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.User;
 import local.project.Inzynierka.persistence.repository.CompanyRepository;
 import local.project.Inzynierka.persistence.repository.UserRepository;
-import local.project.Inzynierka.servicelayer.dto.UserInfoDto;
+import local.project.Inzynierka.servicelayer.dto.user.UserInfoDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

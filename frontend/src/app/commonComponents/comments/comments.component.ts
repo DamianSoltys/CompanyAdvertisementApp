@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+
 import { BehaviorSubject } from 'rxjs';
 import {
   trigger,
@@ -9,6 +10,8 @@ import {
   transition,
   query
 } from '@angular/animations';
+import { NgbRatingConfig } from '@ng-bootstrap/ng-bootstrap'
+
 
 @Component({
   selector: 'app-comments',
@@ -35,7 +38,12 @@ export class CommentsComponent implements OnInit {
     rating:[0,[Validators.required]],
   });
   public isForm=new BehaviorSubject(false);
-  
+  public currentRate=4;
+  public ratingConfig:NgbRatingConfig = {
+    max:5,
+    readonly:false,
+    resettable:false
+  }
   constructor(private fb:FormBuilder) { }
 
   ngOnInit() {

@@ -5,10 +5,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BranchProfileComponent } from './branch-profile.component';
 import { BranchProfileRoutingModule } from './branch-profile-routing.module';
 import { AgmCoreModule } from '@agm/core';
-import { CommentsComponent } from '../comments/comments.component';
 import { CompanyModule } from 'src/app/user/company/company.module';
+import { CommentsModule } from '../comments/comments.module';
+
 @NgModule({
-  declarations: [BranchProfileComponent, CommentsComponent],
+  declarations: [BranchProfileComponent],
   imports: [
     CommonModule,
     BranchProfileRoutingModule,
@@ -17,7 +18,8 @@ import { CompanyModule } from 'src/app/user/company/company.module';
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDymmSbQ_6KBgygpEZwcztemgH3HXTOYrI'
     }),
-    CompanyModule
+    CompanyModule,
+    CommentsModule
   ]
 })
 export class BranchProfileModule {}

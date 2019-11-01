@@ -22,6 +22,8 @@ import { UserREST, PersonalData } from './classes/User';
 import { PersonalDataService } from './services/personal-data.service';
 import { SnackbarService, SnackbarType } from './services/snackbar.service';
 import { slideInAnimation } from './animations/route-animation';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NearbyComponent } from './commonComponents/nearby-component/nearby-component.component';
 
 @Component({
   selector: 'app-root',
@@ -81,7 +83,8 @@ export class AppComponent implements OnInit {
   constructor(
     private lgservice: LoginService,
     private pDataService: PersonalDataService,
-    private snackbarService:SnackbarService
+    private snackbarService:SnackbarService,
+    private modalService: NgbModal,
   ) {
     document.body.addEventListener('click', e => {
       if ((<HTMLElement>e.target).id !== 'menuId') {
@@ -95,6 +98,11 @@ export class AppComponent implements OnInit {
       this.logged = value;
       this.getStorageObjects();
     });
+  }
+
+  public openNearbyModal() {
+    const modalRef = this.modalService.open(NearbyComponent,{size:'lg'});
+    modalRef.componentInstance.name = 'World';
   }
 
   public getStorageObjects() {

@@ -193,66 +193,71 @@ export class CompanyComponent implements OnInit {
         console.log(this.companyList)
       });
 
-      if (userREST.companiesIDs.length) {
-        this.companyList = [];
-        let counter:number = 0;
-        userREST.companiesIDs.forEach((companyId, index) => {
-          this.cDataService.getCompany(companyId).subscribe(
-            response => {
-              let companyData:GetCompany = <GetCompany>response.body;
-              console.log(companyData)
-              this.cDataService.getCompanyLogo(companyData).subscribe(response=>{             
-               if(response.status != 204) {
-                let reader = new FileReader();
-                reader.addEventListener("load", () => {
-                    counter++;
-                    companyData.logo = reader.result;
-                    this.companyList.push(companyData);
-                    this.companyList.sort(this.companySort);
-                    this.cDataService.storeCompanyData(companyData);
+   if(userREST.companiesIDs) {
+    if (userREST.companiesIDs.length) {
+      this.companyList = [];
+      let counter:number = 0;
+      userREST.companiesIDs.forEach((companyId, index) => {
+        this.cDataService.getCompany(companyId).subscribe(
+          response => {
+            let companyData:GetCompany = <GetCompany>response.body;
+            console.log(companyData)
+            this.cDataService.getCompanyLogo(companyData).subscribe(response=>{             
+             if(response.status != 204) {
+              let reader = new FileReader();
+              reader.addEventListener("load", () => {
+                  counter++;
+                  companyData.logo = reader.result;
+                  this.companyList.push(companyData);
+                  this.companyList.sort(this.companySort);
+                  this.cDataService.storeCompanyData(companyData);
 
-                    if(counter === userREST.companiesIDs.length) {
-                      subject.next(true);
-                    }
-                }, false);
+                  if(counter === userREST.companiesIDs.length) {
+                    subject.next(true);
+                  }
+              }, false);
 
-                if (response.body) {
-                    reader.readAsDataURL(response.body);
-                }
-               } else {
-                counter++;
-                companyData.logo = this.cDataService.defaultCListUrl;
-                this.companyList.push(companyData);
-                this.companyList.sort(this.companySort);
-                this.cDataService.storeCompanyData(companyData);
-                
-                if(counter === userREST.companiesIDs.length) {
-                  subject.next(true);
-                }
-               }
-                
-              },error=>{
-                counter++;
-                companyData.logo = this.cDataService.defaultCListUrl;
-                this.companyList.push(companyData);
-                this.companyList.sort(this.companySort);
-                this.cDataService.storeCompanyData(companyData);
-                
-                if(counter === userREST.companiesIDs.length) {
-                  subject.next(true);
-                }
-              });
-            },
-            error => {
-              subject.next(true);
-              console.log(error);
-            }
-          );
-        });
-      } else{
-        console.log('nie ma firm')
-        subject.next(true);
-      }
+              if (response.body) {
+                  reader.readAsDataURL(response.body);
+              }
+             } else {
+              counter++;
+              companyData.logo = this.cDataService.defaultCListUrl;
+              this.companyList.push(companyData);
+              this.companyList.sort(this.companySort);
+              this.cDataService.storeCompanyData(companyData);
+              
+              if(counter === userREST.companiesIDs.length) {
+                subject.next(true);
+              }
+             }
+              
+            },error=>{
+              counter++;
+              companyData.logo = this.cDataService.defaultCListUrl;
+              this.companyList.push(companyData);
+              this.companyList.sort(this.companySort);
+              this.cDataService.storeCompanyData(companyData);
+              
+              if(counter === userREST.companiesIDs.length) {
+                subject.next(true);
+              }
+            });
+          },
+          error => {
+            subject.next(true);
+            console.log(error);
+          }
+        );
+      });
+    } else{
+      console.log('nie ma firm')
+      subject.next(true);
+    }
+   } else {
+    console.log('nie ma firm')
+    subject.next(true);
+   }
       
     }
   }

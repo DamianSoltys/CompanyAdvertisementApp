@@ -12,9 +12,34 @@ html {
 .app-component {
   min-height: calc(100vh - 60px);
   overflow: hidden;
+  position: relative;
 
   .app-component__router-outlet {
     position: relative;
+  }
+
+}
+
+.app-component__nearby-container {
+  position: fixed;
+  left: -5px;
+  top: 40vh;
+  transform: rotate(-90deg);
+  transform-origin: top left;
+  width:200px;
+  @include phone {
+    display:none;
+  }
+  
+
+  .nearby-container__button-nearby {
+    width:100%;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding:0;
+    margin:0;
+    background: $bgcolor;
+    border:0;
   }
 }
 

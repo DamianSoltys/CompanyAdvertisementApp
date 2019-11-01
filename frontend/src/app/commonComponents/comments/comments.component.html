@@ -3,26 +3,51 @@
     <div class="main-container__header">
       <span class="header__text-node">Komentarze i oceny</span>
     </div>
-    <div class="main-container__data-container">
+    <div class="main-container__data-container" *ngIf="isLoaded.value">
       <div class="data-container__section--button">
-        <button class="section--button__button btn-primary btn" (click)="showForm()">Dodaj swoją opinie</button>
+        <button class="section--button__button btn-primary btn" (click)="showForm()" *ngIf="!isOwner.value">Dodaj swoją opinie</button>
       </div>
       <div class="data-container__section--rating">
-      dupa
+      <div class="section--rating__comment" *ngFor="let opinion of testData">
+        <div class="comment_top-data">
+        <div class="top-data__user">
+          Użytkownik: <strong>{{opinion.user}}</strong>
+        </div>
+          <div class="top-data__rate">
+              Ocena: <ngb-rating class="rate_rating-component" [(rate)]="opinion.rating" [max]="5" [readonly]="true">
+                  <ng-template let-fill="fill" let-index="index">
+                      <span class="star" [class.filled]="fill === 100">&#9733;</span>
+                    </ng-template>
+              </ngb-rating>
+            </div>
+          </div>
+            <div class="comment__comment-container">
+              <div class="comment-container__label-container">
+                <p class="label-container__label">Komentarz:</p>
+              </div>
+                <div class="comment-container__text-container">
+                    {{opinion.comment}}
+                </div>
+              </div>
+      </div>
       </div>
       <div class="data-container__section--form" *ngIf="isForm.value" [@formAnimate]>
-       <form class="section--form__form" [formGroup]="ratingForm">
+       <form class="section--form__form" [formGroup]="ratingForm" (submit)="onSubmit($event)">
         <div class="form__comment-input">
-          <label for="commentText">Komentarz</label>
+          <label for="commentText" class="comment-input__label">Komentarz</label>
           <quill-editor class="comment-input__input" formControlName="commentText" [modules]="config">
           </quill-editor>
         </div>
         <div class="form__rating-input">
-          <label class="text-center" for="rating">Ocena</label>
-          <ngb-rating class="rating-input__rating" [(rate)]="currentRate" [max]="5"></ngb-rating>
+          <label class="text-center rating-input__label" for="rating">Ocena</label>
+          <ngb-rating class="rating-input__rating" [(rate)]="currentRate" [max]="5">
+              <ng-template let-fill="fill" let-index="index">
+                  <span class="star" [class.filled]="fill === 100">&#9733;</span>
+                </ng-template>
+          </ngb-rating>
         </div>
         <div class="form__button-container">
-        <button type="submit" class="button-container__button--submit btn btn-primary">Dodaj</button>
+        <button [disabled]="!ratingForm.valid" type="submit" class="button-container__button--submit btn btn-primary">Dodaj</button>
         </div>
        </form>
       </div>

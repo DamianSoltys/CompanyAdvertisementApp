@@ -245,7 +245,8 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
         this.snackbarService.open({
           message:'Proszę potwierdzić zapis do newslettera linkiem wysłanym na podany adres!',
           snackbarType:SnackbarType.success,
-        });
+        });~
+        this.checkNewsletterSubscription();
       },error=>{
         console.log(error);
         this.formErrorService.open({

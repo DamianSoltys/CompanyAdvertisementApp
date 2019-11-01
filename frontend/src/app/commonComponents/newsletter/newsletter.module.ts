@@ -5,6 +5,7 @@ import { FormErrorModule } from '../form-error/form-error.module';
 import { NewsletterComponent } from './newsletter.component';
 import { GrapeEditorModule } from './grape-editor/grape-editor.module';
 import { QuillModule } from 'ngx-quill';
+import { NgbDropdown, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -15,6 +16,7 @@ import { QuillModule } from 'ngx-quill';
     FormErrorModule,
     GrapeEditorModule,
     QuillModule.forRoot(),
+    NgbDropdownModule,
   ],
   exports:[
     NewsletterComponent

@@ -1,3 +1,20 @@
-<p>
-  nearby-component works!
-</p>
+<div class="nearby-component">
+    <div class="nearby-component__map-container" *ngIf="actualPosition">
+        <agm-map
+          [latitude]="actualPosition.latitude"
+          [longitude]="actualPosition.longitude"
+          class="map-container__map"
+        >
+         <!-- <agm-marker
+            *ngIf="mapMarker"
+            [latitude]="mapMarker.latitude"
+            [longitude]="mapMarker.longitude"             
+          >
+          <agm-info-window>Lokalizacvja</agm-info-window>
+          </agm-marker>-->
+        </agm-map>
+      </div>
+      <div class="nearby-component__empty-postion" *ngIf="!actualPosition">
+        <p>Niestety nie można pobrac twojej lokalizacji!</p>
+      </div>
+</div>

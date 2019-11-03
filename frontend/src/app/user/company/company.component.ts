@@ -85,32 +85,32 @@ export class CompanyComponent implements OnInit {
   public _categories = categories;
 
   public companyForm = this.fb.group({
-    description: ['', [Validators.required]],
+    description: ['',[Validators.required]],
     category: ['', [Validators.required]],
-    name: ['', [Validators.required]],
-    nip: ['', [Validators.required]],
-    regon: ['', [Validators.required]],
-    companyWebsiteUrl: ['', [Validators.required]],
+    name: ['', [Validators.required,Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
+    nip: ['', [Validators.required,Validators.pattern(new RegExp(/^[0-9]+$/))]],
+    regon: ['', [Validators.required,Validators.pattern(new RegExp(/^[0-9]+$/))]],
+    companyWebsiteUrl: [''],
     address: this.fb.group({
-      apartmentNo: ['', [Validators.required]],
-      buildingNo: ['', [Validators.required]],
-      city: ['', [Validators.required]],
-      street: ['', [Validators.required]],
+      apartmentNo: ['', [Validators.required, Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/))]],
+      buildingNo: ['', [Validators.required, Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/))]],
+      city: ['', [Validators.required,Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
+      street: ['', [Validators.required,Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
       voivodeship: ['', [Validators.required]]
     })
   });
 
   public workForm = this.fb.group({
     address: this.fb.group({
-      apartmentNo: ['', [Validators.required]],
-      buildingNo: ['', [Validators.required]],
-      city: ['', [Validators.required]],
-      street: ['', [Validators.required]],
+      apartmentNo: ['', [Validators.required,Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/))]],
+      buildingNo: ['', [Validators.required,Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/))]],
+      city: ['', [Validators.required,Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
+      street: ['', [Validators.required,Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
       voivodeship: ['', [Validators.required]]
     }),
     geoX: [''],
     geoY: [''],
-    name: ['', [Validators.required]]
+    name: ['', [Validators.required,Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]]
   });
 
   public config = {

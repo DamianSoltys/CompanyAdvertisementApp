@@ -24,7 +24,7 @@ import { SnackbarService, SnackbarType } from './services/snackbar.service';
 import { slideInAnimation } from './animations/route-animation';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NearbyComponent } from './commonComponents/nearby-component/nearby-component.component';
-
+declare var FB: any;
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -98,6 +98,44 @@ export class AppComponent implements OnInit {
       this.logged = value;
       this.getStorageObjects();
     });
+    //this.initFacebookApi();
+  }
+    public submitLogin() {
+      console.log("submit login to facebook");
+        // FB.login();
+        FB.login((response)=>
+            {
+              console.log('submitLogin',response);
+              if (response.authResponse)
+              {
+                //login success
+                //login success code here
+                //redirect to home page
+               }
+               else
+               {
+               console.log('User login failed');
+             }
+          });
+    }
+  private initFacebookApi() {
+    (window as any).fbAsyncInit = function() {
+      FB.init({
+        appId      : '422141488475751',
+        cookie     : true,
+        xfbml      : true,
+        version    : 'v5.0'
+      });
+      FB.AppEvents.logPageView();
+    };
+
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "https://connect.facebook.net/en_US/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
   }
 
   public openNearbyModal() {

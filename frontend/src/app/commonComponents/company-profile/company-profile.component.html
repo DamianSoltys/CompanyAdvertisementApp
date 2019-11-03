@@ -122,7 +122,7 @@
       <div
     class="company-profile-component__branch-sections col-12"
   >
-    <div class="branch-sections__empty-branches" *ngIf="!branchData">
+    <div class="branch-sections__empty-branches" *ngIf="showEmptyBranchData()">
       <p class="empty-branches__text-node text-center" *ngIf="isLoaded.value">
         Firma nie posiada żadnego zakładu
       </p>

@@ -18,17 +18,24 @@
             <button class="btn btn-primary btn-newsletter type--change-form__button"(click)="showTextForm(type)">{{typeButton}}</button>
         </div>
         <div class="type-container__type--show-media" *ngIf="showTextButton()">
-            <input class="show-media__checkbox" type="checkbox">
-            <label class="show-media__label" for="mediaForm">Pokaż formularz portalu społecznościowego</label>
+            <button class="btn btn-primary btn-newsletter type--change-form__button" (click)="showMediaForm()">{{mediaButton}}</button>
         </div>
       </div>
       <div class="newsletter-container__form-container">
         <div class="form-container__type--information" *ngIf="isInfo.value">
+
             <div class="type--information__editor"> 
               <app-grape-editor [editorName]="'infoEditor'" *ngIf="!isText.value"></app-grape-editor>
             </div>
             <div class="type--information__text-form text-form" *ngIf="isText.value">
                 <quill-editor class="text-form__editor" [modules]="config"></quill-editor>
+            </div>
+            <div class="type--information__media-form media-form" *ngIf="isMedia.value">
+                <quill-editor class="media-form__editor" [modules]="config"></quill-editor>
+                <div class="media-form__images">
+                    <label for="images" class=images__label>Zdjęcia :</label>
+                    <input type="file" name="images" (change)="onFileSelected($event)" multiple>
+                </div>
             </div>
             <div class="type--information__submit-button button-container">
               <button class="submit-button__button--submit btn btn-primary button-type--submit" (click)="sendNewsletter('infoEditor')">Wyśwlij newsletter</button>
@@ -41,6 +48,13 @@
             <div class="type--product__text-form text-form" *ngIf="isText.value">
                 <quill-editor class="text-form__editor" [modules]="config"></quill-editor>
               </div>
+              <div class="type--product__media-form media-form" *ngIf="isMedia.value">
+                  <quill-editor class="media-form__editor" [modules]="config"></quill-editor>
+                  <div class="media-form__images">
+                      <label for="images" class=images__label>Zdjęcia :</label>
+                      <input type="file" name="images" (change)="onFileSelected($event)" multiple>
+                  </div>
+              </div>
               <div class="type--product__submit-button button-container">
                 <button class="submit-button__button--submit btn btn-primary button-type--submit" (click)="sendNewsletter('productEditor')">Wyśwlij newsletter</button>
               </div>
@@ -51,6 +65,13 @@
           </div>
           <div class="type--promotion__text-form text-form" *ngIf="isText.value">
               <quill-editor class="text-form__editor" [modules]="config"></quill-editor>
+            </div>
+            <div class="type--promotion__media-form media-form" *ngIf="isMedia.value">
+                <quill-editor class="media-form__editor" [modules]="config"></quill-editor>
+                <div class="media-form__images">
+                    <label for="images" class=images__label>Zdjęcia :</label>
+                    <input type="file" name="images" (change)="onFileSelected($event)" multiple>
+                </div>
             </div>
             <div class="type--promotion__submit-button button-container">
               <button class="submit-button__button--submit btn btn-primary button-type--submit" (click)="sendNewsletter('promotionEditor')">Wyśwlij newsletter</button>

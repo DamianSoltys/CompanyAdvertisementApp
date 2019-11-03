@@ -58,7 +58,9 @@ export class SearchComponent implements OnInit {
       this.isLoaded.next(true);
     });
 
+   if(this.searchData) {
     this.searchData = this.searchData.split([' ',',','.']);
+   }
     this.companyNumber = 0;
     this.branchNumber = 0;
     

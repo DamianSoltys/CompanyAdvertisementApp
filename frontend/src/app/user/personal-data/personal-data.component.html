@@ -19,7 +19,7 @@
         </div>
         <div class="input-group__section-container row col-12">
           <div class="form-group section-container__container">
-            <label class="section-container__label" for="firstName">Imie</label>
+            <label class="section-container__label" for="firstName">Imie<span class="label__required">*</span></label>
             <input
               type="text"
               name="firstName"
@@ -49,7 +49,7 @@
           </div>
           <div class="form-group section-container__container">
             <label class="section-container__label" for="lastName"
-              >Nazwisko</label
+              >Nazwisko<span class="label__required">*</span></label
             >
             <input
               type="text"
@@ -89,7 +89,7 @@
           formGroupName="address"
         >
           <div class="form-group section-container__container">
-            <label class="section-container__label" for="street">Ulica</label>
+            <label class="section-container__label" for="street">Ulica<span class="label__required">*</span></label>
             <input
               type="text"
               name="street"
@@ -120,7 +120,7 @@
           </div>
           <div class="form-group section-container__container">
             <label class="section-container__label" for="apartmentNo"
-              >Numer Mieszkania</label
+              >Numer Mieszkania<span class="label__required">*</span></label
             >
             <input
               type="text"
@@ -152,7 +152,7 @@
           </div>
           <div class="form-group section-container__container">
             <label class="section-container__label" for="buildingNo"
-              >Numer Domu</label
+              >Numer Domu<span class="label__required">*</span></label
             >
             <input
               type="text"
@@ -186,7 +186,7 @@
             class="form-group section-container__container section-container__with--select"
           >
             <label class="section-container__label" for="voivodeship"
-              >Województwo</label
+              >Województwo<span class="label__required">*</span></label
             >
             <div class="section-container__select-wrapper">
                 <ngx-select-dropdown name="voivodeship" formControlName="voivodeship" [config]="selectConfig" [options]="voivodeshipOptions"  [multiple]="false" ></ngx-select-dropdown>
@@ -208,7 +208,7 @@
             </div>
           </div>
           <div class="form-group section-container__container">
-            <label class="section-container__label" for="city">Miasto</label>
+            <label class="section-container__label" for="city">Miasto<span class="label__required">*</span></label>
             <input
               type="text"
               name="city"
@@ -246,7 +246,7 @@
         <div class="input-group__section-container row col-12">
           <div class="form-group section-container__container">
             <label class="section-container__label" for="phoneNo"
-              >Telefon</label
+              >Telefon<span class="label__required">*</span></label
             >
             <input
               type="text"

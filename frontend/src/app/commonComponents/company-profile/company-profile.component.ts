@@ -170,7 +170,6 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
     let subject = new Subject<any>();
     subject.subscribe(()=>{
       this.isLoaded.next(true);
-      console.log('co tu sie dzieje')
     });
 
     if (this.companyData) {
@@ -303,6 +302,18 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
     //this.canShowEditForm.next(true);
     //this.canShowCompany.next(false);
     this.router.navigate(['companyEdit'],{relativeTo:this.activatedRoute,queryParams:this.editData});
+  }
+
+  public showEmptyBranchData() {
+    if(this.branchData && this.isLoaded.value) {
+      if(this.branchData.length) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
   }
 
   public showNewsletterForm() {

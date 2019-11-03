@@ -21,8 +21,11 @@ export class NewsletterComponent implements OnInit{
   public isPromotion = new BehaviorSubject(false);
   public isProduct = new BehaviorSubject(false);
   public isText = new BehaviorSubject(false);
+  public isMedia = new BehaviorSubject(false);
   public type:FormType;
   public typeButton:string = 'Wersja tekstowa';
+  public mediaButton:string = 'Pokaż formularz medii społecznościowych'
+  public files:File[];
   public config = {
     toolbar: [['bold', 'italic', 'underline']]
   };
@@ -115,6 +118,28 @@ export class NewsletterComponent implements OnInit{
       return true;
     } else {
       return false;
+    }
+  }
+
+  public onFileSelected(event) {
+    if(!this.files) {
+      this.files = [];
+      this.files = event.target.files;
+    } else {
+      this.files = event.target.files;
+    }
+    console.log(this.files);
+  }
+
+  public showMediaForm() {
+    if(this.showTextButton()) {
+      if(this.isMedia.value) {
+        this.isMedia.next(false);
+        this.mediaButton = 'Pokaż formularz medii społecznościowych';
+      } else {
+        this.isMedia.next(true);
+        this.mediaButton = 'Schowaj formularz medii społecznościowych';
+      }
     }
   }
 

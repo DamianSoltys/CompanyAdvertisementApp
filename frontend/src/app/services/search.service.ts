@@ -12,8 +12,14 @@ export class SearchService {
   constructor(private http: HttpClient) {}
 
   public sendSearchData(searchData: Array<string>) {
-    let query: string = searchData.join('%');
-    return this.http.get(`http://localhost:8090/api/search?q=${query}&size=3`, { observe: 'response' });
+    if(searchData) {
+      let query: string = searchData.join('%');
+      let httpParams:HttpParams = new HttpParams().set('q',query).set('size','3');
+      return this.http.get(`http://localhost:8090/api/search`, { observe: 'response' ,params:httpParams});
+    } else {
+      let httpParams:HttpParams = new HttpParams().set('q','').set('size','3');
+      return this.http.get(`http://localhost:8090/api/search`, { observe: 'response',params:httpParams });
+    }
   }
 
   public getActualPageData(searchData: Array<string>,pageNumber:number) {

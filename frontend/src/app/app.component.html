@@ -9,32 +9,13 @@
       />
     </div>
     <div class="btn-group navbar__button-group">
-      <button
-      type="button"
-      class="navbar__button-link btn btn-primary"
-      (click)="toggleMenu('search',false)"
-      id="searchId"
-    >
-      Szukaj
-      <ul
-        [@showHideDropdown]="displaySearchMenu.value ? 'visible' : 'hidden'"
-        class="button-link__dropdown"
-      >        
-        <a
-          routerLink="/search"
-          type="button"
-          class="dropdown__item"
-          ><li>Szukanie podstawowe</li></a
-        >
-        <a
-        routerLink="/advancedSearch"
-        type="button"
-        class="dropdown__item"
-        ><li>Szukanie zaawansowane</li></a
-      >
-        
-      </ul>
-    </button>
+    <div ngbDropdown class="d-inline-block">
+      <button class="btn btn-primary navbar__button-link" id="dropdownBasic1" ngbDropdownToggle>Szukaj</button>
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+        <button routerLink="/search" ngbDropdownItem>Szukanie podstawowe</button>
+        <button routerLink="/advancedSearch" ngbDropdownItem>Szukanie zaawansowane</button>
+      </div>
+    </div>
       <button
         routerLink="/login"
         type="button"
@@ -52,7 +33,7 @@
     </div>
     <div class="navbar__dropdown">
       <button
-        (click)="toggleMenu('',true)"
+        (click)="toggleMenu()"
         class="btn btn-secondary dropdown__button"
         type="button"
         id="menuId"
@@ -66,7 +47,14 @@
           (click)="toggleMenu()"
           class="dropdown__item"
         >
-          <i class="fas fa-search item__icon"></i>Szukaj
+          <i class="fas fa-search item__icon"></i>Szukanie podstawowe
+        </button>
+        <button
+          routerLink="/advancedSearch"
+          (click)="toggleMenu()"
+          class="dropdown__item"
+        >
+          <i class="fas fa-search item__icon"></i>Szukanie zaawansowane
         </button>
         <button
           routerLink="/login"
@@ -96,32 +84,13 @@
       />
     </div>
     <div class="btn-group navbar__button-group">
-      <button
-        type="button"
-        class="navbar__button-link btn btn-primary"
-        (click)="toggleMenu('search',false)"
-        id="searchId"
-      >
-        Szukaj
-        <ul
-          [@showHideDropdown]="displaySearchMenu.value ? 'visible' : 'hidden'"
-          class="button-link__dropdown"
-        >        
-          <a
-            routerLink="/search"
-            type="button"
-            class="dropdown__item"
-            ><li>Szukanie podstawowe</li></a
-          >
-          <a
-          routerLink="/advancedSearch"
-          type="button"
-          class="dropdown__item"
-          ><li>Szukanie zaawansowane</li></a
-        >
-          
-        </ul>
-      </button>
+      <div ngbDropdown class="d-inline-block">
+        <button class="btn btn-primary navbar__button-link" id="dropdownBasic1" ngbDropdownToggle>Szukaj</button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <button routerLink="/search" ngbDropdownItem>Szukanie podstawowe</button>
+          <button routerLink="/advancedSearch" ngbDropdownItem>Szukanie zaawansowane</button>
+        </div>
+      </div>
       <button
         routerLink="/user/companyData"
         type="button"
@@ -136,41 +105,21 @@
       >
         Ulubione
       </button>
-      <button
-        (click)="toggleMenu('personalData',false)"
-        type="button"
-        class="navbar__button-link btn btn-primary"
-        id="dropdownId"
-      >
-        Profil
-        <ul
-          [@showHideDropdown]="displayPersonalDataMenu.value ? 'visible' : 'hidden'"
-          class="button-link__dropdown"
-        >
-          <a *ngIf="userREST" type="button" class="dropdown__item">
+      <div ngbDropdown class="d-inline-block">
+        <button class="btn btn-primary navbar__button-link" id="dropdownBasic2" ngbDropdownToggle>Profil</button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic2">
             <li class="item__username">
-              Zalogowany jako:<strong>{{ userREST.loginName }}</strong>
-            </li></a
-          >
-          <a
-            routerLink="/user/personalData"
-            type="button"
-            class="dropdown__item"
-            *ngIf="personalData"
-            ><li>Dane osobowe</li></a
-          >
-          <a routerLink="/user/accountData" type="button" class="dropdown__item"
-            ><li>Dane konta</li></a
-          >
-          <a type="button" class="dropdown__item" (click)="logOut()"
-            ><li>Wyloguj</li></a
-          >
-        </ul>
-      </button>
+                Zalogowany jako:<strong>{{ userREST.loginName }}</strong>
+            </li>
+          <button routerLink="/user/personalData" ngbDropdownItem>Dane osobowe</button>
+          <button routerLink="/user/accountData" ngbDropdownItem>Dane konta</button>
+          <button (click)="logOut()" ngbDropdownItem>Wyloguj</button>
+        </div>
+      </div>
     </div>
     <div class="navbar__dropdown col-9">
       <button
-        (click)="toggleMenu('',true)"
+        (click)="toggleMenu()"
         class="btn btn-secondary dropdown__button"
         type="button"
         id="menuId"
@@ -187,7 +136,14 @@
           class="dropdown__item"
           (click)="toggleMenu()"
         >
-          <i class="fas fa-search item__icon"></i>Szukaj
+          <i class="fas fa-search item__icon"></i>Szukanie podstawowe
+        </button>
+        <button
+          routerLink="/advancedSearch"
+          class="dropdown__item"
+          (click)="toggleMenu()"
+        >
+          <i class="fas fa-search item__icon"></i>Szukanie zaawansowane
         </button>
         <button
           routerLink="/user/companyData"
@@ -241,8 +197,13 @@
     </div>
   </div>
   -->
+
+    <app-snackbar></app-snackbar>
 </div>
 
+<div class="app-component__nearby-container">
+    <button class="btn btn-primary nearby-container__button-nearby" (click)="openNearbyModal()">Firmy w pobliżu</button>
+  </div> 
 
 <div class="row app-component__footer">
   <p class="footer__text">
@@ -251,5 +212,7 @@
   </p>
 </div>
 
-<app-snackbar></app-snackbar>
+<!--<button type="button" class="btn" (click)="submitLogin();">Login with facebook</button> -->
+
+
 

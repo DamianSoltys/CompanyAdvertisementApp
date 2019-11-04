@@ -35,6 +35,7 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
   public canShowEditForm = new BehaviorSubject(false);
   public canShowAddBranchForm = new BehaviorSubject(false);
   public canShowCompany = new BehaviorSubject(true);
+  public isNewsletter = new BehaviorSubject(false);
   @ViewChild('checkLabel') label:ElementRef;
 
   public newsletterFormUser = this.fb.group({
@@ -108,14 +109,12 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
                     reader.readAsDataURL(response.body);
                 }
             } else {
-              console.log("po eewejsciem");
             this.companyData.logo = this.cDataService.defaultCProfileUrl;
             this.cDataService.storeCompanyData(this.companyData);
             this.checkForCompanyOwnership();
             this.getBranchData();
             }
           },error=>{
-            console.log("po eewejsciem");
             this.companyData.logo = this.cDataService.defaultCProfileUrl;
             this.cDataService.storeCompanyData(this.companyData);
             this.checkForCompanyOwnership();
@@ -156,6 +155,7 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
       JSON.parse(localStorage.getItem('userREST'))
     ) {
       this.userREST = JSON.parse(localStorage.getItem('userREST'));
+      this.checkNewsletterSubscription();
       if(this.userREST.companiesIDs) {
         this.userREST.companiesIDs.forEach(companyId => {
           if (this.companyData && this.companyData.companyId === companyId) {
@@ -170,7 +170,6 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
     let subject = new Subject<any>();
     subject.subscribe(()=>{
       this.isLoaded.next(true);
-      console.log('co tu sie dzieje')
     });
 
     if (this.companyData) {
@@ -228,6 +227,15 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
     
   }
 
+  public checkNewsletterSubscription() {
+    this.nDataService.getSubscriptionStatus(this.companyData.companyId,this.userREST.userID).subscribe(response=>{
+      console.log(response.body)
+      this.isNewsletter.next(<boolean>response.body);
+    },error=>{
+      console.log(error);
+    });
+  }
+
   public saveToNewsletter($event) {
     event.preventDefault();
 
@@ -236,7 +244,8 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
         this.snackbarService.open({
           message:'Proszę potwierdzić zapis do newslettera linkiem wysłanym na podany adres!',
           snackbarType:SnackbarType.success,
-        });
+        });~
+        this.checkNewsletterSubscription();
       },error=>{
         console.log(error);
         this.formErrorService.open({
@@ -295,9 +304,21 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
     this.router.navigate(['companyEdit'],{relativeTo:this.activatedRoute,queryParams:this.editData});
   }
 
+  public showEmptyBranchData() {
+    if(this.branchData && this.isLoaded.value) {
+      if(this.branchData.length) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  }
+
   public showNewsletterForm() {
     if(storage_Avaliable('localStorage')) {
-      if(this.userREST && !this.owner.value) {
+      if(this.userREST && !this.owner.value && !this.isNewsletter.value) {
         return true;
       } else {
         return false;

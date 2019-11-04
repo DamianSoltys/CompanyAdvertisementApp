@@ -81,6 +81,7 @@
           ></div>
         </div>
       </div>
+      <div *ngIf="isLoaded.value">
       <div class="content__section--save-newsletter" *ngIf="showNewsletterForm()">
           <form class="save-newsletter__form" [formGroup]="newsletterFormUser" (submit)="saveToNewsletter($event)">
               <p class="form__text-node">Zapisz się na newsletter aby otrzymywać najnowsze informacje i promocje!</p>
@@ -99,17 +100,12 @@
             <button type="submit" class="btn btn-primary form__button" [disabled]="!this.newsletterFormGuest.valid">Zapisz mnie!</button>
           </form>
           </div>
+      </div>
       <div class="content__section--buttons col-12">
         <button
           class="btn btn-primary section--buttons__button--newsletters"
           [routerLink]="[ 'newsletter']" *ngIf="owner.value">  
           Newsletter
-        </button>
-        <button
-          class="btn btn-primary section--buttons__button--branches"
-          (click)="showBranches()"
-        >
-          Zakłady
         </button>
         <span class="section--buttons__owner-buttons" *ngIf="owner.value">
           <button
@@ -123,13 +119,10 @@
       <div class="content__section--error">
           <app-form-error></app-form-error>
       </div>
-    </div>
-  </div>
-  <div
-    class="company-profile-component__branch-sections"
-    *ngIf="canShowBranches.value"
+      <div
+    class="company-profile-component__branch-sections col-12"
   >
-    <div class="branch-sections__empty-branches" *ngIf="!branchData.length">
+    <div class="branch-sections__empty-branches" *ngIf="showEmptyBranchData()">
       <p class="empty-branches__text-node text-center" *ngIf="isLoaded.value">
         Firma nie posiada żadnego zakładu
       </p>
@@ -154,6 +147,8 @@
       >
         Dodaj zakład
       </button>
+    </div>
+  </div>
     </div>
   </div>
   <app-company

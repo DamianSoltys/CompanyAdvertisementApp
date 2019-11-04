@@ -12,4 +12,5 @@ public class CommentGetDto {
     private Long commentId;
     private Long userId;
     private Long branchId;
+    private String username;
 }

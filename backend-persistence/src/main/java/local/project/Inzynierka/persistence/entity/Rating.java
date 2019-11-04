@@ -4,6 +4,7 @@ import local.project.Inzynierka.persistence.common.FullTimestampingAudit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +24,7 @@ import javax.validation.constraints.Min;
 @Table(name = "ratings")
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class Rating extends FullTimestampingAudit implements IEntity<Long> {
 
 

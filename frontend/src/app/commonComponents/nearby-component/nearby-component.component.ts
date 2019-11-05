@@ -4,7 +4,12 @@ import { storage_Avaliable } from 'src/app/classes/storage_checker';
 import { Position, Marker } from 'src/app/user/company/company.component';
 import { SearchService } from 'src/app/services/search.service';
 import { positionElements } from '@ng-bootstrap/ng-bootstrap/util/positioning';
+import { BranchService } from 'src/app/services/branch.service';
+import { Branch } from 'src/app/classes/Company';
 
+export interface NearbyMarker extends Marker {
+  branchId?:number,
+}
 @Component({
   selector: 'app-nearby-component',
   templateUrl: './nearby-component.component.html',
@@ -16,8 +21,9 @@ export class NearbyComponent implements OnInit {
     latitude: 51.246452,
     longitude: 22.568445
   };
-  public markersArray:Marker[];
-  constructor(public activeModal: NgbActiveModal,private sDataService:SearchService) { }
+  public markersArray:NearbyMarker[];
+  public branches:Branch[];
+  constructor(public activeModal: NgbActiveModal,private sDataService:SearchService,private bDataService:BranchService) { }
 
   ngOnInit() {
     this.getActualPosition();
@@ -52,8 +58,37 @@ export class NearbyComponent implements OnInit {
         }
       }
     }
+    this.getNearbyBranches();
   }
 
   public getNearbyBranches() {
+    this.bDataService.getBranches().subscribe(response=>{
+      this.branches = <Branch[]>response.body['content'];
+      console.log(this.branches)
+      this.getMarkerData();    
+    },error=>{
+      console.log(error);
+    })
+  }
+
+  public getMarkerData() {
+    console.log(this.actualPosition)
+    this.branches.forEach(branch=>{
+      if(Number(branch.geoX) > this.actualPosition.latitude - 0.05 && Number(branch.geoX) < this.actualPosition.latitude + 0.05) {
+        if(Number(branch.geoY) > this.actualPosition.longitude - 0.05 && Number(branch.geoY) < this.actualPosition.longitude + 0.05) {
+          
+          let marker:NearbyMarker = {
+            latitude:Number(branch.geoX),
+            longitude:Number(branch.geoY),
+            label:branch.name,
+            branchId:branch.branchId,
+          }
+          if(!this.markersArray) {
+            this.markersArray = [];
+          }
+          this.markersArray.push(marker);
+        }
+      }
+    });
   }
 }

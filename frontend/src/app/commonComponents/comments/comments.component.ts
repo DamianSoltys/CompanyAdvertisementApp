@@ -19,7 +19,11 @@ import { UserREST } from 'src/app/classes/User';
 import { ActivatedRoute } from '@angular/router';
 import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
 import { CompanyService } from 'src/app/services/company.service';
-
+export interface OpinionListData {
+  comment?:string,
+  rate?:number
+  userName?:string,
+}
 @Component({
   selector: 'app-comments',
   templateUrl: './comments.component.html',
@@ -52,7 +56,7 @@ export class CommentsComponent implements OnInit {
   public userREST: UserREST;
   public branchId: string;
   public companyId:string;
-  public opinions:any[];
+  public opinions:OpinionData[];
   public opinionData:OpinionData;
   public testData = [
     {comment:'dupatreretaeretaaetatae',user:'user',rating:5},
@@ -89,10 +93,19 @@ export class CommentsComponent implements OnInit {
   public getData() {
     this.uDataService.userREST.subscribe(data => {
       this.userREST = data;
-      this.opinionData = {
-        userId:this.userREST.userID,
-        branchId:Number(this.branchId),
-      };
+      if(this.userREST) {
+        if(this.userREST.userID) {
+          this.opinionData = {
+            userId:this.userREST.userID,
+            branchId:Number(this.branchId),
+          };
+        }
+      } else {
+        this.opinionData = {
+          userId:null,
+          branchId:Number(this.branchId),
+        };
+      }
       this.getOpinions();
     });
   }
@@ -113,6 +126,7 @@ export class CommentsComponent implements OnInit {
           message:'Pomyślnie dodano komentarz!',
           snackbarType:SnackbarType.success,
         });
+        this.getOpinions();
         this.isForm.next(false);
       } else {
         this.sDataService.open({
@@ -122,13 +136,45 @@ export class CommentsComponent implements OnInit {
       }
     });
   }
+
+  public canShowAddButton() {
+    if(!this.isOwner.value && this.userREST) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  public canShowEmptyData() {
+    if(this.opinions) {
+      if(this.opinions.length) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
+  }
   public getOpinions() {
+    this.opinions = [];
     let subject = new Subject<boolean>();
     subject.subscribe(data=>{
       this.isLoaded.next(true);
     });
     this.cDataService.getOpinion(this.opinionData).subscribe(data=>{
       console.log(data);
+      data.comment.forEach(comment => {
+        data.rating.forEach(rate=>{
+          if(rate.userId === comment.userId && comment.commentId === rate.ratingId) {
+            let opinion:OpinionListData = {
+              comment:comment.comment,
+              rate:rate.rating
+            }
+            this.opinions.push(opinion);
+          }
+        });
+      });
+      console.log(this.opinions);
       this.isOwner.next(this.coDataService.checkForUserPermission(Number(this.companyId)));
       subject.next(true);
     },error=>{

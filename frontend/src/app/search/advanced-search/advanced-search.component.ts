@@ -179,6 +179,7 @@ export class AdvancedSearchComponent implements OnInit {
   public previousPage() {
     if(this.pageNumber > 0 && this.searchData) {
       this.sDataService.getActualAdvSearchPage(this.searchData,--this.pageNumber).subscribe(response=>{
+        console.log(response)
         let searchResponse = <SearchResponse>response.body;
         this.actualList = searchResponse.content;
         this.getImages();
@@ -191,6 +192,7 @@ export class AdvancedSearchComponent implements OnInit {
   public nextPage() {
     if((this.pageNumber < this.totalPages-1) && this.searchData) {
       this.sDataService.getActualAdvSearchPage(this.searchData,++this.pageNumber).subscribe(response=>{
+        console.log(response)
       let searchResponse = <SearchResponse>response.body;
       this.actualList = searchResponse.content;
       this.getImages();

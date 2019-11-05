@@ -14,11 +14,9 @@ export class SearchService {
   public sendSearchData(searchData: Array<string>) {
     if(searchData) {
       let query: string = searchData.join('%');
+      console.log(query)
       let httpParams:HttpParams = new HttpParams().set('q',query).set('size','3');
       return this.http.get(`http://localhost:8090/api/search`, { observe: 'response' ,params:httpParams});
-    } else {
-      let httpParams:HttpParams = new HttpParams().set('q','').set('size','3');
-      return this.http.get(`http://localhost:8090/api/search`, { observe: 'response',params:httpParams });
     }
   }
 

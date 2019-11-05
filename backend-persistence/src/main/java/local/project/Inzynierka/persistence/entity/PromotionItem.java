@@ -1,7 +1,10 @@
 package local.project.Inzynierka.persistence.entity;
 
 import local.project.Inzynierka.persistence.common.FullTimestampingAudit;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +20,9 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "promotion_items")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class PromotionItem extends FullTimestampingAudit implements IEntity<Long> {
 
     @Id
@@ -27,8 +33,14 @@ public class PromotionItem extends FullTimestampingAudit implements IEntity<Long
     @Column(name = "name", length = 50, nullable = false)
     private String name;
 
-    @Column(name = "description", length = 1000, nullable = false)
-    private String description;
+    @Column(name = "html_content", length = 10000, nullable = false)
+    private String htmlContent;
+
+    @Column(name = "non_html_content", length = 10000, nullable = false)
+    private String nonHtmlContent;
+
+    @Column(name = "photos_number", nullable = false)
+    private Integer numberOfPhotos;
 
     @ManyToOne
     @JoinColumn(name = "promoting_company_id", nullable = false, foreignKey = @ForeignKey(name = "promoting_company_FK"))

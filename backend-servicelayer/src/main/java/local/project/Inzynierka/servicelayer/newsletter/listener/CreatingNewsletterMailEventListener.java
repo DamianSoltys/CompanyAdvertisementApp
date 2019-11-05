@@ -1,7 +1,7 @@
 package local.project.Inzynierka.servicelayer.newsletter.listener;
 
-import local.project.Inzynierka.persistence.entity.Company;
-import local.project.Inzynierka.persistence.entity.NewsletterSubscription;
+import local.project.Inzynierka.persistence.projections.CompanySendMailInfo;
+import local.project.Inzynierka.persistence.projections.NewsletterSubscriptionSendEmailInfo;
 import local.project.Inzynierka.persistence.repository.CompanyRepository;
 import local.project.Inzynierka.persistence.repository.NewsletterSubscriptionRepository;
 import local.project.Inzynierka.servicelayer.newsletter.event.CreatingNewsletterMailEvent;
@@ -35,11 +35,11 @@ public class CreatingNewsletterMailEventListener {
     @Async
     @EventListener
     public void handleSendingNewsletterOut(CreatingNewsletterMailEvent event) {
-        Company company = companyRepository.findById(event.getCompanyId()).
+        CompanySendMailInfo company = companyRepository.getSendEmailInfoById(event.getCompanyId()).
                 orElseThrow(IllegalArgumentException::new);
 
-        List<NewsletterSubscription> newsletterSubscriptions = newsletterSubscriptionRepository
-                .findByCompanyAndVerified(company,true);
+        List<NewsletterSubscriptionSendEmailInfo> newsletterSubscriptions = newsletterSubscriptionRepository
+                .getSendEmailInfoByCompany_IdAndVerifiedTrue(company.getCompanyId());
 
         newsletterSubscriptions.forEach(e -> {
             final SimpleMailMessage mailMessage = constructEmailMessage(event, e, company);
@@ -50,13 +50,13 @@ public class CreatingNewsletterMailEventListener {
 
 
     private SimpleMailMessage constructEmailMessage(CreatingNewsletterMailEvent creatingNewsletterMailEvent,
-                                                    NewsletterSubscription newsletterSubscription,
-                                                    Company company) {
+                                                    NewsletterSubscriptionSendEmailInfo newsletterSubscription,
+                                                    CompanySendMailInfo company) {
 
         String companyName = company.getName();
-        String recipient = newsletterSubscription.getEmailAddressEntity().getEmail();
+        String recipient = newsletterSubscription.getSignedUpEmail();
         String signOutLink = creatingNewsletterMailEvent.getAppUrl() + "/newsletter/signout/" +
-                newsletterSubscription.getUnsubscribeToken().getToken();
+                newsletterSubscription.getUnsubscribeToken();
 
         String message = creatingNewsletterMailEvent.getMessage() + "\r\n\r\n" +
                      "\r\n\r\n" + "Aby wypisać się z listy newslettera, kliknij tu:\r\n"+signOutLink;

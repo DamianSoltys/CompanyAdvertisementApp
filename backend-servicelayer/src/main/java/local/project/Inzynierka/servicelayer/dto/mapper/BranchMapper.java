@@ -41,6 +41,7 @@ public class BranchMapper {
         PersistedBranchDto persistedBranchDto = new PersistedBranchDto();
         persistedBranchDto.setAddress(new AddressMapper().map(branch.getAddress()));
         persistedBranchDto.setHasLogoAdded(branch.isHasLogoAdded());
+        persistedBranchDto.setCompanyId(branch.getCompany().getId());
         persistedBranchDto.setGeoX(branch.getGeoX());
         persistedBranchDto.setGeoY(branch.getGeoY());
         persistedBranchDto.setName(branch.getName());

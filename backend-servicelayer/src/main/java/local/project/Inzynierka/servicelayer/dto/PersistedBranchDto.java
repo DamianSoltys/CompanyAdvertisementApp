@@ -10,6 +10,7 @@ public class PersistedBranchDto {
     private Double geoX;
     private Double geoY;
     private Long branchId;
+    private Long companyId;
     private String logoPath;
     private String logoKey;
     private Boolean hasLogoAdded;

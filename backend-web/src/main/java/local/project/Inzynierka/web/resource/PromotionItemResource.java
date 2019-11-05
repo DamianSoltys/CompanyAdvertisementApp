@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @RequestMapping("/api/pi")
 @RestController
@@ -35,7 +36,7 @@ public class PromotionItemResource {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/")
-    public ResponseEntity<?> addPromotionItem(@RequestBody  PromotionItemAddedEvent promotionItemAddedEvent,
+    public ResponseEntity<?> addPromotionItem(@RequestBody @Valid PromotionItemAddedEvent promotionItemAddedEvent,
                                               HttpServletRequest httpServletRequest) {
 
         UserAccount userAccount = authFacade.getAuthenticatedUser();

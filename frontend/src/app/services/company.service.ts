@@ -62,13 +62,15 @@ export class CompanyService {
     let haveAcces:boolean = false;
     this.getActualUser();
     if(this.userREST) {
-      this.userREST.companiesIDs.forEach(id=>{
-        console.log(companyId);
-        console.log(id);
-        if(companyId == id) {
-          haveAcces = true;
-        }
-      });
+      if(this.userREST.companiesIDs) {
+        this.userREST.companiesIDs.forEach(id=>{
+          console.log(companyId);
+          console.log(id);
+          if(companyId == id) {
+            haveAcces = true;
+          }
+        });
+      }
       if(haveAcces) {
         return true;
       } else {

@@ -8,6 +8,7 @@ import local.project.Inzynierka.servicelayer.dto.company.AddCompanyDto;
 import local.project.Inzynierka.servicelayer.dto.company.UpdateCompanyInfoDto;
 import local.project.Inzynierka.servicelayer.dto.newsletter.NewsletterItemDto;
 import local.project.Inzynierka.servicelayer.errors.UnsuccessfulBranchSaveException;
+import local.project.Inzynierka.servicelayer.newsletter.EmailMimeType;
 import local.project.Inzynierka.servicelayer.newsletter.event.CreatingNewsletterMailEvent;
 import local.project.Inzynierka.shared.UserAccount;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
@@ -93,7 +94,7 @@ public class CompanyManagementResource {
                         newsletterItemDto.getMessage(),
                         newsletterItemDto.getSubject(),
                         request.getHeader(ORIGIN_HEADER),
-                        id));
+                        id, EmailMimeType.TEXT));
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SimpleJsonFromStringCreator

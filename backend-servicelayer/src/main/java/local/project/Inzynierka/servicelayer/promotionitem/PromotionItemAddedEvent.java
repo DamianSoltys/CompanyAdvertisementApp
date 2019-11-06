@@ -8,6 +8,7 @@ import local.project.Inzynierka.servicelayer.promotionitem.validation.AtLeastOne
 import local.project.Inzynierka.servicelayer.promotionitem.validation.HtmlContentBase64Encoded;
 import local.project.Inzynierka.servicelayer.promotionitem.validation.RequiredTextContentWhenPostingToSocialMedia;
 import local.project.Inzynierka.servicelayer.promotionitem.validation.RequiredTitleWhenNewsletter;
+import local.project.Inzynierka.servicelayer.promotionitem.validation.StartTimeRequiredWhenDelayed;
 import local.project.Inzynierka.servicelayer.promotionitem.validation.ZeroOrMaximum5Photos;
 import local.project.Inzynierka.servicelayer.validation.NullOrNotBlank;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,7 @@ import java.util.Set;
 @ZeroOrMaximum5Photos
 @HtmlContentBase64Encoded
 @RequiredTitleWhenNewsletter
+@StartTimeRequiredWhenDelayed
 public class PromotionItemAddedEvent implements Sendable {
 
     private String title;

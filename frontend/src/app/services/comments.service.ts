@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Subject } from 'rxjs';
+import { SearchResponse } from '../classes/Section';
 
 export interface OpinionData {
-  comment?:string;
-  rating?:number;
+  comment?:any;
+  rating?:any;
   branchId?:number;
   userId?:number;
 }
@@ -29,6 +30,7 @@ export class CommentsService {
     let commentData:CommentData = <CommentData>opinionData;
     let ratingData:RatingData = <RatingData>opinionData;
     let subject = new Subject<boolean>();
+    console.log(commentData)
      this.http.post(`http://localhost:8090/api/comment`,commentData).subscribe(response=>{
       this.http.post(`http://localhost:8090/api/rating`,ratingData).subscribe(response=>{
         subject.next(true);
@@ -48,14 +50,15 @@ export class CommentsService {
     let data:OpinionData ={};
     let subject = new Subject<OpinionData>();
     console.log(opinionData)
-    let httpParams= new HttpParams().set('userId',opinionData.userId.toString()).set('branchId',opinionData.branchId.toString());
+    let httpParams= new HttpParams().set('branchId',opinionData.branchId.toString());
     console.log(httpParams)
     this.http.get(`http://localhost:8090/api/comment`,{observe:'response',params:httpParams}).subscribe(response=>{
       console.log(response);
-       data.comment = <any>response.body;
+       let responseData = <SearchResponse>response.body;
+       data.comment = responseData.content;
       this.http.get(`http://localhost:8090/api/rating`,{observe:'response',params:httpParams}).subscribe(response=>{
-        console.log(response);
-        data.rating = <any>response.body;
+        let responseData = <SearchResponse>response.body;
+        data.rating = responseData.content;
         subject.next(data);
       },error=>{
         console.log(error);

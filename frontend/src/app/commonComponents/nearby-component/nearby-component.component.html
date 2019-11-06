@@ -5,13 +5,13 @@
           [longitude]="actualPosition.longitude"
           class="map-container__map"
         >
-         <!-- <agm-marker
-            *ngIf="mapMarker"
-            [latitude]="mapMarker.latitude"
-            [longitude]="mapMarker.longitude"             
+          <agm-marker
+            *ngFor="let marker of markersArray"
+            [latitude]="marker.latitude"
+            [longitude]="marker.longitude"             
           >
-          <agm-info-window>Lokalizacvja</agm-info-window>
-          </agm-marker>-->
+          <agm-info-window><a (click)="goToBranchProfile(marker.branchId,marker.companyId)">{{marker.label}}</a></agm-info-window>
+          </agm-marker>
         </agm-map>
       </div>
       <div class="nearby-component__empty-postion" *ngIf="!actualPosition">

@@ -111,7 +111,7 @@
             <li class="item__username">
                 Zalogowany jako:<strong>{{ userREST.loginName }}</strong>
             </li>
-          <button routerLink="/user/personalData" ngbDropdownItem>Dane osobowe</button>
+          <button routerLink="/user/personalData" ngbDropdownItem *ngIf="personalData">Dane osobowe</button>
           <button routerLink="/user/accountData" ngbDropdownItem>Dane konta</button>
           <button (click)="logOut()" ngbDropdownItem>Wyloguj</button>
         </div>

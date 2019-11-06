@@ -5,10 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-public class LogoFilePathCreator {
+import static local.project.Inzynierka.shared.ApplicationConstants.APPLICATION_URL;
+import static local.project.Inzynierka.shared.ApplicationConstants.URL_PATH_SEPARATOR;
 
-    private static final String APPLICATION_URL = "http://localhost:8090/";
-    private static final String URL_PATH_SEPARATOR = "/";
+public class LogoFilePathCreator {
 
     private LogoFilePathCreator() {}
 

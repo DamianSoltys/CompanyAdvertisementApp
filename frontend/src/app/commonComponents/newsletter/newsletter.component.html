@@ -3,7 +3,7 @@
     <div class="main-container__header">
       <span class="header__text-node">Newsletter</span>
     </div>
-    <div class="main-container__newsletter-container">
+    <div class="main-container__newsletter-container" *ngIf="!isNewsletterList.value">
       <div class="newsletter-container__type-container">
         <div class="type-container__type--information">
           <button class="btn btn-primary btn-newsletter type--information__button" (click)="showInfo($event)">Informacja</button>
@@ -20,22 +20,37 @@
         <div class="type-container__type--show-media" *ngIf="showTextButton()">
             <button class="btn btn-primary btn-newsletter type--change-form__button" (click)="showMediaForm()">{{mediaButton}}</button>
         </div>
+        <div class="type-container__type--show-media" *ngIf="showTextButton()">
+          <button class="btn btn-primary btn-newsletter type--change-form__button" (click)="showNewsletterList()">Pokaż listę newsletterów</button>
+      </div>
       </div>
       <div class="newsletter-container__form-container">
         <div class="form-container__type--information" *ngIf="isInfo.value">
 
-            <div class="type--information__editor"> 
-              <app-grape-editor [editorName]="'infoEditor'" *ngIf="!isText.value"></app-grape-editor>
+            <div class="type--information__editor" *ngIf="!isText.value" @heightAnimate> 
+              <app-grape-editor [editorName]="'infoEditor'"></app-grape-editor>
             </div>
-            <div class="type--information__text-form text-form" *ngIf="isText.value">
-                <quill-editor class="text-form__editor" [modules]="config"></quill-editor>
+            <div class="type--information__text-form text-form" *ngIf="isText.value" [formGroup]="textForm" @heightAnimate>
+                <quill-editor class="text-form__editor" formControlName="text" [modules]="config"></quill-editor>
             </div>
-            <div class="type--information__media-form media-form" *ngIf="isMedia.value">
-                <quill-editor class="media-form__editor" [modules]="config"></quill-editor>
+            <div class="type--information__media-form media-form" *ngIf="isMedia.value" [formGroup]="mediaForm" @heightAnimate>
+                <quill-editor class="media-form__editor" formControlName="text" [modules]="config"></quill-editor>
                 <div class="media-form__images">
                     <label for="images" class=images__label>Zdjęcia :</label>
                     <input type="file" name="images" (change)="onFileSelected($event)" multiple>
                 </div>
+            </div>
+            <div class="type--promotion__button--datepicker datepicker-button">
+                <button class="button--datepicker__button btn btn-primary" (click)="showDatePicker()">{{datePickerButton}}</button>
+              </div>
+            <div class="type--info__datepicker datepicker-container" [formGroup] = "datePicker" *ngIf="isDatePicker.value" @heightAnimate>
+              <p class="datepicker__label text-center">Wybierz czas wysłania newslettera(można zostawić puste)</p>
+              <div class="datepicker__date">
+                  <ngb-datepicker formControlName="date" (select)="onDateSelect($event)"></ngb-datepicker>
+              </div>
+              <div class="datepicker__time">
+                  <ngb-timepicker formControlName="time"></ngb-timepicker>
+              </div>
             </div>
             <div class="type--information__submit-button button-container">
               <button class="submit-button__button--submit btn btn-primary button-type--submit" (click)="sendNewsletter('infoEditor')">Wyśwlij newsletter</button>
@@ -45,14 +60,25 @@
             <div class="type--product__editor"> 
               <app-grape-editor [editorName]="'productEditor'" *ngIf="!isText.value"></app-grape-editor>
             </div>
-            <div class="type--product__text-form text-form" *ngIf="isText.value">
-                <quill-editor class="text-form__editor" [modules]="config"></quill-editor>
+            <div class="type--product__text-form text-form" *ngIf="isText.value" [formGroup]="textForm">
+                <quill-editor class="text-form__editor" formControlName="text" [modules]="config"></quill-editor>
               </div>
-              <div class="type--product__media-form media-form" *ngIf="isMedia.value">
-                  <quill-editor class="media-form__editor" [modules]="config"></quill-editor>
+              <div class="type--product__media-form media-form" *ngIf="isMedia.value" [formGroup]="mediaForm" @heightAnimate>
+                  <quill-editor class="media-form__editor" formControlName="text" [modules]="config"></quill-editor>
                   <div class="media-form__images">
                       <label for="images" class=images__label>Zdjęcia :</label>
                       <input type="file" name="images" (change)="onFileSelected($event)" multiple>
+                  </div>
+              </div>
+              <div class="type--promotion__button--datepicker datepicker-button">
+                  <button class="button--datepicker__button btn btn-primary" (click)="showDatePicker()">{{datePickerButton}}</button>
+                </div>
+              <div class="type--product__datepicker datepicker-container" [formGroup] = "datePicker" *ngIf="isDatePicker.value" @heightAnimate>
+                  <div class="datepicker__date">
+                      <ngb-datepicker formControlName="date" (select)="onDateSelect($event)"></ngb-datepicker>
+                  </div>
+                  <div class="datepicker__time">
+                      <ngb-timepicker formControlName="time"></ngb-timepicker>
                   </div>
               </div>
               <div class="type--product__submit-button button-container">
@@ -63,20 +89,41 @@
             <div class="type--promotion__editor"> 
             <app-grape-editor [editorName]="'promotionEditor'" *ngIf="!isText.value"></app-grape-editor>
           </div>
-          <div class="type--promotion__text-form text-form" *ngIf="isText.value">
-              <quill-editor class="text-form__editor" [modules]="config"></quill-editor>
+          <div class="type--promotion__text-form text-form" *ngIf="isText.value" [formGroup]="textForm">
+              <quill-editor class="text-form__editor" formControlName="text" [modules]="config"></quill-editor>
             </div>
-            <div class="type--promotion__media-form media-form" *ngIf="isMedia.value">
-                <quill-editor class="media-form__editor" [modules]="config"></quill-editor>
+            <div class="type--promotion__media-form media-form" *ngIf="isMedia.value" [formGroup]="mediaForm" @heightAnimate>
+                <quill-editor class="media-form__editor" formControlName="text" [modules]="config"></quill-editor>
                 <div class="media-form__images">
                     <label for="images" class=images__label>Zdjęcia :</label>
                     <input type="file" name="images" (change)="onFileSelected($event)" multiple>
+                </div>
+            </div>
+            <div class="type--promotion__button--datepicker datepicker-button">
+                <button class="button--datepicker__button btn btn-primary" (click)="showDatePicker()">{{datePickerButton}}</button>
+              </div>
+            <div class="type--promotion__datepicker datepicker-container" [formGroup] = "datePicker" *ngIf="isDatePicker.value" @heightAnimate>
+                <div class="datepicker__date">
+                    <ngb-datepicker formControlName="date" (select)="onDateSelect($event)"></ngb-datepicker>
+                </div>
+                <div class="datepicker__time">
+                    <ngb-timepicker formControlName="time"></ngb-timepicker>
                 </div>
             </div>
             <div class="type--promotion__submit-button button-container">
               <button class="submit-button__button--submit btn btn-primary button-type--submit" (click)="sendNewsletter('promotionEditor')">Wyśwlij newsletter</button>
             </div>
         </div>
+      </div>
+    </div>
+    <div class="main-container__list-container" *ngIf="isNewsletterList.value">
+      <div class="list-container__type-container">
+        <div class="type-container__type--show-media" *ngIf="showTextButton()">
+          <button class="btn btn-primary btn-newsletter type--change-form__button" (click)="showNewsletterList()">Schowaj listę newsletterów</button>
+      </div>
+      </div>
+      <div class="list-container__list-data">
+        datar
       </div>
     </div>
   </div>

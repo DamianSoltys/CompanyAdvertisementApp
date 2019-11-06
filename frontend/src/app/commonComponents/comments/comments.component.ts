@@ -168,7 +168,8 @@ export class CommentsComponent implements OnInit {
           if(rate.userId === comment.userId && comment.commentId === rate.ratingId) {
             let opinion:OpinionListData = {
               comment:comment.comment,
-              rate:rate.rating
+              rate:rate.rating,
+              userName:comment.username
             }
             this.opinions.push(opinion);
           }

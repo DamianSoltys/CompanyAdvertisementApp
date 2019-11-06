@@ -42,12 +42,12 @@ export class LoginComponent implements OnInit {
     return this.loginForm.controls;
   }
 
-  onSubmit() {
+  public onSubmit() {
     const User_data = this.setUserData();
     this.checkIfLoginSuccess(User_data);
   }
 
-  checkIfLoginSuccess(User_data: UserLog) {
+  private checkIfLoginSuccess(User_data: UserLog) {
     this.lgservice.Login(User_data).subscribe(
       (data: HttpResponse<any>) => {
           this.snackbarService.open({
@@ -65,14 +65,14 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  setUserData(): UserLog {
+  private setUserData(): UserLog {
     const User_data = new UserLog();
     User_data.email = this.loginForm.get('email').value;
     User_data.password = this.loginForm.get('password').value;
     return User_data;
   }
 
-  loginStorageSet(data: HttpResponse<any>) {
+  private loginStorageSet(data: HttpResponse<any>) {
     if (storage_Avaliable('localStorage')) {
       let userObject: UserREST = data.body;
 
@@ -88,5 +88,12 @@ export class LoginComponent implements OnInit {
         message:'Coś poszło nie tak!',
       });
     }
+  }
+
+  public facebookLogin($event) {
+      event.preventDefault();
+  }
+  public twitterLogin($event) {
+    event.preventDefault();
   }
 }

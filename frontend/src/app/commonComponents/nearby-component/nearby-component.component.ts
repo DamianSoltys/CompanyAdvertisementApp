@@ -6,9 +6,11 @@ import { SearchService } from 'src/app/services/search.service';
 import { positionElements } from '@ng-bootstrap/ng-bootstrap/util/positioning';
 import { BranchService } from 'src/app/services/branch.service';
 import { Branch } from 'src/app/classes/Company';
+import { Router } from '@angular/router';
 
 export interface NearbyMarker extends Marker {
   branchId?:number,
+  companyId?:number
 }
 @Component({
   selector: 'app-nearby-component',
@@ -23,7 +25,7 @@ export class NearbyComponent implements OnInit {
   };
   public markersArray:NearbyMarker[];
   public branches:Branch[];
-  constructor(public activeModal: NgbActiveModal,private sDataService:SearchService,private bDataService:BranchService) { }
+  constructor(public activeModal: NgbActiveModal,private sDataService:SearchService,private bDataService:BranchService,private router:Router) { }
 
   ngOnInit() {
     this.getActualPosition();
@@ -70,9 +72,13 @@ export class NearbyComponent implements OnInit {
       console.log(error);
     })
   }
+  public goToBranchProfile(branchId:number,companyId:number) {
+    console.log(branchId);
+    console.log(companyId)
+    this.router.navigate(['/branchProfile',companyId,branchId]);
+  }
 
   public getMarkerData() {
-    console.log(this.actualPosition)
     this.branches.forEach(branch=>{
       if(Number(branch.geoX) > this.actualPosition.latitude - 0.05 && Number(branch.geoX) < this.actualPosition.latitude + 0.05) {
         if(Number(branch.geoY) > this.actualPosition.longitude - 0.05 && Number(branch.geoY) < this.actualPosition.longitude + 0.05) {
@@ -82,6 +88,7 @@ export class NearbyComponent implements OnInit {
             longitude:Number(branch.geoY),
             label:branch.name,
             branchId:branch.branchId,
+            companyId:branch.companyId,
           }
           if(!this.markersArray) {
             this.markersArray = [];

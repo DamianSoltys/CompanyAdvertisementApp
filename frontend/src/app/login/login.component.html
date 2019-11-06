@@ -74,6 +74,14 @@
         >
           Zaloguj
         </button>
+        <div class="form__media-buttons">
+            <button class="btn btn-primary form__button--facebook" (click)="facebookLogin($event)">
+                Zaloguj przez facebooka<i class="fab fa-facebook-square"></i>
+              </button>
+              <button class="btn btn-primary form__button--twitter" (click)="twitterLogin($event)">
+                Zaloguj przez twittera<i class="fab fa-twitter-square"></i>
+              </button>
+        </div>
         <p class="input-group__text--question">Nie posiadasz jeszcze konta?</p>
         <a class="input-group__register-link" routerLink="/register"
           >ZAREJESTRUJ SIĘ</a

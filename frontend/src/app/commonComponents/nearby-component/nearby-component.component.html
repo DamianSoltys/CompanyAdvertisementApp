@@ -10,7 +10,7 @@
             [latitude]="marker.latitude"
             [longitude]="marker.longitude"             
           >
-          <agm-info-window><a routerLink="/branchProfile/{{marker.branchId}}">{{marker.label}}</a></agm-info-window>
+          <agm-info-window><a (click)="goToBranchProfile(marker.branchId,marker.companyId)">{{marker.label}}</a></agm-info-window>
           </agm-marker>
         </agm-map>
       </div>

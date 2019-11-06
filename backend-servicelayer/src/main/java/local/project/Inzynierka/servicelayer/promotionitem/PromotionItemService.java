@@ -5,14 +5,11 @@ import local.project.Inzynierka.servicelayer.dto.promotionitem.Destination;
 import local.project.Inzynierka.servicelayer.dto.promotionitem.SendingStrategy;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class PromotionItemService {
-
-    private static final String START_TIME_HAS_TO_BE_IN_FUTURE = "Start time has to be in future.";
 
     private final PromotionItemRepository promotionItemRepository;
 
@@ -26,11 +23,6 @@ public class PromotionItemService {
 
         for (var sender : senders) {
             if (SendingStrategy.DELAYED.equals(promotionItemAddedEvent.getSendingStrategy())) {
-                if (promotionItemAddedEvent.getStartTime() == null ||
-                        Instant.now().isAfter(promotionItemAddedEvent.getStartTime())) {
-
-                    throw new PastStartTimeException(START_TIME_HAS_TO_BE_IN_FUTURE);
-                }
                 sender.schedule(promotionItemAddedEvent);
             } else if (SendingStrategy.AT_CREATION.equals(promotionItemAddedEvent.getSendingStrategy())) {
                 sender.send(promotionItemAddedEvent);

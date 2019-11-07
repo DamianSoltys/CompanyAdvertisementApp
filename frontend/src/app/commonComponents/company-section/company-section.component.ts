@@ -50,7 +50,8 @@ export class CompanySectionComponent implements OnInit, OnDestroy {
     this.cDataService.deleteCompany(this.companyData.companyId).subscribe(
       response => {
         this.uDataService.updateUser().subscribe(()=>{
-          this.cDataService.getCompanyData.next(true);
+          this.cDataService.removeCompanyFromLocalStorage(this.companyData.companyId);
+          this.cDataService.getCompanyData.next(false);
         });
       },
       error => {
@@ -73,10 +74,10 @@ export class CompanySectionComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy() {
     if (this.companyData && !this.showWorks) {
-      this.cDataService.storeCompanyData(this.companyData);
+      //this.cDataService.storeCompanyData(this.companyData);
     }
     if (this.branchData && this.showWorks) {
-      this.bDataService.storeBranchData(this.branchData);
+      //this.bDataService.storeBranchData(this.branchData);
     }
   }
 }

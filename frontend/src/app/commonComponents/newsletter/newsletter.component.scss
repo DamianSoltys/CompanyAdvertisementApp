@@ -20,6 +20,7 @@
       justify-content: center;
       align-items: center;
       flex-direction: column;
+      padding-top:50px;
       .datepicker__label {
         flex:100%;
         color:$bgcolor;
@@ -96,54 +97,9 @@
           outline: none;
           box-shadow: none;
         }
-
-        .type-container__type {
-          &--information {
-            .type--information__button{
-
-            }
-          }
-          &--product {
-            .type--product__button {
-              
-            }
-          }
-          &--promotion {
-            .type--promotion__button {
-
-            }
-          }
-          &--show-media {
-            display:flex;
-            align-items: flex-end;
-            @include phone {
-              padding:0 10px;
-            }
-            .show-media__checkbox {
-              margin-bottom: 5px;
-            }
-            .show-media__label {
-              margin:0;
-            }
-          }
-          &--change-form {
-            padding:0 5px;
-            @include phone {
-              border-top:1px solid darken($bgcolor,15%);
-            }
-            .type--change-form__button {
-              color:#000;
-              margin-bottom: 0;
-              padding-bottom: 0;
-              transition: all 0.2s ease-in-out;
-              @include desktop {
-                border-left: 1px solid darken($bgcolor,15%);
-              }
-              &:focus {
-                color:$bgcolor;
-              }
-            }
-          }
+        .type-container__type-select {
+          margin:5px;
+          min-width:150px;
         }
       }
       .newsletter-container__form-container {

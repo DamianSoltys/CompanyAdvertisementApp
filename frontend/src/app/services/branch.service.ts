@@ -103,13 +103,11 @@ export class BranchService {
         let branchData: Branch[] = JSON.parse(
           localStorage.getItem('branchData')
         );
-        branchData.forEach(branchStorage => {
-          if (branch.branchId === branchStorage.branchId) {
-            this.isBranch.next(true);
-          }
-        });
+        let data = branchData.find((element)=>{
+          return element.branchId === branch.branchId;
+         });
 
-        if (!this.isBranch.value) {
+        if (!data) {
           branchData.push(branch);
           localStorage.setItem('branchData', JSON.stringify(branchData));
         }

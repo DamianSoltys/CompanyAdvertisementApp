@@ -35,13 +35,7 @@ export class LoginService {
   }
   public logoutStorageClean() {
     if (storage_Avaliable('localStorage')) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('userREST');
-      localStorage.removeItem('naturalUserData');
-      localStorage.removeItem('actualPosition');
-      localStorage.removeItem('companyData');
-      localStorage.removeItem('branchData');
-      localStorage.removeItem('companyProfile');
+      window.localStorage.clear();
       this.ChangeLogged();
       this.router.navigate(['']);
     } else {

@@ -83,7 +83,7 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
 
   private getCompanyData(clearCompanyStorage?:boolean) {
     if(clearCompanyStorage) {
-      localStorage.removeItem('companyData');
+      this.cDataService.deleteStorageData();
       this.companyData = undefined;
     }
     
@@ -192,6 +192,7 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
                     branchData.logo = reader.result;
                     branchData.branchId = branchId;
                     this.branchData.push(branchData);
+                    this.bDataService.storeBranchData(branchData);
                     subject.next(true);
                     
                 }, false);
@@ -203,6 +204,7 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
                   branchData.logo = this.bDataService.defaultLogoUrl;
                 branchData.branchId = branchId;
                 this.branchData.push(branchData);
+                this.bDataService.storeBranchData(branchData);
                 subject.next(true);
                 }
 
@@ -210,6 +212,7 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
                 branchData.logo = this.bDataService.defaultLogoUrl;
                 branchData.branchId = branchId;
                 this.branchData.push(branchData);
+                this.bDataService.storeBranchData(branchData);
                 subject.next(true);
               });
 

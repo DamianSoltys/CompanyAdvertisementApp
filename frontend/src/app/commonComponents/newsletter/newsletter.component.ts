@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, AfterViewInit, AfterViewChecked, ViewChild, ElementRef, AfterContentInit, AfterContentChecked } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { NewsletterService } from 'src/app/services/newsletter.service';
 import { UserREST } from 'src/app/classes/User';
@@ -7,6 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { CompanyService } from 'src/app/services/company.service';
 import { FormBuilder } from '@angular/forms';
 import { trigger, style, animate, transition } from '@angular/animations';
+import { SelectDropDownComponent } from 'ngx-select-dropdown';
 enum FormType {
   info,
   promotion,
@@ -53,15 +54,32 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
   public isNewsletterList = new BehaviorSubject(false);
   public isDatePicker = new BehaviorSubject(false);
   public type:FormType;
-  public typeButton:string = 'Wersja tekstowa';
-  public mediaButton:string = 'Pokaż formularz medii społecznościowych';
-  public datePickerButton:string = 'Wybierz czas wysłania newslettera';
   public files:File[];
+  public typeOptions =[
+    'Informacja',
+    'Produkt',
+    'Promocja'
+  ]
+  public formTypeOptions = [
+    'Formularz tekstowy',
+    'Edytor HTML'
+  ]
+  public mediaOptions = [
+    'Wysyłka do medii społecznościowych',
+    'Standardowa wysyłka newslettera'
+  ]
+  public sendingTypeOptions= [
+    'Wysyłka z opóźnieniem',
+    'Wysyłka natychmiastowa'
+  ]
   public config = {
     toolbar: [['bold', 'italic', 'underline']]
   };
+  public selectConfig = {
+    height: '300px',
+  }
   public userREST:UserREST;
-  public paramId:number
+  public paramId:number;
   public textForm = this.fb.group({
     text:[''],
   });
@@ -73,15 +91,46 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     time:[],
   });
   constructor(private nDataService:NewsletterService,private route:ActivatedRoute,private cDataService:CompanyService,private router:Router,private fb:FormBuilder) {}
+  @ViewChild('typeSelect') typeSelect:SelectDropDownComponent;
+  @ViewChild('formTypeSelect') formTypeSelect:SelectDropDownComponent;
+  @ViewChild('sendingTypeSelect') sendingTypeSelect:SelectDropDownComponent;
+  @ViewChild('mediaSelect') mediaSelect:SelectDropDownComponent;
 
   ngOnInit() {
    this.getActualUser();
    this.checkForPermissions();
+   
   }
   ngAfterViewInit() {
-   setTimeout(() => {
-     this.setFirstFocused();
-   }, 0);
+    setTimeout(() => {
+      this.setDefaultValues();
+    }, 0);
+  }
+  private setDefaultValues() {
+    this.typeSelect.selectItem('Informacja');
+    this.formTypeSelect.selectItem('Edytor HTML');
+    this.sendingTypeSelect.selectItem('Wysyłka natychmiastowa');
+    this.mediaSelect.selectItem('Standardowa wysyłka newslettera');
+  }
+
+  private setFormVisibility() {
+    if(this.formTypeSelect.value === 'Edytor HTML') {
+      this.isText.next(false);
+    } else {
+      this.isText.next(true);
+    }
+
+    if(this.mediaSelect.value === 'Standardowa wysyłka newslettera') {
+      this.isMedia.next(false);
+    }else {
+      this.isMedia.next(true);
+    }
+
+    if(this.sendingTypeSelect.value === 'Wysyłka natychmiastowa') {
+      this.isDatePicker.next(false);
+    } else {
+      this.isDatePicker.next(true);
+    }
   }
 
   public getActualUser() {
@@ -92,6 +141,14 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     }
   }
 
+  public checkForChanges(element:SelectDropDownComponent) {
+    this.setFormVisibility();
+    
+    if(!element.value) {
+      element.selectItem(element.options[0]);
+    }
+  }
+
   private checkForPermissions() {
     this.route.parent.params.subscribe(params=>{
       this.paramId = params['id'];
@@ -99,84 +156,6 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
         this.router.navigate(['companyProfile',this.paramId]);
       }
     });
-  }
-
-  public setFirstFocused() {
-    let buttons:HTMLCollection = document.getElementsByClassName('btn-newsletter');
-    buttons.item(0).classList.add('button-type--focus');
-    this.nDataService.destroyEditor.next(true);
-    this.isInfo.next(true);
-    this.isProduct.next(false);
-    this.isPromotion.next(false);
-    this.isText.next(false);
-    this.type = FormType.info;
-    this.typeButton = 'Wyświetl formularz';
-  }
-
-  public showDatePicker() {
-    this.isDatePicker.next(!this.isDatePicker.value);
-    if(this.isDatePicker.value) {
-      this.datePickerButton = 'Schowaj';
-    } else {
-      this.datePickerButton = 'Wybierz czas wysłania newslettera';
-    }
-  }
-
-  public showInfo($event?:Event) {
-    this.setFocusedButton(event);
-    this.nDataService.destroyEditor.next(true);
-    this.isInfo.next(true);
-    this.isProduct.next(false);
-    this.isPromotion.next(false);
-    this.isText.next(false);
-    this.type = FormType.info;
-    this.typeButton = 'Wyświetl formularz';
-  }
-  
-  public showProduct($event?:Event) {
-    this.setFocusedButton(event);
-    this.nDataService.destroyEditor.next(true);
-    this.isInfo.next(false);
-    this.isProduct.next(true);
-    this.isPromotion.next(false);
-    this.isText.next(false);
-    this.type = FormType.product;
-    this.typeButton = 'Wyświetl formularz';
-  }
-
-  public showPromotion($event?:Event) {
-    this.setFocusedButton(event);
-    this.nDataService.destroyEditor.next(true);
-    this.isInfo.next(false);
-    this.isProduct.next(false);
-    this.isPromotion.next(true);
-    this.isText.next(false);
-    this.type = FormType.promotion;
-    this.typeButton = 'Wyświetl formularz';
-  }
-
-  public showNewsletterList() {
-    this.isNewsletterList.next(!this.isNewsletterList.value);
-  }
-
-  public showTextForm(type:FormType) {
-    if(this.isText.value) {
-      this.isText.next(false);
-      this.typeButton = 'Wyświetl formularz';
-      console.log(type);
-    } else {
-      this.typeButton = 'Wyświetl edytor';
-      this.isText.next(true);
-      console.log(type);
-    }
-  }
-
-  public showTextButton() {
-    if(this.isProduct.value || this.isPromotion.value || this.isInfo.value) {
-      return true;
-    } else {
-      return false;
-    }
   }
 
   public onDateSelect($event) {
@@ -193,17 +172,6 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     console.log(this.files);
   }
 
-  public showMediaForm() {
-    if(this.showTextButton()) {
-      if(this.isMedia.value) {
-        this.isMedia.next(false);
-        this.mediaButton = 'Pokaż formularz medii społecznościowych';
-      } else {
-        this.isMedia.next(true);
-        this.mediaButton = 'Schowaj formularz medii społecznościowych';
-      }
-    }
-  }
 
   private setFocusedButton($event) {
     let buttons:HTMLCollection = document.getElementsByClassName('btn-newsletter');

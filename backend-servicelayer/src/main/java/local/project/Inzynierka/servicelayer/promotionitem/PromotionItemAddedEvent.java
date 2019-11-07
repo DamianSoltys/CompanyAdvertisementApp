@@ -9,6 +9,7 @@ import local.project.Inzynierka.servicelayer.promotionitem.validation.HtmlConten
 import local.project.Inzynierka.servicelayer.promotionitem.validation.RequiredTextContentWhenPostingToSocialMedia;
 import local.project.Inzynierka.servicelayer.promotionitem.validation.RequiredTitleWhenNewsletter;
 import local.project.Inzynierka.servicelayer.promotionitem.validation.StartTimeRequiredWhenDelayed;
+import local.project.Inzynierka.servicelayer.promotionitem.validation.ValidContentSize;
 import local.project.Inzynierka.servicelayer.promotionitem.validation.ZeroOrMaximum5Photos;
 import local.project.Inzynierka.servicelayer.validation.NullOrNotBlank;
 import lombok.AllArgsConstructor;
@@ -32,6 +33,7 @@ import java.util.Set;
 @HtmlContentBase64Encoded
 @RequiredTitleWhenNewsletter
 @StartTimeRequiredWhenDelayed
+@ValidContentSize
 public class PromotionItemAddedEvent implements Sendable {
 
     private String title;
@@ -43,7 +45,6 @@ public class PromotionItemAddedEvent implements Sendable {
     @NotNull
     private Long companyId;
     private Instant startTime;
-    private Instant endTime;
 
     @NotEmpty
     private Set<Destination> destination;

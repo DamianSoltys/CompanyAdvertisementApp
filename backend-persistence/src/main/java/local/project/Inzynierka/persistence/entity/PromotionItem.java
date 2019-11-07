@@ -30,13 +30,13 @@ public class PromotionItem extends FullTimestampingAudit implements IEntity<Long
     @Column(name = "promotion_item_id")
     private Long id = 0L;
 
-    @Column(name = "name", length = 50, nullable = false)
+    @Column(name = "name", length = 50)
     private String name;
 
-    @Column(name = "html_content", length = 10000, nullable = false)
+    @Column(name = "html_content", length = 16777215)
     private String htmlContent;
 
-    @Column(name = "non_html_content", length = 10000, nullable = false)
+    @Column(name = "non_html_content", length = 16777215)
     private String nonHtmlContent;
 
     @Column(name = "photos_number", nullable = false)
@@ -55,8 +55,5 @@ public class PromotionItem extends FullTimestampingAudit implements IEntity<Long
 
     @Column(nullable = false, name = "valid_from", columnDefinition = "TIMESTAMP")
     private Timestamp validFrom;
-
-    @Column(nullable = false, name = "valid_to", columnDefinition = "TIMESTAMP")
-    private Timestamp validTo;
 
 }

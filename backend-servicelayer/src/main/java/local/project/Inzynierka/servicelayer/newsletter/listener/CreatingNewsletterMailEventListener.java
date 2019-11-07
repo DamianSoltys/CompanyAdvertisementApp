@@ -1,17 +1,21 @@
 package local.project.Inzynierka.servicelayer.newsletter.listener;
 
-import local.project.Inzynierka.persistence.entity.Company;
-import local.project.Inzynierka.persistence.entity.NewsletterSubscription;
+import local.project.Inzynierka.persistence.projections.CompanySendMailInfo;
+import local.project.Inzynierka.persistence.projections.NewsletterSubscriptionSendEmailInfo;
 import local.project.Inzynierka.persistence.repository.CompanyRepository;
 import local.project.Inzynierka.persistence.repository.NewsletterSubscriptionRepository;
+import local.project.Inzynierka.servicelayer.newsletter.EmailMimeType;
 import local.project.Inzynierka.servicelayer.newsletter.event.CreatingNewsletterMailEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.util.Base64;
 import java.util.List;
 
 @Component
@@ -34,39 +38,51 @@ public class CreatingNewsletterMailEventListener {
 
     @Async
     @EventListener
-    public void handleSendingNewsletterOut(CreatingNewsletterMailEvent event) {
-        Company company = companyRepository.findById(event.getCompanyId()).
+    public void handleSendingNewsletterOut(CreatingNewsletterMailEvent event) throws MessagingException {
+        CompanySendMailInfo company = companyRepository.getSendEmailInfoById(event.getCompanyId()).
                 orElseThrow(IllegalArgumentException::new);
 
-        List<NewsletterSubscription> newsletterSubscriptions = newsletterSubscriptionRepository
-                .findByCompanyAndVerified(company,true);
+        List<NewsletterSubscriptionSendEmailInfo> newsletterSubscriptions = newsletterSubscriptionRepository
+                .getSendEmailInfoByCompany_IdAndVerifiedTrue(company.getCompanyId());
 
-        newsletterSubscriptions.forEach(e -> {
-            final SimpleMailMessage mailMessage = constructEmailMessage(event, e, company);
-            javaMailSender.send(mailMessage);
-        });
+        for (var subscription : newsletterSubscriptions) {
+            javaMailSender.send(constructEmailMessage(event, subscription, company));
+        }
 
     }
 
 
-    private SimpleMailMessage constructEmailMessage(CreatingNewsletterMailEvent creatingNewsletterMailEvent,
-                                                    NewsletterSubscription newsletterSubscription,
-                                                    Company company) {
+    private MimeMessage constructEmailMessage(CreatingNewsletterMailEvent creatingNewsletterMailEvent,
+                                              NewsletterSubscriptionSendEmailInfo newsletterSubscription,
+                                              CompanySendMailInfo company) throws MessagingException {
+
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+
+        String text = constructEmailText(creatingNewsletterMailEvent, newsletterSubscription);
+        helper.setText(text,
+                       EmailMimeType.HTML.equals(creatingNewsletterMailEvent.getEmailMimeType()));
 
         String companyName = company.getName();
-        String recipient = newsletterSubscription.getEmailAddressEntity().getEmail();
+        String recipient = newsletterSubscription.getSignedUpEmail();
+
+        helper.setFrom("test@example.com");
+        helper.setSubject(creatingNewsletterMailEvent.getSubject() + " Newsletter -" + companyName);
+        helper.setTo(recipient);
+
+        return mimeMessage;
+    }
+
+    private String constructEmailText(CreatingNewsletterMailEvent creatingNewsletterMailEvent,
+                                      NewsletterSubscriptionSendEmailInfo newsletterSubscription) {
+        if (EmailMimeType.HTML.equals(creatingNewsletterMailEvent.getEmailMimeType())) {
+            return new String(Base64.getDecoder().decode(creatingNewsletterMailEvent.getMessage()));
+        }
+
         String signOutLink = creatingNewsletterMailEvent.getAppUrl() + "/newsletter/signout/" +
-                newsletterSubscription.getUnsubscribeToken().getToken();
+                newsletterSubscription.getUnsubscribeToken();
 
-        String message = creatingNewsletterMailEvent.getMessage() + "\r\n\r\n" +
-                     "\r\n\r\n" + "Aby wypisać się z listy newslettera, kliknij tu:\r\n"+signOutLink;
-
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setFrom("test@example.com");
-        simpleMailMessage.setSubject(creatingNewsletterMailEvent.getSubject() + " Newsletter -" + companyName);
-        simpleMailMessage.setTo(recipient);
-        simpleMailMessage.setText(message);
-
-        return simpleMailMessage;
+        return creatingNewsletterMailEvent.getMessage() + "\r\n\r\n" +
+                "\r\n\r\n" + "Aby wypisać się z listy newslettera, kliknij tu:\r\n" + signOutLink;
     }
 }

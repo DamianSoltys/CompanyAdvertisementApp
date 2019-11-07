@@ -238,7 +238,7 @@ CALL insert_promotion_types();
 
 DELIMITER |
 CREATE OR REPLACE PROCEDURE insert_promotion_items()
-INSERT IGNORE INTO promotion_items (description, name, was_sent, promoting_company_id, promotion_type_id)
+INSERT IGNORE INTO promotion_items (non_html_content, name, was_sent, promoting_company_id, promotion_type_id)
 VALUES ('helo', 'cos tam', 0, 2, 1),
        ('TEST1', 'TEST1', 0, 2, 2);
 

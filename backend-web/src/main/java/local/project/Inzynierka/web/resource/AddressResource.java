@@ -1,6 +1,6 @@
 package local.project.Inzynierka.web.resource;
 
-import local.project.Inzynierka.servicelayer.dto.Voivodeship;
+import local.project.Inzynierka.servicelayer.dto.address.Voivodeship;
 import local.project.Inzynierka.servicelayer.errors.InvalidVoivodeshipException;
 import local.project.Inzynierka.servicelayer.services.AddressService;
 import org.springframework.http.ResponseEntity;

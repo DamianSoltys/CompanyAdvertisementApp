@@ -1,7 +1,10 @@
 package local.project.Inzynierka.persistence.entity;
 
 import local.project.Inzynierka.persistence.common.FullTimestampingAudit;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,10 +16,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Data
 @Entity
 @Table(name = "promotion_items")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class PromotionItem extends FullTimestampingAudit implements IEntity<Long> {
 
     @Id
@@ -24,11 +31,17 @@ public class PromotionItem extends FullTimestampingAudit implements IEntity<Long
     @Column(name = "promotion_item_id")
     private Long id = 0L;
 
-    @Column(name = "name", length = 50, nullable = false)
+    @Column(name = "name", length = 50)
     private String name;
 
-    @Column(name = "description", length = 1000, nullable = false)
-    private String description;
+    @Column(name = "html_content", length = 16777215)
+    private String htmlContent;
+
+    @Column(name = "non_html_content", length = 16777215)
+    private String nonHtmlContent;
+
+    @Column(name = "photos_number", nullable = false)
+    private Integer numberOfPhotos;
 
     @ManyToOne
     @JoinColumn(name = "promoting_company_id", nullable = false, foreignKey = @ForeignKey(name = "promoting_company_FK"))
@@ -41,10 +54,11 @@ public class PromotionItem extends FullTimestampingAudit implements IEntity<Long
     @Column(name = "was_sent")
     private boolean wasSent;
 
-    @Column(nullable = false, name = "valid_from", columnDefinition = "TIMESTAMP")
+    @Column(name = "valid_from", columnDefinition = "TIMESTAMP")
     private Timestamp validFrom;
 
-    @Column(nullable = false, name = "valid_to", columnDefinition = "TIMESTAMP")
-    private Timestamp validTo;
-
+    @Override
+    public Date getCreatedDate() {
+        return super.getCreatedDate();
+    }
 }

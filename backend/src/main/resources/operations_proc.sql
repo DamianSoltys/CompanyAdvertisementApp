@@ -22,6 +22,7 @@ begin
     truncate inzynierka.addresses;
     truncate inzynierka.tokens;
     truncate inzynierka.voivodeships;
+    truncate inzynierka.promotion_item_destinations;
     SET FOREIGN_KEY_CHECKS = 1;
 end;
 |

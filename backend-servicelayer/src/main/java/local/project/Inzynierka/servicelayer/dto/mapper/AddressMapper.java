@@ -1,8 +1,8 @@
 package local.project.Inzynierka.servicelayer.dto.mapper;
 
 import local.project.Inzynierka.persistence.entity.Voivoideship;
-import local.project.Inzynierka.servicelayer.dto.Address;
-import local.project.Inzynierka.servicelayer.dto.Voivodeship;
+import local.project.Inzynierka.servicelayer.dto.address.Address;
+import local.project.Inzynierka.servicelayer.dto.address.Voivodeship;
 import org.springframework.stereotype.Component;
 
 @Component

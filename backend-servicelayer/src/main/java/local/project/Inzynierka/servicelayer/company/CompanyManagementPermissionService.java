@@ -31,6 +31,10 @@ public class CompanyManagementPermissionService {
     }
 
     public boolean hasManagingAuthority(Long companyId, UserAccount userAccount) {
+
+        if(companyId == null) {
+            return  false;
+        }
         User user = userRepository.getByAddressEmail(userAccount.getEmail());
 
         if (user == null) {

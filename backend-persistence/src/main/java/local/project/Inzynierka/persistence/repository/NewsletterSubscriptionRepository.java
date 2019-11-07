@@ -3,6 +3,7 @@ package local.project.Inzynierka.persistence.repository;
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.NewsletterSubscription;
 import local.project.Inzynierka.persistence.entity.VerificationToken;
+import local.project.Inzynierka.persistence.projections.NewsletterSubscriptionSendEmailInfo;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface NewsletterSubscriptionRepository extends ApplicationBigReposito
     Optional<NewsletterSubscription> findByCompanyAndEmailAddressEntityEmailAndVerifiedIsTrue(Company company, String emailAddress);
 
     Optional<NewsletterSubscription> findByCompanyIdAndEmailAddressEntityEmail(Long companyId, String email);
+
+    List<NewsletterSubscriptionSendEmailInfo> getSendEmailInfoByCompany_IdAndVerifiedTrue(Long companyId);
 }

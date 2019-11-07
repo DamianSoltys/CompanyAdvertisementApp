@@ -23,10 +23,10 @@ public abstract class FullTimestampingAudit {
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
-    private Date createdDate;
+    protected Date createdDate;
 
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modified_at")
-    private Date lastModifiedDate;
+    protected Date lastModifiedDate;
 }

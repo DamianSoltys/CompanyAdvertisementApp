@@ -4,7 +4,7 @@ import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.persistence.entity.Rating;
 import local.project.Inzynierka.persistence.entity.User;
 import local.project.Inzynierka.persistence.repository.RatingRepository;
-import local.project.Inzynierka.servicelayer.dto.RatingGetDto;
+import local.project.Inzynierka.servicelayer.dto.rating.RatingGetDto;
 import local.project.Inzynierka.servicelayer.rating.event.RatingCreatedEvent;
 import local.project.Inzynierka.servicelayer.rating.event.RatingDeletedEvent;
 import local.project.Inzynierka.servicelayer.rating.event.RatingEditedEvent;

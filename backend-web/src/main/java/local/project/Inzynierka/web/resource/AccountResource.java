@@ -1,11 +1,11 @@
 package local.project.Inzynierka.web.resource;
 
 import local.project.Inzynierka.auth.AuthFacade;
-import local.project.Inzynierka.servicelayer.dto.AuthenticatedUserPersonalDataDto;
-import local.project.Inzynierka.servicelayer.dto.BecomeNaturalPersonDto;
-import local.project.Inzynierka.servicelayer.dto.UpdatePersonalDataDto;
-import local.project.Inzynierka.servicelayer.dto.UpdateUserDto;
-import local.project.Inzynierka.servicelayer.dto.UserInfoDto;
+import local.project.Inzynierka.servicelayer.dto.user.AuthenticatedUserPersonalDataDto;
+import local.project.Inzynierka.servicelayer.dto.user.BecomeNaturalPersonDto;
+import local.project.Inzynierka.servicelayer.dto.user.UpdatePersonalDataDto;
+import local.project.Inzynierka.servicelayer.dto.user.UpdateUserDto;
+import local.project.Inzynierka.servicelayer.dto.user.UserInfoDto;
 import local.project.Inzynierka.servicelayer.errors.NotAuthorizedAccessToResourceException;
 import local.project.Inzynierka.servicelayer.services.UserFacade;
 import local.project.Inzynierka.shared.UserAccount;

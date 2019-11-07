@@ -1,6 +1,6 @@
 package local.project.Inzynierka.servicelayer.search;
 
-import local.project.Inzynierka.servicelayer.dto.Address;
+import local.project.Inzynierka.servicelayer.dto.address.Address;
 import lombok.Builder;
 import lombok.Data;
 

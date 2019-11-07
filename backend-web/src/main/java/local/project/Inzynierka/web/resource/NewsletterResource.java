@@ -2,8 +2,8 @@ package local.project.Inzynierka.web.resource;
 
 import local.project.Inzynierka.auth.AuthFacade;
 import local.project.Inzynierka.servicelayer.company.CompanyManagementService;
-import local.project.Inzynierka.servicelayer.dto.NewSubscriptionDto;
-import local.project.Inzynierka.servicelayer.dto.SubscriptionToCreateDto;
+import local.project.Inzynierka.servicelayer.dto.newsletter.NewSubscriptionDto;
+import local.project.Inzynierka.servicelayer.dto.newsletter.SubscriptionToCreateDto;
 import local.project.Inzynierka.servicelayer.newsletter.SubscriptionState;
 import local.project.Inzynierka.servicelayer.services.NewsletterService;
 import local.project.Inzynierka.shared.UserAccount;

@@ -18,8 +18,9 @@ public class CacheConfig {
     @Bean
     public CacheManager cacheManager() {
         CaffeineCache voivodeshipCache = buildCache("voivodeship", 30, 16);
+        CaffeineCache promotionItemTypes = buildCache("PItypes", 60, 3);
         SimpleCacheManager manager = new SimpleCacheManager();
-        manager.setCaches(Arrays.asList(voivodeshipCache));
+        manager.setCaches(Arrays.asList(voivodeshipCache, promotionItemTypes));
         return manager;
     }
 

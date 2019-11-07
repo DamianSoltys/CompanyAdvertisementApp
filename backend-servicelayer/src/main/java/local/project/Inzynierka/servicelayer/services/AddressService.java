@@ -4,7 +4,7 @@ import local.project.Inzynierka.persistence.entity.Address;
 import local.project.Inzynierka.persistence.entity.Voivoideship;
 import local.project.Inzynierka.persistence.repository.AddressRepository;
 import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
-import local.project.Inzynierka.servicelayer.dto.Voivodeship;
+import local.project.Inzynierka.servicelayer.dto.address.Voivodeship;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;

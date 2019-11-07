@@ -10,14 +10,14 @@ import local.project.Inzynierka.persistence.repository.NaturalPersonRepository;
 import local.project.Inzynierka.persistence.repository.UserRepository;
 import local.project.Inzynierka.persistence.repository.VerificationTokenRepository;
 import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
-import local.project.Inzynierka.servicelayer.dto.AccountRelatedDeletedEntities;
-import local.project.Inzynierka.servicelayer.dto.AuthenticatedUserPersonalDataDto;
-import local.project.Inzynierka.servicelayer.dto.BecomeNaturalPersonDto;
-import local.project.Inzynierka.servicelayer.dto.PersonRelatedDeletedEntities;
-import local.project.Inzynierka.servicelayer.dto.UpdatePersonalDataDto;
-import local.project.Inzynierka.servicelayer.dto.UpdateUserDto;
-import local.project.Inzynierka.servicelayer.dto.UserInfoDto;
 import local.project.Inzynierka.servicelayer.dto.mapper.NaturalPersonDtoMapper;
+import local.project.Inzynierka.servicelayer.dto.user.AccountRelatedDeletedEntities;
+import local.project.Inzynierka.servicelayer.dto.user.AuthenticatedUserPersonalDataDto;
+import local.project.Inzynierka.servicelayer.dto.user.BecomeNaturalPersonDto;
+import local.project.Inzynierka.servicelayer.dto.user.PersonRelatedDeletedEntities;
+import local.project.Inzynierka.servicelayer.dto.user.UpdatePersonalDataDto;
+import local.project.Inzynierka.servicelayer.dto.user.UpdateUserDto;
+import local.project.Inzynierka.servicelayer.dto.user.UserInfoDto;
 import local.project.Inzynierka.servicelayer.errors.IllegalPasswordException;
 import local.project.Inzynierka.servicelayer.errors.InvalidVoivodeshipException;
 import local.project.Inzynierka.servicelayer.errors.PasswordsNotMatchingException;
@@ -187,7 +187,7 @@ public class UserFacade {
                 person.setPhoneNo(updatePersonalDataDto.getPhoneNo());
             }
         }
-        local.project.Inzynierka.servicelayer.dto.Address addressDto = updatePersonalDataDto.getAddress();
+        local.project.Inzynierka.servicelayer.dto.address.Address addressDto = updatePersonalDataDto.getAddress();
         if (addressDto != null) {
             Address address = person.getAddress();
             if (addressDto.getApartmentNo() != null) {

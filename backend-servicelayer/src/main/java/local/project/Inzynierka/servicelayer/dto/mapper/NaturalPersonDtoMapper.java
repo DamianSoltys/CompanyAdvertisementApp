@@ -4,9 +4,9 @@ package local.project.Inzynierka.servicelayer.dto.mapper;
 import local.project.Inzynierka.persistence.entity.Address;
 import local.project.Inzynierka.persistence.entity.NaturalPerson;
 import local.project.Inzynierka.persistence.entity.Voivoideship;
-import local.project.Inzynierka.servicelayer.dto.AuthenticatedUserPersonalDataDto;
-import local.project.Inzynierka.servicelayer.dto.BecomeNaturalPersonDto;
-import local.project.Inzynierka.servicelayer.dto.Voivodeship;
+import local.project.Inzynierka.servicelayer.dto.address.Voivodeship;
+import local.project.Inzynierka.servicelayer.dto.user.AuthenticatedUserPersonalDataDto;
+import local.project.Inzynierka.servicelayer.dto.user.BecomeNaturalPersonDto;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -35,7 +35,7 @@ public class NaturalPersonDtoMapper {
     public AuthenticatedUserPersonalDataDto map(NaturalPerson person) {
 
         AuthenticatedUserPersonalDataDto personDto = new AuthenticatedUserPersonalDataDto();
-        personDto.setAddress(new local.project.Inzynierka.servicelayer.dto.Address(
+        personDto.setAddress(new local.project.Inzynierka.servicelayer.dto.address.Address(
                 Voivodeship.fromVoivodeship(person.getAddress().getVoivodeship_id().getName().toLowerCase()),
                 person.getAddress().getCity(),
                 person.getAddress().getStreet(),

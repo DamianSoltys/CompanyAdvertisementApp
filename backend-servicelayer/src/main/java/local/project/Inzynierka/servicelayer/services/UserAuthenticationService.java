@@ -1,8 +1,8 @@
 package local.project.Inzynierka.servicelayer.services;
 
-import local.project.Inzynierka.servicelayer.dto.LoginDto;
-import local.project.Inzynierka.servicelayer.dto.UserInfoDto;
-import local.project.Inzynierka.servicelayer.dto.UserRegistrationDto;
+import local.project.Inzynierka.servicelayer.dto.user.LoginDto;
+import local.project.Inzynierka.servicelayer.dto.user.UserInfoDto;
+import local.project.Inzynierka.servicelayer.dto.user.UserRegistrationDto;
 import org.springframework.security.core.Authentication;
 
 public interface UserAuthenticationService {

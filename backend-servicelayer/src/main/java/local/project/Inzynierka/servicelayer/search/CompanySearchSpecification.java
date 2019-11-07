@@ -4,7 +4,7 @@ import local.project.Inzynierka.persistence.entity.Address;
 import local.project.Inzynierka.persistence.entity.Category;
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.Voivoideship;
-import local.project.Inzynierka.servicelayer.dto.Voivodeship;
+import local.project.Inzynierka.servicelayer.dto.address.Voivodeship;
 import local.project.Inzynierka.shared.utils.CustomCollectionsUtils;
 import lombok.experimental.SuperBuilder;
 import org.springframework.util.CollectionUtils;

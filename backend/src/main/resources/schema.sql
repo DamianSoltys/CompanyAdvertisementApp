@@ -94,16 +94,16 @@ create or replace table companies
     regon           varchar(14)                             not null,
     company_website varchar(255)                            null,
     created_at      timestamp default current_timestamp()   not null on update current_timestamp(),
-    description    varchar(10000)                          not null,
-    has_branch     bit                                     not null,
-    logo_path      varchar(255)                            null,
-    modified_at    timestamp default '0000-00-00 00:00:00' not null,
-    name           varchar(50)                             not null,
-    address_id     bigint                                  not null,
-    category_id    smallint(6)                             not null,
-    registerer_id  bigint                                  not null,
-    has_logo_added boolean                                 not null default false,
-    companyUUID    varchar(36)                             not null,
+    description     varchar(10000)                          not null,
+    has_branch      bit                                     not null,
+    logo_path       varchar(255)                            null,
+    modified_at     timestamp default '0000-00-00 00:00:00' not null,
+    name            varchar(50)                             not null,
+    address_id      bigint                                  not null,
+    category_id     smallint(6)                             not null,
+    registerer_id   bigint                                  not null,
+    has_logo_added  boolean                                 not null default false,
+    companyUUID     varchar(36)                             not null,
     constraint unique_regon
         unique (regon),
     constraint unique_nip
@@ -174,19 +174,31 @@ create or replace table promotion_items
     promotion_item_id    bigint auto_increment
         primary key,
     created_at           timestamp default current_timestamp()   not null on update current_timestamp(),
-    description          varchar(1000)                           not null,
+    non_html_content     MEDIUMTEXT                              null,
+    html_content         MEDIUMTEXT                              null,
     modified_at          timestamp default '0000-00-00 00:00:00' not null,
-    name                 varchar(50)                             not null,
+    name                 varchar(50)                             null,
     was_sent             bit                                     null,
-    valid_from           timestamp default '0000-00-00 00:00:00' not null,
+    valid_from           timestamp                               null,
     valid_to             timestamp default '0000-00-00 00:00:00' not null,
     promoting_company_id bigint                                  not null,
     promotion_type_id    smallint(6)                             not null,
+    photos_number        smallint(2)                             not null,
     constraint promoting_company_FK
         foreign key (promoting_company_id) references companies (id)
             on delete cascade,
     constraint promotion_type_FK
         foreign key (promotion_type_id) references promotion_item_types (promotion_item_type_id)
+);
+
+create or replace table promotion_item_destinations
+(
+    promotion_item_destination_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    destination                   varchar(30) NOT NULL,
+    promotion_item_id             bigint      NOT NULL,
+    constraint promotion_item_destination_FK
+        foreign key (promotion_item_id) references promotion_items (promotion_item_id)
+            on delete cascade
 );
 
 create or replace table social_profiles

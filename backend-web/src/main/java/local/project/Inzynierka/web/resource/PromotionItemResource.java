@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,18 +36,35 @@ public class PromotionItemResource {
         this.authFacade = authFacade;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/")
+    @RequestMapping(method = RequestMethod.POST, value = "")
     public ResponseEntity<?> addPromotionItem(@RequestBody @Valid PromotionItemAddedEvent promotionItemAddedEvent,
                                               HttpServletRequest httpServletRequest) {
+        ResponseEntity<?> result;
 
         UserAccount userAccount = authFacade.getAuthenticatedUser();
         if (!companyManagementPermissionService.hasManagingAuthority(promotionItemAddedEvent.getCompanyId(), userAccount)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            result = ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        } else {
+            promotionItemAddedEvent.setAppUrl(httpServletRequest.getHeader(ORIGIN_HEADER));
+            promotionItemService.addPromotionItem(promotionItemAddedEvent);
+            result = ResponseEntity.ok(SimpleJsonFromStringCreator.toJson("OK"));
         }
 
-        promotionItemAddedEvent.setAppUrl(httpServletRequest.getHeader(ORIGIN_HEADER));
-        promotionItemService.addPromotionItem(promotionItemAddedEvent);
+        return result;
+    }
 
-        return ResponseEntity.ok(SimpleJsonFromStringCreator.toJson("OK"));
+    @RequestMapping(method = RequestMethod.GET, value = "")
+    public ResponseEntity<?> getPromotionItems(@RequestParam(value = "companyId") Long companyId) {
+
+        ResponseEntity<?> result;
+
+        UserAccount userAccount = authFacade.getAuthenticatedUser();
+        if (!companyManagementPermissionService.hasManagingAuthority(companyId, userAccount)) {
+            result = ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        } else {
+            result = ResponseEntity.ok(promotionItemService.getPromotionItems(companyId));
+        }
+
+        return result;
     }
 }

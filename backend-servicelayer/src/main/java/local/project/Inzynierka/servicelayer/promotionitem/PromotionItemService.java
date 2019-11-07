@@ -6,6 +6,8 @@ import local.project.Inzynierka.persistence.entity.PromotionItemDestination;
 import local.project.Inzynierka.persistence.repository.PromotionItemDestinationRepository;
 import local.project.Inzynierka.persistence.repository.PromotionItemRepository;
 import local.project.Inzynierka.servicelayer.dto.promotionitem.Destination;
+import local.project.Inzynierka.servicelayer.dto.promotionitem.GetPromotionItemDto;
+import local.project.Inzynierka.servicelayer.dto.promotionitem.SendingStatus;
 import local.project.Inzynierka.servicelayer.dto.promotionitem.SendingStrategy;
 import org.springframework.stereotype.Service;
 
@@ -43,8 +45,6 @@ public class PromotionItemService {
                 sender.schedule(promotionItemAddedEvent);
             } else if (SendingStrategy.AT_CREATION.equals(promotionItemAddedEvent.getSendingStrategy())) {
                 sender.send(promotionItemAddedEvent);
-            } else if (SendingStrategy.AT_WILL.equals(promotionItemAddedEvent.getSendingStrategy())) {
-                sender.schedule(promotionItemAddedEvent);
             }
         }
     }
@@ -62,7 +62,9 @@ public class PromotionItemService {
 
         var promotionItemType = promotionItemTypeFetcher.fetch(promotionItemAddedEvent.getPromotionItemType().name());
         var numberOfPhotos = Optional.ofNullable(promotionItemAddedEvent.getNumberOfPhotos()).orElse(0);
-        var validFrom = Optional.ofNullable(promotionItemAddedEvent.getStartTime()).orElse(Instant.now());
+        var validFrom = promotionItemAddedEvent.getSendingStrategy().equals(SendingStrategy.AT_WILL) ? null :
+                Timestamp.from(Optional.ofNullable(promotionItemAddedEvent.getStartTime())
+                                       .orElse(Instant.now()));
 
         return PromotionItem.builder()
                 .company(Company.builder().id(promotionItemAddedEvent.getCompanyId()).build())
@@ -70,7 +72,7 @@ public class PromotionItemService {
                 .name(promotionItemAddedEvent.getTitle())
                 .nonHtmlContent(promotionItemAddedEvent.getNonHtmlContent())
                 .numberOfPhotos(numberOfPhotos)
-                .validFrom(Timestamp.from(validFrom))
+                .validFrom(validFrom)
                 .wasSent(SendingStrategy.AT_CREATION.equals(promotionItemAddedEvent.getSendingStrategy()))
                 .promotionItemType(promotionItemType)
                 .build();
@@ -92,5 +94,41 @@ public class PromotionItemService {
             senders.add(newsletterSender);
         }
         return senders;
+    }
+
+    public List<GetPromotionItemDto> getPromotionItems(Long companyId) {
+
+        var promotionItems = promotionItemRepository.findByCompany(Company.builder().id(companyId).build());
+        return promotionItems.stream().map(this::mapGetDto).collect(Collectors.toList());
+    }
+
+    private GetPromotionItemDto mapGetDto(PromotionItem promotionItem) {
+
+        var destinations = promotionItemDestinationRepository.findByPromotionItem(promotionItem);
+        var sendingStatus = getSendingStatus(promotionItem);
+        return GetPromotionItemDto.builder()
+                .dateAdded(Instant.from(promotionItem.getCreatedDate().toInstant()))
+                .destinations(destinations.stream()
+                                      .map(destination -> Destination.valueOf(destination.getDestination()))
+                                      .collect(Collectors.toList()))
+                .sendingStatus(sendingStatus)
+                .promotionItemId(promotionItem.getId())
+                .build();
+    }
+
+    private SendingStatus getSendingStatus(PromotionItem promotionItem) {
+        SendingStatus sendingStatus;
+
+        if (promotionItem.isWasSent()) {
+            sendingStatus = SendingStatus.SENT;
+        } else {
+            if (promotionItem.getValidFrom() == null) {
+                sendingStatus = SendingStatus.WAITING_FOR_ACTION;
+            } else {
+                sendingStatus = SendingStatus.DELAYED;
+
+            }
+        }
+        return sendingStatus;
     }
 }

@@ -179,7 +179,7 @@ create or replace table promotion_items
     modified_at          timestamp default '0000-00-00 00:00:00' not null,
     name                 varchar(50)                             null,
     was_sent             bit                                     null,
-    valid_from           timestamp default '0000-00-00 00:00:00' not null,
+    valid_from           timestamp                               null,
     valid_to             timestamp default '0000-00-00 00:00:00' not null,
     promoting_company_id bigint                                  not null,
     promotion_type_id    smallint(6)                             not null,

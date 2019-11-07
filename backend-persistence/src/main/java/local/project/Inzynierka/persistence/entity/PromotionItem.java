@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Data
 @Entity
@@ -53,7 +54,11 @@ public class PromotionItem extends FullTimestampingAudit implements IEntity<Long
     @Column(name = "was_sent")
     private boolean wasSent;
 
-    @Column(nullable = false, name = "valid_from", columnDefinition = "TIMESTAMP")
+    @Column(name = "valid_from", columnDefinition = "TIMESTAMP")
     private Timestamp validFrom;
 
+    @Override
+    public Date getCreatedDate() {
+        return super.getCreatedDate();
+    }
 }

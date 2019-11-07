@@ -1,0 +1,20 @@
+<div class="nearby-component">
+    <div class="nearby-component__map-container" *ngIf="actualPosition">
+        <agm-map
+          [latitude]="actualPosition.latitude"
+          [longitude]="actualPosition.longitude"
+          class="map-container__map"
+        >
+          <agm-marker
+            *ngFor="let marker of markersArray"
+            [latitude]="marker.latitude"
+            [longitude]="marker.longitude"             
+          >
+          <agm-info-window><a (click)="goToBranchProfile(marker.branchId,marker.companyId)">{{marker.label}}</a></agm-info-window>
+          </agm-marker>
+        </agm-map>
+      </div>
+      <div class="nearby-component__empty-postion" *ngIf="!actualPosition">
+        <p>Niestety nie można pobrac twojej lokalizacji!</p>
+      </div>
+</div>

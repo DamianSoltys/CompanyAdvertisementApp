@@ -85,32 +85,32 @@ export class CompanyComponent implements OnInit {
   public _categories = categories;
 
   public companyForm = this.fb.group({
-    description: ['', [Validators.required]],
+    description: ['',[Validators.required]],
     category: ['', [Validators.required]],
-    name: ['', [Validators.required]],
-    nip: ['', [Validators.required]],
-    regon: ['', [Validators.required]],
-    companyWebsiteUrl: ['', [Validators.required]],
+    name: ['', [Validators.required,Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
+    nip: ['', [Validators.required,Validators.pattern(new RegExp(/^[0-9]+$/))]],
+    regon: ['', [Validators.required,Validators.pattern(new RegExp(/^[0-9]+$/))]],
+    companyWebsiteUrl: [''],
     address: this.fb.group({
-      apartmentNo: ['', [Validators.required]],
-      buildingNo: ['', [Validators.required]],
-      city: ['', [Validators.required]],
-      street: ['', [Validators.required]],
+      apartmentNo: ['', [Validators.required, Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/))]],
+      buildingNo: ['', [Validators.required, Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/))]],
+      city: ['', [Validators.required,Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
+      street: ['', [Validators.required,Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
       voivodeship: ['', [Validators.required]]
     })
   });
 
   public workForm = this.fb.group({
     address: this.fb.group({
-      apartmentNo: ['', [Validators.required]],
-      buildingNo: ['', [Validators.required]],
-      city: ['', [Validators.required]],
-      street: ['', [Validators.required]],
+      apartmentNo: ['', [Validators.required,Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/))]],
+      buildingNo: ['', [Validators.required,Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/))]],
+      city: ['', [Validators.required,Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
+      street: ['', [Validators.required,Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
       voivodeship: ['', [Validators.required]]
     }),
     geoX: [''],
     geoY: [''],
-    name: ['', [Validators.required]]
+    name: ['', [Validators.required,Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]]
   });
 
   public config = {
@@ -193,66 +193,71 @@ export class CompanyComponent implements OnInit {
         console.log(this.companyList)
       });
 
-      if (userREST.companiesIDs.length) {
-        this.companyList = [];
-        let counter:number = 0;
-        userREST.companiesIDs.forEach((companyId, index) => {
-          this.cDataService.getCompany(companyId).subscribe(
-            response => {
-              let companyData:GetCompany = <GetCompany>response.body;
-              console.log(companyData)
-              this.cDataService.getCompanyLogo(companyData).subscribe(response=>{             
-               if(response.status != 204) {
-                let reader = new FileReader();
-                reader.addEventListener("load", () => {
-                    counter++;
-                    companyData.logo = reader.result;
-                    this.companyList.push(companyData);
-                    this.companyList.sort(this.companySort);
-                    this.cDataService.storeCompanyData(companyData);
+   if(userREST.companiesIDs) {
+    if (userREST.companiesIDs.length) {
+      this.companyList = [];
+      let counter:number = 0;
+      userREST.companiesIDs.forEach((companyId, index) => {
+        this.cDataService.getCompany(companyId).subscribe(
+          response => {
+            let companyData:GetCompany = <GetCompany>response.body;
+            console.log(companyData)
+            this.cDataService.getCompanyLogo(companyData).subscribe(response=>{             
+             if(response.status != 204) {
+              let reader = new FileReader();
+              reader.addEventListener("load", () => {
+                  counter++;
+                  companyData.logo = reader.result;
+                  this.companyList.push(companyData);
+                  this.companyList.sort(this.companySort);
+                  this.cDataService.storeCompanyData(companyData);
 
-                    if(counter === userREST.companiesIDs.length) {
-                      subject.next(true);
-                    }
-                }, false);
+                  if(counter === userREST.companiesIDs.length) {
+                    subject.next(true);
+                  }
+              }, false);
 
-                if (response.body) {
-                    reader.readAsDataURL(response.body);
-                }
-               } else {
-                counter++;
-                companyData.logo = this.cDataService.defaultCListUrl;
-                this.companyList.push(companyData);
-                this.companyList.sort(this.companySort);
-                this.cDataService.storeCompanyData(companyData);
-                
-                if(counter === userREST.companiesIDs.length) {
-                  subject.next(true);
-                }
-               }
-                
-              },error=>{
-                counter++;
-                companyData.logo = this.cDataService.defaultCListUrl;
-                this.companyList.push(companyData);
-                this.companyList.sort(this.companySort);
-                this.cDataService.storeCompanyData(companyData);
-                
-                if(counter === userREST.companiesIDs.length) {
-                  subject.next(true);
-                }
-              });
-            },
-            error => {
-              subject.next(true);
-              console.log(error);
-            }
-          );
-        });
-      } else{
-        console.log('nie ma firm')
-        subject.next(true);
-      }
+              if (response.body) {
+                  reader.readAsDataURL(response.body);
+              }
+             } else {
+              counter++;
+              companyData.logo = this.cDataService.defaultCListUrl;
+              this.companyList.push(companyData);
+              this.companyList.sort(this.companySort);
+              this.cDataService.storeCompanyData(companyData);
+              
+              if(counter === userREST.companiesIDs.length) {
+                subject.next(true);
+              }
+             }
+              
+            },error=>{
+              counter++;
+              companyData.logo = this.cDataService.defaultCListUrl;
+              this.companyList.push(companyData);
+              this.companyList.sort(this.companySort);
+              this.cDataService.storeCompanyData(companyData);
+              
+              if(counter === userREST.companiesIDs.length) {
+                subject.next(true);
+              }
+            });
+          },
+          error => {
+            subject.next(true);
+            console.log(error);
+          }
+        );
+      });
+    } else{
+      console.log('nie ma firm')
+      subject.next(true);
+    }
+   } else {
+    console.log('nie ma firm')
+    subject.next(true);
+   }
       
     }
   }

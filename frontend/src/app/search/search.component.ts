@@ -18,13 +18,14 @@ export class SearchComponent implements OnInit {
   public sectionData:SectionData[];
   public responseBody:SearchResponse;
   public isLoaded = new BehaviorSubject(false);
-  public pageNumber:number = 1;
-  public chunkSize:number = 3;
-  public paginationTable:SectionData[][];
+  public pageNumber:number = 0;
   public actualList:SectionData[];
   public actualIndex:number = 0;
   public companyNumber:number;
   public branchNumber:number;
+  public searchData:any;
+  public totalPages:number;
+  public isEmptyMessage = new BehaviorSubject(false);
   constructor(private fb: FormBuilder, private searchS: SearchService) {
     this.searchform = fb.group({
       search: ['']
@@ -50,97 +51,87 @@ export class SearchComponent implements OnInit {
   }
   
   onSubmit() {
-    let searchData = this.searchform.value['search'];
+    this.searchData = this.searchform.value['search'];
     let subject = new Subject<any>();
 
     subject.subscribe(()=>{
       this.isLoaded.next(true);
     });
 
-    searchData = searchData.split([' ',',','.']);
+   if(this.searchData) {
+    this.searchData = this.searchData.split([' ',',','.']);
+   }
     this.companyNumber = 0;
     this.branchNumber = 0;
     
-    this.searchS.sendSearchData(searchData).subscribe(response=>{
-      this.responseBody = <SearchResponse>response.body     
+    this.searchS.sendSearchData(this.searchData).subscribe(response=>{
+      this.responseBody = <SearchResponse>response.body  
+      this.totalPages = this.responseBody.totalPages;  
       this.sectionData = this.responseBody.content;
-      this.paginationTable = this.setPaginationTable(this.sectionData,3);
-      let counter:number = 0;
-      this.sectionData.map(data=>{
-        if(data.type == 'Company') {
-          this.companyNumber++;
-        } else {
-          this.branchNumber++;
-        }
-        this.searchS.getSearchSectionLogo(data).subscribe(response=>{
-          console.log(response)
-          if(response.status != 204) {
-            let reader = new FileReader();
-            reader.addEventListener("load", () => {
-              data.logo = reader.result;
-              subject.next(true);
-          }, false);
-
-          if (response.body) {
-              reader.readAsDataURL(<any>response.body);
-          }
-        }else {
-          data.logo = this.searchS.defaultSearchLogo;
-          subject.next(true);
-        }
-      },error=>{
-        data.logo = this.searchS.defaultSearchLogo;
-        console.log(error);
-        subject.next(true);
-      });
-    })
+      this.actualList = this.responseBody.content;
+      this.isEmptyMessage.next(this.sectionData.length?false:true);
+      subject.next(this.getImages(true));
   },error=>{
     console.log(error);
     subject.next(true);
   })
 }
 
-public setPaginationTable(myArray, chunk_size){
-  var index = 0;
-  var arrayLength = myArray.length;
-  var tempArray = [];
-  
-  for (index = 0; index < arrayLength; index += chunk_size) {
-      this.chunkSize = myArray.slice(index, index+chunk_size);
-      tempArray.push(this.chunkSize);
-  }
-  this.actualList = tempArray[0];
-  return tempArray;
+public getImages(firstRequest?:boolean) {
+  this.actualList.map(data=>{
+    this.searchS.getSearchSectionLogo(data).subscribe(response=>{
+      if(response.status != 204) {
+        let reader = new FileReader();
+        reader.addEventListener("load", () => {
+          data.logo = reader.result;
+          return true;
+      }, false);
+
+      if (response.body) {
+          reader.readAsDataURL(<any>response.body);
+      }
+    }else {
+      data.logo = this.searchS.defaultSearchLogo;
+      return true;
+    }
+  },error=>{
+    data.logo = this.searchS.defaultSearchLogo;
+    console.log(error);
+    return true;
+  });
+});
 }
 
 public previousPage() {
-  if(this.actualIndex != 0) {
-    this.actualList = this.paginationTable[--this.actualIndex]
-    this.pageNumber--;
-
-  }
+  if(this.pageNumber > 0 && this.searchData) {
+    this.searchS.getActualPageData(this.searchData,--this.pageNumber).subscribe(response=>{
+      let searchResponse = <SearchResponse>response.body;
+      this.actualList = searchResponse.content;
+      this.getImages();
+  },error=>{
+    console.log(error);
+  });
+}
 }
 
 public nextPage() {
-  if(this.paginationTable) {
-    if(this.paginationTable.length-1 > this.actualIndex) {
-      this.actualList = this.paginationTable[++this.actualIndex]
-      this.pageNumber++;
+  if((this.pageNumber < this.totalPages-1) && this.searchData) {
+    this.searchS.getActualPageData(this.searchData,++this.pageNumber).subscribe(response=>{
+    let searchResponse = <SearchResponse>response.body;
+    this.actualList = searchResponse.content;
+    this.getImages();
+  },error=>{
+    console.log(error);
+  });
+}
+}
 
-    }
-  }
-}
 public showEmptyMessage() {
-if(this.isLoaded.value) {
-  if(this.sectionData) {
-    if(this.sectionData.length) {
-      return false;
-    } else {
-      return true;
-    }
-  } else {
+  if(this.isLoaded.value && this.isEmptyMessage.value) {
     return true;
+  } else {
+    return false
   }
 }
-}
+
 }

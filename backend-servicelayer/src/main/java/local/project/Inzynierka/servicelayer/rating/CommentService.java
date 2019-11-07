@@ -91,6 +91,7 @@ public class CommentService {
         return CommentGetDto.builder()
                 .branchId(comment.getBranch().getId())
                 .commentId(comment.getId())
+                .username(comment.getUser().getName())
                 .userId(comment.getUser().getId())
                 .comment(comment.getComment())
                 .build();

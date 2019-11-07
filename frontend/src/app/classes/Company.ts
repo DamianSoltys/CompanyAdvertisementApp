@@ -33,6 +33,7 @@ export class Branch {
     geoY: string;
     name: string;
     branchId?:number;
+    companyId?:number;
     logoKey?:string;
     logoURL?:string;
     logoPath?:string;

@@ -116,6 +116,11 @@
           width:30%;
           transition: all 0.2s ease-in-out;
 
+          .section-container__label {
+            .label__required{
+              color:red;
+            }
+          }
           .section-container__input {
             padding: 0;
           }

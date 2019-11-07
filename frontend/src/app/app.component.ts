@@ -22,7 +22,9 @@ import { UserREST, PersonalData } from './classes/User';
 import { PersonalDataService } from './services/personal-data.service';
 import { SnackbarService, SnackbarType } from './services/snackbar.service';
 import { slideInAnimation } from './animations/route-animation';
-
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NearbyComponent } from './commonComponents/nearby-component/nearby-component.component';
+declare var FB: any;
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -64,23 +66,6 @@ import { slideInAnimation } from './animations/route-animation';
       ),
       transition('visible <=> hidden', [animate('.2s')])
     ]),
-    trigger('showHideDropdown', [
-      state(
-        'visible',
-        style({
-          height:'*',
-          overflow:'hidden'
-        })
-      ),
-      state(
-        'hidden',
-        style({
-          height:'0px',
-          overflow:'hidden'
-        })
-      ),
-      transition('visible <=> hidden', [animate('.2s')])
-    ]),
     slideInAnimation,
   ]
 })
@@ -98,17 +83,12 @@ export class AppComponent implements OnInit {
   constructor(
     private lgservice: LoginService,
     private pDataService: PersonalDataService,
-    private snackbarService:SnackbarService
+    private snackbarService:SnackbarService,
+    private modalService: NgbModal,
   ) {
     document.body.addEventListener('click', e => {
       if ((<HTMLElement>e.target).id !== 'menuId') {
         this.displayHamburgerMenu.next(false);
-      }
-      if ((<HTMLElement>e.target).id !== 'dropdownId') {
-        this.displayPersonalDataMenu.next(false);
-      }
-      if ((<HTMLElement>e.target).id !== 'searchId') {
-        this.displaySearchMenu.next(false);
       }
     });
   }
@@ -118,6 +98,49 @@ export class AppComponent implements OnInit {
       this.logged = value;
       this.getStorageObjects();
     });
+    //this.initFacebookApi();
+  }
+    public submitLogin() {
+      console.log("submit login to facebook");
+        // FB.login();
+        FB.login((response)=>
+            {
+              console.log('submitLogin',response);
+              if (response.authResponse)
+              {
+                //login success
+                //login success code here
+                //redirect to home page
+               }
+               else
+               {
+               console.log('User login failed');
+             }
+          });
+    }
+  private initFacebookApi() {
+    (window as any).fbAsyncInit = function() {
+      FB.init({
+        appId      : '422141488475751',
+        cookie     : true,
+        xfbml      : true,
+        version    : 'v5.0'
+      });
+      FB.AppEvents.logPageView();
+    };
+
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "https://connect.facebook.net/en_US/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
+  }
+
+  public openNearbyModal() {
+    const modalRef = this.modalService.open(NearbyComponent,{size:'lg'});
+    modalRef.componentInstance.name = 'World';
   }
 
   public getStorageObjects() {
@@ -133,20 +156,8 @@ export class AppComponent implements OnInit {
     this.nearby_toggle = !this.nearby_toggle;
     this.visible = !this.visible;
   }
-  public toggleMenu(type?:string,mobile?: boolean) {
-    if (!mobile) {
-      switch (type) {
-        case 'personalData':{
-          this.displayPersonalDataMenu.next(!this.displayPersonalDataMenu.value);
-        }
-        case 'search':{
-          this.displaySearchMenu.next(!this.displaySearchMenu.value);
-        }
-      }
-    } else {
-      console.log('menu')
+  public toggleMenu() {   
       this.displayHamburgerMenu.next(!this.displayHamburgerMenu.value);
-    }
   }
 
   public logOut() {

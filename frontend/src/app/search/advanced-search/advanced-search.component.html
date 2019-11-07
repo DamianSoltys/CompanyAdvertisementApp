@@ -38,11 +38,11 @@
     <div class="search-data-container__sections">
       <app-search-section *ngFor="let data of actualList" [sectionData]="data"></app-search-section>
     </div>
-    <div class="search-data-container__buttons" *ngIf="paginationTable.length > 1">
+    <div class="search-data-container__buttons" *ngIf="totalPages > 1">
       <button class="btn btn-primary buttons__button--previous" (click) = "previousPage();">
         Poprzednia
       </button>
-      <p class="buttons__text-node">{{pageNumber}}</p>
+      <p class="buttons__text-node">{{pageNumber+1}}</p>
       <button class="btn btn-primary buttons__button--next" (click) = "nextPage();">
          Następna
       </button>

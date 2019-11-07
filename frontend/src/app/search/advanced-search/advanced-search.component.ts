@@ -7,7 +7,7 @@ import { SearchResponse, SectionData } from 'src/app/classes/Section';
 import { Subject, BehaviorSubject } from 'rxjs';
 
 export interface AdvSearchData {
-  name?;
+  name?:string;
   type?:string[];
   category?:string[];
   voivodeship?:string[];
@@ -74,12 +74,15 @@ export class AdvancedSearchComponent implements OnInit {
   public sectionData:SectionData[];
   public responseBody:SearchResponse;
   public isLoaded = new BehaviorSubject(false);
-  public pageNumber:number = 1;
-  public chunkSize:number = 3;
+  public pageNumber:number = 0;
   public paginationTable:SectionData[][];
   public actualList:SectionData[];
   public actualIndex:number = 0;
   public dataNumber:number;
+  public companyNumber:number;
+  public branchNumber:number;
+  public searchData:any;
+  public totalPages:number;
   constructor(private sDataService:SearchService,private fb:FormBuilder,private snackbarService:SnackbarService) { }
 
   ngOnInit() {
@@ -88,51 +91,29 @@ export class AdvancedSearchComponent implements OnInit {
   }
 
   public getSearchData() {
-    let searchData:AdvSearchData = this.searchForm.value;
+    this.searchData = this.searchForm.value;
     let subject = new Subject<any>();
-    if(searchData.name) {
+    if(this.searchData.name) {
       let string = this.searchForm.value['name'];
       let nameArray = string.split(' ');
-      searchData.name = nameArray;
+      this.searchData.name = nameArray;
     }
 
 
     subject.subscribe(()=>{
       this.isLoaded.next(true);
     });
-    this.dataNumber = 0;
 
-    this.sDataService.sendAdvSearchData(searchData).subscribe(response=>{
+    this.sDataService.sendAdvSearchData(this.searchData).subscribe(response=>{
+      console.log(response)
       this.responseBody = <SearchResponse>response.body     
       this.sectionData = this.responseBody.content;
+      this.totalPages = this.responseBody.totalPages;  
+      this.sectionData = this.responseBody.content;
+      this.actualList = this.responseBody.content;
+      this.dataNumber = this.responseBody.totalElements;
       if(this.sectionData.length) {
-        this.paginationTable = this.setPaginationTable(this.sectionData,3);
-        let counter:number = 0;
-        this.sectionData.forEach(data=>{
-          this.dataNumber++;
-          
-          this.sDataService.getSearchSectionLogo(data).subscribe(response=>{
-            console.log(response)
-            if(response.status != 204) {
-              let reader = new FileReader();
-              reader.addEventListener("load", () => {
-                data.logo = reader.result;
-                subject.next(true);
-            }, false);
-  
-            if (response.body) {
-                reader.readAsDataURL(<any>response.body);
-            }
-          }else {
-            data.logo = this.sDataService.defaultSearchLogo;
-            subject.next(true);
-          }
-        },error=>{
-          data.logo = this.sDataService.defaultSearchLogo;
-          console.log(error);
-          subject.next(true);
-        });
-      });
+        this.getImages();
       }else {
         this.sectionData = undefined;
         subject.next(true);
@@ -142,6 +123,31 @@ export class AdvancedSearchComponent implements OnInit {
     console.log(error);
     subject.next(true);
   })
+  }
+
+  public getImages() {
+    this.actualList.map(data=>{
+      this.sDataService.getSearchSectionLogo(data).subscribe(response=>{
+        if(response.status != 204) {
+          let reader = new FileReader();
+          reader.addEventListener("load", () => {
+            data.logo = reader.result;
+            return true;
+        }, false);
+  
+        if (response.body) {
+            reader.readAsDataURL(<any>response.body);
+        }
+      }else {
+        data.logo = this.sDataService.defaultSearchLogo;
+        return true;
+      }
+    },error=>{
+      data.logo = this.sDataService.defaultSearchLogo;
+      console.log(error);
+      return true;
+    });
+  });
   }
 
   public getCityData() {
@@ -169,35 +175,31 @@ export class AdvancedSearchComponent implements OnInit {
     }
   }
 
-  public setPaginationTable(myArray, chunk_size){
-    var index = 0;
-    var arrayLength = myArray.length;
-    var tempArray = [];
-    
-    for (index = 0; index < arrayLength; index += chunk_size) {
-        this.chunkSize = myArray.slice(index, index+chunk_size);
-        tempArray.push(this.chunkSize);
-    }
-    this.actualList = tempArray[0];
-    return tempArray;
-  }
   
   public previousPage() {
-    if(this.actualIndex != 0) {
-      this.actualList = this.paginationTable[--this.actualIndex]
-      this.pageNumber--;
-  
-    }
+    if(this.pageNumber > 0 && this.searchData) {
+      this.sDataService.getActualAdvSearchPage(this.searchData,--this.pageNumber).subscribe(response=>{
+        console.log(response)
+        let searchResponse = <SearchResponse>response.body;
+        this.actualList = searchResponse.content;
+        this.getImages();
+    },error=>{
+      console.log(error);
+    });
+  }
   }
   
   public nextPage() {
-    if(this.paginationTable) {
-      if(this.paginationTable.length-1 > this.actualIndex) {
-        this.actualList = this.paginationTable[++this.actualIndex]
-        this.pageNumber++;
-  
-      }
-    }
+    if((this.pageNumber < this.totalPages-1) && this.searchData) {
+      this.sDataService.getActualAdvSearchPage(this.searchData,++this.pageNumber).subscribe(response=>{
+        console.log(response)
+      let searchResponse = <SearchResponse>response.body;
+      this.actualList = searchResponse.content;
+      this.getImages();
+    },error=>{
+      console.log(error);
+    });
+  }
   }
   
   public showEmptyMessage() {

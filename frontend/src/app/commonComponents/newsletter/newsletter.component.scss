@@ -15,6 +15,17 @@
     @include boxShadow(0px 4px 5px 0px #bbb9bf);
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
+    .datepicker-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      .datepicker__label {
+        flex:100%;
+        color:$bgcolor;
+        font-size: 1.1rem;
+      }
+    }
     .main-container__header {
       display: flex;
       align-items: center;
@@ -105,7 +116,6 @@
           &--show-media {
             display:flex;
             align-items: flex-end;
-            padding-bottom: .3rem;
             @include phone {
               padding:0 10px;
             }
@@ -141,14 +151,25 @@
         display:flex;
         flex-direction: column;
         align-items: center;
-        .text-form {
-          border-top:3px solid darken($bgcolor,15%);
+        .text-form,.media-form {
+          border-top:2px solid darken($bgcolor,15%);
           margin:5px;
           margin-top:0;
           height: 300px;
-          margin-bottom:40px;
+          padding-bottom:40px;
+          
           .text-form__editor {
 
+          }
+        }
+
+        .datepicker-button {
+          display:flex;
+          justify-content: center;
+          padding-top:50px;
+          .btn {
+            background-color: darken($bgcolor,10%);
+            border:0;
           }
         }
 
@@ -178,59 +199,67 @@
         
         .form-container__type {
 
-          &--information {  
+          &--information,&--product,&--promotion {  
             width:100%;
 
-            .type--information__editor {
-
-            }
-
-            .type--information__text-form {
-              
-
-              .text-form__editor {
-                
-              }
-            }
-            .type--information__submit-button {
-              .submit-button__button--submit {
-                
+            .type--information,.type--product,.type--promotion {
+              &__media-form {
+                padding-bottom: 40px;
+                border-top:2px solid darken($bgcolor,15%);
+                .media-form__images {
+                  display: flex;
+                  justify-content: center;
+                  padding-top: 10px;
+                  .images__label {
+                    color:$bgcolor;
+                    font-size: 1.1rem;
+                    padding-right: 5px;
+                  }
+                }
               }
             }
           }
-          &--product {
-            width:100%;
-            .type--product__editor {
+        }
+      }
+    }
 
-            }
-            .type--product__text-form {
-             
-              .text-form__editor {
-                
-              }
-            }
-            .type--product__submit-button {
-              .submit-button__button--submit {
-                              
-              }
-            }
+    .main-container__list-container {
+      display: flex;
+      flex-direction: column;
+      .list-container__type-container {
+        display: flex;
+        padding-left: 10px;
+        justify-content: center;
+        @include phone {
+          flex-direction: column;
+          padding-left: 0;
+          align-items: center;
+        }
+        @include tablet {
+          flex-direction: column;
+          padding-left: 0;
+          align-items: center;
+        }
+        .btn-newsletter {
+          position: relative;
+          color:black;
+          background:#fff;
+          margin-top:5px;
+          border:2px solid transparent;          
+          z-index: 2;
+          transition: all 0.5s ease-in-out;
+          @include desktop {
+            border-bottom: 0;
+            border-radius: 0;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
           }
-          &--promotion {
-            width:100%;
-            .type--promotion__editor {
-
-            }
-            .type--promotion__text-form {
-             
-              .text-form__editor {
-                
-              }
-            }
-            .type--promotion__submit-button {
-              .submit-button__button--submit {
-                
-              }
-            }
+          @include phone {
+            border-radius: 5px;
+          }
+          &:focus {
+            outline: none;
+            box-shadow: none;
           }
         }
       }

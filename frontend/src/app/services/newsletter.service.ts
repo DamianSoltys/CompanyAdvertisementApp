@@ -23,4 +23,8 @@ export class NewsletterService {
   public sendSingOutData(token:string,type:string) {
     return this.http.get(`http://localhost:8090/api/newsletter/${type}?token=${token}`,{observe:'response'});
   }
+
+  public getSubscriptionStatus(companyId:number,userId:number) {
+    return this.http.get(`http://localhost:8090/api/newsletter/?userId=${userId}&companyId=${companyId}`,{observe:'response'});
+  }
 }

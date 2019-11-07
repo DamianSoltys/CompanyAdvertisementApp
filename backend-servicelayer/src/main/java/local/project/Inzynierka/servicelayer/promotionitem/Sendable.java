@@ -14,5 +14,6 @@ public interface Sendable {
     String getHTMLContent();
     String getTitle();
     Instant startTime();
-    Set<Destination> getDestination();
+
+    Set<Destination> getDestinations();
 }

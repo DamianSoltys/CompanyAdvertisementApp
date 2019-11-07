@@ -191,6 +191,16 @@ create or replace table promotion_items
         foreign key (promotion_type_id) references promotion_item_types (promotion_item_type_id)
 );
 
+create or replace table promotion_item_destinations
+(
+    promotion_item_destination_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    destination                   varchar(30) NOT NULL,
+    promotion_item_id             bigint      NOT NULL,
+    constraint promotion_item_destination_FK
+        foreign key (promotion_item_id) references promotion_items (promotion_item_id)
+            on delete cascade
+);
+
 create or replace table social_profiles
 (
     company_id         bigint                                  not null,

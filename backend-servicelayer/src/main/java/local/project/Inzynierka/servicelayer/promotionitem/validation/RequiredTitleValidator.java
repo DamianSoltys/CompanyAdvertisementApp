@@ -13,10 +13,10 @@ public class RequiredTitleValidator implements ConstraintValidator<RequiredTitle
     }
 
     public boolean isValid(PromotionItemAddedEvent value, ConstraintValidatorContext context) {
-        return CollectionUtils.isEmpty(value.getDestination()) || (
-                !CollectionUtils.isEmpty(value.getDestination()) &&
-                        (!value.getDestination().contains(Destination.NEWSLETTER) ||
-                                (value.getDestination().contains(Destination.NEWSLETTER) &&
+        return CollectionUtils.isEmpty(value.getDestinations()) || (
+                !CollectionUtils.isEmpty(value.getDestinations()) &&
+                        (!value.getDestinations().contains(Destination.NEWSLETTER) ||
+                                (value.getDestinations().contains(Destination.NEWSLETTER) &&
                                         !StringUtils.isEmpty(value.getTitle()))));
     }
 }

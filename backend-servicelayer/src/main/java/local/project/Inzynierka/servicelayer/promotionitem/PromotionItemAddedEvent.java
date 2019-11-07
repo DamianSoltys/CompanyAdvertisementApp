@@ -47,7 +47,7 @@ public class PromotionItemAddedEvent implements Sendable {
     private Instant startTime;
 
     @NotEmpty
-    private Set<Destination> destination;
+    private Set<Destination> destinations;
 
     @NotNull
     private SendingStrategy sendingStrategy;

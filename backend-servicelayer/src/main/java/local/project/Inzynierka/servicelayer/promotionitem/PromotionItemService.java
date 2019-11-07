@@ -2,6 +2,8 @@ package local.project.Inzynierka.servicelayer.promotionitem;
 
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.PromotionItem;
+import local.project.Inzynierka.persistence.entity.PromotionItemDestination;
+import local.project.Inzynierka.persistence.repository.PromotionItemDestinationRepository;
 import local.project.Inzynierka.persistence.repository.PromotionItemRepository;
 import local.project.Inzynierka.servicelayer.dto.promotionitem.Destination;
 import local.project.Inzynierka.servicelayer.dto.promotionitem.SendingStrategy;
@@ -10,23 +12,30 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class PromotionItemService {
 
     private final PromotionItemRepository promotionItemRepository;
     private final PromotionItemTypeFetcher promotionItemTypeFetcher;
+    private final PromotionItemDestinationRepository promotionItemDestinationRepository;
 
-    public PromotionItemService(PromotionItemRepository promotionItemRepository, PromotionItemTypeFetcher promotionItemTypeFetcher) {
+    public PromotionItemService(PromotionItemRepository promotionItemRepository, PromotionItemTypeFetcher promotionItemTypeFetcher, PromotionItemDestinationRepository promotionItemDestinationRepository) {
         this.promotionItemRepository = promotionItemRepository;
         this.promotionItemTypeFetcher = promotionItemTypeFetcher;
+        this.promotionItemDestinationRepository = promotionItemDestinationRepository;
     }
 
     public void addPromotionItem(PromotionItemAddedEvent promotionItemAddedEvent) {
 
-        promotionItemRepository.save(map(promotionItemAddedEvent));
+        var promotionItem = promotionItemRepository.save(map(promotionItemAddedEvent));
+        promotionItemDestinationRepository.saveAll(mapDestinations(promotionItemAddedEvent.getDestinations(), promotionItem));
+
         List<PromotionItemSender> senders = buildSenders(promotionItemAddedEvent);
 
         for (var sender : senders) {
@@ -38,6 +47,15 @@ public class PromotionItemService {
                 sender.schedule(promotionItemAddedEvent);
             }
         }
+    }
+
+    private Collection<PromotionItemDestination> mapDestinations(Set<Destination> destinations, PromotionItem promotionItem) {
+        return destinations.stream()
+                .map(destination -> PromotionItemDestination.builder()
+                        .destination(destination.name())
+                        .promotionItem(promotionItem)
+                        .build())
+                .collect(Collectors.toList());
     }
 
     private PromotionItem map(PromotionItemAddedEvent promotionItemAddedEvent) {
@@ -61,15 +79,15 @@ public class PromotionItemService {
     private List<PromotionItemSender> buildSenders(PromotionItemAddedEvent promotionItemAddedEvent) {
         List<PromotionItemSender> senders = new ArrayList<>();
 
-        if (promotionItemAddedEvent.getDestination().contains(Destination.FB)) {
+        if (promotionItemAddedEvent.getDestinations().contains(Destination.FB)) {
             var fbSender = new FacebookPromotionItemSender();
             senders.add(fbSender);
         }
-        if (promotionItemAddedEvent.getDestination().contains(Destination.TWITTER)) {
+        if (promotionItemAddedEvent.getDestinations().contains(Destination.TWITTER)) {
             var twitterSender = new TwitterPromotionItemSender();
             senders.add(twitterSender);
         }
-        if (promotionItemAddedEvent.getDestination().contains(Destination.NEWSLETTER)) {
+        if (promotionItemAddedEvent.getDestinations().contains(Destination.NEWSLETTER)) {
             var newsletterSender = new NewsletterPromotionItemSender();
             senders.add(newsletterSender);
         }

@@ -12,9 +12,10 @@ public class RequiredContentToSocialMediaValidator implements
         ConstraintValidator<RequiredTextContentWhenPostingToSocialMedia, PromotionItemAddedEvent> {
     @Override
     public boolean isValid(PromotionItemAddedEvent value, ConstraintValidatorContext context) {
-        return CollectionUtils.isEmpty(value.getDestination()) ||
-                value.getDestination().contains(Destination.NEWSLETTER) || (
-                (value.getDestination().contains(Destination.TWITTER) || value.getDestination().contains(Destination.FB)) &&
+        return CollectionUtils.isEmpty(value.getDestinations()) ||
+                value.getDestinations().contains(Destination.NEWSLETTER) || (
+                (value.getDestinations().contains(Destination.TWITTER) ||
+                        value.getDestinations().contains(Destination.FB)) &&
                         !StringUtils.isEmpty(value.getContent()));
     }
 }

@@ -5,16 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
 import java.util.List;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetPromotionItemDto {
+@Builder
+public class PromotionItemSendingStatusDto {
+
     private String promotionItemUUID;
-    private SendingStatus sendingStatus;
-    private List<Destination> destinations;
-    private Instant dateAdded;
+    private List<String> promotionItemPhotosUUIDsDto;
+    private Boolean sendingFinished;
 }

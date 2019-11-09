@@ -7,7 +7,8 @@ import java.util.Arrays;
 
 public enum EntityName {
     BRANCH("branch"),
-    COMPANY("company");
+    COMPANY("company"),
+    PROMOTION_ITEM("pi");
 
     private String entityName;
 

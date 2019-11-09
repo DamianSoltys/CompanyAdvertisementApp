@@ -26,8 +26,8 @@ BEGIN
     (
         id          smallint(6) auto_increment
             primary key,
-        created_at  timestamp default current_timestamp()   not null on update current_timestamp(),
-        modified_at timestamp default '0000-00-00 00:00:00' not null,
+        created_at  timestamp default current_timestamp()   not null,
+        modified_at timestamp default '0000-00-00 00:00:00' not null on update current_timestamp(),
         name        varchar(30)                             not null
     );
 
@@ -35,7 +35,7 @@ BEGIN
     (
         email_id   bigint auto_increment
             primary key,
-        created_at timestamp default current_timestamp() not null on update current_timestamp(),
+        created_at timestamp default current_timestamp() not null,
         email      varchar(254)                          not null,
         constraint unique_email
             unique (email)
@@ -45,7 +45,7 @@ BEGIN
     (
         promotion_item_type_id smallint(6) auto_increment
             primary key,
-        created_at             timestamp default current_timestamp() not null on update current_timestamp(),
+        created_at             timestamp default current_timestamp() not null,
         type                   varchar(30)                           not null
     );
 
@@ -53,8 +53,8 @@ BEGIN
     (
         platform_id           smallint(6) auto_increment
             primary key,
-        created_at            timestamp default current_timestamp()   not null on update current_timestamp(),
-        modified_at           timestamp default '0000-00-00 00:00:00' not null,
+        created_at            timestamp default current_timestamp()   not null,
+        modified_at           timestamp default '0000-00-00 00:00:00' not null on update current_timestamp(),
         social_media_platform varchar(255)                            not null
     );
 
@@ -84,8 +84,8 @@ BEGIN
         apartment_no   varchar(5)                              null,
         building_no    varchar(5)                              not null,
         city           varchar(30)                             not null,
-        created_at     timestamp default current_timestamp()   not null on update current_timestamp(),
-        modified_at    timestamp default '0000-00-00 00:00:00' not null,
+        created_at     timestamp default current_timestamp()   not null,
+        modified_at    timestamp default '0000-00-00 00:00:00' not null on update current_timestamp(),
         street         varchar(30)                             null,
         voivodeship_id smallint(6)                             not null,
         constraint voivodeship_FK
@@ -96,10 +96,10 @@ BEGIN
     (
         id_natural_person bigint auto_increment
             primary key,
-        created_at        timestamp default current_timestamp()   not null on update current_timestamp(),
+        created_at        timestamp default current_timestamp()   not null,
         first_name        varchar(30)                             not null,
         last_name         varchar(30)                             not null,
-        modified_at       timestamp default '0000-00-00 00:00:00' not null,
+        modified_at       timestamp default '0000-00-00 00:00:00' not null on update current_timestamp(),
         phone_no          varchar(13)                             not null,
         second_first_name varchar(30)                             null,
         address_id        bigint                                  not null,
@@ -117,11 +117,11 @@ BEGIN
         nip             varchar(10)                             not null,
         regon           varchar(14)                             not null,
         company_website varchar(255)                            null,
-        created_at      timestamp default current_timestamp()   not null on update current_timestamp(),
+        created_at      timestamp default current_timestamp()   not null,
         description     varchar(10000)                          not null,
         has_branch      bit                                     not null,
         logo_path       varchar(255)                            null,
-        modified_at     timestamp default '0000-00-00 00:00:00' not null,
+        modified_at     timestamp default '0000-00-00 00:00:00' not null on update current_timestamp(),
         name            varchar(50)                             not null,
         address_id      bigint                                  not null,
         category_id     smallint(6)                             not null,
@@ -146,10 +146,10 @@ BEGIN
     (
         branch_id        bigint auto_increment
             primary key,
-        created_at       timestamp default current_timestamp()   not null on update current_timestamp(),
+        created_at       timestamp default current_timestamp()   not null,
         x_geo_coordinate float                                   null,
         y_geo_coordinate float                                   null,
-        modified_at      timestamp default '0000-00-00 00:00:00' not null,
+        modified_at      timestamp default '0000-00-00 00:00:00' not null on update current_timestamp(),
         name             varchar(50)                             not null,
         photo_path       varchar(255)                            null,
         address_id       bigint                                  not null,
@@ -172,8 +172,8 @@ BEGIN
     (
         id                    bigint auto_increment
             primary key,
-        created_at            timestamp default current_timestamp()   not null on update current_timestamp(),
-        modified_at           timestamp default '0000-00-00 00:00:00' not null,
+        created_at            timestamp default current_timestamp()   not null,
+        modified_at           timestamp default '0000-00-00 00:00:00' not null on update current_timestamp(),
         verified              bit                                     not null,
         company_id            bigint                                  not null,
         id_email              bigint                                  not null,
@@ -199,10 +199,10 @@ BEGIN
     (
         promotion_item_id    bigint auto_increment
             primary key,
-        created_at           timestamp default current_timestamp()   not null on update current_timestamp(),
+        created_at           timestamp default current_timestamp()   not null,
         non_html_content     MEDIUMTEXT                              null,
         html_content         MEDIUMTEXT                              null,
-        modified_at          timestamp default '0000-00-00 00:00:00' not null,
+        modified_at          timestamp default '0000-00-00 00:00:00' not null on update current_timestamp(),
         name                 varchar(50)                             null,
         was_sent             bit                                     null,
         valid_from           timestamp                               null,
@@ -210,6 +210,7 @@ BEGIN
         promoting_company_id bigint                                  not null,
         promotion_type_id    smallint(6)                             not null,
         photos_number        smallint(2)                             not null,
+        promotion_item_uuid  varchar(36)                             not null,
         constraint promoting_company_FK
             foreign key (promoting_company_id) references companies (id)
                 on delete cascade,
@@ -227,13 +228,26 @@ BEGIN
                 on delete cascade
     );
 
+    create or replace table promotion_item_photos
+    (
+        promotion_item_photo_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+        photo_uuid              varchar(36)                             NOT NULL,
+        promotion_item_id       bigint                                  NOT NULL,
+        was_added               BOOLEAN                                 NOT NULL,
+        created_at              timestamp default current_timestamp()   not null,
+        modified_at             timestamp default '0000-00-00 00:00:00' not null on update current_timestamp(),
+        constraint promotion_item_photo_FK
+            foreign key (promotion_item_id) references promotion_items (promotion_item_id)
+                on delete cascade
+    );
+
     create or replace table social_profiles
     (
         company_id         bigint                                  not null,
         platform_id        smallint(6)                             not null,
         social_profile_url varchar(255)                            not null,
-        created_at         timestamp default current_timestamp()   not null on update current_timestamp(),
-        modified_at        timestamp default '0000-00-00 00:00:00' not null,
+        created_at         timestamp default current_timestamp()   not null,
+        modified_at        timestamp default '0000-00-00 00:00:00' not null on update current_timestamp(),
         primary key (company_id, platform_id),
         constraint company_soc_prof_FK
             foreign key (company_id) references companies (id)
@@ -246,15 +260,15 @@ BEGIN
     (
         user_id               bigint auto_increment
             primary key,
-        account_type          smallint(6)  not null,
-        created_at            datetime(6)  not null,
-        is_enabled            bit          null,
-        modified_at           datetime(6)  not null,
-        user_name             varchar(30)  not null,
-        password_hash         varchar(255) not null,
-        id_email_address      bigint       not null,
-        id_natural_person     bigint       null,
-        verification_token_id bigint       null,
+        account_type          smallint(6)                             not null,
+        created_at            timestamp default current_timestamp()   not null,
+        is_enabled            bit                                     null,
+        modified_at           timestamp default '0000-00-00 00:00:00' not null on update current_timestamp(),
+        user_name             varchar(30)                             not null,
+        password_hash         varchar(255)                            not null,
+        id_email_address      bigint                                  not null,
+        id_natural_person     bigint                                  null,
+        verification_token_id bigint                                  null,
         constraint unique_verification_token
             unique (verification_token_id),
         constraint unique_email
@@ -275,8 +289,8 @@ BEGIN
         id          bigint auto_increment
             primary key,
         comment     varchar(500)                            not null,
-        created_at  timestamp default current_timestamp()   not null on update current_timestamp(),
-        modified_at timestamp default '0000-00-00 00:00:00' not null,
+        created_at  timestamp default current_timestamp()   not null,
+        modified_at timestamp default '0000-00-00 00:00:00' not null on update current_timestamp(),
         branch_id   bigint                                  not null,
         user_id     bigint                                  not null,
         constraint commentend_branch_FK
@@ -291,8 +305,8 @@ BEGIN
     (
         branch_id   bigint                                  not null,
         user_id     bigint                                  not null,
-        created_at  timestamp default current_timestamp()   not null on update current_timestamp(),
-        modified_at timestamp default '0000-00-00 00:00:00' not null,
+        created_at  timestamp default current_timestamp()   not null,
+        modified_at timestamp default '0000-00-00 00:00:00' not null on update current_timestamp(),
         primary key (branch_id, user_id),
         constraint favourite_branches_branch_FK
             foreign key (branch_id) references branches (branch_id)
@@ -306,8 +320,8 @@ BEGIN
     (
         rating_id   bigint auto_increment
             primary key,
-        created_at  timestamp default current_timestamp()   not null on update current_timestamp(),
-        modified_at timestamp default '0000-00-00 00:00:00' not null,
+        created_at  timestamp default current_timestamp()   not null,
+        modified_at timestamp default '0000-00-00 00:00:00' not null on update current_timestamp(),
         rating      int                                     not null,
         branch_id   bigint                                  not null,
         user_id     bigint                                  not null,

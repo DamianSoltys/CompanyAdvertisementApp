@@ -34,6 +34,7 @@ public class NewsletterPromotionItemSender implements PromotionItemSender {
         }, sendable.startTime());
     }
 
+    //TODO SUSPEND SENDING WHEN THERE ARE PHOTOS TO SAVE (( NOPE SUSPENSION ONLY FOR SM))
     private void publishSendable(Sendable sendable) {
         EmailMimeType emailMimeType = StringUtils.isEmpty(sendable.getHTMLContent()) ? EmailMimeType.TEXT : EmailMimeType.HTML;
         String message = emailMimeType.equals(EmailMimeType.HTML) ? sendable.getHTMLContent() : sendable.getContent();

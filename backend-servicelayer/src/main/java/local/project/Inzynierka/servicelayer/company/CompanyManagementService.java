@@ -17,7 +17,7 @@ import local.project.Inzynierka.servicelayer.dto.company.UpdateCompanyInfoDto;
 import local.project.Inzynierka.servicelayer.dto.mapper.AddressMapper;
 import local.project.Inzynierka.servicelayer.dto.mapper.CompanyExtractor;
 import local.project.Inzynierka.shared.UserAccount;
-import local.project.Inzynierka.shared.utils.LogoFilePathCreator;
+import local.project.Inzynierka.shared.utils.FilePathCreator;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -69,7 +69,7 @@ public class CompanyManagementService {
     private static CompanyBuildDto mapToCompanyBuildDto(Company createdCompany) {
         return CompanyBuildDto.builder()
                 .id(createdCompany.getId())
-                .logoKey(LogoFilePathCreator.getLogoKey(createdCompany.getLogoPath()))
+                .logoKey(FilePathCreator.getFileKey(createdCompany.getLogoPath()))
                 .logoFilePath(createdCompany.getLogoPath())
                 .build();
     }
@@ -81,12 +81,12 @@ public class CompanyManagementService {
                                 .map(branch -> BranchBuildDto.builder()
                                         .id(branch.getId())
                                         .logoFilePath(branch.getPhotoPath())
-                                        .logoKey(LogoFilePathCreator.getLogoKey(branch.getPhotoPath()))
+                                        .logoKey(FilePathCreator.getFileKey(branch.getPhotoPath()))
                                         .build())
                                 .collect(Collectors.toList()))
                 .id(createdCompany.getId())
                 .logoFilePath(createdCompany.getLogoPath())
-                .logoKey(LogoFilePathCreator.getLogoKey(createdCompany.getLogoPath()))
+                .logoKey(FilePathCreator.getFileKey(createdCompany.getLogoPath()))
                 .build();
     }
 
@@ -141,7 +141,7 @@ public class CompanyManagementService {
         return CompanyInfoDto.builder()
                 .hasLogoAdded(company.isHasLogoAdded())
                 .logoURL(company.getLogoPath())
-                .logoKey(LogoFilePathCreator.getLogoKey(company.getLogoPath()))
+                .logoKey(FilePathCreator.getFileKey(company.getLogoPath()))
                 .category(company.getCategory().getName())
                 .companyId(company.getId())
                 .companyName(company.getName())

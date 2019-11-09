@@ -1,9 +1,11 @@
 package local.project.Inzynierka.servicelayer.promotionitem;
 
 import local.project.Inzynierka.servicelayer.dto.promotionitem.Destination;
+import local.project.Inzynierka.servicelayer.dto.promotionitem.SendingStrategy;
 
 import java.time.Instant;
-import java.util.Set;
+import java.util.Collection;
+import java.util.Collections;
 
 public interface Sendable {
 
@@ -15,5 +17,11 @@ public interface Sendable {
     String getTitle();
     Instant startTime();
 
-    Set<Destination> getDestinations();
+    SendingStrategy getSendingStrategy();
+
+    Collection<Destination> getDestinations();
+
+    default Collection<String> getPhotoURLs() {
+        return Collections.emptyList();
+    }
 }

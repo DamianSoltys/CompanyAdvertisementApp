@@ -57,6 +57,9 @@ public class PromotionItem extends FullTimestampingAudit implements IEntity<Long
     @Column(name = "valid_from", columnDefinition = "TIMESTAMP")
     private Timestamp validFrom;
 
+    @Column(name = "promotion_item_uuid", unique = true, nullable = false)
+    private String promotionItemUUID;
+
     @Override
     public Date getCreatedDate() {
         return super.getCreatedDate();

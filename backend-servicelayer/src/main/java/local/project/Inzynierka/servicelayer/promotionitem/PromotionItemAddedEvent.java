@@ -56,6 +56,8 @@ public class PromotionItemAddedEvent implements Sendable {
 
     @JsonIgnore
     private String appUrl;
+
+    @JsonIgnore
     private String UUID;
 
     @NotNull

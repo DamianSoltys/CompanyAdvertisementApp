@@ -8,7 +8,7 @@ import local.project.Inzynierka.servicelayer.dto.branch.AddBranchDto;
 import local.project.Inzynierka.servicelayer.dto.branch.CompanyBranchDto;
 import local.project.Inzynierka.servicelayer.dto.branch.PersistedBranchDto;
 import local.project.Inzynierka.shared.utils.EntityName;
-import local.project.Inzynierka.shared.utils.LogoFilePathCreator;
+import local.project.Inzynierka.shared.utils.FilePathCreator;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public class BranchMapper {
         companyBranchDto.setName(branch.getName());
         companyBranchDto.setLogoURL(branch.getPhotoPath());
         companyBranchDto.setHasLogoAdded(branch.isHasLogoAdded());
-        companyBranchDto.setLogoKey(LogoFilePathCreator.getLogoKey(branch.getPhotoPath()));
+        companyBranchDto.setLogoKey(FilePathCreator.getFileKey(branch.getPhotoPath()));
         return companyBranchDto;
     }
 
@@ -47,7 +47,7 @@ public class BranchMapper {
         persistedBranchDto.setName(branch.getName());
         persistedBranchDto.setBranchId(branch.getId());
         persistedBranchDto.setLogoPath(branch.getPhotoPath());
-        persistedBranchDto.setLogoKey(LogoFilePathCreator.getLogoKey(branch.getPhotoPath()));
+        persistedBranchDto.setLogoKey(FilePathCreator.getFileKey(branch.getPhotoPath()));
         return persistedBranchDto;
     }
 
@@ -70,7 +70,7 @@ public class BranchMapper {
                 .geoY(addBranchDto.getGeoY())
                 .registerer(NaturalPerson.builder().id(personId).build())
                 .branchUUID(entityUUID)
-                .photoPath(LogoFilePathCreator.buildEntityLogoURL(entityUUID, EntityName.BRANCH))
+                .photoPath(FilePathCreator.buildEntityLogoURL(entityUUID, EntityName.BRANCH))
                 .build();
     }
 }

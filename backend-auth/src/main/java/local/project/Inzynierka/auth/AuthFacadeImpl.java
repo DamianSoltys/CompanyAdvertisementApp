@@ -1,8 +1,10 @@
 package local.project.Inzynierka.auth;
 
 import local.project.Inzynierka.persistence.entity.Comment;
+import local.project.Inzynierka.persistence.entity.PromotionItem;
 import local.project.Inzynierka.persistence.entity.Rating;
 import local.project.Inzynierka.persistence.repository.CommentRepository;
+import local.project.Inzynierka.persistence.repository.PromotionItemRepository;
 import local.project.Inzynierka.persistence.repository.RatingRepository;
 import local.project.Inzynierka.persistence.repository.UserRepository;
 import local.project.Inzynierka.shared.UserAccount;
@@ -18,11 +20,14 @@ public class AuthFacadeImpl implements AuthFacade {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final RatingRepository ratingRepository;
+    private final PromotionItemRepository promotionItemRepository;
 
-    public AuthFacadeImpl(UserRepository userRepository, CommentRepository commentRepository, RatingRepository ratingRepository) {
+    public AuthFacadeImpl(UserRepository userRepository, CommentRepository commentRepository,
+                          RatingRepository ratingRepository, PromotionItemRepository promotionItemRepository) {
         this.userRepository = userRepository;
         this.commentRepository = commentRepository;
         this.ratingRepository = ratingRepository;
+        this.promotionItemRepository = promotionItemRepository;
     }
 
     @Override
@@ -65,6 +70,17 @@ public class AuthFacadeImpl implements AuthFacade {
                 .map(Rating::getUser)
                 .filter(user -> getAuthenticatedUser().getId().equals(user.getId()))
                 .isPresent();
+    }
+
+    @Override
+    public boolean hasPrincipalHavePermissionToPromotionItemResource(String promotionItemUUID) {
+        Optional<PromotionItem> promotionItem = promotionItemRepository.findByPromotionItemUUID(promotionItemUUID);
+        if (promotionItem.isEmpty()) {
+            return false;
+        }
+
+        var registererId = promotionItem.get().getCompany().getRegisterer().getId();
+        return registererId.equals(getAuthenticatedUser().personId());
     }
 
 }

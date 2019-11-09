@@ -192,25 +192,25 @@ export class CompanyComponent implements OnInit {
   }
   
   private getCompanyList(clearDataStorage?:boolean) {
+    let subject = new Subject<any>();
+    this.dataLoaded.next(false);
+    subject.subscribe(()=>{
+      this.dataLoaded.next(true);
+    });
+
     if (storage_Avaliable('localStorage')) {
        if(clearDataStorage) {
          this.cDataService.deleteStorageData();
          this.companyList = undefined;
       } 
       let userREST: UserREST = JSON.parse(localStorage.getItem('userREST'));
-      let subject = new Subject<any>();
 
       this.getStorageList();
 
-      subject.subscribe(()=>{
-        this.dataLoaded.next(true);
-      });
-   if(userREST.companiesIDs && !this.companyList) {
-    console.log("wykonywanie");
+   if(userREST.companiesIDs ) {
     if (userREST.companiesIDs.length) {
       this.companyList = [];
       userREST.companiesIDs.forEach((companyId,index) => {
-        console.log(index);
         this.cDataService.getCompany(companyId).subscribe(
           response => {
             let companyData:GetCompany = <GetCompany>response.body;
@@ -218,22 +218,20 @@ export class CompanyComponent implements OnInit {
              if(response.status != 204) {
               let reader = new FileReader();
               reader.addEventListener("load", () => {
-                  companyData.logo = reader.result;
-                  this.companyList.push(companyData);
-                  this.companyList.sort(this.companySort);
-                  this.cDataService.storeCompanyData(companyData);      
-                  subject.next(true);    
+                    companyData.logo = reader.result;
+                    this.cDataService.storeCompanyData(companyData);
+                    this.getStorageList();     
+                    subject.next(true);    
               }, false);
 
               if (response.body) {
                   reader.readAsDataURL(response.body);
               }
              } else {
-              companyData.logo = this.cDataService.defaultCListUrl;
-              this.companyList.push(companyData);
-              this.companyList.sort(this.companySort);
-              this.cDataService.storeCompanyData(companyData);                           
-              subject.next(true);
+                companyData.logo = this.cDataService.defaultCListUrl;              
+                this.cDataService.storeCompanyData(companyData); 
+                this.getStorageList();                         
+                subject.next(true);
              }
               
             },error=>{
@@ -258,6 +256,10 @@ export class CompanyComponent implements OnInit {
    }
       
     }
+  }
+
+  public checkForDoubles() {
+    
   }
 
   private companySort(item1: GetCompany, item2: GetCompany) {
@@ -432,9 +434,11 @@ export class CompanyComponent implements OnInit {
           snackbarType:SnackbarType.success,
         });
         this.uDataService.updateUser().subscribe(data=>{
-          this.setDefaultValues();
-          this.cDataService.getCompanyData.next(true);
-          this.toggleDataList();
+           this.setDefaultValues();
+           this.cDataService.getCompanyData.next(true);
+           this.toggleDataList();
+          // this.cDataService.deleteStorageData();
+          // location.reload();
         });
       } else {
         this.formErrorService.open({

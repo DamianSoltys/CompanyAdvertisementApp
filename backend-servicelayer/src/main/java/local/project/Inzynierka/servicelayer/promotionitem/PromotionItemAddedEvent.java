@@ -64,16 +64,19 @@ public class PromotionItemAddedEvent implements Sendable {
     private PromotionItemType promotionItemType;
 
     @Override
+    @JsonIgnore
     public String getContent() {
         return nonHtmlContent;
     }
 
     @Override
+    @JsonIgnore
     public String getHTMLContent() {
         return htmlContent;
     }
 
     @Override
+    @JsonIgnore
     public Instant startTime() {
         return startTime;
     }

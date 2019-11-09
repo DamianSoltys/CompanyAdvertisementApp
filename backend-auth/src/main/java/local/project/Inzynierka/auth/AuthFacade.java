@@ -20,4 +20,6 @@ public interface AuthFacade {
 
     boolean hasPrincipalHavePermissionToRatingResource(Long ratingId);
 
+    boolean hasPrincipalHavePermissionToPromotionItemResource(String promotionItemUUID);
+
 }

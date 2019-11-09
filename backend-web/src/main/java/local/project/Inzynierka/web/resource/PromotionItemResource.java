@@ -5,9 +5,9 @@ import local.project.Inzynierka.servicelayer.company.CompanyManagementPermission
 import local.project.Inzynierka.servicelayer.promotionitem.PromotionItemAddedEvent;
 import local.project.Inzynierka.servicelayer.promotionitem.PromotionItemService;
 import local.project.Inzynierka.shared.UserAccount;
-import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -46,8 +46,20 @@ public class PromotionItemResource {
             result = ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         } else {
             promotionItemAddedEvent.setAppUrl(httpServletRequest.getHeader(ORIGIN_HEADER));
-            promotionItemService.addPromotionItem(promotionItemAddedEvent);
-            result = ResponseEntity.ok(SimpleJsonFromStringCreator.toJson("OK"));
+            result = ResponseEntity.ok(promotionItemService.addPromotionItem(promotionItemAddedEvent));
+        }
+
+        return result;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/{promotionItemUUID}/confirmation")
+    public ResponseEntity<?> getSendingConfirmation(@PathVariable(value = "promotionItemUUID") String promotionItemUUID) {
+
+        ResponseEntity<?> result;
+        if (!authFacade.hasPrincipalHavePermissionToPromotionItemResource(promotionItemUUID)) {
+            result = ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        } else {
+            result = ResponseEntity.ok(promotionItemService.finalizePromotionItemSending(promotionItemUUID));
         }
 
         return result;

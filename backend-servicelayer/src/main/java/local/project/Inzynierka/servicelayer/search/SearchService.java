@@ -5,7 +5,7 @@ import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.repository.BranchRepository;
 import local.project.Inzynierka.persistence.repository.CompanyRepository;
 import local.project.Inzynierka.servicelayer.dto.mapper.AddressMapper;
-import local.project.Inzynierka.shared.utils.LogoFilePathCreator;
+import local.project.Inzynierka.shared.utils.FilePathCreator;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.data.domain.Page;
@@ -110,7 +110,7 @@ public class SearchService {
         return SearchableCompanyDto.builder()
                 .hasLogoAdded(company.isHasLogoAdded())
                 .logoPath(company.getLogoPath())
-                .logoKey(LogoFilePathCreator.getLogoKey(company.getLogoPath()))
+                .logoKey(FilePathCreator.getFileKey(company.getLogoPath()))
                 .id(company.getId())
                 .category(company.getCategory().getName())
                 .name(company.getName())
@@ -130,7 +130,7 @@ public class SearchService {
                 .category(branch.getCompany().getCategory().getName())
                 .hasLogoAdded(branch.isHasLogoAdded())
                 .logoPath(branch.getPhotoPath())
-                .logoKey(LogoFilePathCreator.getLogoKey(branch.getPhotoPath()))
+                .logoKey(FilePathCreator.getFileKey(branch.getPhotoPath()))
                 .companyId(branch.getCompany().getId())
                 .id(branch.getId())
                 .name(branch.getName())

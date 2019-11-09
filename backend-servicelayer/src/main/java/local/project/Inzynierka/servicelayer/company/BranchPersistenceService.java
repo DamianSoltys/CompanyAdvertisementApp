@@ -14,7 +14,7 @@ import local.project.Inzynierka.servicelayer.dto.mapper.BranchMapper;
 import local.project.Inzynierka.servicelayer.errors.InvalidVoivodeshipException;
 import local.project.Inzynierka.servicelayer.services.AddressService;
 import local.project.Inzynierka.shared.utils.EntityName;
-import local.project.Inzynierka.shared.utils.LogoFilePathCreator;
+import local.project.Inzynierka.shared.utils.FilePathCreator;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ class BranchPersistenceService {
             branch.setHasLogoAdded(false);
             branch.setRegisterer(createdCompany.getRegisterer());
             String entityUUID = UUID.randomUUID().toString();
-            branch.setPhotoPath(LogoFilePathCreator.buildEntityLogoURL(entityUUID, EntityName.BRANCH));
+            branch.setPhotoPath(FilePathCreator.buildEntityLogoURL(entityUUID, EntityName.BRANCH));
             branch.setBranchUUID(entityUUID);
             Voivoideship branchVoivodeship = this.voivodeshipRepository.findByName(branch.getAddress().getVoivodeship_id().getName()).orElseThrow(InvalidVoivodeshipException::new);
             branch.getAddress().setVoivodeship_id(branchVoivodeship);

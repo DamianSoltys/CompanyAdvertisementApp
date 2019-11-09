@@ -13,7 +13,7 @@ import local.project.Inzynierka.persistence.repository.VoivodeshipRepository;
 import local.project.Inzynierka.servicelayer.errors.InvalidVoivodeshipException;
 import local.project.Inzynierka.shared.UserAccount;
 import local.project.Inzynierka.shared.utils.EntityName;
-import local.project.Inzynierka.shared.utils.LogoFilePathCreator;
+import local.project.Inzynierka.shared.utils.FilePathCreator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,7 +56,7 @@ public class CompanyPersistenceService {
                                                    .NIP(company.getNIP())
                                                    .registerer(user.getNaturalPerson())
                                                    .companyUUID(entityUUID)
-                                                   .logoPath(LogoFilePathCreator.buildEntityLogoURL(entityUUID, EntityName.COMPANY))
+                                                   .logoPath(FilePathCreator.buildEntityLogoURL(entityUUID, EntityName.COMPANY))
                                                    .REGON(company.getREGON())
                                                    .build());
     }

@@ -4,7 +4,9 @@ import local.project.Inzynierka.auth.AuthFacade;
 import local.project.Inzynierka.servicelayer.company.BranchManagementPermissionService;
 import local.project.Inzynierka.servicelayer.company.CompanyManagementPermissionService;
 import local.project.Inzynierka.servicelayer.filestorage.LogoFileStorageService;
+import local.project.Inzynierka.servicelayer.filestorage.PromotionItemPhotoService;
 import local.project.Inzynierka.shared.UserAccount;
+import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
 import local.project.Inzynierka.web.error.LogoKeyDoesNotMatchRequestParameterException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,7 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
 
 @RestController
 @RequestMapping(value = "/static")
@@ -29,39 +35,50 @@ public class FileResource {
     private static final String LACK_OF_FILE_UPLOAD_PERMISSION = "User has no permission to upload logo";
 
     private final LogoFileStorageService logoFileStorageService;
+    private final PromotionItemPhotoService promotionItemPhotoService;
     private final AuthFacade authFacade;
     private final CompanyManagementPermissionService companyManagementPermissionService;
     private final BranchManagementPermissionService branchManagementPermissionService;
 
-    public FileResource(LogoFileStorageService logoFileStorageService, AuthFacade authFacade, CompanyManagementPermissionService companyManagementPermissionService, BranchManagementPermissionService branchManagementPermissionService) {
+    public FileResource(LogoFileStorageService logoFileStorageService, PromotionItemPhotoService promotionItemPhotoService, AuthFacade authFacade, CompanyManagementPermissionService companyManagementPermissionService, BranchManagementPermissionService branchManagementPermissionService) {
         this.logoFileStorageService = logoFileStorageService;
+        this.promotionItemPhotoService = promotionItemPhotoService;
         this.authFacade = authFacade;
         this.companyManagementPermissionService = companyManagementPermissionService;
         this.branchManagementPermissionService = branchManagementPermissionService;
     }
 
-    @PutMapping(value = "/company/{companyUUID}/{logoUUID}")
+    @PutMapping(value = "/company/{companyUUID}")
     public ResponseEntity<?> uploadCompanyLogo(@PathVariable(value = "companyUUID") String companyUUID,
-                                               @PathVariable(value = "logoUUID") String logoUUID,
                                                StandardMultipartHttpServletRequest request) {
 
         UserAccount userAccount = authFacade.getAuthenticatedUser();
         if (!companyManagementPermissionService.hasManagingAuthority(companyUUID, userAccount)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(LACK_OF_FILE_UPLOAD_PERMISSION);
         }
-        MultipartFile file = getLogoMultiPartFile(logoUUID, request);
+        Map<String, MultipartFile> filesMap = getUUIDToMultiPartFileMapping(request);
+        Map.Entry<String, MultipartFile> entry = filesMap.entrySet().iterator().next();
+        String logoUUID = entry.getKey();
+        MultipartFile file = entry.getValue();
+
         logoFileStorageService.saveCompanyLogo(companyUUID, logoUUID, file);
 
-        return ResponseEntity.ok("OK");
+        return ResponseEntity.ok(SimpleJsonFromStringCreator.toJson("OK"));
     }
 
-    private MultipartFile getLogoMultiPartFile(String logoUUID, StandardMultipartHttpServletRequest request) {
+    private Map<String, MultipartFile> getUUIDToMultiPartFileMapping(StandardMultipartHttpServletRequest request) {
         MultiValueMap<String, MultipartFile> filesMap = request.getMultiFileMap();
-        List<MultipartFile> file = filesMap.get(logoUUID);
-        if (file == null) {
-            throw new LogoKeyDoesNotMatchRequestParameterException();
+        List<String> photoUUIDs = Collections.list(request.getParameterNames());
+        Map<String, MultipartFile> files = new LinkedHashMap<>();
+        for (var uuid : photoUUIDs) {
+            List<MultipartFile> file = filesMap.get(uuid);
+            if (file == null) {
+                throw new LogoKeyDoesNotMatchRequestParameterException();
+            }
+            files.put(uuid, file.get(0));
         }
-        return file.get(0);
+
+        return files;
     }
 
     @GetMapping(value = "/company/{companyUUID}/{logoUUID}", produces = MediaType.IMAGE_PNG_VALUE)
@@ -71,9 +88,8 @@ public class FileResource {
         return logoFileStorageService.getCompanyLogo(companyUUID, logoUUID);
     }
 
-    @PutMapping(value = "/branch/{branchUUID}/{logoUUID}")
+    @PutMapping(value = "/branch/{branchUUID}")
     public ResponseEntity<?> uploadBranchLogo(@PathVariable(value = "branchUUID") String branchUUID,
-                                              @PathVariable(value = "logoUUID") String logoUUID,
                                               StandardMultipartHttpServletRequest request) {
 
 
@@ -82,10 +98,14 @@ public class FileResource {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(LACK_OF_FILE_UPLOAD_PERMISSION);
         }
 
-        MultipartFile file = getLogoMultiPartFile(logoUUID, request);
+        Map<String, MultipartFile> filesMap = getUUIDToMultiPartFileMapping(request);
+        Map.Entry<String, MultipartFile> entry = filesMap.entrySet().iterator().next();
+        String logoUUID = entry.getKey();
+        MultipartFile file = entry.getValue();
+
         logoFileStorageService.saveBranchLogo(branchUUID, logoUUID, file);
 
-        return ResponseEntity.ok("OK");
+        return ResponseEntity.ok(SimpleJsonFromStringCreator.toJson("OK"));
     }
 
     @GetMapping(value = "/branch/{branchUUID}/{logoUUID}", produces = MediaType.IMAGE_PNG_VALUE)
@@ -93,5 +113,16 @@ public class FileResource {
                                 @PathVariable(value = "logoUUID") String logoUUID) {
 
         return logoFileStorageService.getBranchLogo(branchUUID, logoUUID);
+    }
+
+    @PutMapping(value = "/pi/{promotionItemUUID}")
+    public ResponseEntity<?> uploadPromotionItemPhotos(@PathVariable(value = "promotionItemUUID") String promotionItemUUID,
+                                                       StandardMultipartHttpServletRequest request) {
+
+
+        var filesMapping = getUUIDToMultiPartFileMapping(request);
+        promotionItemPhotoService.savePhotos(promotionItemUUID, filesMapping);
+
+        return ResponseEntity.ok(SimpleJsonFromStringCreator.toJson("OK"));
     }
 }

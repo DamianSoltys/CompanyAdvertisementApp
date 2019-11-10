@@ -89,14 +89,4 @@ export class LoginComponent implements OnInit {
       });
     }
   }
-
-  public facebookLogin($event) {
-      event.preventDefault();
-      this.lgservice.facebookLogin().subscribe(response=>{
-        console.log(response);
-      });
-  }
-  public twitterLogin($event) {
-    event.preventDefault();
-  }
 }

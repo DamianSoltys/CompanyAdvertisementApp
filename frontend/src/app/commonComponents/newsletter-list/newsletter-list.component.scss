@@ -41,7 +41,12 @@
 
         .main-container__list-container {
             .list-container__empty-list {
-
+                display:flex;
+                justify-content: center;
+                .empty-list__text-node {
+                    color:$bgcolor;
+                    font-size: 1.1rem;
+                }
             }
         }
         .empty-list__data-container {

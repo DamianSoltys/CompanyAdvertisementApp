@@ -17,6 +17,7 @@ import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service
 import { FormErrorService } from 'src/app/services/form-error.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NewsletterService } from 'src/app/services/newsletter.service';
+import { LoginService } from 'src/app/services/login.service';
 
 @Component({
   selector: 'app-company-profile',
@@ -36,6 +37,8 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
   public canShowAddBranchForm = new BehaviorSubject(false);
   public canShowCompany = new BehaviorSubject(true);
   public isNewsletter = new BehaviorSubject(false);
+  public isFacebookConnected = false;
+  public isTwitterConnected = false;
   @ViewChild('checkLabel') label:ElementRef;
 
   public newsletterFormUser = this.fb.group({
@@ -52,7 +55,8 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
     private snackbarService:SnackbarService,
     private formErrorService:FormErrorService,
     private fb:FormBuilder,
-    private nDataService:NewsletterService
+    private nDataService:NewsletterService,
+    private lgService:LoginService
   ) {}
 
   ngOnInit() {
@@ -230,6 +234,17 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
     
   }
 
+  public facebookLogin($event) {
+    event.preventDefault();
+    this.lgService.facebookLogin().subscribe(response=>{
+      console.log(response);
+    });
+  }
+
+  public twitterLogin($event) {
+    event.preventDefault();
+  }
+
   public checkNewsletterSubscription() {
     this.nDataService.getSubscriptionStatus(this.companyData.companyId,this.userREST.userID).subscribe(response=>{
       console.log(response.body)
@@ -330,4 +345,13 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
       return false;
     }
   }
+
+  public showNewsletterFormContainer() {
+    if(this.isLoaded.value && !this.owner.value) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  
 }

@@ -185,25 +185,31 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
   }
 
   public sendNewsletter(editorName?:string) {
-    //podzielić na funkcje
+    this.setStandardValues();
+    this.setSendingTypeValues();
+    this.setTypeValues();
+    this.setContentValues(editorName);
+    this.setDateValues();
+    this.setMediaValues();
+  
+    console.log(this.sendingOptions);
+
+    if(this.sendingOptions) {
+      this.nDataService.sendNewsletter(this.sendingOptions).subscribe(response=>{
+        console.log(response);
+      });
+    }
+  }
+  private setStandardValues() {
     this.sendingOptions = {};
     this.sendingOptions.destinations = [];
 
     this.sendingOptions.companyId = this.paramId;
     this.sendingOptions.destinations.push(Destination.NEWSLETTER);
     this.sendingOptions.title = this.textForm.controls.title.value;
+  }
 
-    switch (this.sendingTypeSelect.value) {
-      case  SendStrategy.now: {
-        this.sendingOptions.sendingStrategy = SendingStrategy.AT_CREATION;
-        break;
-      }
-      case  SendStrategy.at_will: {
-        this.sendingOptions.sendingStrategy = SendingStrategy.AT_WILL;
-        break;
-      }
-    }
-
+  private setTypeValues() {
     switch (this.typeSelect.value) {
       case FormType.info:{
         this.sendingOptions.promotionItemType = PromotionType.INFORMATION;
@@ -218,7 +224,21 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
         break;
       }
     }
+  }
+  private setSendingTypeValues() {
+    switch (this.sendingTypeSelect.value) {
+      case  SendStrategy.now: {
+        this.sendingOptions.sendingStrategy = SendingStrategy.AT_CREATION;
+        break;
+      }
+      case  SendStrategy.at_will: {
+        this.sendingOptions.sendingStrategy = SendingStrategy.AT_WILL;
+        break;
+      }
+    }
+  }
 
+  private setContentValues(editorName:string) {
     if(this.isText.value) {
       this.sendingOptions.nonHtmlContent = this.textForm.controls.text.value;
     } else {
@@ -227,43 +247,43 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
       });
       this.nDataService.getHtmlTemplate.next(editorName);
     }
+  }
 
-   if(this.isDatePicker.value) {
-    let dateForm= this.datePicker.controls.date.value;
-    let timeForm = this.datePicker.controls.time.value;
+  private setMediaValues() {
+    if(this.isMedia.value) {
+      console.log(this.mediaForm.value)
+      console.log(this.files)
+      this.sendingOptions.numberOfPhotos = this.files.length;
+      this.sendingOptions.nonHtmlContent = this.mediaForm.value;
+      this.sendingOptions.destinations.push(Destination.FB);
+    }
+  }
 
-    if(dateForm) {
-      if(timeForm) {
-        let string = `${dateForm.month}/${dateForm.day}/${dateForm.year} ${timeForm.hour}:${timeForm.minute}`;
-        let time = moment(string, "M/D/YYYY H:mm").unix();
-        this.sendingOptions.startTime = time.toString();
-        this.sendingOptions.sendingStrategy = SendingStrategy.DELAYED;
-        console.log(time);
-      } else {
-        let string = `${dateForm.month}/${dateForm.day}/${dateForm.year}`;
-        let time = moment(string, "M/D/YYYY").unix();
-        this.sendingOptions.startTime = time.toString();
-        this.sendingOptions.sendingStrategy = SendingStrategy.DELAYED;
-        console.log(time);
+  private setDateValues() {
+    if(this.isMedia.value) {
+      let dateForm= this.datePicker.controls.date.value;
+      let timeForm = this.datePicker.controls.time.value;
+
+      if(dateForm) {
+        if(timeForm) {
+          let string = `${dateForm.month}/${dateForm.day}/${dateForm.year} ${timeForm.hour}:${timeForm.minute}`;
+          let time = moment(string, "M/D/YYYY H:mm").unix();
+          this.sendingOptions.startTime = time.toString();
+          this.sendingOptions.sendingStrategy = SendingStrategy.DELAYED;
+          console.log(time);
+        } else {
+          let string = `${dateForm.month}/${dateForm.day}/${dateForm.year}`;
+          let time = moment(string, "M/D/YYYY").unix();
+          this.sendingOptions.startTime = time.toString();
+          this.sendingOptions.sendingStrategy = SendingStrategy.DELAYED;
+          console.log(time);
+        }
       }
     }
-   }
-
-   if(this.isMedia.value) {
-    console.log(this.mediaForm.value)
-    console.log(this.files)
-    this.sendingOptions.numberOfPhotos = this.files.length;
-    this.sendingOptions.nonHtmlContent = this.mediaForm.value;
-    this.sendingOptions.destinations.push(Destination.FB);
-  }
-  console.log(this.sendingOptions);
-
-  if(this.sendingOptions) {
-    this.nDataService.sendNewsletter(this.sendingOptions).subscribe(response=>{
-      console.log(response);
-    });
-  }
   }
   
+  public goBack() {
+    this.router.navigate(['/companyProfile',this.paramId]);
+  }
 
 }

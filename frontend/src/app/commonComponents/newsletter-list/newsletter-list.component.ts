@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NewsletterService } from 'src/app/services/newsletter.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PromotionItem } from 'src/app/classes/Newsletter';
 
 @Component({
@@ -11,7 +11,7 @@ import { PromotionItem } from 'src/app/classes/Newsletter';
 export class NewsletterListComponent implements OnInit {
   public companyId:string;
   public newsletterList:PromotionItem[] = [];
-  constructor(private nDataService:NewsletterService,private activatedRoute:ActivatedRoute) { }
+  constructor(private nDataService:NewsletterService,private activatedRoute:ActivatedRoute,private router:Router) { }
 
   ngOnInit() {
     this.activatedRoute.parent.params.subscribe(params=>{
@@ -31,5 +31,8 @@ export class NewsletterListComponent implements OnInit {
 
   public sendDelayedNewsletter() {
 
+  }
+  public goBack() {
+    this.router.navigate(['/companyProfile',this.companyId]);
   }
 }

@@ -24,7 +24,10 @@
       </div>
       <div class="newsletter-container__form-container">
         <div class="form-container__type--information">
-
+          <div class="type--information__text-input" [formGroup]="textForm">
+            <label for="title">Tytuł newslettera<span class="label__required">*</span></label>
+            <input type="text" name="title" class="text-form__input form-control" formControlName="title">
+          </div>
             <div class="type--information__editor" *ngIf="!isText.value" @heightAnimate> 
               <app-grape-editor [editorName]="'infoEditor'"></app-grape-editor>
             </div>
@@ -48,20 +51,13 @@
               </div>
             </div>
             <div class="type--information__submit-button button-container">
-              <button class="submit-button__button--submit btn btn-primary button-type--submit" (click)="sendNewsletter('infoEditor')">Wyśwlij newsletter</button>
+              <button class="submit-button__button--submit btn btn-primary button-type--submit" (click)="sendNewsletter('infoEditor')" [disabled]="!textForm.valid">Wyśwlij newsletter</button>
             </div>
         </div>
       </div>
     </div>
-    <div class="main-container__list-container" *ngIf="isNewsletterList.value">
-      <div class="list-container__type-container">
-        <div class="type-container__type--show-media" *ngIf="showTextButton()">
-          <button class="btn btn-primary btn-newsletter type--change-form__button" (click)="showNewsletterList()">Schowaj listę newsletterów</button>
-      </div>
-      </div>
-      <div class="list-container__list-data">
-        datar
-      </div>
-    </div>
+  </div>
+  <div class="newsletter-component__back-button">
+      <button class="back-button__button">Wróć do profilu firmy</button>
   </div>
 </div>

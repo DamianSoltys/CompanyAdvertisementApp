@@ -5,15 +5,23 @@ import { UserREST } from 'src/app/classes/User';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CompanyService } from 'src/app/services/company.service';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { trigger, style, animate, transition } from '@angular/animations';
 import { SelectDropDownComponent } from 'ngx-select-dropdown';
+import  * as moment from 'moment';
+import { PromotionItem, SendingStrategy, Destination, PromotionType } from 'src/app/classes/Newsletter';
 enum FormType {
-  info,
-  promotion,
-  product,
-  text
+  info = 'Informacja',
+  product = 'Produkt',
+  promotion = 'Promocja'
 }
+
+enum SendStrategy {
+  delayed = 'Wysyłka z opóźnieniem',
+  now = 'Wysyłka natychmiastowa',
+  at_will = 'Wysyłka na żądanie'
+}
+
 @Component({
   selector: 'app-newsletter',
   templateUrl: './newsletter.component.html',
@@ -53,6 +61,8 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
   public isMedia = new BehaviorSubject(false);
   public isNewsletterList = new BehaviorSubject(false);
   public isDatePicker = new BehaviorSubject(false);
+  public sendingTypeNow = false;
+  public sendingOptions:PromotionItem;
   public type:FormType;
   public files:File[];
   public typeOptions =[
@@ -70,7 +80,8 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
   ]
   public sendingTypeOptions= [
     'Wysyłka z opóźnieniem',
-    'Wysyłka natychmiastowa'
+    'Wysyłka natychmiastowa',
+    'Wysyłka na żądanie'
   ]
   public config = {
     toolbar: [['bold', 'italic', 'underline']]
@@ -82,6 +93,7 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
   public paramId:number;
   public textForm = this.fb.group({
     text:[''],
+    title:['',[Validators.required]]
   });
   public mediaForm = this.fb.group({
     text:[''],
@@ -172,35 +184,85 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     console.log(this.files);
   }
 
+  public sendNewsletter(editorName?:string) {
+    //podzielić na funkcje
+    this.sendingOptions = {};
+    this.sendingOptions.destinations = [];
 
-  private setFocusedButton($event) {
-    let buttons:HTMLCollection = document.getElementsByClassName('btn-newsletter');
-    for(let i=0;i<buttons.length;i++) {
-      if(buttons.item(i).classList.contains('button-type--focus')) {
-        buttons.item(i).classList.remove('button-type--focus')
+    this.sendingOptions.companyId = this.paramId;
+    this.sendingOptions.destinations.push(Destination.NEWSLETTER);
+    this.sendingOptions.title = this.textForm.controls.title.value;
+
+    switch (this.sendingTypeSelect.value) {
+      case  SendStrategy.now: {
+        this.sendingOptions.sendingStrategy = SendingStrategy.AT_CREATION;
+        break;
+      }
+      case  SendStrategy.at_will: {
+        this.sendingOptions.sendingStrategy = SendingStrategy.AT_WILL;
+        break;
       }
     }
-    
-    let element:HTMLElement = <HTMLElement>event.currentTarget;
-    element.classList.add('button-type--focus');
-  }
 
-  public sendNewsletter(editorName?:string) {
+    switch (this.typeSelect.value) {
+      case FormType.info:{
+        this.sendingOptions.promotionItemType = PromotionType.INFORMATION;
+        break;
+      }
+      case FormType.product:{
+        this.sendingOptions.promotionItemType = PromotionType.PRODUCT;
+        break;
+      }
+      case FormType.promotion:{
+        this.sendingOptions.promotionItemType = PromotionType.PROMOTION;
+        break;
+      }
+    }
+
     if(this.isText.value) {
-      console.log(this.textForm.value);
+      this.sendingOptions.nonHtmlContent = this.textForm.controls.text.value;
     } else {
       this.nDataService.template.subscribe(template=>{
-        console.log(template);
+        this.sendingOptions.htmlContent = btoa(template);
       });
       this.nDataService.getHtmlTemplate.next(editorName);
     }
 
-    if(this.isMedia.value) {
-      console.log(this.mediaForm.value)
-      console.log(this.files)
-    }
+   if(this.isDatePicker.value) {
+    let dateForm= this.datePicker.controls.date.value;
+    let timeForm = this.datePicker.controls.time.value;
 
-    console.log(this.datePicker.value)
+    if(dateForm) {
+      if(timeForm) {
+        let string = `${dateForm.month}/${dateForm.day}/${dateForm.year} ${timeForm.hour}:${timeForm.minute}`;
+        let time = moment(string, "M/D/YYYY H:mm").unix();
+        this.sendingOptions.startTime = time.toString();
+        this.sendingOptions.sendingStrategy = SendingStrategy.DELAYED;
+        console.log(time);
+      } else {
+        let string = `${dateForm.month}/${dateForm.day}/${dateForm.year}`;
+        let time = moment(string, "M/D/YYYY").unix();
+        this.sendingOptions.startTime = time.toString();
+        this.sendingOptions.sendingStrategy = SendingStrategy.DELAYED;
+        console.log(time);
+      }
+    }
+   }
+
+   if(this.isMedia.value) {
+    console.log(this.mediaForm.value)
+    console.log(this.files)
+    this.sendingOptions.numberOfPhotos = this.files.length;
+    this.sendingOptions.nonHtmlContent = this.mediaForm.value;
+    this.sendingOptions.destinations.push(Destination.FB);
+  }
+  console.log(this.sendingOptions);
+
+  if(this.sendingOptions) {
+    this.nDataService.sendNewsletter(this.sendingOptions).subscribe(response=>{
+      console.log(response);
+    });
+  }
   }
   
 

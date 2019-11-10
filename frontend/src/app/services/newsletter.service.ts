@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { PromotionItem } from '../classes/Newsletter';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,34 @@ export class NewsletterService {
   public template = new Subject<any>();
 
   constructor(private http:HttpClient) { }
+
+  public sendNewsletter(newsletterOptions:PromotionItem) {
+    let subject = new Subject<boolean>();
+    let httpParams = new HttpParams().set('companyId',newsletterOptions.companyId.toString());
+    this.http.post(`http://localhost:8090/api/pi`,newsletterOptions,{params:httpParams}).subscribe(response=>{
+      console.log(response);
+      subject.next(true);
+    },error=>{
+      console.log(error);
+      subject.next(false);
+    })
+    return subject;
+  }
+
+  public sendMediaNewsletter(newsletterOptions:PromotionItem) {
+
+  }
+
+  public getNewsletterData(companyId:string) {
+    let subject = new Subject<any>();
+    let httpParams = new HttpParams().set('companyId',companyId);
+      this.http.get(`http://localhost:8090/api/pi`,{observe:'response',params:httpParams}).subscribe(response=>{
+        subject.next(response);
+      },error=>{
+        subject.next(false);
+      })
+    return subject;
+  }
 
   public saveToNewsletter(userEmail:string,companyId:number) {
     return this.http.post(`http://localhost:8090/api/newsletter`,{email:userEmail,id:companyId});

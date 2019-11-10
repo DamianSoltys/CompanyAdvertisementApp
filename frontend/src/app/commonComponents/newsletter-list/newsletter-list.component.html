@@ -1,3 +1,31 @@
-<p>
-  newsletter-list works!
-</p>
+<div class="newsletter-list-component">
+  <div class="newsletter-list-component__main-container">
+    <div class="main-container__header">
+      <p class="header__text-node">Lista newsletterów</p>
+    </div>
+    <div class="main-container__list-container">
+      <div class="list-container__empty-list" *ngIf="!newsletterList.length">
+        <p class="empty-list__text-node">Nie masz żadnych oczekujących newsletterów</p>
+      </div>
+      <div class="empty-list__data-container" *ngIf="newsletterList.length">
+        <div class="data-container__main-section" *ngFor="let newsletter of newsletterList">
+          <div class="main-section__section">
+            <p class="section__text-node">Nazwa:</p>
+            <p class="section__text-node">Data dodania:{{newsletter.dateAdded}}</p>
+          </div>
+          <div class="main-section__section">
+            <p class="section__text-node">Data wysłania:</p>
+            <p class="section__text-node">Status:{{newsletter.sendingStatus}}</p>
+          </div>
+          <div class="main-section__section text-center section--button">
+              <button class="btn btn-primary section__button--send" (click)="sendDelayedNewsletter()">Wyślij</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="newsletter-list-component__back-button">
+    <button class="back-button__button">Wróć do profilu firmy</button>
+  </div>
+</div>

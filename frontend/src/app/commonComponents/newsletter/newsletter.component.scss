@@ -11,6 +11,25 @@
     width: 100%;
     padding: 0;
   }
+
+  .newsletter-component__back-button {
+    padding-top: 35px;
+    width:30%;
+    margin: auto;
+    .back-button__button {
+        width:100%;
+        min-height: 35px;
+        color:#fff;
+        border-radius: 50px;
+        border: 0;
+        background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor, 20%) 51%, $bgcolor 100%);
+        transition: all 0.4s ease-in-out;
+        background-size: 200%;
+        &:hover {
+        background-position: 100% 0;
+        }
+    }
+}
   .newsletter-component__main-container {
     @include boxShadow(0px 4px 5px 0px #bbb9bf);
     border-bottom-left-radius: 20px;
@@ -46,6 +65,9 @@
     .main-container__newsletter-container {
       display: flex;
       flex-direction: column;
+      label {
+        color:darken($bgcolor,10%)
+      }
       .newsletter-container__type-container {
         display: flex;
         padding-left: 10px;
@@ -155,10 +177,18 @@
         
         .form-container__type {
 
+
           &--information,&--product,&--promotion {  
             width:100%;
 
             .type--information,.type--product,.type--promotion {
+              &__text-input {
+                width:50%;
+                padding:5px 15px;
+                .label__required {
+                  color:red;
+                }
+              }
               &__media-form {
                 padding-bottom: 40px;
                 border-top:2px solid darken($bgcolor,15%);

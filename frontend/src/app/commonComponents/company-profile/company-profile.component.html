@@ -107,6 +107,11 @@
           [routerLink]="[ 'newsletter']" *ngIf="owner.value">  
           Newsletter
         </button>
+        <button
+          class="btn btn-primary section--buttons__button--newsletters"
+          [routerLink]="[ 'newsletterList']" *ngIf="owner.value">  
+          Lista newsletterów
+        </button>
         <span class="section--buttons__owner-buttons" *ngIf="owner.value">
           <button
             class="btn btn-primary owner-buttons__button--edit"

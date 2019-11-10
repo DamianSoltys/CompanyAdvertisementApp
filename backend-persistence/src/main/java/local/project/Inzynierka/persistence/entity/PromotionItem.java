@@ -31,8 +31,11 @@ public class PromotionItem extends FullTimestampingAudit implements IEntity<Long
     @Column(name = "promotion_item_id")
     private Long id = 0L;
 
-    @Column(name = "name", length = 50)
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "email_title")
+    private String emailTitle;
 
     @Column(name = "html_content", length = 16777215)
     private String htmlContent;
@@ -54,8 +57,11 @@ public class PromotionItem extends FullTimestampingAudit implements IEntity<Long
     @Column(name = "was_sent")
     private boolean wasSent;
 
-    @Column(name = "valid_from", columnDefinition = "TIMESTAMP")
-    private Timestamp validFrom;
+    @Column(name = "send_at", columnDefinition = "TIMESTAMP")
+    private Timestamp sendAt;
+
+    @Column(name = "planned_sending_at", columnDefinition = "TIMESTAMP")
+    private Timestamp plannedSendingAt;
 
     @Column(name = "promotion_item_uuid", unique = true, nullable = false)
     private String promotionItemUUID;

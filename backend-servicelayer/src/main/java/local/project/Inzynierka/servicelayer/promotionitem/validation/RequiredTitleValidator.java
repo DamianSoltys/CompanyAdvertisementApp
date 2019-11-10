@@ -17,6 +17,6 @@ public class RequiredTitleValidator implements ConstraintValidator<RequiredTitle
                 !CollectionUtils.isEmpty(value.getDestinations()) &&
                         (!value.getDestinations().contains(Destination.NEWSLETTER) ||
                                 (value.getDestinations().contains(Destination.NEWSLETTER) &&
-                                        !StringUtils.isEmpty(value.getTitle()))));
+                                        !StringUtils.isEmpty(value.getEmailTitle()))));
     }
 }

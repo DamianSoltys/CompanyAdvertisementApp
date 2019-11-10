@@ -16,12 +16,13 @@ import java.util.Collection;
 @Builder
 public class PersistedSendable implements Sendable {
     private Long companyId;
+    private String name;
     private String appUrl;
     private String UUID;
     private String content;
     private String htmlContent;
-    private String title;
-    private Instant startTime;
+    private String emailTitle;
+    private Instant plannedSendingTime;
     private Collection<Destination> destinations;
     private SendingStrategy sendingStrategy;
     private Collection<String> photoURLs;
@@ -29,11 +30,6 @@ public class PersistedSendable implements Sendable {
     @Override
     public String getHTMLContent() {
         return htmlContent;
-    }
-
-    @Override
-    public Instant startTime() {
-        return startTime;
     }
 
     @Override

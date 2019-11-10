@@ -9,10 +9,10 @@ public class PhotosNumberValidator implements ConstraintValidator<ZeroOrMaximum5
     @Override
     public boolean isValid(PromotionItemAddedEvent value, ConstraintValidatorContext context) {
         return value.getNumberOfPhotos() == null ||
-                (value.getNumberOfPhotos() != null && integerInRange0to5(value.getNumberOfPhotos()));
+                (value.getNumberOfPhotos() != null && integerInRange1to5(value.getNumberOfPhotos()));
     }
 
-    private boolean integerInRange0to5(Integer number) {
-       return number >= 0 && number <=5;
+    private boolean integerInRange1to5(Integer number) {
+       return number >= 1 && number <=5;
     }
 }

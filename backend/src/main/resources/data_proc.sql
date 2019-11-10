@@ -132,7 +132,6 @@ VALUES (1, 2, 1, 'Mechanikex', NOW(), NOW(), 51.1079, 17.0385, 1, UUID()),
        (4, 3, 2, 'Urodex 2', NOW(), NOW(), 51.2367, 22.534, 4, UUID());
 
 |
-
 DELIMITER ;
 
 CALL insert_branches();
@@ -143,12 +142,11 @@ CREATE OR REPLACE PROCEDURE insert_newsletter_subscriptions()
 INSERT IGNORE INTO newsletter_subscriptions(id, company_id, id_email, verified, created_at, modified_at)
 VALUES (1, 1, 7, FALSE, NOW(), NOW()),
        (2, 1, 8, FALSE, NOW(), NOW()),
-       (3, 2, 1, FALSE, NOW(), NOW());
+       (3, 2, 3, TRUE, NOW(), NOW());
 |
 
 DELIMITER ;
 CALL insert_newsletter_subscriptions();
-
 
 DELIMITER |
 
@@ -231,7 +229,8 @@ DELIMITER |
 CREATE OR REPLACE PROCEDURE insert_promotion_types()
 INSERT IGNORE INTO promotion_item_types (promotion_item_type_id, type)
 VALUES (1, 'Product'),
-       (2, 'Information');
+       (2, 'Information'),
+       (3, 'Promotion');
 
 DELIMITER ;
 CALL insert_promotion_types();
@@ -250,7 +249,8 @@ DELIMITER |
 
 CREATE OR REPLACE PROCEDURE insert_social_platforms()
 INSERT IGNORE INTO social_platforms (platform_id, social_media_platform)
-VALUES (1, 'facebook');
+VALUES (1, 'facebook'),
+       (2, 'twitter');
 
 DELIMITER ;
 CALL insert_social_platforms();

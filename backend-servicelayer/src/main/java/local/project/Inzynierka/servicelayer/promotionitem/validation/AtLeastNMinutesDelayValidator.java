@@ -7,17 +7,17 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.time.Instant;
 
-public class AtLeast15MinutesDelayValidator implements ConstraintValidator<AtLeast15MinutesDelay, PromotionItemAddedEvent> {
+import static local.project.Inzynierka.shared.ApplicationConstants.SECONDS_IN_N_MINUTES_DELAY;
 
-    private static final long SECONDS_IN_15_MINUTES = 900;
+public class AtLeastNMinutesDelayValidator implements ConstraintValidator<AtLeastNMinutesDelay, PromotionItemAddedEvent> {
 
     @Override
     public boolean isValid(PromotionItemAddedEvent value, ConstraintValidatorContext context) {
         return !SendingStrategy.DELAYED.equals(value.getSendingStrategy()) ||
-                (SendingStrategy.DELAYED.equals(value.getSendingStrategy()) &&  !startIn15Minutes(value.getStartTime()));
+                (SendingStrategy.DELAYED.equals(value.getSendingStrategy()) &&  !startInNMinutes(value.getPlannedSendingTime()));
     }
 
-    private boolean startIn15Minutes(Instant value) {
-        return value != null && Instant.now().plusSeconds(SECONDS_IN_15_MINUTES).isAfter(value);
+    private boolean startInNMinutes(Instant value) {
+        return value != null && Instant.now().plusSeconds(SECONDS_IN_N_MINUTES_DELAY).isAfter(value);
     }
 }

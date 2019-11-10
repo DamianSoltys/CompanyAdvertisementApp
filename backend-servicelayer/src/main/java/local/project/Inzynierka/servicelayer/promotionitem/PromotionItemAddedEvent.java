@@ -3,12 +3,13 @@ package local.project.Inzynierka.servicelayer.promotionitem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import local.project.Inzynierka.servicelayer.dto.promotionitem.Destination;
 import local.project.Inzynierka.servicelayer.dto.promotionitem.SendingStrategy;
-import local.project.Inzynierka.servicelayer.promotionitem.validation.AtLeast15MinutesDelay;
+import local.project.Inzynierka.servicelayer.promotionitem.validation.AtLeastNMinutesDelay;
 import local.project.Inzynierka.servicelayer.promotionitem.validation.AtLeastOneContent;
 import local.project.Inzynierka.servicelayer.promotionitem.validation.HtmlContentBase64Encoded;
+import local.project.Inzynierka.servicelayer.promotionitem.validation.LackOfDelayTimeWhenNotDelayedStrategy;
 import local.project.Inzynierka.servicelayer.promotionitem.validation.RequiredTextContentWhenPostingToSocialMedia;
 import local.project.Inzynierka.servicelayer.promotionitem.validation.RequiredTitleWhenNewsletter;
-import local.project.Inzynierka.servicelayer.promotionitem.validation.StartTimeRequiredWhenDelayed;
+import local.project.Inzynierka.servicelayer.promotionitem.validation.PlannedSendingTimeRequiredWhenDelayed;
 import local.project.Inzynierka.servicelayer.promotionitem.validation.ValidContentSize;
 import local.project.Inzynierka.servicelayer.promotionitem.validation.ZeroOrMaximum5Photos;
 import local.project.Inzynierka.servicelayer.validation.NullOrNotBlank;
@@ -27,12 +28,13 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @AtLeastOneContent
-@AtLeast15MinutesDelay
+@AtLeastNMinutesDelay
 @RequiredTextContentWhenPostingToSocialMedia
 @ZeroOrMaximum5Photos
 @HtmlContentBase64Encoded
 @RequiredTitleWhenNewsletter
-@StartTimeRequiredWhenDelayed
+@PlannedSendingTimeRequiredWhenDelayed
+@LackOfDelayTimeWhenNotDelayedStrategy
 @ValidContentSize
 public class PromotionItemAddedEvent implements Sendable {
 
@@ -46,7 +48,7 @@ public class PromotionItemAddedEvent implements Sendable {
 
     @NotNull
     private Long companyId;
-    private Instant startTime;
+    private Instant plannedSendingTime;
 
     @NotEmpty
     private Set<Destination> destinations;
@@ -77,9 +79,4 @@ public class PromotionItemAddedEvent implements Sendable {
         return htmlContent;
     }
 
-    @Override
-    @JsonIgnore
-    public Instant startTime() {
-        return startTime;
-    }
 }

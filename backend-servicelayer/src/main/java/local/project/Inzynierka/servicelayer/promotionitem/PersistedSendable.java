@@ -22,7 +22,7 @@ public class PersistedSendable implements Sendable {
     private String content;
     private String htmlContent;
     private String emailTitle;
-    private Instant startTime;
+    private Instant plannedSendingTime;
     private Collection<Destination> destinations;
     private SendingStrategy sendingStrategy;
     private Collection<String> photoURLs;
@@ -30,11 +30,6 @@ public class PersistedSendable implements Sendable {
     @Override
     public String getHTMLContent() {
         return htmlContent;
-    }
-
-    @Override
-    public Instant startTime() {
-        return startTime;
     }
 
     @Override

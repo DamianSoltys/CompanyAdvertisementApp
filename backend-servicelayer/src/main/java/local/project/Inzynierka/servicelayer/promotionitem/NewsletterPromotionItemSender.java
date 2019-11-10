@@ -31,10 +31,9 @@ public class NewsletterPromotionItemSender implements PromotionItemSender {
     public void schedule(Sendable sendable) {
         threadPoolTaskScheduler.schedule(()-> {
             publishSendable(sendable);
-        }, sendable.startTime());
+        }, sendable.getPlannedSendingTime());
     }
 
-    //TODO SUSPEND SENDING WHEN THERE ARE PHOTOS TO SAVE (( NOPE SUSPENSION ONLY FOR SM))
     private void publishSendable(Sendable sendable) {
         EmailMimeType emailMimeType = StringUtils.isEmpty(sendable.getHTMLContent()) ? EmailMimeType.TEXT : EmailMimeType.HTML;
         String message = emailMimeType.equals(EmailMimeType.HTML) ? sendable.getHTMLContent() : sendable.getContent();
@@ -43,6 +42,7 @@ public class NewsletterPromotionItemSender implements PromotionItemSender {
                                                                                sendable.getAppUrl(),
                                                                                sendable.getCompanyId(),
                                                                                emailMimeType));
+        applicationEventPublisher.publishEvent(new PromotionItemSentEvent(sendable.getUUID()));
     }
 
     @Override

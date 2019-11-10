@@ -16,7 +16,7 @@ public interface Sendable {
     String getContent();
     String getHTMLContent();
     String getEmailTitle();
-    Instant startTime();
+    Instant getPlannedSendingTime();
 
     SendingStrategy getSendingStrategy();
 

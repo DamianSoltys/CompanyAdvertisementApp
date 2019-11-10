@@ -7,11 +7,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = AtWillStrategyValidator.class)
+@Constraint(validatedBy = NotDelayedStrategyValidator.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface LackOfDelayTimeWhenSendingStrategyAtWill {
-    String message() default "Promotion item should not contain startTime when sending strategy is AT_WILL.";
+public @interface LackOfDelayTimeWhenNotDelayedStrategy {
+    String message() default "Promotion item should not contain plannedSendingTime when sending strategy is not DELAYED.";
 
     Class<?>[] groups() default {};
 

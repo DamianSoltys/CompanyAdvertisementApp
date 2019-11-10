@@ -45,14 +45,16 @@ public class PromotionItemService {
 
     public PromotionItemSendingStatusDto addPromotionItem(PromotionItemAddedEvent promotionItemAddedEvent) {
 
-        var promotionItem = promotionItemRepository.save(map(promotionItemAddedEvent));
+        var promotionItem = promotionItemRepository.save(mapNewPromotionItem(promotionItemAddedEvent));
         promotionItemDestinationRepository.saveAll(mapDestinations(promotionItemAddedEvent.getDestinations(), promotionItem));
         List<PromotionItemPhoto> photos = getPromotionItemPhotos(promotionItemAddedEvent, promotionItem);
         var persistedPhotos = promotionItemPhotosRepository.saveAll(photos);
 
         List<PromotionItemSender> senders = buildSenders(promotionItemAddedEvent.getDestinations());
 
-        if (promotionItemAddedEvent.getNumberOfPhotos() == null) {
+        promotionItemAddedEvent.setUUID(promotionItem.getPromotionItemUUID());
+        var readyToSend = promotionItemAddedEvent.getNumberOfPhotos() == null;
+        if (readyToSend) {
             commissionSendingPromotionItem(promotionItemAddedEvent, senders);
         }
 
@@ -98,23 +100,26 @@ public class PromotionItemService {
                 .collect(Collectors.toList());
     }
 
-    private PromotionItem map(PromotionItemAddedEvent promotionItemAddedEvent) {
+    private PromotionItem mapNewPromotionItem(PromotionItemAddedEvent promotionItemAddedEvent) {
 
         var promotionItemType = promotionItemTypeFetcher.fetch(promotionItemAddedEvent.getPromotionItemType().name());
         var numberOfPhotos = Optional.ofNullable(promotionItemAddedEvent.getNumberOfPhotos()).orElse(0);
-        var validFrom = promotionItemAddedEvent.getSendingStrategy().equals(SendingStrategy.AT_WILL) ? null :
-                Timestamp.from(Optional.ofNullable(promotionItemAddedEvent.getStartTime())
-                                       .orElse(Instant.now()));
+        var plannedSendingTime = promotionItemAddedEvent.getSendingStrategy().equals(SendingStrategy.DELAYED) ?
+                Timestamp.from(promotionItemAddedEvent.getPlannedSendingTime()) : null;
         var promotionItemUUID = UUID.randomUUID().toString();
+        var wasSent = numberOfPhotos == 0 &&
+                SendingStrategy.AT_CREATION.equals(promotionItemAddedEvent.getSendingStrategy());
+        var sendAt = wasSent ? Timestamp.from(Instant.now()) : null;
         return PromotionItem.builder()
                 .company(Company.builder().id(promotionItemAddedEvent.getCompanyId()).build())
                 .htmlContent(promotionItemAddedEvent.getHTMLContent())
-                .name(promotionItemAddedEvent.getTitle())
+                .name(promotionItemAddedEvent.getName())
+                .emailTitle(promotionItemAddedEvent.getEmailTitle())
                 .nonHtmlContent(promotionItemAddedEvent.getNonHtmlContent())
                 .numberOfPhotos(numberOfPhotos)
-                .validFrom(validFrom)
-                .wasSent(numberOfPhotos == 0 &&
-                                 SendingStrategy.AT_CREATION.equals(promotionItemAddedEvent.getSendingStrategy()))
+                .plannedSendingAt(plannedSendingTime)
+                .sendAt(sendAt)
+                .wasSent(wasSent)
                 .promotionItemType(promotionItemType)
                 .promotionItemUUID(promotionItemUUID)
                 .build();
@@ -148,12 +153,19 @@ public class PromotionItemService {
 
         var destinations = promotionItemDestinationRepository.findByPromotionItem(promotionItem);
         var sendingStatus = getSendingStatus(promotionItem);
+        var plannedSendingAt = promotionItem.getPlannedSendingAt() ==
+                null ? null : promotionItem.getPlannedSendingAt().toInstant().getEpochSecond();
+        var sendAt = promotionItem.getSendAt() == null ? null : promotionItem.getSendAt().toInstant().getEpochSecond();
+
         return GetPromotionItemDto.builder()
-                .dateAdded(Instant.from(promotionItem.getCreatedDate().toInstant()))
+                .addedTime(promotionItem.getCreatedDate().toInstant().getEpochSecond())
+                .plannedSendingTime(plannedSendingAt)
+                .sendTime(sendAt)
                 .destinations(destinations.stream()
                                       .map(destination -> Destination.valueOf(destination.getDestination()))
                                       .collect(Collectors.toList()))
                 .sendingStatus(sendingStatus)
+                .name(promotionItem.getName())
                 .promotionItemUUID(promotionItem.getPromotionItemUUID())
                 .build();
     }
@@ -164,7 +176,7 @@ public class PromotionItemService {
         if (promotionItem.isWasSent()) {
             sendingStatus = SendingStatus.SENT;
         } else {
-            if (promotionItem.getValidFrom() == null) {
+            if (promotionItem.getPlannedSendingAt() == null) {
                 sendingStatus = SendingStatus.WAITING_FOR_ACTION;
             } else {
                 sendingStatus = SendingStatus.DELAYED;
@@ -185,9 +197,6 @@ public class PromotionItemService {
                         .map(destination -> Destination.valueOf(destination.getDestination()))
                         .collect(Collectors.toList());
 
-                promotionItem.setWasSent(true);
-                promotionItemRepository.save(promotionItem);
-
                 var persistedSendable = buildPersistedSendable(promotionItem, destinations);
                 var senders = buildSenders(destinations);
                 commissionSendingPromotionItem(persistedSendable, senders);
@@ -196,8 +205,6 @@ public class PromotionItemService {
         }
 
         return true;
-
-
     }
 
     private PersistedSendable buildPersistedSendable(PromotionItem promotionItem, List<Destination> destinations) {
@@ -206,33 +213,35 @@ public class PromotionItemService {
                 .stream()
                 .map(PromotionItemPhoto::getPhotoUUID)
                 .collect(Collectors.toList());
+        var plannedSendingTime =
+                promotionItem.getPlannedSendingAt() == null ? null : promotionItem.getPlannedSendingAt().toInstant();
 
         return PersistedSendable.builder()
                 .appUrl(ApplicationConstants.CLIENT_URL)
                 .companyId(promotionItem.getCompany().getId())
                 .content(promotionItem.getNonHtmlContent())
                 .htmlContent(promotionItem.getHtmlContent())
-                .startTime(promotionItem.getValidFrom().toInstant())
-                .title(promotionItem.getName())
-                .UUID(promotionItem.getPromotionItemUUID())
+                .plannedSendingTime(plannedSendingTime)
+                .emailTitle(promotionItem.getEmailTitle())
                 .sendingStrategy(buildSendingStrategy(promotionItem))
+                .name(promotionItem.getName())
+                .UUID(promotionItem.getPromotionItemUUID())
                 .destinations(destinations)
                 .photoURLs(photosURLs)
                 .build();
     }
 
     private SendingStrategy buildSendingStrategy(PromotionItem promotionItem) {
-        SendingStrategy sendingStrategy;
-        if (promotionItem.getValidFrom() == null) {
-            sendingStrategy = SendingStrategy.AT_WILL;
+        SendingStrategy strategy;
+        //ONLY TWO SENDING STRATEGIES BECAUSE THERE IS NO WAY DISCERN
+        // AT_WILL FROM AT_CREATION WITHOUT ADDITIONAL COLUMN IN PROMOTION_ITEM
+        if (promotionItem.getPlannedSendingAt() == null) {
+            strategy = SendingStrategy.AT_CREATION;
         } else {
-            if (promotionItem.getValidFrom().after(Timestamp.from(Instant.now().plusSeconds(600)))) {
-                sendingStrategy = SendingStrategy.DELAYED;
-            } else {
-                sendingStrategy = SendingStrategy.AT_CREATION;
-            }
+            strategy = SendingStrategy.DELAYED;
         }
-        return sendingStrategy;
+
+        return strategy;
     }
 
     @Async
@@ -241,5 +250,14 @@ public class PromotionItemService {
         var photo = promotionItemPhotosRepository.findByPhotoUUID(promotionItemPhotoAddedEvent.getPhotoUUID());
         photo.setWasAdded(true);
         promotionItemPhotosRepository.save(photo);
+    }
+
+    @Async
+    @EventListener
+    public void markPromotionItemSent(PromotionItemSentEvent promotionItemSentEvent) {
+        var promotionItem = promotionItemRepository.findByPromotionItemUUID(promotionItemSentEvent.getPromotionItemUUID()).get();
+        promotionItem.setWasSent(true);
+        promotionItem.setSendAt(Timestamp.from(Instant.now()));
+        promotionItemRepository.save(promotionItem);
     }
 }

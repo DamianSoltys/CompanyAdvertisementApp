@@ -12,10 +12,11 @@ public interface Sendable {
     Long getCompanyId();
     String getAppUrl();
     String getUUID();
+    String getName();
     String getContent();
     String getHTMLContent();
-    String getTitle();
-    Instant startTime();
+    String getEmailTitle();
+    Instant getPlannedSendingTime();
 
     SendingStrategy getSendingStrategy();
 

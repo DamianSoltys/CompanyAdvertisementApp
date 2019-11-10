@@ -31,8 +31,11 @@ public class PromotionItem extends FullTimestampingAudit implements IEntity<Long
     @Column(name = "promotion_item_id")
     private Long id = 0L;
 
-    @Column(name = "name", length = 50)
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "email_title")
+    private String emailTitle;
 
     @Column(name = "html_content", length = 16777215)
     private String htmlContent;

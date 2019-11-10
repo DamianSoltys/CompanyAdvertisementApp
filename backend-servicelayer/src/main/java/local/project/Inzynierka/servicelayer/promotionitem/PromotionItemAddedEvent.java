@@ -36,7 +36,9 @@ import java.util.Set;
 @ValidContentSize
 public class PromotionItemAddedEvent implements Sendable {
 
-    private String title;
+    @NotEmpty
+    private String name;
+    private String emailTitle;
     private String htmlContent;
 
     @NullOrNotBlank

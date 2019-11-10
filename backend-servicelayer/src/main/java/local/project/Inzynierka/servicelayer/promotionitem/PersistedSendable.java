@@ -16,11 +16,12 @@ import java.util.Collection;
 @Builder
 public class PersistedSendable implements Sendable {
     private Long companyId;
+    private String name;
     private String appUrl;
     private String UUID;
     private String content;
     private String htmlContent;
-    private String title;
+    private String emailTitle;
     private Instant startTime;
     private Collection<Destination> destinations;
     private SendingStrategy sendingStrategy;

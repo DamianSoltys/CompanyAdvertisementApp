@@ -39,7 +39,7 @@ public class NewsletterPromotionItemSender implements PromotionItemSender {
         EmailMimeType emailMimeType = StringUtils.isEmpty(sendable.getHTMLContent()) ? EmailMimeType.TEXT : EmailMimeType.HTML;
         String message = emailMimeType.equals(EmailMimeType.HTML) ? sendable.getHTMLContent() : sendable.getContent();
         applicationEventPublisher.publishEvent(new CreatingNewsletterMailEvent(message,
-                                                                               sendable.getTitle(),
+                                                                               sendable.getEmailTitle(),
                                                                                sendable.getAppUrl(),
                                                                                sendable.getCompanyId(),
                                                                                emailMimeType));

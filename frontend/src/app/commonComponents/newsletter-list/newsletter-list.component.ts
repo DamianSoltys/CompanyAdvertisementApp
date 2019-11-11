@@ -42,8 +42,11 @@ export class NewsletterListComponent implements OnInit {
     console.log(moment.locale())
   }
 
-  public sendDelayedNewsletter() {
-
+  public sendDelayedNewsletter(promotionUUID:any) {
+    this.nDataService.sendDelayedNewsletter(promotionUUID).subscribe(response=>{
+      console.log(response);
+      this.getNewsletters();
+    });
   }
   public checkStatus(status:string) {
     if(status == "SENT") {

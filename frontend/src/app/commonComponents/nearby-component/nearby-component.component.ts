@@ -75,7 +75,9 @@ export class NearbyComponent implements OnInit {
   public goToBranchProfile(branchId:number,companyId:number) {
     console.log(branchId);
     console.log(companyId)
-    this.router.navigate(['/branchProfile',companyId,branchId]);
+    this.router.navigate(['/home']).then(()=>{
+      this.router.navigate(['/branchProfile',companyId,branchId]);
+    });
   }
 
   public getMarkerData() {

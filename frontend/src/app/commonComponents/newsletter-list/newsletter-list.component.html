@@ -18,7 +18,7 @@
             <p class="section__text-node">Status:{{newsletter.sendingStatus}}</p>
           </div>
           <div class="main-section__section text-center section--button" *ngIf="checkStatus(newsletter.sendingStatus)">
-              <button class="btn btn-primary section__button--send" (click)="sendDelayedNewsletter()">Wyślij</button>
+              <button class="btn btn-primary section__button--send" (click)="sendDelayedNewsletter(newsletter.promotionItemUUID)">Wyślij</button>
           </div>
         </div>
       </div>

@@ -22,6 +22,18 @@ enum SendStrategy {
   at_will = 'Wysyłka na żądanie'
 }
 
+enum MediaOptions {
+  withMedia = 'Wysyłka do medii społecznościowych',
+  withoutMedia = 'Standardowa wysyłka newslettera',
+  onlyMedia = 'Wysyłka tylko do medii społecznościowych'
+}
+
+enum MediaType {
+  FB = 'Facebook',
+  TWITTER = 'Twitter',
+  ALL = 'Wszystkie media'
+}
+
 @Component({
   selector: 'app-newsletter',
   templateUrl: './newsletter.component.html',
@@ -58,9 +70,11 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
   public isPromotion = new BehaviorSubject(false);
   public isProduct = new BehaviorSubject(false);
   public isText = new BehaviorSubject(false);
+  public isEdit = new BehaviorSubject(true);
   public isMedia = new BehaviorSubject(false);
   public isNewsletterList = new BehaviorSubject(false);
   public isDatePicker = new BehaviorSubject(false);
+  public onlyMedia = new BehaviorSubject(false);
   public sendingTypeNow = false;
   public sendingOptions:PromotionItem;
   public type:FormType;
@@ -76,12 +90,18 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
   ]
   public mediaOptions = [
     'Wysyłka do medii społecznościowych',
-    'Standardowa wysyłka newslettera'
+    'Standardowa wysyłka newslettera',
+    'Wysyłka tylko do medii społecznościowych'
   ]
   public sendingTypeOptions= [
     'Wysyłka z opóźnieniem',
     'Wysyłka natychmiastowa',
     'Wysyłka na żądanie'
+  ];
+  public mediaTypeOptions =[
+    'Facebook',
+    'Twitter',
+    'Wszystkie media'
   ]
   public config = {
     toolbar: [['bold', 'italic', 'underline']]
@@ -108,6 +128,7 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
   @ViewChild('formTypeSelect') formTypeSelect:SelectDropDownComponent;
   @ViewChild('sendingTypeSelect') sendingTypeSelect:SelectDropDownComponent;
   @ViewChild('mediaSelect') mediaSelect:SelectDropDownComponent;
+  @ViewChild('mediaTypeSelect') mediaTypeSelect:SelectDropDownComponent;
 
   ngOnInit() {
    this.getActualUser();
@@ -124,22 +145,41 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     this.typeSelect.selectItem('Informacja');
     this.formTypeSelect.selectItem('Edytor HTML');
     this.sendingTypeSelect.selectItem('Wysyłka natychmiastowa');
+    this.mediaTypeSelect.selectItem('Facebook');
   }
 
   private setFormVisibility() {
-    if(this.formTypeSelect.value === 'Edytor HTML') {
+    if(this.mediaSelect.value === MediaOptions.onlyMedia) {
+      this.onlyMedia.next(true);
       this.isText.next(false);
+      this.isEdit.next(false);
     } else {
-      this.isText.next(true);
+      this.onlyMedia.next(false);
+      this.isText.next(false);
+      this.isEdit.next(true);
     }
 
-    if(this.mediaSelect.value === 'Standardowa wysyłka newslettera') {
+    if(this.formTypeSelect) {
+      if(this.formTypeSelect.value === 'Edytor HTML') {
+        this.isText.next(false);
+        this.isEdit.next(true);
+      } else {
+        this.isText.next(true);
+        this.isEdit.next(false);
+      }
+    } else {
+      this.isEdit.next(false);
+    }
+
+    if(this.mediaSelect.value === MediaOptions.withoutMedia) {
       this.isMedia.next(false);  
     }else {
       this.isMedia.next(true);
       this.isText.next(false);
-     if(this.formTypeSelect.value === 'Formularz tekstowy') {
-      this.formTypeSelect.selectItem('Edytor HTML');
+     if(this.formTypeSelect) {
+      if(this.formTypeSelect.value === 'Formularz tekstowy') {
+        this.formTypeSelect.selectItem('Edytor HTML');
+       }
      }
     }
 
@@ -160,7 +200,6 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
 
   public checkForChanges(element:SelectDropDownComponent) {
     this.setFormVisibility();
-
     if(!element.value) {
       element.selectItem(element.options[0]);
     }
@@ -200,7 +239,7 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     console.log(this.sendingOptions);
 
     if(this.sendingOptions) {
-      if(!this.isMedia.value) {
+      if(!this.isMedia.value || !this.onlyMedia.value) {
         this.nDataService.sendNewsletter(this.sendingOptions).subscribe(response=>{
           console.log(response);
         });
@@ -262,17 +301,31 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
   }
 
   private setMediaValues() {
-    if(this.isMedia.value) {
-      console.log(this.mediaForm.value)
-      console.log(this.files)
-      this.sendingOptions.numberOfPhotos = this.files.length;
+    if(this.isMedia.value || this.onlyMedia.value) {
+      if(this.files) {
+        this.sendingOptions.numberOfPhotos = this.files.length;
+      } else {
+        this.sendingOptions.numberOfPhotos = 0;
+      }
       this.sendingOptions.nonHtmlContent = this.mediaForm.controls.text.value;
-      this.sendingOptions.destinations.push(Destination.FB);
+
+      if(this.onlyMedia.value) {
+        this.sendingOptions.destinations = [];
+      }
+
+        if(this.mediaTypeSelect.value === MediaType.FB) {
+          this.sendingOptions.destinations.push(Destination.FB);
+        } else if(this.mediaTypeSelect.value === MediaType.TWITTER) {
+          this.sendingOptions.destinations.push(Destination.TWITTER);
+        } else {
+          this.sendingOptions.destinations.push(Destination.TWITTER);
+          this.sendingOptions.destinations.push(Destination.FB);
+        }
     }
   }
 
   private setDateValues() {
-    if(this.isMedia.value) {
+    if(this.isDatePicker.value) {
       let dateForm= this.datePicker.controls.date.value;
       let timeForm = this.datePicker.controls.time.value;
 
@@ -291,6 +344,29 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
           console.log(time);
         }
       }
+    }
+  }
+  public showEdit() {
+    if(!this.isText.value && this.isEdit.value && !this.onlyMedia.value) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public showText() {
+    if(this.isText.value && !this.isEdit.value && !this.onlyMedia.value) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public showMediaTypeSelect() {
+    if(this.isMedia.value || this.onlyMedia.value) {
+      return true;
+    } else {
+      return false;
     }
   }
   

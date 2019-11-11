@@ -9,9 +9,9 @@
         <label for="type">Typ newslettera</label>
         <ngx-select-dropdown name="type" #typeSelect [config]="selectConfig" [options]="typeOptions" (change)="checkForChanges(typeSelect)" [multiple]="false"></ngx-select-dropdown>
        </div>
-        <div class="type-container__type-select" >
+        <div class="type-container__type-select">
             <label for="formType">Typ formularza</label>
-          <ngx-select-dropdown name="formType" #formTypeSelect [config]="selectConfig" [options]="formTypeOptions" (change)="checkForChanges(formTypeSelect)" [multiple]="false"></ngx-select-dropdown>
+          <ngx-select-dropdown name="formType" #formTypeSelect [config]="selectConfig" [options]="formTypeOptions" (change)="checkForChanges(formTypeSelect)" [disabled]="onlyMedia.value" [multiple]="false"></ngx-select-dropdown>
         </div>
         <div class="type-container__type-select">
             <label for="sendingType">Strategia wysłania</label>
@@ -21,6 +21,10 @@
             <label for="media">Dodatkowy formularz medii</label>
           <ngx-select-dropdown name="media" #mediaSelect [config]="selectConfig" [options]="mediaOptions" (change)="checkForChanges(mediaSelect)" [multiple]="false"></ngx-select-dropdown>
         </div>
+        <div class="type-container__type-select">
+          <label for="mediaType">Rodzaj medii społecznościowych</label>
+        <ngx-select-dropdown name="mediaType" #mediaTypeSelect [config]="selectConfig" [options]="mediaTypeOptions" (change)="checkForChanges(mediaTypeSelect)" [disabled]="!showMediaTypeSelect()" [multiple]="false"></ngx-select-dropdown>
+      </div>
       </div>
       <div class="newsletter-container__form-container">
         <div class="form-container__type--information">
@@ -30,11 +34,11 @@
             <label for="name">Nazwa newslettera<span class="label__required">*</span></label>
             <input type="text" name="name" class="text-form__input form-control" formControlName="name">
           </div>
-            <div class="type--information__editor" *ngIf="!isText.value" @heightAnimate>
+            <div class="type--information__editor" *ngIf="showEdit()" @heightAnimate>
                 <p class="text-center editor__label">Edytor newslettera HTML</p> 
               <app-grape-editor [editorName]="'infoEditor'"></app-grape-editor>
             </div>
-            <div class="type--information__text-form text-form" *ngIf="isText.value" [formGroup]="textForm" @heightAnimate>
+            <div class="type--information__text-form text-form" *ngIf="showText()" [formGroup]="textForm" @heightAnimate>
                 <p class="text-center text-form__label">Treść newslettera</p>
                 <quill-editor class="text-form__editor" formControlName="text" [modules]="config"></quill-editor>
             </div>

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NewsletterService } from 'src/app/services/newsletter.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PromotionItem } from 'src/app/classes/Newsletter';
+import { PromotionItem, PromotionItemResponse } from 'src/app/classes/Newsletter';
+import * as moment from 'moment';
+import 'moment/locale/pl';
 
 @Component({
   selector: 'app-newsletter-list',
@@ -10,7 +12,7 @@ import { PromotionItem } from 'src/app/classes/Newsletter';
 })
 export class NewsletterListComponent implements OnInit {
   public companyId:string;
-  public newsletterList:PromotionItem[] = [];
+  public newsletterList:PromotionItemResponse[] = [];
   constructor(private nDataService:NewsletterService,private activatedRoute:ActivatedRoute,private router:Router) { }
 
   ngOnInit() {
@@ -24,13 +26,31 @@ export class NewsletterListComponent implements OnInit {
     this.nDataService.getNewsletterData(this.companyId).subscribe(response=>{
       if(response) {
         console.log(response)
-        this.newsletterList = <PromotionItem[]>response.body;
+        this.newsletterList = <PromotionItemResponse[]>response.body;
+        this.convertUnixToDate();
+        console.log(this.newsletterList)
       }
     });
   }
 
+  private convertUnixToDate() {
+    moment.locale('pl');
+    this.newsletterList.map(newsletter=>{
+      newsletter.addedTime = moment.unix(newsletter.addedTime).format('LLL');
+      newsletter.sendTime = moment.unix(newsletter.sendTime).format('LLL');
+    });
+    console.log(moment.locale())
+  }
+
   public sendDelayedNewsletter() {
 
+  }
+  public checkStatus(status:string) {
+    if(status == "SENT") {
+      return false;
+    } else {
+      return true;
+    }
   }
   public goBack() {
     this.router.navigate(['/companyProfile',this.companyId]);

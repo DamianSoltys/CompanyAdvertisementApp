@@ -10,14 +10,14 @@
       <div class="empty-list__data-container" *ngIf="newsletterList.length">
         <div class="data-container__main-section" *ngFor="let newsletter of newsletterList">
           <div class="main-section__section">
-            <p class="section__text-node">Nazwa:</p>
-            <p class="section__text-node">Data dodania:{{newsletter.dateAdded}}</p>
+            <p class="section__text-node">Nazwa:{{newsletter.name}}</p>
+            <p class="section__text-node">Data dodania:{{newsletter.addedTime}}</p>
           </div>
           <div class="main-section__section">
-            <p class="section__text-node">Data wysłania:</p>
+            <p class="section__text-node">Data wysłania:{{newsletter.sendTime}}</p>
             <p class="section__text-node">Status:{{newsletter.sendingStatus}}</p>
           </div>
-          <div class="main-section__section text-center section--button">
+          <div class="main-section__section text-center section--button" *ngIf="checkStatus(newsletter.sendingStatus)">
               <button class="btn btn-primary section__button--send" (click)="sendDelayedNewsletter()">Wyślij</button>
           </div>
         </div>

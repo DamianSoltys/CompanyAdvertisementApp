@@ -27,14 +27,19 @@
           <div class="type--information__text-input" [formGroup]="textForm">
             <label for="title">Tytuł newslettera<span class="label__required">*</span></label>
             <input type="text" name="title" class="text-form__input form-control" formControlName="title">
+            <label for="name">Nazwa newslettera<span class="label__required">*</span></label>
+            <input type="text" name="name" class="text-form__input form-control" formControlName="name">
           </div>
-            <div class="type--information__editor" *ngIf="!isText.value" @heightAnimate> 
+            <div class="type--information__editor" *ngIf="!isText.value" @heightAnimate>
+                <p class="text-center editor__label">Edytor newslettera HTML</p> 
               <app-grape-editor [editorName]="'infoEditor'"></app-grape-editor>
             </div>
             <div class="type--information__text-form text-form" *ngIf="isText.value" [formGroup]="textForm" @heightAnimate>
+                <p class="text-center text-form__label">Treść newslettera</p>
                 <quill-editor class="text-form__editor" formControlName="text" [modules]="config"></quill-editor>
             </div>
             <div class="type--information__media-form media-form" *ngIf="isMedia.value" [formGroup]="mediaForm" @heightAnimate>
+                <p class="text-center media-form__label">Treść newslettera do medii społecznościowych</p>
                 <quill-editor class="media-form__editor" formControlName="text" [modules]="config"></quill-editor>
                 <div class="media-form__images">
                     <label for="images" class=images__label>Zdjęcia :</label>

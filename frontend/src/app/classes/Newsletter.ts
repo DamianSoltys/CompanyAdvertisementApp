@@ -7,10 +7,19 @@ export interface PromotionItem {
     photoURLs?:string[],
     promotionItemType?:PromotionType,
     sendingStrategy?:SendingStrategy,
+    plannedSendingTime?:string,
+    emailTitle?:string,
+    name?:string,
+    uuid?:string,
+}
+
+export interface PromotionItemResponse {
+    name?:string,
+    addedTime?:any,
+    sendTime?:any,
+    promotionItemUUID?:string,
     sendingStatus?:string,
-    startTime?:string,
-    title?:string,
-    uuid?:string
+    destinations?:Destination[],
 }
 
 export enum Destination {

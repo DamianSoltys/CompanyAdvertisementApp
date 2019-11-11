@@ -30,9 +30,11 @@ export class CompanySectionComponent implements OnInit, OnDestroy {
       let userREST: UserREST = JSON.parse(localStorage.getItem('userREST'));
       if (userREST) {
         if (this.companyData) {
-          userREST.companiesIDs.forEach(value => {
-            if (value === this.companyData.companyId) this.owner.next(true);
-          });
+          if(userREST.companiesIDs) {
+            userREST.companiesIDs.forEach(value => {
+              if (value === this.companyData.companyId) this.owner.next(true);
+            });
+          }
         }
       }
     }

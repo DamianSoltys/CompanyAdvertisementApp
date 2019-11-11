@@ -27,7 +27,10 @@ export class NewsletterService {
   }
 
   public sendMediaNewsletter(newsletterOptions:PromotionItem) {
-
+    let subject = new Subject<any>();
+    console.log(newsletterOptions);
+    subject.next(true);
+    return subject;
   }
 
   public getNewsletterData(companyId:string) {

@@ -93,7 +93,8 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
   public paramId:number;
   public textForm = this.fb.group({
     text:[''],
-    title:['',[Validators.required]]
+    title:['',[Validators.required]],
+    name:['',[Validators.required]]
   });
   public mediaForm = this.fb.group({
     text:[''],
@@ -119,10 +120,10 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     }, 0);
   }
   private setDefaultValues() {
+    this.mediaSelect.selectItem('Standardowa wysyłka newslettera');
     this.typeSelect.selectItem('Informacja');
     this.formTypeSelect.selectItem('Edytor HTML');
     this.sendingTypeSelect.selectItem('Wysyłka natychmiastowa');
-    this.mediaSelect.selectItem('Standardowa wysyłka newslettera');
   }
 
   private setFormVisibility() {
@@ -133,12 +134,16 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     }
 
     if(this.mediaSelect.value === 'Standardowa wysyłka newslettera') {
-      this.isMedia.next(false);
+      this.isMedia.next(false);  
     }else {
       this.isMedia.next(true);
+      this.isText.next(false);
+     if(this.formTypeSelect.value === 'Formularz tekstowy') {
+      this.formTypeSelect.selectItem('Edytor HTML');
+     }
     }
 
-    if(this.sendingTypeSelect.value === 'Wysyłka natychmiastowa') {
+    if(this.sendingTypeSelect.value === SendStrategy.now || this.sendingTypeSelect.value === SendStrategy.at_will ) {
       this.isDatePicker.next(false);
     } else {
       this.isDatePicker.next(true);
@@ -155,7 +160,7 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
 
   public checkForChanges(element:SelectDropDownComponent) {
     this.setFormVisibility();
-    
+
     if(!element.value) {
       element.selectItem(element.options[0]);
     }
@@ -195,9 +200,15 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     console.log(this.sendingOptions);
 
     if(this.sendingOptions) {
-      this.nDataService.sendNewsletter(this.sendingOptions).subscribe(response=>{
-        console.log(response);
-      });
+      if(!this.isMedia.value) {
+        this.nDataService.sendNewsletter(this.sendingOptions).subscribe(response=>{
+          console.log(response);
+        });
+      } else {
+        this.nDataService.sendMediaNewsletter(this.sendingOptions).subscribe(response=>{
+          console.log(response);
+        });
+      }
     }
   }
   private setStandardValues() {
@@ -206,7 +217,8 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
 
     this.sendingOptions.companyId = this.paramId;
     this.sendingOptions.destinations.push(Destination.NEWSLETTER);
-    this.sendingOptions.title = this.textForm.controls.title.value;
+    this.sendingOptions.emailTitle = this.textForm.controls.title.value;
+    this.sendingOptions.name = this.textForm.controls.name.value;
   }
 
   private setTypeValues() {
@@ -254,7 +266,7 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
       console.log(this.mediaForm.value)
       console.log(this.files)
       this.sendingOptions.numberOfPhotos = this.files.length;
-      this.sendingOptions.nonHtmlContent = this.mediaForm.value;
+      this.sendingOptions.nonHtmlContent = this.mediaForm.controls.text.value;
       this.sendingOptions.destinations.push(Destination.FB);
     }
   }
@@ -268,13 +280,13 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
         if(timeForm) {
           let string = `${dateForm.month}/${dateForm.day}/${dateForm.year} ${timeForm.hour}:${timeForm.minute}`;
           let time = moment(string, "M/D/YYYY H:mm").unix();
-          this.sendingOptions.startTime = time.toString();
+          this.sendingOptions.plannedSendingTime = time.toString();
           this.sendingOptions.sendingStrategy = SendingStrategy.DELAYED;
           console.log(time);
         } else {
           let string = `${dateForm.month}/${dateForm.day}/${dateForm.year}`;
           let time = moment(string, "M/D/YYYY").unix();
-          this.sendingOptions.startTime = time.toString();
+          this.sendingOptions.plannedSendingTime = time.toString();
           this.sendingOptions.sendingStrategy = SendingStrategy.DELAYED;
           console.log(time);
         }

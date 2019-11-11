@@ -242,7 +242,11 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
   }
 
   public twitterLogin($event) {
+
     event.preventDefault();
+    this.lgService.twitterLogin().subscribe(response=>{
+      console.log(response);
+    });
   }
 
   public checkNewsletterSubscription() {

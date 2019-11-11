@@ -9,6 +9,7 @@ import { NgbDropdown, NgbDropdownModule, NgbDatepickerModule, NgbTimepickerModul
 import { NewsletterListComponent } from '../newsletter-list/newsletter-list.component';
 import { NewsletterListModule } from '../newsletter-list/newsletter-list.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SelectDropDownModule } from 'ngx-select-dropdown';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     NgbDropdownModule,
     NewsletterListModule,
     NgbDatepickerModule,
-    NgbTimepickerModule
+    NgbTimepickerModule,
+    SelectDropDownModule
   ],
   exports:[
     NewsletterComponent

@@ -136,19 +136,20 @@ export class CompanyService {
         let companyData: GetCompany[] = JSON.parse(
           localStorage.getItem('companyData')
         );
-        companyData.forEach(companyStorage => {
-          if (company.companyId === companyStorage.companyId) {
-            this.isCompany.next(true);
-          }
-        });
+       let data = companyData.find((element)=>{
+        return element.companyId === company.companyId;
+       });
 
-        if (!this.isCompany.value) {
+        if (!data) {
           companyData.push(company);
+          console.log('data')
           localStorage.setItem('companyData', JSON.stringify(companyData));
         }
+
       } else {
-        let companyData: GetCompany[] = [];
+        let companyData:GetCompany[] = [];
         companyData.push(company);
+        console.log('data')
         localStorage.setItem('companyData', JSON.stringify(companyData));
       }
     } else {
@@ -172,6 +173,27 @@ export class CompanyService {
       `http://localhost:8090/api/companies/${companyId}`,
       { observe: 'response' }
     );
+  }
+
+  public removeCompanyFromLocalStorage(companyId:number) {
+    if(storage_Avaliable('localStorage')) {
+      let companyData:GetCompany[] = JSON.parse(localStorage.getItem('companyData'));
+      companyData.forEach((company,index)=>{
+        if(company.companyId === companyId) {
+          console.log(index)
+          companyData = companyData.filter((company)=>company.companyId != companyId);
+          console.log(companyData);
+          if(companyData.length) {
+            console.log('usuwanko')
+            this.deleteStorageData();
+            localStorage.setItem('companyData',JSON.stringify(companyData));
+          } else {
+            console.log('usuniete')
+            localStorage.removeItem('companyData');
+          }
+        }
+      });
+    }
   }
 
   public editCompany(companyData: Company, editRequestData:EditRequestData,companyLogo?:File):Subject<any> {

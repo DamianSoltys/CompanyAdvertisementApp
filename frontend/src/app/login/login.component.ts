@@ -89,11 +89,4 @@ export class LoginComponent implements OnInit {
       });
     }
   }
-
-  public facebookLogin($event) {
-      event.preventDefault();
-  }
-  public twitterLogin($event) {
-    event.preventDefault();
-  }
 }

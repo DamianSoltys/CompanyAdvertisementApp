@@ -4,18 +4,26 @@ import { CompanyProfileComponent } from './company-profile.component';
 import { AuthGuard } from 'src/app/guards/auth-guard.service';
 import { NewsletterComponent } from '../newsletter/newsletter.component';
 import { CompanyComponent } from 'src/app/user/company/company.component';
+import { NewsletterListComponent } from '../newsletter-list/newsletter-list.component';
 
 const routes: Routes = [
   { path: '', component: CompanyProfileComponent },
-  { path: 'newsletter', component: NewsletterComponent },
+  { 
+    path: 'newsletter',
+    component: NewsletterComponent,
+    canActivate: [AuthGuard] },
+  { 
+    path: 'newsletterList',
+    component: NewsletterListComponent,
+    canActivate: [AuthGuard] },
   {
     path: 'companyEdit',
-    component:CompanyComponent,
+    component: CompanyComponent,
     canActivate: [AuthGuard]
   },
   {
     path: 'branchEdit',
-    component:CompanyComponent,
+    component: CompanyComponent,
     canActivate: [AuthGuard]
   },
   { path: '**', redirectTo: 'guest', pathMatch: 'full' }

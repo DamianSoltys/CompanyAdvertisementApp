@@ -27,6 +27,7 @@
     "grapesjs": "^0.15.8",
     "grapesjs-preset-newsletter": "^0.2.20",
     "jquery": "^3.4.1",
+    "moment": "^2.24.0",
     "ngx-bootstrap": "^4.3.0",
     "ngx-quill": "^7.3.2",
     "ngx-select-dropdown": "^1.2.0",

@@ -6,5 +6,10 @@
         .map-container__map {
             height:80vh;
         }
+
+        .marker__link {
+            color:$bgcolor;
+            cursor: pointer;
+        }
     }
 }

@@ -3,7 +3,7 @@
 .company-profile-component {
   display: flex;
   flex-direction: column;
-  width: 75%;
+  width: 85%;
   margin-top: 3%;
   margin-bottom: 1%;
   max-width: 1000px;
@@ -14,6 +14,14 @@
   }
   @include tablet {
     width: 85%;
+  }
+
+  .content-col {
+    width:50%;
+    padding:15px;
+    @include phone() {
+      width:100%;
+    }
   }
   .company-profile-component__app-company {
     margin-bottom: 5px;
@@ -144,10 +152,48 @@
             padding:10px;
           }
         }
-      }
 
-      .section--description__data {
-        min-height: 100px;
+        &--media-buttons {      
+            display:flex;
+            flex-direction: column;
+            align-items: flex-end;
+            width:50%;
+            padding:15px;
+            @include phone {
+              align-items: center;
+              width:100%;
+            }
+            .form__button {
+              &--facebook,&--twitter {
+                width:50%;
+                padding:2px;
+                margin:5px;
+                border:0;
+                .fab {
+                  padding-left: 5px;
+                }
+                @include phone {
+                  width:80%;
+                }
+              }
+              &--facebook {
+                background:#3b5998;
+              }
+              &--twitter {
+                background:#1DA1F2;
+              }
+            }
+        }
+      }
+      .content__section--description {
+        width:50%;
+        padding:15px;
+        @include phone() {
+          width: 100%;
+        }
+        .section--description__data {
+          min-height: 100px;
+        }
       }
 
       .content__section--error {
@@ -155,11 +201,9 @@
       }
 
       .content__section--save-newsletter {
-        padding-left: 15px;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        width:40%;
+        align-items: flex-end;
         @include phone {
           width: 100%;
           padding: 10px;
@@ -168,7 +212,14 @@
         .save-newsletter__form {
           display: flex;
           flex-direction: column;
+          width:60%;
 
+          @include phone {
+            width: 100%;
+          }
+          @include tablet {
+            width: 100%;
+          }
           .form__text-node {
             color: darken($bgcolor, 10%);
           }
@@ -181,7 +232,6 @@
           }
 
           .form__button {
-            width: 60%;
             margin-top: 10px;
             border-radius: 50px;
             border-radius: 50px;

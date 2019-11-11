@@ -72,7 +72,7 @@
           </p>
         </div>
       </div>
-      <div class="content__section--description col-12">
+      <div class="content__section--description">
         <div class="section--description__data">
           <p class="data__text-node">Opis firmy:</p>
           <div
@@ -81,31 +81,44 @@
           ></div>
         </div>
       </div>
-      <div *ngIf="isLoaded.value">
-      <div class="content__section--save-newsletter" *ngIf="showNewsletterForm()">
-          <form class="save-newsletter__form" [formGroup]="newsletterFormUser" (submit)="saveToNewsletter($event)">
-              <p class="form__text-node">Zapisz się na newsletter aby otrzymywać najnowsze informacje i promocje!</p>
-              <div>
-                  <input formControlName="isChecked" type="checkbox" class="form__checkbox">
-                  <label #checkLabel class="form__label" for="email">Czy chcesz otrzymywać newsletter?</label>
-              </div>
-              <button type="submit" class="btn btn-primary form__button" [disabled]="!this.newsletterFormUser.valid">Zapisz mnie!</button>
-          </form>
-        </div>
-        <div class="content__section--save-newsletter" *ngIf="!this.userREST">
-            <form class="save-newsletter__form" [formGroup]="newsletterFormGuest" (submit)="saveToNewsletter($event)">
-            <p class="form__text-node">Zapisz się na newsletter aby otrzymywać najnowsze informacje i promocje!</p>
-            <label for="email">Email</label>
-            <input formControlName="email" type="text" class="form-control form__input">
-            <button type="submit" class="btn btn-primary form__button" [disabled]="!this.newsletterFormGuest.valid">Zapisz mnie!</button>
-          </form>
-          </div>
+      <div class="content__section--media-buttons" *ngIf="owner.value">
+        <button class="btn btn-primary form__button--facebook" (click)="facebookLogin($event)">
+            Połącz z facebookiem<i class="fab fa-facebook-square"></i>
+          </button>
+          <button class="btn btn-primary form__button--twitter" (click)="twitterLogin($event)">
+            Połącz z twitterem<i class="fab fa-twitter-square"></i>
+          </button>
       </div>
+      <div *ngIf="showNewsletterFormContainer()" class="content-col">
+        <div class="content__section--save-newsletter" *ngIf="showNewsletterForm()">
+            <form class="save-newsletter__form" [formGroup]="newsletterFormUser" (submit)="saveToNewsletter($event)">
+                <p class="form__text-node">Zapisz się na newsletter aby otrzymywać najnowsze informacje i promocje!</p>
+                <div>
+                    <input formControlName="isChecked" type="checkbox" class="form__checkbox">
+                    <label #checkLabel class="form__label" for="email">Czy chcesz otrzymywać newsletter?</label>
+                </div>
+                <button type="submit" class="btn btn-primary form__button" [disabled]="!this.newsletterFormUser.valid">Zapisz mnie!</button>
+            </form>
+          </div>
+          <div class="content__section--save-newsletter" *ngIf="!this.userREST">
+              <form class="save-newsletter__form" [formGroup]="newsletterFormGuest" (submit)="saveToNewsletter($event)">
+              <p class="form__text-node">Zapisz się na newsletter aby otrzymywać najnowsze informacje i promocje!</p>
+              <label for="email">Email</label>
+              <input formControlName="email" type="text" class="form-control form__input">
+              <button type="submit" class="btn btn-primary form__button" [disabled]="!this.newsletterFormGuest.valid">Zapisz mnie!</button>
+            </form>
+            </div>
+        </div>
       <div class="content__section--buttons col-12">
         <button
           class="btn btn-primary section--buttons__button--newsletters"
           [routerLink]="[ 'newsletter']" *ngIf="owner.value">  
           Newsletter
+        </button>
+        <button
+          class="btn btn-primary section--buttons__button--newsletters"
+          [routerLink]="[ 'newsletterList']" *ngIf="owner.value">  
+          Lista newsletterów
         </button>
         <span class="section--buttons__owner-buttons" *ngIf="owner.value">
           <button

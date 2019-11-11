@@ -23,6 +23,8 @@ export interface OpinionListData {
   comment?:string,
   rate?:number
   userName?:string,
+  userId?:number,
+  ratingId?:number,
 }
 @Component({
   selector: 'app-comments',
@@ -118,9 +120,20 @@ export class CommentsComponent implements OnInit {
 
     this.opinionData.comment = this.ratingForm.controls.commentText.value;
     this.opinionData.rating = this.currentRate;
-
-
-    this.cDataService.postOpinion(this.opinionData).subscribe(response => {
+    let rateId = null;
+    if(this.opinions) {
+      this.opinions.forEach(opinion=>{
+        console.log(opinion.userId);
+        console.log(this.opinionData.userId);
+        //sprawdzic
+        if(opinion.userId == this.opinionData.userId) {
+          
+          rateId = opinion.ratingId;
+          console.log(rateId)
+        }
+      });
+    }
+    this.cDataService.postOpinion(this.opinionData,rateId).subscribe(response => {
       if(response) {
         this.sDataService.open({
           message:'Pomyślnie dodano komentarz!',
@@ -165,11 +178,13 @@ export class CommentsComponent implements OnInit {
       console.log(data);
       data.comment.forEach(comment => {
         data.rating.forEach(rate=>{
-          if(rate.userId === comment.userId && comment.commentId === rate.ratingId) {
+          if(rate.userId === comment.userId) {
             let opinion:OpinionListData = {
               comment:comment.comment,
               rate:rate.rating,
-              userName:comment.username
+              userName:comment.username,
+              userId:rate.userId,
+              ratingId:rate.ratingId
             }
             this.opinions.push(opinion);
           }

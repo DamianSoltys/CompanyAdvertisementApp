@@ -11,6 +11,28 @@
     width: 100%;
     padding: 0;
   }
+
+  .newsletter-component__back-button {
+    padding-top: 35px;
+    width:30%;
+    margin: auto;
+    @include phone {
+      width:95%;
+    }
+    .back-button__button {
+        width:100%;
+        min-height: 35px;
+        color:#fff;
+        border-radius: 50px;
+        border: 0;
+        background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor, 20%) 51%, $bgcolor 100%);
+        transition: all 0.4s ease-in-out;
+        background-size: 200%;
+        &:hover {
+        background-position: 100% 0;
+        }
+    }
+}
   .newsletter-component__main-container {
     @include boxShadow(0px 4px 5px 0px #bbb9bf);
     border-bottom-left-radius: 20px;
@@ -20,10 +42,12 @@
       justify-content: center;
       align-items: center;
       flex-direction: column;
+      margin-top:50px;
       .datepicker__label {
         flex:100%;
         color:$bgcolor;
         font-size: 1.1rem;
+        margin-top: 40px;
       }
     }
     .main-container__header {
@@ -45,6 +69,9 @@
     .main-container__newsletter-container {
       display: flex;
       flex-direction: column;
+      label {
+        color:darken($bgcolor,10%)
+      }
       .newsletter-container__type-container {
         display: flex;
         padding-left: 10px;
@@ -96,53 +123,11 @@
           outline: none;
           box-shadow: none;
         }
-
-        .type-container__type {
-          &--information {
-            .type--information__button{
-
-            }
-          }
-          &--product {
-            .type--product__button {
-              
-            }
-          }
-          &--promotion {
-            .type--promotion__button {
-
-            }
-          }
-          &--show-media {
-            display:flex;
-            align-items: flex-end;
-            @include phone {
-              padding:0 10px;
-            }
-            .show-media__checkbox {
-              margin-bottom: 5px;
-            }
-            .show-media__label {
-              margin:0;
-            }
-          }
-          &--change-form {
-            padding:0 5px;
-            @include phone {
-              border-top:1px solid darken($bgcolor,15%);
-            }
-            .type--change-form__button {
-              color:#000;
-              margin-bottom: 0;
-              padding-bottom: 0;
-              transition: all 0.2s ease-in-out;
-              @include desktop {
-                border-left: 1px solid darken($bgcolor,15%);
-              }
-              &:focus {
-                color:$bgcolor;
-              }
-            }
+        .type-container__type-select {
+          margin:5px;
+          min-width:150px;
+          @include phone {
+            width:95%;
           }
         }
       }
@@ -152,7 +137,6 @@
         flex-direction: column;
         align-items: center;
         .text-form,.media-form {
-          border-top:2px solid darken($bgcolor,15%);
           margin:5px;
           margin-top:0;
           height: 300px;
@@ -166,7 +150,7 @@
         .datepicker-button {
           display:flex;
           justify-content: center;
-          padding-top:50px;
+          margin-top:50px;
           .btn {
             background-color: darken($bgcolor,10%);
             border:0;
@@ -181,8 +165,6 @@
           transition: all .4s ease-in-out;
           background-size: 200%;
           height:35px;
-          margin-top:40px;
-          margin-bottom: 20px;
           &:hover {
               background-position: 100% 0;
           }
@@ -195,21 +177,33 @@
         .button-container {
           display: flex;
           justify-content: center;
+          margin-top: 100px;
+          padding-bottom: 20px;
         }
         
         .form-container__type {
+
 
           &--information,&--product,&--promotion {  
             width:100%;
 
             .type--information,.type--product,.type--promotion {
+              &__text-input {
+                width:50%;
+                padding:5px 15px;
+                @include phone {
+                  width:100%;
+                }
+                .label__required {
+                  color:red;
+                }
+              }
               &__media-form {
                 padding-bottom: 40px;
-                border-top:2px solid darken($bgcolor,15%);
                 .media-form__images {
                   display: flex;
                   justify-content: center;
-                  padding-top: 10px;
+                  margin-top: 10px;
                   .images__label {
                     color:$bgcolor;
                     font-size: 1.1rem;

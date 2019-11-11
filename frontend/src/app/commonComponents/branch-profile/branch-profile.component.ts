@@ -64,11 +64,13 @@ export class BranchProfileComponent implements OnInit {
       );
       let userREST: UserREST = JSON.parse(localStorage.getItem('userREST'));
       if (companyList && userREST) {
-        userREST.companiesIDs.forEach(companyId => {
-          if (companyId == this.companyId) {
-            this.owner.next(true);
-          }
-        });
+        if(userREST.companiesIDs) {
+          userREST.companiesIDs.forEach(companyId => {
+            if (companyId == this.companyId) {
+              this.owner.next(true);
+            }
+          });
+        }
       }
     }
   }

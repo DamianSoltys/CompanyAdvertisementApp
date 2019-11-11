@@ -57,11 +57,17 @@
     }
   }
   .company-component__company-section {
-    max-height: 50vh;
-    overflow: auto;
+    .company-section__title {
+      color:$bgcolor;
+      font-size: 1.5rem;
+    }
     .company-section__text-node {
       font-size: 1.2rem;
       color: $bgcolor;
+    }
+    .company-section__company-container {
+      max-height: 50vh;
+      overflow: auto;
     }
   }
   .company-component__rodo-container {

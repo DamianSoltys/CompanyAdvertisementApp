@@ -8,12 +8,10 @@ const routes: Routes = [
   {
     path: 'login',
     loadChildren: './login/login.module#LoginModule',
-    data: {animation: 'HomePage'}
   },
   {
     path: 'register',
     loadChildren: './register/register.module#RegisterModule',
-    data: {animation: 'AboutPage'}
   },
   {
     path: 'search',
@@ -47,6 +45,11 @@ const routes: Routes = [
     path: 'branchProfile/:idBranch',
     loadChildren:
       './commonComponents/branch-profile/branch-profile.module#BranchProfileModule'
+  },
+  {
+    path: 'user/favourites',
+    loadChildren: './commonComponents/favourite-branches/favourite-branches.module#FavouriteBranchesModule',
+    canActivate: [AuthGuard]
   },
   {
     path: 'user/personalData',

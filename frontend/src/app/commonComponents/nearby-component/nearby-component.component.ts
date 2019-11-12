@@ -1,12 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
 import { Position, Marker } from 'src/app/user/company/company.component';
 import { SearchService } from 'src/app/services/search.service';
-import { positionElements } from '@ng-bootstrap/ng-bootstrap/util/positioning';
 import { BranchService } from 'src/app/services/branch.service';
 import { Branch } from 'src/app/classes/Company';
 import { Router } from '@angular/router';
+import { AgmMap } from '@agm/core';
 
 export interface NearbyMarker extends Marker {
   branchId?:number,
@@ -17,18 +17,30 @@ export interface NearbyMarker extends Marker {
   templateUrl: './nearby-component.component.html',
   styleUrls: ['./nearby-component.component.scss']
 })
-export class NearbyComponent implements OnInit {
+export class NearbyComponent implements OnInit,AfterViewInit {
   @Input() name;
+  public zoom = 12;
+  public draggable = false;
   public actualPosition: Position = {
     latitude: 51.246452,
     longitude: 22.568445
   };
+  public radius:number;
   public markersArray:NearbyMarker[];
   public branches:Branch[];
+  @ViewChild('googleMap') googleMap:AgmMap;
+
   constructor(public activeModal: NgbActiveModal,private sDataService:SearchService,private bDataService:BranchService,private router:Router) { }
 
   ngOnInit() {
     this.getActualPosition();
+  }
+
+  ngAfterViewInit() {
+    this.googleMap.mapReady.subscribe(map=>{
+      this.radius = this.setCircleRadius(this.actualPosition.latitude,this.actualPosition.longitude-0.05,this.actualPosition.latitude,this.actualPosition.longitude+0.05)/2;
+      this.radius +=200; //+-błąd/wyrównanie
+    });
   }
 
   private getActualPosition() {
@@ -72,6 +84,19 @@ export class NearbyComponent implements OnInit {
       console.log(error);
     })
   }
+
+  public setCircleRadius(lat1, lon1, lat2, lon2) {
+      var R = 6378.137; // Radius of earth in KM
+      var dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
+      var dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
+      var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLon/2) * Math.sin(dLon/2);
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      var d = R * c;
+      return d * 1000; // meters
+  }
+
   public goToBranchProfile(branchId:number,companyId:number) {
     console.log(branchId);
     console.log(companyId)
@@ -83,7 +108,7 @@ export class NearbyComponent implements OnInit {
   public getMarkerData() {
     this.branches.forEach(branch=>{
       if(Number(branch.geoX) > this.actualPosition.latitude - 0.05 && Number(branch.geoX) < this.actualPosition.latitude + 0.05) {
-        if(Number(branch.geoY) > this.actualPosition.longitude - 0.05 && Number(branch.geoY) < this.actualPosition.longitude + 0.05) {
+        if(Number(branch.geoY) > this.actualPosition.longitude - 0.053 && Number(branch.geoY) < this.actualPosition.longitude + 0.053) {
           
           let marker:NearbyMarker = {
             latitude:Number(branch.geoX),

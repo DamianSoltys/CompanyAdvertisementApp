@@ -1,4 +1,4 @@
-package local.project.Inzynierka.servicelayer.filestorage;
+package local.project.Inzynierka.servicelayer.filestorage.errors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

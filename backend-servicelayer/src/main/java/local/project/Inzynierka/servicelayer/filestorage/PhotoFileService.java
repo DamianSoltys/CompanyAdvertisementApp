@@ -1,5 +1,9 @@
 package local.project.Inzynierka.servicelayer.filestorage;
 
+import local.project.Inzynierka.servicelayer.filestorage.errors.FailedToCreateDirectoryException;
+import local.project.Inzynierka.servicelayer.filestorage.errors.FailedToSaveLogoException;
+import local.project.Inzynierka.servicelayer.filestorage.errors.LackOfLogoException;
+import local.project.Inzynierka.servicelayer.filestorage.errors.UnsupportedLogoFileFormatException;
 import local.project.Inzynierka.shared.utils.EntityName;
 import local.project.Inzynierka.shared.utils.FilePathCreator;
 import org.springframework.stereotype.Service;
@@ -42,7 +46,7 @@ public class PhotoFileService {
 
     public void validateLogoFile(MultipartFile file) {
         if (!MIME_IMAGE_JPEG.equals(file.getContentType()) && !MIME_IMAGE_PNG.equals(file.getContentType())) {
-            throw new UnsupportedLogoFileFormat();
+            throw new UnsupportedLogoFileFormatException();
         }
     }
 }

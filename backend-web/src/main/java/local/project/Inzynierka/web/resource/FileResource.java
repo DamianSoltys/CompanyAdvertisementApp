@@ -2,6 +2,7 @@ package local.project.Inzynierka.web.resource;
 
 import local.project.Inzynierka.auth.AuthFacade;
 import local.project.Inzynierka.servicelayer.company.BranchManagementPermissionService;
+import local.project.Inzynierka.servicelayer.company.CompanyLogoUUID;
 import local.project.Inzynierka.servicelayer.company.CompanyManagementPermissionService;
 import local.project.Inzynierka.servicelayer.filestorage.LogoFileStorageService;
 import local.project.Inzynierka.servicelayer.filestorage.PromotionItemPhotoService;
@@ -32,6 +33,8 @@ import java.util.Map;
 @Slf4j
 public class FileResource {
 
+    private static final String LOGO_UUID_REQUIRED_MESSAGE = "You have to provide logo's UUID as a key in formData body.";
+    private static final String INCORRECT_LOGO_UUID_MESSAGE = "You have provided incorrect logoUUID.";
     private static final String LACK_OF_FILE_UPLOAD_PERMISSION = "User has no permission to upload logo";
 
     private final LogoFileStorageService logoFileStorageService;
@@ -57,13 +60,26 @@ public class FileResource {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(LACK_OF_FILE_UPLOAD_PERMISSION);
         }
         Map<String, MultipartFile> filesMap = getUUIDToMultiPartFileMapping(request);
-        Map.Entry<String, MultipartFile> entry = filesMap.entrySet().iterator().next();
-        String logoUUID = entry.getKey();
-        MultipartFile file = entry.getValue();
 
-        logoFileStorageService.saveCompanyLogo(companyUUID, logoUUID, file);
+        var filesMapIterator = filesMap.entrySet().iterator();
+        if (filesMapIterator.hasNext()) {
+            Map.Entry<String, MultipartFile> entry = filesMap.entrySet().iterator().next();
+            String logoUUID = entry.getKey();
+            MultipartFile file = entry.getValue();
 
-        return ResponseEntity.ok(SimpleJsonFromStringCreator.toJson("OK"));
+            var logoID = CompanyLogoUUID.builder()
+                    .logoUUID(logoUUID)
+                    .companyUUID(companyUUID)
+                    .build();
+            if (logoFileStorageService.saveCompanyLogo(logoID, file)) {
+                return ResponseEntity.ok(SimpleJsonFromStringCreator.toJson("OK"));
+            }
+
+            return ResponseEntity.badRequest().body(SimpleJsonFromStringCreator.toJson(INCORRECT_LOGO_UUID_MESSAGE));
+
+        }
+
+        return ResponseEntity.badRequest().body(SimpleJsonFromStringCreator.toJson(LOGO_UUID_REQUIRED_MESSAGE));
     }
 
     private Map<String, MultipartFile> getUUIDToMultiPartFileMapping(StandardMultipartHttpServletRequest request) {
@@ -99,13 +115,22 @@ public class FileResource {
         }
 
         Map<String, MultipartFile> filesMap = getUUIDToMultiPartFileMapping(request);
-        Map.Entry<String, MultipartFile> entry = filesMap.entrySet().iterator().next();
-        String logoUUID = entry.getKey();
-        MultipartFile file = entry.getValue();
 
-        logoFileStorageService.saveBranchLogo(branchUUID, logoUUID, file);
+        var filesMapIterator = filesMap.entrySet().iterator();
+        if (filesMapIterator.hasNext()) {
+            Map.Entry<String, MultipartFile> entry = filesMap.entrySet().iterator().next();
+            String logoUUID = entry.getKey();
+            MultipartFile file = entry.getValue();
 
-        return ResponseEntity.ok(SimpleJsonFromStringCreator.toJson("OK"));
+            if (logoFileStorageService.saveBranchLogo(branchUUID, logoUUID, file)) {
+                return ResponseEntity.ok(SimpleJsonFromStringCreator.toJson("OK"));
+            }
+
+            return ResponseEntity.badRequest().body(SimpleJsonFromStringCreator.toJson(INCORRECT_LOGO_UUID_MESSAGE));
+        }
+
+        return ResponseEntity.badRequest().body(SimpleJsonFromStringCreator.toJson(LOGO_UUID_REQUIRED_MESSAGE));
+
     }
 
     @GetMapping(value = "/branch/{branchUUID}/{logoUUID}", produces = MediaType.IMAGE_PNG_VALUE)

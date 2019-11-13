@@ -12,7 +12,8 @@ class SearchableBranchDto {
     private Long id;
     private Address address;
     private Long companyId;
-    private String logoPath;
+    private String getLogoURL;
+    private String putLogoURL;
     private String logoKey;
     private Boolean hasLogoAdded;
     private String category;

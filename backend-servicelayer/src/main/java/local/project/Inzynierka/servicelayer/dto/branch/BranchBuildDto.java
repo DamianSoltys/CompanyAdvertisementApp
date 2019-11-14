@@ -9,6 +9,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class BranchBuildDto {
     private Long id;
-    private String logoFilePath;
+    private String getLogoURL;
+    private String putLogoURL;
     private String logoKey;
 }

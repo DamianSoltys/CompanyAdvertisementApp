@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static local.project.Inzynierka.shared.ApplicationConstants.APPLICATION_URL;
 import static local.project.Inzynierka.shared.ApplicationConstants.URL_PATH_SEPARATOR;
@@ -38,13 +39,20 @@ public class FilePathCreator {
     }
 
     public static String getFileKey(String logoPath) {
-
         if (logoPath != null) {
             final String URL_PATH_SEPARATOR = "/";
             List<String> backslashSplitPath = Arrays.asList(logoPath.split(URL_PATH_SEPARATOR));
             return backslashSplitPath.get(backslashSplitPath.size() - 1);
         }
         return "";
+    }
 
+    public static String getPutLogoURL(String logoPath) {
+        if (logoPath != null) {
+            final String URL_PATH_SEPARATOR = "/";
+            List<String> backslashSplitPath = Arrays.asList(logoPath.split(URL_PATH_SEPARATOR));
+            return String.join("/", backslashSplitPath.subList(0, backslashSplitPath.size() - 1));
+        }
+        return "";
     }
 }

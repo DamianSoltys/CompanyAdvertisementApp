@@ -70,7 +70,8 @@ public class CompanyManagementService {
         return CompanyBuildDto.builder()
                 .id(createdCompany.getId())
                 .logoKey(FilePathCreator.getFileKey(createdCompany.getLogoPath()))
-                .logoFilePath(createdCompany.getLogoPath())
+                .getLogoURL(createdCompany.getLogoPath())
+                .putLogoURL(FilePathCreator.getPutLogoURL(createdCompany.getLogoPath()))
                 .build();
     }
 
@@ -80,12 +81,14 @@ public class CompanyManagementService {
                         branches.stream()
                                 .map(branch -> BranchBuildDto.builder()
                                         .id(branch.getId())
-                                        .logoFilePath(branch.getPhotoPath())
+                                        .getLogoURL(branch.getPhotoPath())
+                                        .putLogoURL(FilePathCreator.getPutLogoURL(branch.getPhotoPath()))
                                         .logoKey(FilePathCreator.getFileKey(branch.getPhotoPath()))
                                         .build())
                                 .collect(Collectors.toList()))
                 .id(createdCompany.getId())
-                .logoFilePath(createdCompany.getLogoPath())
+                .getLogoURL(createdCompany.getLogoPath())
+                .putLogoURL(FilePathCreator.getPutLogoURL(createdCompany.getLogoPath()))
                 .logoKey(FilePathCreator.getFileKey(createdCompany.getLogoPath()))
                 .build();
     }

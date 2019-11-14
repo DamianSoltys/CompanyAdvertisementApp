@@ -47,7 +47,8 @@ export interface EditRequestData {
   addWork: boolean;
   backId:number;
   logoKey?:string;
-  logoURL?:string;
+  putLogoUrl?:string;
+  getLogoUrl?:string;
 }
 @Component({
   selector: 'app-company',
@@ -214,7 +215,7 @@ export class CompanyComponent implements OnInit {
         this.cDataService.getCompany(companyId).subscribe(
           response => {
             let companyData:GetCompany = <GetCompany>response.body;
-            this.cDataService.getCompanyLogo(companyData).subscribe(response=>{             
+            this.cDataService.getCompanyLogo(companyData).subscribe(response=>{            
              if(response.status != 204) {
               let reader = new FileReader();
               reader.addEventListener("load", () => {
@@ -235,6 +236,7 @@ export class CompanyComponent implements OnInit {
              }
               
             },error=>{
+              console.log(error);
               console.log('coś poszło nie tak');
               this.companyList=undefined;                        
               subject.next(true);
@@ -473,6 +475,8 @@ export class CompanyComponent implements OnInit {
     this.workForms = undefined;
     this.LogoList = undefined;
     this.companyList = undefined;
+    this.companyLogo = undefined;
+    this.workLogo = undefined;
   }
 
   private checkForPersonalData() {

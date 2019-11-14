@@ -7,7 +7,7 @@
       <div class="data-container__section--button">
         <button class="section--button__button btn-primary btn" (click)="showForm()" *ngIf="canShowAddButton()">Dodaj swoją opinie</button>
       </div>
-      <div class="data-container__section--rating">
+      <div class="data-container__section--rating" #scrollContainer (scroll)="onScroll($event)">
         <div class="section--rating__comment" *ngIf="canShowEmptyData()">
           <p class="comment__empty-opinion">Firma nie posiada żadnych opinii</p>
         </div>

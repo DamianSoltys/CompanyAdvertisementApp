@@ -22,6 +22,8 @@ export class GetCompany {
     regon: string;
     registererFullname:string;
     logoKey?:string;
+    putLogoURL?:string;
+    getLogoURL?:string;
     logoURL?:string;
     logo?:any;
     hasLogoAdded?:boolean;
@@ -37,6 +39,8 @@ export class Branch {
     logoKey?:string;
     logoURL?:string;
     logoPath?:string;
+    putLogoURL?:string;
+    getLogoURL?:string;
     logo?:any;
     hasLogoAdded?:boolean;
 }

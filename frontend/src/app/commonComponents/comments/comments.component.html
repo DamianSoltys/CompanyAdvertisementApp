@@ -16,8 +16,8 @@
         <div class="top-data__user">
           Użytkownik: <strong>{{opinion.userName}}</strong><strong *ngIf="opinion.isOwner">(Właściciel)</strong>
         </div>
-          <div class="top-data__rate" *ngIf="opinion.rating">
-              Ocena: <ngb-rating class="rate_rating-component" [(rate)]="opinion.rating" [max]="5" [readonly]="true">
+          <div class="top-data__rate" *ngIf="opinion.rate">
+              Ocena: <ngb-rating class="rate_rating-component" [(rate)]="opinion.rate" [max]="5" [readonly]="true">
                   <ng-template let-fill="fill" let-index="index">
                       <span class="star" [class.filled]="fill === 100">&#9733;</span>
                     </ng-template>

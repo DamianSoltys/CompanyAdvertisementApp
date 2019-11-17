@@ -24,6 +24,7 @@ export interface OpinionListData {
   rate?:number
   userName?:string,
   userId?:number,
+  branchId?:number,
   ratingId?:number,
   isOwner?:boolean,
   commentId?:number,
@@ -64,8 +65,8 @@ export class CommentsComponent implements OnInit {
   public userREST: UserREST;
   public branchId: string;
   public companyId:string;
-  public opinions:OpinionData[];
-  public opinionData:OpinionData;
+  public opinions:OpinionListData[] = [];
+  public opinionData:OpinionListData;
   public testData = [
     {comment:'dupatreretaeretaaetatae',user:'user',rating:5},
     {comment:'sasasapdasdasdetatae',user:'Lamus',rating:2},
@@ -126,9 +127,9 @@ export class CommentsComponent implements OnInit {
 
     this.opinionData.comment = this.ratingForm.controls.commentText.value;
     if(this.currentRate) {
-      this.opinionData.rating = this.currentRate;
+      this.opinionData.rate = this.currentRate;
     } else {
-      this.opinionData.rating = null;
+      this.opinionData.rate = null;
     }
     let rateId = null;
     if(this.opinions) {
@@ -190,19 +191,21 @@ export class CommentsComponent implements OnInit {
     let tracker = event.target;
     let limit = tracker.scrollHeight - tracker.clientHeight;
     if (event.target.scrollTop === limit) {
-      console.log('down')
+      if(this.actualPageLoaded < this.numberOfPages) {
+        this.getOpinions(this.actualPageLoaded+1);
+        this.actualPageLoaded++;
+      }
     }
   }
   
-  public getOpinions() {
-    this.opinions = [];
+  public getOpinions(pageNumber?:number) {
     let subject = new Subject<boolean>();
     subject.subscribe(data=>{
       this.isLoaded.next(true);
     });
-    this.cDataService.getOpinion(this.opinionData).subscribe(data=>{
+    this.cDataService.getOpinion(this.opinionData,pageNumber).subscribe(data=>{
       console.log(data)
-
+      this.numberOfPages = data.numberOfPages;
       data.comment.forEach(comment => {
         let opinion:OpinionListData = {
           comment: comment.comment,
@@ -217,7 +220,7 @@ export class CommentsComponent implements OnInit {
       data.rating.forEach(rate=>{
         this.opinions.map(opinion => {
           if(rate.userId === opinion.userId) {
-            opinion.rating = rate.rating;
+            opinion.rate = rate.rating;
             opinion.ratingId = rate.ratingId;
           } 
         });

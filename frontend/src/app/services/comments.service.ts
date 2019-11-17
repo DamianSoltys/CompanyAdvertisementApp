@@ -2,14 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { SearchResponse } from '../classes/Section';
+import { OpinionListData } from '../commonComponents/comments/comments.component';
 
 export interface OpinionData {
   comment?:any;
   rating?:any;
-  branchId?:number;
-  userId?:number;
-  ratingId?:number,
-  commentId?:number,
+  numberOfPages?:number;
 }
 
 interface CommentData {
@@ -61,17 +59,22 @@ export class CommentsService {
      return subject;
   }
 
-  public getOpinion(opinionData:OpinionData):Subject<OpinionData> {
+  public getOpinion(opinionData:OpinionListData,pageNumber?:number):Subject<OpinionData> {
     let data:OpinionData ={};
     let subject = new Subject<OpinionData>();
-    console.log(opinionData)
-    let httpParams= new HttpParams().set('branchId',opinionData.branchId.toString());
-    console.log(httpParams)
-    this.http.get(`http://localhost:8090/api/comment?size=3`,{observe:'response',params:httpParams}).subscribe(response=>{
-      console.log(response);
+    let httpCommentParams:HttpParams;
+    if(!pageNumber) {
+      httpCommentParams= new HttpParams().set('branchId',opinionData.branchId.toString()).set('size','3');
+    } else {
+      httpCommentParams= new HttpParams().set('branchId',opinionData.branchId.toString()).set('size','3').set('page',pageNumber.toString());
+    }
+
+    this.http.get(`http://localhost:8090/api/comment`,{observe:'response',params:httpCommentParams}).subscribe(response=>{
        let responseData = <SearchResponse>response.body;
        data.comment = responseData.content;
-      this.http.get(`http://localhost:8090/api/rating?size=3`,{observe:'response',params:httpParams}).subscribe(response=>{
+       data.numberOfPages = responseData.totalPages;
+       let httpRatingParams= new HttpParams().set('branchId',opinionData.branchId.toString());
+      this.http.get(`http://localhost:8090/api/rating`,{observe:'response',params:httpRatingParams}).subscribe(response=>{
         console.log(response);
         let responseData = <SearchResponse>response.body;
         data.rating = responseData.content;

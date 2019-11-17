@@ -159,7 +159,7 @@ export class PersonalDataComponent implements OnInit {
   }
 
   private getPersonalDataServer() {
-    if (this.userObject.naturalPersonID != null) {
+    if (this.userObject.naturalPersonID) {
       this.pdataService
         .getPersonalData(
           this.userObject.userID,

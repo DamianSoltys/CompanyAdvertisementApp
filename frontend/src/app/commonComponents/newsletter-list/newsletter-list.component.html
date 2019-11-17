@@ -14,7 +14,7 @@
             <p class="section__text-node">Data dodania:{{newsletter.addedTime}}</p>
           </div>
           <div class="main-section__section">
-            <p class="section__text-node">Data wysłania:{{newsletter.sendTime}}</p>
+            <p class="section__text-node" *ngIf="newsletter.sendTime">Data wysłania:{{newsletter.sendTime}}</p>
             <p class="section__text-node">Status:{{newsletter.sendingStatus}}</p>
           </div>
           <div class="main-section__section text-center section--button" *ngIf="checkStatus(newsletter.sendingStatus)">

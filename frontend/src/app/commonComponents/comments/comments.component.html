@@ -14,10 +14,10 @@
       <div class="section--rating__comment" *ngFor="let opinion of opinions">
         <div class="comment_top-data">
         <div class="top-data__user">
-          Użytkownik: <strong>{{opinion.userName}}</strong>
+          Użytkownik: <strong>{{opinion.userName}}</strong><strong *ngIf="opinion.isOwner">(Właściciel)</strong>
         </div>
-          <div class="top-data__rate">
-              Ocena: <ngb-rating class="rate_rating-component" [(rate)]="opinion.rate" [max]="5" [readonly]="true">
+          <div class="top-data__rate" *ngIf="opinion.rating">
+              Ocena: <ngb-rating class="rate_rating-component" [(rate)]="opinion.rating" [max]="5" [readonly]="true">
                   <ng-template let-fill="fill" let-index="index">
                       <span class="star" [class.filled]="fill === 100">&#9733;</span>
                     </ng-template>
@@ -40,7 +40,7 @@
           <quill-editor class="comment-input__input" formControlName="commentText" [modules]="config">
           </quill-editor>
         </div>
-        <div class="form__rating-input">
+        <div class="form__rating-input" *ngIf="canShowRatingForm()">
           <label class="text-center rating-input__label" for="rating">Ocena</label>
           <ngb-rating class="rating-input__rating" [(rate)]="currentRate" [max]="5">
               <ng-template let-fill="fill" let-index="index">

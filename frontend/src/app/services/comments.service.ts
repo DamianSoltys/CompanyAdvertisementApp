@@ -9,6 +9,7 @@ export interface OpinionData {
   branchId?:number;
   userId?:number;
   ratingId?:number,
+  commentId?:number,
 }
 
 interface CommentData {
@@ -31,23 +32,26 @@ export class CommentsService {
     let commentData:CommentData = <CommentData>opinionData;
     let ratingData:RatingData = <RatingData>opinionData;
     let subject = new Subject<boolean>();
-    console.log(commentData)
      this.http.post(`http://localhost:8090/api/comment`,commentData).subscribe(response=>{
-      if(rateId) {
-        console.log(rateId)
-        this.http.patch(`http://localhost:8090/api/rating/${rateId}`,ratingData).subscribe(response=>{
+      if(opinionData.rating) {
+        if(rateId) {
+          console.log(rateId)
+          this.http.patch(`http://localhost:8090/api/rating/${rateId}`,ratingData).subscribe(response=>{
+            subject.next(true);
+          },error=>{
+            console.log(error);
+            subject.next(false);
+          });
+        } else {
+          this.http.post(`http://localhost:8090/api/rating`,ratingData).subscribe(response=>{
           subject.next(true);
         },error=>{
           console.log(error);
           subject.next(false);
         });
+        }
       } else {
-        this.http.post(`http://localhost:8090/api/rating`,ratingData).subscribe(response=>{
         subject.next(true);
-      },error=>{
-        console.log(error);
-        subject.next(false);
-      });
       }
      },error=>{
        console.log(error);

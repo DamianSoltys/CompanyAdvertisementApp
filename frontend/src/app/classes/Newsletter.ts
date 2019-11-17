@@ -20,6 +20,7 @@ export interface PromotionItemResponse {
     promotionItemUUID?:string,
     sendingStatus?:string,
     destinations?:Destination[],
+    plannedSendingTime?:number,
 }
 
 export enum Destination {

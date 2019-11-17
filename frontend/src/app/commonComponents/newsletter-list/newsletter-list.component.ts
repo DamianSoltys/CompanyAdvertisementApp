@@ -37,9 +37,10 @@ export class NewsletterListComponent implements OnInit {
     moment.locale('pl');
     this.newsletterList.map(newsletter=>{
       newsletter.addedTime = moment.unix(newsletter.addedTime).format('LLL');
-      newsletter.sendTime = moment.unix(newsletter.sendTime).format('LLL');
+      if(newsletter.plannedSendingTime) {
+        newsletter.sendTime = moment.unix(newsletter.plannedSendingTime).format('LLL');
+      }
     });
-    console.log(moment.locale())
   }
 
   public sendDelayedNewsletter(promotionUUID:any) {

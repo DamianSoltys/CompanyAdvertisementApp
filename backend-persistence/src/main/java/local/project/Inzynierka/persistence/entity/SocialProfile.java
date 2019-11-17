@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "social_profiles")
-public class SocialProfileUrl extends FullTimestampingAudit implements IEntity<SocialProfileUrl.PK> {
+public class SocialProfile extends FullTimestampingAudit implements IEntity<SocialProfile.PK> {
 
     @EmbeddedId
     private PK id;

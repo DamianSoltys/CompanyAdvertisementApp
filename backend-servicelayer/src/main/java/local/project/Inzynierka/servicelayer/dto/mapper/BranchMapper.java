@@ -25,7 +25,8 @@ public class BranchMapper {
         companyBranchDto.setGeoX(branch.getGeoX());
         companyBranchDto.setGeoY(branch.getGeoY());
         companyBranchDto.setName(branch.getName());
-        companyBranchDto.setLogoURL(branch.getPhotoPath());
+        companyBranchDto.setGetLogoURL(branch.getPhotoPath());
+        companyBranchDto.setPutLogoURL(FilePathCreator.getPutLogoURL(branch.getPhotoPath()));
         companyBranchDto.setHasLogoAdded(branch.isHasLogoAdded());
         companyBranchDto.setLogoKey(FilePathCreator.getFileKey(branch.getPhotoPath()));
         return companyBranchDto;
@@ -46,7 +47,8 @@ public class BranchMapper {
         persistedBranchDto.setGeoY(branch.getGeoY());
         persistedBranchDto.setName(branch.getName());
         persistedBranchDto.setBranchId(branch.getId());
-        persistedBranchDto.setLogoPath(branch.getPhotoPath());
+        persistedBranchDto.setGetLogoURL(branch.getPhotoPath());
+        persistedBranchDto.setPutLogoURL(FilePathCreator.getPutLogoURL(branch.getPhotoPath()));
         persistedBranchDto.setLogoKey(FilePathCreator.getFileKey(branch.getPhotoPath()));
         return persistedBranchDto;
     }

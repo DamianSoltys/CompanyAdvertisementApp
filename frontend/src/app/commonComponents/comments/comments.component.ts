@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -46,6 +46,7 @@ export interface OpinionListData {
   ]
 })
 export class CommentsComponent implements OnInit {
+  @ViewChild('scrollContainer') scrollContainer:ElementRef;
   public ratingForm = this.fb.group({
     commentText: ['', [Validators.required]]
   });
@@ -54,6 +55,9 @@ export class CommentsComponent implements OnInit {
   public isLoaded = new BehaviorSubject(false);
   public isOwner = new BehaviorSubject(false);
   public currentRate = this.isOwner.value?1:null;
+  public numberOfPages:number;
+  public actualPageLoaded:number = 0;
+
   public config = {
     toolbar: [['bold', 'italic', 'underline']]
   };
@@ -179,10 +183,17 @@ export class CommentsComponent implements OnInit {
     }
   }
 
-  public checkForBranchOwnership() {
 
+  @HostListener('scroll', ['$event'])
+  public onScroll(event:any) {
+    //dokonczyc
+    let tracker = event.target;
+    let limit = tracker.scrollHeight - tracker.clientHeight;
+    if (event.target.scrollTop === limit) {
+      console.log('down')
+    }
   }
-
+  
   public getOpinions() {
     this.opinions = [];
     let subject = new Subject<boolean>();

@@ -67,11 +67,12 @@ export class CommentsService {
     console.log(opinionData)
     let httpParams= new HttpParams().set('branchId',opinionData.branchId.toString());
     console.log(httpParams)
-    this.http.get(`http://localhost:8090/api/comment`,{observe:'response',params:httpParams}).subscribe(response=>{
+    this.http.get(`http://localhost:8090/api/comment?size=3`,{observe:'response',params:httpParams}).subscribe(response=>{
       console.log(response);
        let responseData = <SearchResponse>response.body;
        data.comment = responseData.content;
-      this.http.get(`http://localhost:8090/api/rating`,{observe:'response',params:httpParams}).subscribe(response=>{
+      this.http.get(`http://localhost:8090/api/rating?size=3`,{observe:'response',params:httpParams}).subscribe(response=>{
+        console.log(response);
         let responseData = <SearchResponse>response.body;
         data.rating = responseData.content;
         subject.next(data);

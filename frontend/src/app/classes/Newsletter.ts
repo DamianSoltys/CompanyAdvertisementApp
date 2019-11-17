@@ -16,7 +16,7 @@ export interface PromotionItem {
 export interface PromotionItemResponse {
     name?:string,
     addedTime?:any,
-    sendTime?:any,
+    plannedSendingTime?:any,
     promotionItemUUID?:string,
     sendingStatus?:string,
     destinations?:Destination[],

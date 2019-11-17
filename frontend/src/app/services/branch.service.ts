@@ -31,7 +31,7 @@ export class BranchService {
   }
 
   public getBranchLogo(branchData:Branch) {
-    let url = branchData.logoURL;
+    let url = branchData.getLogoURL;
     return this.http.get(url,{observe: 'response',responseType:'blob'});
   }
 
@@ -45,12 +45,14 @@ export class BranchService {
     let subject = new Subject<any>();
     this.http.post(`http://localhost:8090/api/companies/${companyId}/branches`,branches).subscribe(response=> {
      if(logoList) {
+       console.log(response)
       let branches:Branch[] = <Branch[]>response;
       let counter:number = 0;
       branches.forEach((branch,index)=>{
-        let url = branch.logoPath;
+        let url = branch.putLogoURL;
         let logoData = new FormData();
         logoData.append(branch.logoKey,logoList[index]);
+        logoData.append(branch.logoKey,'Value');
 
         this.http.put(url,logoData).subscribe(response=>{
           counter++;
@@ -78,7 +80,7 @@ export class BranchService {
     this.http.patch(`http://localhost:8090/api/branch/${editRequestData.workId}`,branch).subscribe(response=>{
       if(workLogo) {
         console.log(response);
-        let url = editRequestData.logoURL;
+        let url = editRequestData.putLogoUrl;
         let logoData = new FormData();
         logoData.append(editRequestData.logoKey,workLogo);
         this.http.put(url,logoData).subscribe(response=>{

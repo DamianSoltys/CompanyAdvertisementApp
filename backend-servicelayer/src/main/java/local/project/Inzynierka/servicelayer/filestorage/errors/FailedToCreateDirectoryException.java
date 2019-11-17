@@ -1,4 +1,4 @@
-package local.project.Inzynierka.servicelayer.filestorage;
+package local.project.Inzynierka.servicelayer.filestorage.errors;
 
 
 public class FailedToCreateDirectoryException extends RuntimeException {

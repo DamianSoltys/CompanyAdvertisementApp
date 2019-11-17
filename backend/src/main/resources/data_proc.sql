@@ -248,9 +248,9 @@ CALL insert_promotion_items();
 DELIMITER |
 
 CREATE OR REPLACE PROCEDURE insert_social_platforms()
-INSERT IGNORE INTO social_platforms (platform_id, social_media_platform)
-VALUES (1, 'facebook'),
-       (2, 'twitter');
+INSERT IGNORE INTO social_platforms (platform_id, social_media_platform, created_at, modified_at)
+VALUES (1, 'facebook', current_timestamp(), current_timestamp()),
+       (2, 'twitter', current_timestamp(), current_timestamp());
 
 DELIMITER ;
 CALL insert_social_platforms();
@@ -258,8 +258,8 @@ CALL insert_social_platforms();
 DELIMITER |
 
 CREATE OR REPLACE PROCEDURE insert_social_profiles()
-INSERT IGNORE INTO social_profiles (company_id, platform_id, social_profile_url)
-VALUES (2, 1, 'https://facebook.com/example123.example123');
+INSERT IGNORE INTO social_profiles (company_id, platform_id, social_profile_url, modified_at)
+VALUES (2, 1, 'https://facebook.com/example123.example123', current_timestamp());
 
 DELIMITER ;
 CALL insert_social_profiles();

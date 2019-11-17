@@ -37,7 +37,7 @@ public class FavouriteBranch extends FullTimestampingAudit implements IEntity<Fa
 
     @Embeddable
     @Data
-    public class PK implements Serializable {
+    public static class PK implements Serializable {
 
         @Column(name = "user_id")
         private long userId;

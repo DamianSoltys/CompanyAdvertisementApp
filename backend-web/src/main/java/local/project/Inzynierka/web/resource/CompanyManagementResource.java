@@ -82,7 +82,7 @@ public class CompanyManagementResource {
     @RequestMapping(method = POST, value = "/companies/{id}/newsletters")
     public ResponseEntity<String> sendEmailToNewsletterRecipients(final @PathVariable(value = "id") Long id,
                                                                   @Valid @RequestBody NewsletterItemDto newsletterItemDto,
-                                                                  HttpServletRequest request){
+                                                                  HttpServletRequest request) {
 
         if (!this.companyManagementPermissionService.hasManagingAuthority(id, this.authFacade.getAuthenticatedUser())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
@@ -105,7 +105,9 @@ public class CompanyManagementResource {
     @RequestMapping(method = GET, value = "/companies/{id}")
     public ResponseEntity<?> getCompanyInfo(final @PathVariable(value = "id") Long id) {
 
-        return this.companyManagementService.getCompanyInfo(id)
+        UserAccount userAccount = authFacade.getAuthenticatedUser();
+
+        return this.companyManagementService.getCompanyInfo(id, userAccount)
                 .map(ResponseEntity::ok).orElse(null);
 
     }
@@ -114,11 +116,12 @@ public class CompanyManagementResource {
     public ResponseEntity<?> updateCompanyInfo(final @PathVariable(value = "id") Long id,
                                                @Valid final @RequestBody UpdateCompanyInfoDto updateCompanyInfoDto) {
 
-        if (!this.companyManagementPermissionService.hasManagingAuthority(id, this.authFacade.getAuthenticatedUser())) {
+        UserAccount userAccount = authFacade.getAuthenticatedUser();
+        if (!this.companyManagementPermissionService.hasManagingAuthority(id, userAccount)) {
             return new ResponseEntity<>(SimpleJsonFromStringCreator.toJson(LACK_OF_MANAGING_PERMISSION_MESSAGE), HttpStatus.FORBIDDEN);
         }
 
-        return this.companyManagementService.updateCompanyInfo(id, updateCompanyInfoDto)
+        return this.companyManagementService.updateCompanyInfo(id, updateCompanyInfoDto, userAccount)
                 .map(ResponseEntity::ok).orElse(null);
 
     }

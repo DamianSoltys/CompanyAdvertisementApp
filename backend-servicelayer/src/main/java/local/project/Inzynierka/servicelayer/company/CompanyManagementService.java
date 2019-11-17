@@ -16,6 +16,8 @@ import local.project.Inzynierka.servicelayer.dto.company.CompanyRelatedDeletedEn
 import local.project.Inzynierka.servicelayer.dto.company.UpdateCompanyInfoDto;
 import local.project.Inzynierka.servicelayer.dto.mapper.AddressMapper;
 import local.project.Inzynierka.servicelayer.dto.mapper.CompanyExtractor;
+import local.project.Inzynierka.servicelayer.dto.social.SocialProfileConnectionDto;
+import local.project.Inzynierka.servicelayer.social.SocialMediaConnectionService;
 import local.project.Inzynierka.shared.UserAccount;
 import local.project.Inzynierka.shared.utils.FilePathCreator;
 import org.springframework.context.event.EventListener;
@@ -38,32 +40,13 @@ public class CompanyManagementService {
 
     private final BranchPersistenceService branchPersistenceService;
 
-    public CompanyManagementService(CompanyRepository companyRepository, CompanyPersistenceService companyPersistenceService, BranchPersistenceService branchPersistenceService) {
+    private final SocialMediaConnectionService socialMediaConnectionService;
+
+    public CompanyManagementService(CompanyRepository companyRepository, CompanyPersistenceService companyPersistenceService, BranchPersistenceService branchPersistenceService, SocialMediaConnectionService socialMediaConnectionService) {
         this.companyRepository = companyRepository;
         this.companyPersistenceService = companyPersistenceService;
         this.branchPersistenceService = branchPersistenceService;
-    }
-
-    @Transactional
-    public CompanyBuildDto registerCompany(AddCompanyDto addCompanyDto, UserAccount registerer) {
-
-        var companyExtractor = new CompanyExtractor(addCompanyDto);
-        List<Branch> branches = companyExtractor.getBranches();
-        Company company = companyExtractor.getCompany();
-
-        Company createdCompany = this.companyPersistenceService.getPersistedCompany(company, registerer);
-
-        if (!createdCompany.hasBranch()) {
-            return mapToCompanyBuildDto(createdCompany);
-        }
-
-        this.branchPersistenceService.buildAllCompanyBranches(branches, createdCompany);
-
-        Iterable<Branch> persistedBranches = this.branchPersistenceService.saveAll(branches);
-        var branchCollection = new ArrayList<Branch>();
-        persistedBranches.forEach(branchCollection::add);
-
-        return mapToCompanyBuildDto(createdCompany, branchCollection);
+        this.socialMediaConnectionService = socialMediaConnectionService;
     }
 
     private static CompanyBuildDto mapToCompanyBuildDto(Company createdCompany) {
@@ -93,15 +76,37 @@ public class CompanyManagementService {
                 .build();
     }
 
+    @Transactional
+    public CompanyBuildDto registerCompany(AddCompanyDto addCompanyDto, UserAccount registerer) {
+
+        var companyExtractor = new CompanyExtractor(addCompanyDto);
+        List<Branch> branches = companyExtractor.getBranches();
+        Company company = companyExtractor.getCompany();
+
+        Company createdCompany = this.companyPersistenceService.getPersistedCompany(company, registerer);
+
+        if (!createdCompany.hasBranch()) {
+            return mapToCompanyBuildDto(createdCompany);
+        }
+
+        this.branchPersistenceService.buildAllCompanyBranches(branches, createdCompany);
+
+        Iterable<Branch> persistedBranches = this.branchPersistenceService.saveAll(branches);
+        var branchCollection = new ArrayList<Branch>();
+        persistedBranches.forEach(branchCollection::add);
+
+        return mapToCompanyBuildDto(createdCompany, branchCollection);
+    }
+
     public boolean companyExists(Long id) {
         return this.companyRepository.findById(id).isPresent();
     }
 
-    public Optional<CompanyInfoDto> getCompanyInfo(Long id) {
+    public Optional<CompanyInfoDto> getCompanyInfo(Long id, UserAccount userAccount) {
 
         Optional<Company> optionalCompany = this.companyPersistenceService.getPersistedCompany(id);
 
-        return optionalCompany.map(this::buildCompanyInfoDto);
+        return optionalCompany.map(company -> buildCompanyInfoDto(company, userAccount));
     }
 
     //TODO move to some better place
@@ -110,13 +115,13 @@ public class CompanyManagementService {
     }
 
     @Transactional
-    public Optional<CompanyInfoDto> updateCompanyInfo(Long id, UpdateCompanyInfoDto updateCompanyInfoDto) {
+    public Optional<CompanyInfoDto> updateCompanyInfo(Long id, UpdateCompanyInfoDto updateCompanyInfoDto, UserAccount userAccount) {
 
         Optional<Company> optionalCompany = this.companyPersistenceService.getPersistedCompany(id);
 
         return optionalCompany
                 .map(company -> updateCompany(updateCompanyInfoDto, company))
-                .map(this::buildCompanyInfoDto);
+                .map(company -> buildCompanyInfoDto(company, userAccount));
     }
 
     private Company updateCompany(UpdateCompanyInfoDto updateCompanyInfoDto, Company company) {
@@ -138,15 +143,21 @@ public class CompanyManagementService {
         return this.companyRepository.save(company);
     }
 
-    private CompanyInfoDto buildCompanyInfoDto(Company company) {
+    private CompanyInfoDto buildCompanyInfoDto(Company company, UserAccount userAccount) {
 
+        boolean isAllowedToSeeConnectionStatus = company.getRegisterer().getId().equals(userAccount.personId());
+        List<SocialProfileConnectionDto> socialMediaConnections = isAllowedToSeeConnectionStatus ?
+                socialMediaConnectionService.getSocialProfileConnections(company) :
+                Collections.emptyList();
         AddressMapper addressMapper = new AddressMapper();
+
         return CompanyInfoDto.builder()
                 .hasLogoAdded(company.isHasLogoAdded())
                 .logoURL(company.getLogoPath())
                 .logoKey(FilePathCreator.getFileKey(company.getLogoPath()))
                 .category(company.getCategory().getName())
                 .companyId(company.getId())
+                .socialProfileConnectionDtos(socialMediaConnections)
                 .companyName(company.getName())
                 .REGON(company.getREGON())
                 .NIP(company.getNIP())

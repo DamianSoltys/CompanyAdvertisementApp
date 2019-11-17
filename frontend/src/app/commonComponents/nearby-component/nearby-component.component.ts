@@ -21,10 +21,7 @@ export class NearbyComponent implements OnInit,AfterViewInit {
   @Input() name;
   public zoom = 12;
   public draggable = false;
-  public actualPosition: Position = {
-    latitude: 51.246452,
-    longitude: 22.568445
-  };
+  public actualPosition: Position;
   public radius:number;
   public markersArray:NearbyMarker[];
   public branches:Branch[];
@@ -39,15 +36,14 @@ export class NearbyComponent implements OnInit,AfterViewInit {
   ngAfterViewInit() {
     this.googleMap.mapReady.subscribe(map=>{
       this.radius = this.setCircleRadius(this.actualPosition.latitude,this.actualPosition.longitude-0.05,this.actualPosition.latitude,this.actualPosition.longitude+0.05)/2;
-      this.radius +=200; //+-błąd/wyrównanie
     });
   }
 
   private getActualPosition() {
     let navigatorObject = window.navigator;
-
     if (storage_Avaliable('localStorage')) {
       if (!localStorage.getItem('actualPosition') && !this.actualPosition) {
+        this.actualPosition = {};
         navigatorObject.geolocation.getCurrentPosition(
           position => {
             this.actualPosition = {
@@ -59,7 +55,12 @@ export class NearbyComponent implements OnInit,AfterViewInit {
               JSON.stringify(this.actualPosition)
             );
           },
-          error => {}
+          error => {
+            this.actualPosition ={
+              latitude: 51.246452,
+              longitude: 22.568445
+            };
+          }
         );
       } else {
         let position = JSON.parse(localStorage.getItem('actualPosition'));
@@ -68,6 +69,11 @@ export class NearbyComponent implements OnInit,AfterViewInit {
           this.actualPosition = {
             latitude: position.latitude,
             longitude: position.longitude
+          };
+        } else {
+          this.actualPosition = {
+            latitude: 51.246452,
+            longitude: 22.568445
           };
         }
       }
@@ -107,8 +113,8 @@ export class NearbyComponent implements OnInit,AfterViewInit {
 
   public getMarkerData() {
     this.branches.forEach(branch=>{
-      if(Number(branch.geoX) > this.actualPosition.latitude - 0.05 && Number(branch.geoX) < this.actualPosition.latitude + 0.05) {
-        if(Number(branch.geoY) > this.actualPosition.longitude - 0.053 && Number(branch.geoY) < this.actualPosition.longitude + 0.053) {
+      if(Number(branch.geoX) > this.actualPosition.latitude - 0.031 && Number(branch.geoX) < this.actualPosition.latitude + 0.031) {
+        if(Number(branch.geoY) > this.actualPosition.longitude - 0.050 && Number(branch.geoY) < this.actualPosition.longitude + 0.050) {
           
           let marker:NearbyMarker = {
             latitude:Number(branch.geoX),

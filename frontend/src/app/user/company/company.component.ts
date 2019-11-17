@@ -32,8 +32,8 @@ import { ActivatedRoute, Route, Router } from '@angular/router';
 import { BranchService } from 'src/app/services/branch.service';
 
 export interface Position {
-  latitude: number;
-  longitude: number;
+  latitude?: number;
+  longitude?: number;
 }
 export interface Marker {
   latitude: number;
@@ -394,7 +394,15 @@ export class CompanyComponent implements OnInit {
   }
 
   private patchWorkIdData() {
+    if (this.workForm) {
+      if (this.mapMarker) {
+        this._workForm.geoX.setValue(this.mapMarker.latitude);
+        this._workForm.geoY.setValue(this.mapMarker.longitude);
+        this.mapMarker = null;
+      }
+    }
     let branch:Branch = this.workForm.value;
+    console.log(branch)
     this.bDataService.editBranch(this.editRequestData,branch,this.workLogo).subscribe(response=>{
       if(response) {
       this.snackbarService.open({

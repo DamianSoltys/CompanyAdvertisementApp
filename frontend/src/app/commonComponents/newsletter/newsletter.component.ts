@@ -10,6 +10,7 @@ import { trigger, style, animate, transition } from '@angular/animations';
 import { SelectDropDownComponent } from 'ngx-select-dropdown';
 import  * as moment from 'moment';
 import { PromotionItem, SendingStrategy, Destination, PromotionType } from 'src/app/classes/Newsletter';
+import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
 enum FormType {
   info = 'Informacja',
   product = 'Produkt',
@@ -123,7 +124,7 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     date:[],
     time:[],
   });
-  constructor(private nDataService:NewsletterService,private route:ActivatedRoute,private cDataService:CompanyService,private router:Router,private fb:FormBuilder) {}
+  constructor(private nDataService:NewsletterService,private route:ActivatedRoute,private cDataService:CompanyService,private router:Router,private fb:FormBuilder,private snackbar:SnackbarService) {}
   @ViewChild('typeSelect') typeSelect:SelectDropDownComponent;
   @ViewChild('formTypeSelect') formTypeSelect:SelectDropDownComponent;
   @ViewChild('sendingTypeSelect') sendingTypeSelect:SelectDropDownComponent;
@@ -239,16 +240,20 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     console.log(this.sendingOptions);
 
     if(this.sendingOptions) {
-      if(!this.isMedia.value || !this.onlyMedia.value) {
         this.nDataService.sendNewsletter(this.sendingOptions).subscribe(response=>{
-          console.log(response);
-        });
-      } else {
-        this.nDataService.sendMediaNewsletter(this.sendingOptions).subscribe(response=>{
-          console.log(response);
-        });
-      }
-    }
+          if(response) {
+            this.snackbar.open({
+              message:'Newsletter zostal pomyślnie wysłany',
+              snackbarType:SnackbarType.success,
+            });
+          } else {
+            this.snackbar.open({
+              message:'Nie udalo się wysłać newslettera',
+              snackbarType:SnackbarType.error,
+            });
+          }
+    });
+  }
   }
   private setStandardValues() {
     this.sendingOptions = {};

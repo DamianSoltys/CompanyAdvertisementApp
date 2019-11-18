@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { storage_Avaliable } from '../classes/storage_checker';
 import { Route, Router } from '@angular/router';
-import { HttpClient, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest, HttpResponse, HttpParams } from '@angular/common/http';
 import { Company, Branch, Address, GetCompany } from '../classes/Company';
 import { UserREST } from '../classes/User';
 import { BehaviorSubject, Subject, Observable } from 'rxjs';
@@ -82,9 +82,10 @@ export class CompanyService {
   private workLogoRequest(response,logoList:File[]) {
     let counter:number = 0;
     logoList.forEach((logo,index)=>{
-      let url = response['branchBuildDTOs'][index]['logoFilePath'];
+      let url = response['branchBuildDTOs'][index]['putLogoURL'];
       let logoData = new FormData();
       logoData.append(response['branchBuildDTOs'][index]['logoKey'],logo);
+      logoData.append(response['branchBuildDTOs'][index]['logoKey'],'Value');
       this.http.put(url,logoData).subscribe(response=>{
         counter++;
         if(counter === logoList.length) {
@@ -105,7 +106,8 @@ export class CompanyService {
   private companyLogoRequest(response,companyLogo:File,logoList?:File[]) {
     let logoData = new FormData();
     logoData.append(response['logoKey'],companyLogo);
-    let url = response['logoFilePath'];
+    logoData.append(response['logoKey'],'Value');
+    let url = response['putLogoURL'];
     this.http.put(url,logoData).subscribe(response2=>{
       console.log(response2)
       console.log("dodano plik")
@@ -128,6 +130,23 @@ export class CompanyService {
     if(storage_Avaliable('localStorage')) {
       localStorage.removeItem('companyData');
     }
+  }
+
+  public getActualAdvSearchPage(comment:boolean,pageNumber:number,branchId:number) {
+    let httpParams = new HttpParams().set('size','3').set('page',pageNumber.toString()).set('branchId',branchId.toString());
+    console.log(httpParams)
+    if(comment) {
+      return this.http.get(
+        `http://localhost:8090/api/comment`,
+        { observe: 'response' ,params: httpParams}
+      );
+    } else {
+      return this.http.get(
+        `http://localhost:8090/api/rating`,
+        { observe: 'response' ,params: httpParams}
+      );
+    }
+
   }
 
   public storeCompanyData(company: GetCompany) {
@@ -165,6 +184,7 @@ export class CompanyService {
 
   public getCompanyLogo(companyData:GetCompany){
     let url = companyData.logoURL;
+    console.log(companyData);
     return this.http.get(url,{ observe: 'response',responseType: 'blob'}); 
   }
 
@@ -205,8 +225,9 @@ export class CompanyService {
       let companyData:GetCompany = <GetCompany>response;
       if(companyLogo) {
         let logoData = new FormData();
-        let url = companyData.logoURL;
+        let url = companyData.putLogoURL;
         logoData.append(companyData.logoKey,companyLogo);
+        logoData.append(companyData.logoKey,'Value');
         this.http.put(url,logoData).subscribe(response=> {
         subject.next(true);
         console.log('dodano pliczek'); 

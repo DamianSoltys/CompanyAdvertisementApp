@@ -32,8 +32,8 @@ import { ActivatedRoute, Route, Router } from '@angular/router';
 import { BranchService } from 'src/app/services/branch.service';
 
 export interface Position {
-  latitude: number;
-  longitude: number;
+  latitude?: number;
+  longitude?: number;
 }
 export interface Marker {
   latitude: number;
@@ -47,7 +47,8 @@ export interface EditRequestData {
   addWork: boolean;
   backId:number;
   logoKey?:string;
-  logoURL?:string;
+  putLogoUrl?:string;
+  getLogoUrl?:string;
 }
 @Component({
   selector: 'app-company',
@@ -214,7 +215,7 @@ export class CompanyComponent implements OnInit {
         this.cDataService.getCompany(companyId).subscribe(
           response => {
             let companyData:GetCompany = <GetCompany>response.body;
-            this.cDataService.getCompanyLogo(companyData).subscribe(response=>{             
+            this.cDataService.getCompanyLogo(companyData).subscribe(response=>{            
              if(response.status != 204) {
               let reader = new FileReader();
               reader.addEventListener("load", () => {
@@ -235,6 +236,7 @@ export class CompanyComponent implements OnInit {
              }
               
             },error=>{
+              console.log(error);
               console.log('coś poszło nie tak');
               this.companyList=undefined;                        
               subject.next(true);
@@ -392,7 +394,15 @@ export class CompanyComponent implements OnInit {
   }
 
   private patchWorkIdData() {
+    if (this.workForm) {
+      if (this.mapMarker) {
+        this._workForm.geoX.setValue(this.mapMarker.latitude);
+        this._workForm.geoY.setValue(this.mapMarker.longitude);
+        this.mapMarker = null;
+      }
+    }
     let branch:Branch = this.workForm.value;
+    console.log(branch)
     this.bDataService.editBranch(this.editRequestData,branch,this.workLogo).subscribe(response=>{
       if(response) {
       this.snackbarService.open({
@@ -473,6 +483,8 @@ export class CompanyComponent implements OnInit {
     this.workForms = undefined;
     this.LogoList = undefined;
     this.companyList = undefined;
+    this.companyLogo = undefined;
+    this.workLogo = undefined;
   }
 
   private checkForPersonalData() {

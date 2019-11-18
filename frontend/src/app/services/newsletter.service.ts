@@ -18,18 +18,28 @@ export class NewsletterService {
     let httpParams = new HttpParams().set('companyId',newsletterOptions.companyId.toString());
     this.http.post(`http://localhost:8090/api/pi`,newsletterOptions,{params:httpParams}).subscribe(response=>{
       console.log(response);
+      if(newsletterOptions.numberOfPhotos > 0) {
+        let formData = new FormData();
+        subject.next(true);
+      } else {
+        subject.next(true);
+      }
+    },error=>{
+      console.log(error);
+      subject.next(false);
+    });
+    return subject;
+  }
+
+  public sendDelayedNewsletter(promotionUUID:any) {
+    let subject = new Subject<any>();
+    this.http.get(`http://localhost:8090/api/pi/${promotionUUID}/confirmation`,{observe:'response'}).subscribe(response=>{
+      console.log(response);
       subject.next(true);
     },error=>{
       console.log(error);
       subject.next(false);
-    })
-    return subject;
-  }
-
-  public sendMediaNewsletter(newsletterOptions:PromotionItem) {
-    let subject = new Subject<any>();
-    console.log(newsletterOptions);
-    subject.next(true);
+    });
     return subject;
   }
 

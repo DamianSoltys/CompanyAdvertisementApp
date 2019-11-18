@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NearbyComponent } from './nearby-component.component';
-import { AgmCoreModule } from '@agm/core';
+import { AgmCoreModule} from '@agm/core';
 import { RouterModule } from '@angular/router';
 
 @NgModule({

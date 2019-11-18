@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -24,7 +24,10 @@ export interface OpinionListData {
   rate?:number
   userName?:string,
   userId?:number,
+  branchId?:number,
   ratingId?:number,
+  isOwner?:boolean,
+  commentId?:number,
 }
 @Component({
   selector: 'app-comments',
@@ -44,6 +47,7 @@ export interface OpinionListData {
   ]
 })
 export class CommentsComponent implements OnInit {
+  @ViewChild('scrollContainer') scrollContainer:ElementRef;
   public ratingForm = this.fb.group({
     commentText: ['', [Validators.required]]
   });
@@ -51,15 +55,18 @@ export class CommentsComponent implements OnInit {
   public isEditForm = new BehaviorSubject(false);
   public isLoaded = new BehaviorSubject(false);
   public isOwner = new BehaviorSubject(false);
-  public currentRate = 1;
+  public currentRate = this.isOwner.value?1:null;
+  public numberOfPages:number;
+  public actualPageLoaded:number = 0;
+
   public config = {
     toolbar: [['bold', 'italic', 'underline']]
   };
   public userREST: UserREST;
   public branchId: string;
   public companyId:string;
-  public opinions:OpinionData[];
-  public opinionData:OpinionData;
+  public opinions:OpinionListData[] = [];
+  public opinionData:OpinionListData;
   public testData = [
     {comment:'dupatreretaeretaaetatae',user:'user',rating:5},
     {comment:'sasasapdasdasdetatae',user:'Lamus',rating:2},
@@ -119,31 +126,31 @@ export class CommentsComponent implements OnInit {
     event.preventDefault();
 
     this.opinionData.comment = this.ratingForm.controls.commentText.value;
-    this.opinionData.rating = this.currentRate;
+    if(this.currentRate) {
+      this.opinionData.rate = this.currentRate;
+    } else {
+      this.opinionData.rate = null;
+    }
     let rateId = null;
     if(this.opinions) {
       this.opinions.forEach(opinion=>{
-        console.log(opinion.userId);
-        console.log(this.opinionData.userId);
-        //sprawdzic
         if(opinion.userId == this.opinionData.userId) {
           
           rateId = opinion.ratingId;
-          console.log(rateId)
         }
       });
     }
     this.cDataService.postOpinion(this.opinionData,rateId).subscribe(response => {
       if(response) {
         this.sDataService.open({
-          message:'Pomyślnie dodano komentarz!',
+          message:'Pomyślnie dodano opinie!',
           snackbarType:SnackbarType.success,
         });
         this.getOpinions();
         this.isForm.next(false);
       } else {
         this.sDataService.open({
-          message:'Nie udało się dodać komentarza!',
+          message:'Nie udało się dodać opinii!',
           snackbarType:SnackbarType.error,
         });
       }
@@ -151,7 +158,15 @@ export class CommentsComponent implements OnInit {
   }
 
   public canShowAddButton() {
-    if(!this.isOwner.value && this.userREST) {
+    if(this.userREST) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public canShowRatingForm() {
+    if(!this.isOwner.value) {
       return true;
     } else {
       return false;
@@ -168,28 +183,49 @@ export class CommentsComponent implements OnInit {
       return true;
     }
   }
-  public getOpinions() {
-    this.opinions = [];
+
+
+  @HostListener('scroll', ['$event'])
+  public onScroll(event:any) {
+    //dokonczyc
+    let tracker = event.target;
+    let limit = tracker.scrollHeight - tracker.clientHeight;
+    if (event.target.scrollTop === limit) {
+      if(this.actualPageLoaded < this.numberOfPages) {
+        this.getOpinions(this.actualPageLoaded+1);
+        this.actualPageLoaded++;
+      }
+    }
+  }
+  
+  public getOpinions(pageNumber?:number) {
     let subject = new Subject<boolean>();
     subject.subscribe(data=>{
       this.isLoaded.next(true);
     });
-    this.cDataService.getOpinion(this.opinionData).subscribe(data=>{
-      console.log(data);
+    this.cDataService.getOpinion(this.opinionData,pageNumber).subscribe(data=>{
+      console.log(data)
+      this.numberOfPages = data.numberOfPages;
       data.comment.forEach(comment => {
-        data.rating.forEach(rate=>{
-          if(rate.userId === comment.userId) {
-            let opinion:OpinionListData = {
-              comment:comment.comment,
-              rate:rate.rating,
-              userName:comment.username,
-              userId:rate.userId,
-              ratingId:rate.ratingId
-            }
-            this.opinions.push(opinion);
-          }
+        let opinion:OpinionListData = {
+          comment: comment.comment,
+          userName: comment.username,
+          commentId: comment.commentId,
+          userId: comment.userId,
+          isOwner:false,
+        }
+        this.opinions.push(opinion);
+      });
+
+      data.rating.forEach(rate=>{
+        this.opinions.map(opinion => {
+          if(rate.userId === opinion.userId) {
+            opinion.rate = rate.rating;
+            opinion.ratingId = rate.ratingId;
+          } 
         });
       });
+
       console.log(this.opinions);
       this.isOwner.next(this.coDataService.checkForUserPermission(Number(this.companyId)));
       subject.next(true);

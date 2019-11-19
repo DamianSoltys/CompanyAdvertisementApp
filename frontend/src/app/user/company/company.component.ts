@@ -57,7 +57,8 @@ export interface EditRequestData {
 })
 export class CompanyComponent implements OnInit {
   public voivodeshipOptions:string[] = voivodeships;
-  public categoryOptions:string[] = categories;
+  public categoryData:any;
+  public categoryOptions:string[];
   public selectConfig = {
     height: '300px',
   }
@@ -82,8 +83,6 @@ export class CompanyComponent implements OnInit {
     addWork: false,
     backId:null,
   };
-  public _voivodeships = voivodeships;
-  public _categories = categories;
 
   public companyForm = this.fb.group({
     description: ['',[Validators.required]],
@@ -141,6 +140,7 @@ export class CompanyComponent implements OnInit {
     this.getCompanyList();
     this.showEditForm();
     this.registerGetCompanyListener();
+    this.getCategoryData();
   }
 
   private getActualPosition() {
@@ -183,13 +183,21 @@ export class CompanyComponent implements OnInit {
   private getStorageList() {
     if(storage_Avaliable('localStorage')) {
       let companyData:GetCompany[] = JSON.parse(localStorage.getItem('companyData'));
-      console.log(companyData)
       if(companyData) {
         this.companyList = companyData;
       } else {
         this.companyList = undefined;
       }
     }
+  }
+  private getCategoryData() {
+    this.cDataService.getCategoryData().subscribe(data=>{
+      if(data) {
+        this.categoryOptions = data.body;
+      } else {
+        this.categoryOptions = categories;
+      }
+    });
   }
   
   private getCompanyList(clearDataStorage?:boolean) {

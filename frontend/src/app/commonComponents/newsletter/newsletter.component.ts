@@ -240,7 +240,7 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     console.log(this.sendingOptions);
 
     if(this.sendingOptions) {
-        this.nDataService.sendNewsletter(this.sendingOptions).subscribe(response=>{
+        this.nDataService.sendNewsletter(this.sendingOptions,this.files?this.files:null).subscribe(response=>{
           if(response) {
             this.snackbar.open({
               message:'Newsletter zostal pomyślnie wysłany',

@@ -2,7 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { PromotionItem } from '../classes/Newsletter';
-
+export interface newsletterResponse {
+  promotionItemPhotosUUIDsDto:string[];
+  promotionItemUUID: string;
+  sendingFinished: boolean;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -13,14 +17,36 @@ export class NewsletterService {
 
   constructor(private http:HttpClient) { }
 
-  public sendNewsletter(newsletterOptions:PromotionItem) {
+  public sendNewsletter(newsletterOptions:PromotionItem,fileList:File[]) {
     let subject = new Subject<boolean>();
     let httpParams = new HttpParams().set('companyId',newsletterOptions.companyId.toString());
     this.http.post(`http://localhost:8090/api/pi`,newsletterOptions,{params:httpParams}).subscribe(response=>{
-      console.log(response);
-      if(newsletterOptions.numberOfPhotos > 0) {
+      let responseBody = <newsletterResponse>response;
+      console.log(responseBody)
+      if(fileList) {
         let formData = new FormData();
-        subject.next(true);
+        for(let i=0;i<fileList.length;i++) {
+          formData.append(responseBody.promotionItemPhotosUUIDsDto[i],fileList[i]);
+          formData.append(responseBody.promotionItemPhotosUUIDsDto[i],'Value');
+        }
+        this.http.put(`http://localhost:8090/static/pi/${responseBody.promotionItemUUID}`,formData).subscribe(response=>{
+          setTimeout(()=>{
+            this.http.get(`http://localhost:8090/api/pi/${responseBody.promotionItemUUID}/confirmation`,{observe:'response'}).subscribe(response=>{
+              if(response.body) {
+                subject.next(true);
+              } else {
+                subject.next(false);
+              }
+            },error=>{
+              console.log(error);
+              subject.next(false);
+            });
+          },2000)
+        },error=>{
+          console.log(error);
+          subject.next(false);
+        });
+        
       } else {
         subject.next(true);
       }

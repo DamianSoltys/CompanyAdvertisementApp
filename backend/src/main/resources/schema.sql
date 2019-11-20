@@ -254,7 +254,7 @@ create or replace table users
         foreign key (id_email_address) references email_addresses (email_id),
     constraint natural_person_FK
         foreign key (id_natural_person) references natural_persons (id_natural_person)
-            ON DELETE SET NULL,
+            ON delete SET NULL,
     constraint verify_user_token_FK
         foreign key (verification_token_id) references tokens (token_id)
 );
@@ -338,10 +338,12 @@ create or replace table fb_tokens
     created_at             timestamp default current_timestamp()   not null,
     modified_at            timestamp default '0000-00-00 00:00:00' not null on update current_timestamp(),
     type                   varchar(40)                             not null,
-    expires_at             timestamp                               not null,
-    data_access_expires_at timestamp                               not null,
-    issued_at              timestamp                               not null,
+    expires_at             bigint                                  not null,
+    data_access_expires_at bigint                                  not null,
+    issued_at              bigint                                  not null,
+    is_valid               boolean                                 not null,
     facebook_profile_id    bigint                                  not null,
+    access_token           varchar(255)                            not null,
     constraint profile_facebook_token_FK
         foreign key (facebook_profile_id) references fb_social_profiles (facebook_social_profile_id)
 );
@@ -352,7 +354,7 @@ create or replace table fb_token_scopes
     created_at              timestamp default current_timestamp() not null,
     token_scope_type        varchar(30)                           not null,
     facebook_token_id       bigint                                not null,
-    scope                   bigint                                not null,
+    scope                   varchar(50)                           not null,
     constraint scope_facebook_token_FK
         foreign key (facebook_token_id) references fb_tokens (facebook_token_id)
 );

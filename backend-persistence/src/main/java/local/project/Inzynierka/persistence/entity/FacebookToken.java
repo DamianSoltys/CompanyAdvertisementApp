@@ -2,6 +2,7 @@ package local.project.Inzynierka.persistence.entity;
 
 import local.project.Inzynierka.persistence.common.FullTimestampingAudit;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +22,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Entity
 @Table(name = "fb_tokens")
+@Builder
 public class FacebookToken extends FullTimestampingAudit implements IEntity<Long> {
 
     @Id
@@ -39,6 +41,12 @@ public class FacebookToken extends FullTimestampingAudit implements IEntity<Long
 
     @Column(name = "issued_at")
     private Long issuedAt;
+
+    @Column(name = "access_token", nullable = false)
+    private String accessToken;
+
+    @Column(name = "is_valid", nullable = false)
+    private Boolean isValid;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "facebook_profile_id",nullable = false, foreignKey = @ForeignKey(name = "profile_facebook_token_FK"))

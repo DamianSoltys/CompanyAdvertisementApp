@@ -257,9 +257,6 @@ CALL insert_social_platforms();
 
 DELIMITER |
 
-CREATE OR REPLACE PROCEDURE insert_social_profiles()
-INSERT IGNORE INTO social_profiles (company_id, platform_id, social_profile_url, modified_at)
-VALUES (2, 1, 'https://facebook.com/example123.example123', current_timestamp());
 
 DELIMITER ;
 CALL insert_social_profiles();

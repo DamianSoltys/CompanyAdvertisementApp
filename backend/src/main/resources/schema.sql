@@ -320,7 +320,7 @@ create or replace table fb_social_profiles
     platform_id                smallint(6)                             not null,
     user_id                    bigint                                  not null,
     user_name                  varchar(255)                            not null,
-    page_id                    bigint                                  not null,
+    page_id                    bigint                                  null,
     constraint company_fb_profile_FK
         foreign key (company_id) references social_profiles (company_id)
             on delete CASCADE,

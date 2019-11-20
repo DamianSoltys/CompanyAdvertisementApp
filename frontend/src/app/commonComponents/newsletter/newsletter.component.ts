@@ -90,22 +90,22 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     'Edytor HTML'
   ]
   public mediaOptions = [
-    'Wysyłka do medii społecznościowych',
+    'Wysyłka do medii społecznościowych', //if user connected to media TODO
     'Standardowa wysyłka newslettera',
-    'Wysyłka tylko do medii społecznościowych'
+    'Wysyłka tylko do medii społecznościowych'///if user connected to media TODO
   ]
   public sendingTypeOptions= [
     'Wysyłka z opóźnieniem',
     'Wysyłka natychmiastowa',
     'Wysyłka na żądanie'
   ];
-  public mediaTypeOptions =[
+  public mediaTypeOptions =[ //if user connected to media TODO/display:none on select input
     'Facebook',
     'Twitter',
     'Wszystkie media'
   ]
   public config = {
-    toolbar: [['bold', 'italic', 'underline']]
+    toolbar: []
   };
   public selectConfig = {
     height: '300px',
@@ -240,7 +240,7 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     console.log(this.sendingOptions);
 
     if(this.sendingOptions) {
-        this.nDataService.sendNewsletter(this.sendingOptions).subscribe(response=>{
+        this.nDataService.sendNewsletter(this.sendingOptions,this.files?this.files:null).subscribe(response=>{
           if(response) {
             this.snackbar.open({
               message:'Newsletter zostal pomyślnie wysłany',
@@ -296,7 +296,8 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
 
   private setContentValues(editorName:string) {
     if(this.isText.value) {
-      this.sendingOptions.nonHtmlContent = this.textForm.controls.text.value;
+      let cleanText = this.textForm.controls.text.value.replace(/<\/?[^>]+(>|$)/g, "");
+      this.sendingOptions.nonHtmlContent = cleanText;
     } else {
       this.nDataService.template.subscribe(template=>{
         this.sendingOptions.htmlContent = btoa(template);
@@ -312,7 +313,8 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
       } else {
         this.sendingOptions.numberOfPhotos = 0;
       }
-      this.sendingOptions.nonHtmlContent = this.mediaForm.controls.text.value;
+      let cleanText = this.mediaForm.controls.text.value.replace(/<\/?[^>]+(>|$)/g, "");
+      this.sendingOptions.nonHtmlContent = cleanText;
 
       if(this.onlyMedia.value) {
         this.sendingOptions.destinations = [];

@@ -58,6 +58,16 @@ export class CompanyService {
     }
   }
 
+  public getCategoryData() {
+    let subject = new Subject<any>();
+    this.http.get(`http://localhost:8090/api/categories`,{observe:'response'}).subscribe(response=>{
+      subject.next(response);
+    },error=>{
+      subject.next(false);
+    });
+    return subject;
+  }
+
   public checkForUserPermission(companyId:number) {
     let haveAcces:boolean = false;
     this.getActualUser();

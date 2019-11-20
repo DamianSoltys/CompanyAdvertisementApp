@@ -2,6 +2,7 @@ package local.project.Inzynierka.persistence.entity;
 
 import local.project.Inzynierka.persistence.common.FullTimestampingAudit;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,6 +21,7 @@ import java.io.Serializable;
 @Table(name = "social_profiles")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class SocialProfile extends FullTimestampingAudit implements IEntity<SocialProfile.PK> {
 
     @EmbeddedId
@@ -40,6 +42,7 @@ public class SocialProfile extends FullTimestampingAudit implements IEntity<Soci
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
+    @Builder
     public static class PK implements Serializable {
 
         @Column(name = "company_id")

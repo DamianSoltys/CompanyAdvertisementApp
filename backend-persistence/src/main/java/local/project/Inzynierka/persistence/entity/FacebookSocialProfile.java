@@ -2,6 +2,7 @@ package local.project.Inzynierka.persistence.entity;
 
 import local.project.Inzynierka.persistence.common.FullTimestampingAudit;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +22,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Entity
 @Table(name = "fb_social_profiles")
+@Builder
 public class FacebookSocialProfile extends FullTimestampingAudit implements IEntity<Long> {
 
     @Id

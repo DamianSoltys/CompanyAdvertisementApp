@@ -2,6 +2,7 @@ package local.project.Inzynierka.persistence.entity;
 
 import local.project.Inzynierka.persistence.common.CreationTimestampingAudit;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -23,6 +24,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "fb_token_scopes")
+@Builder
 public class FacebookTokenScope extends CreationTimestampingAudit implements IEntity<Long> {
 
     @Id

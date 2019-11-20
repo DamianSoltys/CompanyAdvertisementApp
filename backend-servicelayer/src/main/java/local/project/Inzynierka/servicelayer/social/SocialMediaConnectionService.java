@@ -33,8 +33,8 @@ public class SocialMediaConnectionService {
         this.facebookTokenScopesRepository = facebookTokenScopesRepository;
     }
 
-    public List<SocialProfileConnectionDto> getSocialProfileConnections(Company company) {
-        return socialProfileRepository.findByCompany(company).stream()
+    public List<SocialProfileConnectionDto> getSocialProfileConnections(Long companyId) {
+        return socialProfileRepository.findByCompany(Company.builder().id(companyId).build()).stream()
                 .map(profile -> SocialProfileConnectionDto.builder()
                         .socialPlatform(SocialPlatform.fromSocialPlatform(profile.getSocialMediaPlatform()
                                                                                   .getSocialMediaPlatform()))
@@ -83,6 +83,7 @@ public class SocialMediaConnectionService {
                     connectionStatus = hasPageConnected(tokens) ?
                             ConnectionStatus.builder()
                                     .status(Status.CONNECTED)
+                                    .profileURL(tokens.get(0).getFacebookSocialProfile().getSocialProfile().getURL())
                                     .build() :
                             ConnectionStatus.builder()
                                     .status(Status.LACK_OF_PAGE)

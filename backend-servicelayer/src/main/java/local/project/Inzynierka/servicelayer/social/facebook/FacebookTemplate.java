@@ -2,7 +2,6 @@ package local.project.Inzynierka.servicelayer.social.facebook;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -27,8 +26,8 @@ public class FacebookTemplate {
     }
 
     public <T> T exchange(UriComponents uriComponents, HttpMethod httpMethod, Class<T> tClass) throws IOException {
-        var result = restTemplate.exchange(uriComponents.toUriString(), httpMethod, getDecoratedHttpEntity(), tClass);
-        return objectMapper.readValue((String) result.getBody(), tClass);
+        var result = restTemplate.exchange(uriComponents.toUriString(), httpMethod, getDecoratedHttpEntity(), String.class);
+        return objectMapper.readValue(result.getBody(), tClass);
     }
 
     public <T> T exchange(UriComponents uriComponents, HttpMethod httpMethod, TypeReference<T> responseType) throws IOException {

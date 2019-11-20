@@ -15,4 +15,7 @@ public class ConnectionStatus {
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String message;
+
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String profileURL;
 }

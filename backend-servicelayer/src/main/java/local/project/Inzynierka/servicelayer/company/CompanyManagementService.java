@@ -147,7 +147,7 @@ public class CompanyManagementService {
 
         boolean isAllowedToSeeConnectionStatus = userAccount.isNaturalPersonRegistered() && company.getRegisterer().getId().equals(userAccount.personId());
         List<SocialProfileConnectionDto> socialMediaConnections = isAllowedToSeeConnectionStatus ?
-                socialMediaConnectionService.getSocialProfileConnections(company) :
+                socialMediaConnectionService.getSocialProfileConnections(company.getId()) :
                 Collections.emptyList();
         AddressMapper addressMapper = new AddressMapper();
 

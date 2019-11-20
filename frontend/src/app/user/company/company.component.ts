@@ -223,32 +223,39 @@ export class CompanyComponent implements OnInit {
         this.cDataService.getCompany(companyId).subscribe(
           response => {
             let companyData:GetCompany = <GetCompany>response.body;
-            this.cDataService.getCompanyLogo(companyData).subscribe(response=>{            
-             if(response.status != 204) {
-              let reader = new FileReader();
-              reader.addEventListener("load", () => {
-                    companyData.logo = reader.result;
-                    this.cDataService.storeCompanyData(companyData);
-                    this.getStorageList();     
-                    subject.next(true);    
-              }, false);
-
-              if (response.body) {
-                  reader.readAsDataURL(response.body);
-              }
-             } else {
+            if(companyData.logoURL) {
+              this.cDataService.getCompanyLogo(companyData).subscribe(response=>{            
+                if(response.status != 204) {
+                 let reader = new FileReader();
+                 reader.addEventListener("load", () => {
+                       companyData.logo = reader.result;
+                       this.cDataService.storeCompanyData(companyData);
+                       this.getStorageList();     
+                       subject.next(true);    
+                 }, false);
+   
+                 if (response.body) {
+                     reader.readAsDataURL(response.body);
+                 }
+                } else {
+                   companyData.logo = this.cDataService.defaultCListUrl;              
+                   this.cDataService.storeCompanyData(companyData); 
+                   this.getStorageList();                         
+                   subject.next(true);
+                }
+                 
+               },error=>{
+                 console.log(error);
+                 console.log('coś poszło nie tak');
+                 this.companyList=undefined;                        
+                 subject.next(true);
+               });
+            } else {
                 companyData.logo = this.cDataService.defaultCListUrl;              
                 this.cDataService.storeCompanyData(companyData); 
                 this.getStorageList();                         
                 subject.next(true);
-             }
-              
-            },error=>{
-              console.log(error);
-              console.log('coś poszło nie tak');
-              this.companyList=undefined;                        
-              subject.next(true);
-            });
+            }
           },
           error => {
             subject.next(true);

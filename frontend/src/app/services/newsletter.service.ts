@@ -30,18 +30,31 @@ export class NewsletterService {
           formData.append(responseBody.promotionItemPhotosUUIDsDto[i],'Value');
         }
         this.http.put(`http://localhost:8090/static/pi/${responseBody.promotionItemUUID}`,formData).subscribe(response=>{
-          setTimeout(()=>{
-            this.http.get(`http://localhost:8090/api/pi/${responseBody.promotionItemUUID}/confirmation`,{observe:'response'}).subscribe(response=>{
-              if(response.body) {
-                subject.next(true);
-              } else {
+          if(newsletterOptions.plannedSendingTime) {
+            setTimeout(()=>{
+              this.http.get(`http://localhost:8090/api/pi/${responseBody.promotionItemUUID}/confirmation`,{observe:'response'}).subscribe(response=>{
+                if(response.body) {
+                  subject.next(true);
+                } else {
+                  this.http.get(`http://localhost:8090/api/pi/${responseBody.promotionItemUUID}/confirmation`,{observe:'response'}).subscribe(response=>{
+                    if(response.body) {
+                      subject.next(true);
+                    } else {
+                      subject.next(false);
+                    }
+                  },error=>{
+                    console.log(error);
+                    subject.next(false);
+                  });
+                }
+              },error=>{
+                console.log(error);
                 subject.next(false);
-              }
-            },error=>{
-              console.log(error);
-              subject.next(false);
-            });
-          },2000)
+              });
+            },3000)
+          } else {
+            subject.next(true);
+          }
         },error=>{
           console.log(error);
           subject.next(false);

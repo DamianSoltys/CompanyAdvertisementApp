@@ -145,7 +145,7 @@ public class CompanyManagementService {
 
     private CompanyInfoDto buildCompanyInfoDto(Company company, UserAccount userAccount) {
 
-        boolean isAllowedToSeeConnectionStatus = company.getRegisterer().getId().equals(userAccount.personId());
+        boolean isAllowedToSeeConnectionStatus = userAccount.isNaturalPersonRegistered() && company.getRegisterer().getId().equals(userAccount.personId());
         List<SocialProfileConnectionDto> socialMediaConnections = isAllowedToSeeConnectionStatus ?
                 socialMediaConnectionService.getSocialProfileConnections(company) :
                 Collections.emptyList();

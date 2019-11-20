@@ -43,7 +43,7 @@ public class FacebookSocialProfile extends FullTimestampingAudit implements IEnt
     @Column(name = "user_name", nullable = false)
     private String userName;
 
-    @Column(name = "page_id", nullable = false, unique = true)
+    @Column(name = "page_id", unique = true)
     private Long pageId;
 
 }

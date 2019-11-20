@@ -59,23 +59,30 @@ public class FacebookSocialProfileInstallerService {
         FacebookLogin facebookLogin = event.getFacebookLogin();
         TokenInspection tokenInspection = event.getTokenInspection();
 
-        var userAccounts = facebookTemplate.exchange(getCheckForPagesUri(event, tokenInspection), HttpMethod.GET, String.class);
-        if (hasNoPage(userAccounts)) {
+        var userAccounts = facebookTemplate.exchangeForEntity(getCheckForPagesUri(event, tokenInspection), HttpMethod.GET, String.class);
+        if (hasNoPage(userAccounts.getBody())) {
             log.info(String.format("User %s has no page registered. ", facebookLogin.getAuthResponse().getUserID()));
+            installTokens(event, facebookLogin, tokenInspection, null, null, null);
             return;
         }
 
-        QueriedPageInfo page = facebookTemplate.readValue(userAccounts, QueriedPageInfo.class);
+        QueriedPageInfo page = facebookTemplate.readValue(userAccounts.getBody(), QueriedPageInfo.class);
         TokenInspection pageTokenInspection = facebookTokenInspector.inspectToken(page.getData().getAccess_token());
 
         PageData pageData = facebookTemplate.exchange(getPageUri(page), HttpMethod.GET, PageData.class);
         log.info(String.valueOf(pageData));
 
+        installTokens(event, facebookLogin, tokenInspection, page, pageTokenInspection, pageData);
+    }
+
+    private void installTokens(FacebookTokenInstalledEvent event, FacebookLogin facebookLogin, TokenInspection tokenInspection, QueriedPageInfo page, TokenInspection pageTokenInspection, PageData pageData) {
         SocialProfile socialProfile = socialProfileRepository.save(buildSocialProfile(facebookLogin, pageData));
         FacebookSocialProfile facebookSocialProfile = facebookSocialProfileRepository.save(buildFacebookSocialProfile(facebookLogin, pageData, socialProfile));
 
         FacebookToken userToken = facebookTokenRepository.save(buildUserToken(event, tokenInspection, facebookSocialProfile));
-        FacebookToken pageToken = facebookTokenRepository.save(buildPageToken(page, pageTokenInspection, facebookSocialProfile));
+        if(page != null ) {
+            facebookTokenRepository.save(buildPageToken(page, pageTokenInspection, facebookSocialProfile));
+        }
 
         List<FacebookTokenScope> scopes = tokenInspection.getScopes().stream()
                 .map(scope -> FacebookTokenScope.builder()
@@ -112,8 +119,11 @@ public class FacebookSocialProfileInstallerService {
     }
 
     private FacebookSocialProfile buildFacebookSocialProfile(FacebookLogin facebookLogin, PageData pageData, SocialProfile socialProfile) {
+
+       Long pageId = pageData == null ? null : pageData.getId();
+
         return FacebookSocialProfile.builder()
-                .pageId(pageData.getId())
+                .pageId(pageId)
                 .socialProfile(socialProfile)
                 .userId(facebookLogin.getAuthResponse().getUserID())
                 .userName("")
@@ -123,6 +133,8 @@ public class FacebookSocialProfileInstallerService {
     private SocialProfile buildSocialProfile(FacebookLogin facebookLogin, PageData pageData) {
 
         var socialMediaPlatform = socialPlatformRepository.findBySocialMediaPlatform("facebook");
+        String socialURL = pageData == null ? "" : String.format("https://facebook.com/%s-%s", pageData.getName()
+                .replace(" ", "-"), pageData.getId());
 
         return SocialProfile.builder()
                 .id(SocialProfile.PK.builder()
@@ -131,8 +143,7 @@ public class FacebookSocialProfileInstallerService {
                             .build())
                 .socialMediaPlatform(socialMediaPlatform)
                 .company(Company.builder().id(facebookLogin.getCompanyId()).build())
-                .URL(String.format("https://facebook.com/%s-%s", pageData.getName()
-                        .replace(" ", "-"), pageData.getId()))
+                .URL(socialURL)
                 .build();
     }
 

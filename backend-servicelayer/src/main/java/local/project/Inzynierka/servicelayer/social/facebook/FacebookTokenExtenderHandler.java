@@ -58,11 +58,12 @@ public class FacebookTokenExtenderHandler {
                 .inspectedToken(tokenToInspect)
                 .build();
         log.info(String.valueOf(event));
-        installToken(event);
+
+        publishInstallTokenEvent(event);
 
     }
 
-    private void installToken(FacebookTokenInstalledEvent event) {
+    private void publishInstallTokenEvent(FacebookTokenInstalledEvent event) {
         applicationEventPublisher.publishEvent(event);
     }
 

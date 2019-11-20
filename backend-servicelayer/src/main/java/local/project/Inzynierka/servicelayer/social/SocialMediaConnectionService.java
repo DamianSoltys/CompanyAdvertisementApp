@@ -114,6 +114,7 @@ public class SocialMediaConnectionService {
     }
 
     private boolean existValidByTimeFacebookToken(FacebookToken token) {
-        return Timestamp.from(Instant.now()).before(Timestamp.from(Instant.ofEpochSecond(token.getExpiresAt())));
+        return Timestamp.from(Instant.now()).before(Timestamp.from(Instant.ofEpochSecond(token.getExpiresAt()))) ||
+                token.getExpiresAt() == 0;
     }
 }

@@ -2,7 +2,6 @@ package local.project.Inzynierka.servicelayer.social.facebook;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import local.project.Inzynierka.servicelayer.social.facebook.fbapi.FacebookLogin;
-import local.project.Inzynierka.servicelayer.social.facebook.fbapi.QueriedPageInfo;
 import local.project.Inzynierka.shared.utils.SimpleJsonFromStringCreator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -43,13 +42,16 @@ public class FacebookAuthService {
 
     @GetMapping("/api/fb/generate_app_access_token")
     public void generateAppAccessToken() {
-        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString("https://graph.facebook.com/oauth/access_token")
+        var result = restTemplate.exchange(generateAppAccessTokenUri().toUriString(),
+                                           HttpMethod.GET, getDecoratedHttpEntity(), String.class).getBody();
+        log.info(String.valueOf(result));
+    }
+
+    private UriComponentsBuilder generateAppAccessTokenUri() {
+        return UriComponentsBuilder.fromUriString("https://graph.facebook.com/oauth/access_token")
                 .queryParam("client_id", facebookCredentials.getAppId())
                 .queryParam("client_secret", facebookCredentials.getAppSecret())
-                .queryParam("grant_type","client_credentials");
-        var result = restTemplate.exchange(
-                uriBuilder.toUriString(), HttpMethod.GET, getDecoratedHttpEntity(), String.class).getBody();
-        log.info(String.valueOf(result));
+                .queryParam("grant_type", "client_credentials");
     }
 
     @PostMapping("/api/fb/login_in")

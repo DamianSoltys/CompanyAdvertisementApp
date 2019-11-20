@@ -1,6 +1,5 @@
 package local.project.Inzynierka.servicelayer.social.facebook;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.FacebookSocialProfile;
 import local.project.Inzynierka.persistence.entity.FacebookToken;
@@ -20,19 +19,13 @@ import local.project.Inzynierka.servicelayer.social.facebook.fbapi.QueriedPageIn
 import local.project.Inzynierka.servicelayer.social.facebook.fbapi.TokenInspection;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,18 +35,17 @@ public class FacebookSocialProfileInstallerService {
 
     private final SocialProfileRepository socialProfileRepository;
     private final SocialPlatformRepository socialPlatformRepository;
-    private final RestTemplate restTemplate;
-    private final ObjectMapper objectMapper;
     private final FacebookTokenInspector facebookTokenInspector;
+    private final FacebookTemplate facebookTemplate;
     private final FacebookSocialProfileRepository facebookSocialProfileRepository;
     private final FacebookTokenRepository facebookTokenRepository;
     private final FacebookTokenScopesRepository facebookTokenScopesRepository;
 
-    public FacebookSocialProfileInstallerService(SocialProfileRepository socialProfileRepository, SocialPlatformRepository socialPlatformRepository, RestTemplate restTemplate, ObjectMapper objectMapper, FacebookTokenInspector facebookTokenInspector, FacebookSocialProfileRepository facebookSocialProfileRepository, FacebookTokenRepository facebookTokenRepository, FacebookTokenScopesRepository facebookTokenScopesRepository) {
+    public FacebookSocialProfileInstallerService(SocialProfileRepository socialProfileRepository, SocialPlatformRepository socialPlatformRepository,
+                                                 FacebookTokenInspector facebookTokenInspector, FacebookTemplate facebookTemplate, FacebookSocialProfileRepository facebookSocialProfileRepository, FacebookTokenRepository facebookTokenRepository, FacebookTokenScopesRepository facebookTokenScopesRepository) {
         this.socialProfileRepository = socialProfileRepository;
         this.socialPlatformRepository = socialPlatformRepository;
-        this.restTemplate = restTemplate;
-        this.objectMapper = objectMapper;
+        this.facebookTemplate = facebookTemplate;
         this.facebookTokenInspector = facebookTokenInspector;
         this.facebookSocialProfileRepository = facebookSocialProfileRepository;
         this.facebookTokenRepository = facebookTokenRepository;
@@ -67,20 +59,17 @@ public class FacebookSocialProfileInstallerService {
         FacebookLogin facebookLogin = event.getFacebookLogin();
         TokenInspection tokenInspection = event.getTokenInspection();
 
-        UriComponents checkForPagesUri = getCheckForPagesUri(event, tokenInspection);
-        var userAccounts = restTemplate.exchange(checkForPagesUri.toUriString(), HttpMethod.GET, getDecoratedHttpEntity(), String.class);
+        var userAccounts = facebookTemplate.exchange(getCheckForPagesUri(event, tokenInspection), HttpMethod.GET, String.class);
         if (hasNoPage(userAccounts)) {
             log.info(String.format("User %s has no page registered. ", facebookLogin.getAuthResponse().getUserID()));
             return;
         }
 
-        QueriedPageInfo page = objectMapper.readValue(userAccounts.getBody(), QueriedPageInfo.class);
+        QueriedPageInfo page = facebookTemplate.readValue(userAccounts, QueriedPageInfo.class);
         TokenInspection pageTokenInspection = facebookTokenInspector.inspectToken(page.getData().getAccess_token());
 
-        UriComponents getPageUri = getPageUri(page);
-        var result = restTemplate.exchange(getPageUri.toString(), HttpMethod.GET, getDecoratedHttpEntity(), String.class);
-        PageData pageData = objectMapper.readValue(result.getBody(), PageData.class);
-        log.info(String.valueOf(result));
+        PageData pageData = facebookTemplate.exchange(getPageUri(page), HttpMethod.GET, PageData.class);
+        log.info(String.valueOf(pageData));
 
         SocialProfile socialProfile = socialProfileRepository.save(buildSocialProfile(facebookLogin, pageData));
         FacebookSocialProfile facebookSocialProfile = facebookSocialProfileRepository.save(buildFacebookSocialProfile(facebookLogin, pageData, socialProfile));
@@ -96,8 +85,6 @@ public class FacebookSocialProfileInstallerService {
                         .build())
                 .collect(Collectors.toList());
         facebookTokenScopesRepository.saveAll(scopes);
-
-
     }
 
     private FacebookToken buildPageToken(QueriedPageInfo pageInfo, TokenInspection pageTokenInspection, FacebookSocialProfile facebookSocialProfile) {
@@ -168,13 +155,8 @@ public class FacebookSocialProfileInstallerService {
                 .build();
     }
 
-    private boolean hasNoPage(ResponseEntity<String> accounts) {
-        return EmptyData.EMPTY_DATA.toString().equals(accounts.getBody());
+    private boolean hasNoPage(String accounts) {
+        return EmptyData.EMPTY_DATA.toString().equals(accounts);
     }
 
-    private HttpEntity getDecoratedHttpEntity() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        return new HttpEntity(headers);
-    }
 }

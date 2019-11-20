@@ -2,6 +2,7 @@ package local.project.Inzynierka.servicelayer.social;
 
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.FacebookToken;
+import local.project.Inzynierka.persistence.entity.FacebookTokenScope;
 import local.project.Inzynierka.persistence.entity.SocialProfile;
 import local.project.Inzynierka.persistence.entity.TokenScopeType;
 import local.project.Inzynierka.persistence.repository.FacebookTokenRepository;
@@ -68,8 +69,8 @@ public class SocialMediaConnectionService {
                     .build();
         } else {
             List<FacebookToken> tokens = facebookTokens.stream()
-                    .filter(this::existValidByTimeFacebookToken
-                    ).collect(Collectors.toList());
+                    .filter(this::existValidByTimeFacebookToken)
+                    .collect(Collectors.toList());
             if (tokens.isEmpty()) {
                 connectionStatus = ConnectionStatus.builder().status(Status.EXPIRED_CONNECTION).build();
             } else {
@@ -102,9 +103,14 @@ public class SocialMediaConnectionService {
     }
 
     private List<FacebookToken> getTokensWithRequiredPermissions(List<FacebookToken> tokens) {
-        return tokens.stream().filter(token ->
-                                              facebookTokenScopesRepository.
-                                                      findByFacebookTokenAndTokenScopeType(token, TokenScopeType.NORMAL).containsAll(getRequiredScopes()))
+        return tokens.stream().filter(token -> getTokenScopes(token).containsAll(getRequiredScopes()))
+                .collect(Collectors.toList());
+    }
+
+    private List<String> getTokenScopes(FacebookToken token) {
+        return facebookTokenScopesRepository.
+                findByFacebookTokenAndTokenScopeType(token, TokenScopeType.NORMAL).stream()
+                .map(FacebookTokenScope::getScope)
                 .collect(Collectors.toList());
     }
 

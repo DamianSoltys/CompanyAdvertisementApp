@@ -1,6 +1,6 @@
 package local.project.Inzynierka.servicelayer.promotionitem.validation;
 
-import local.project.Inzynierka.servicelayer.promotionitem.PromotionItemAddedEvent;
+import local.project.Inzynierka.servicelayer.promotionitem.event.PromotionItemAddedEvent;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -13,6 +13,6 @@ public class PhotosNumberValidator implements ConstraintValidator<ZeroOrMaximum5
     }
 
     private boolean integerInRange1to5(Integer number) {
-       return number >= 1 && number <=5;
+       return number >= 0 && number <=5;
     }
 }

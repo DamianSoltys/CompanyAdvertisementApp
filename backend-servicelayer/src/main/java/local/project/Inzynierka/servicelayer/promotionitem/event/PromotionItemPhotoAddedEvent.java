@@ -1,4 +1,4 @@
-package local.project.Inzynierka.servicelayer.promotionitem;
+package local.project.Inzynierka.servicelayer.promotionitem.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

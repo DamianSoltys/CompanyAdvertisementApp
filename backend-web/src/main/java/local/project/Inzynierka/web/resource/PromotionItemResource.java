@@ -2,12 +2,11 @@ package local.project.Inzynierka.web.resource;
 
 import local.project.Inzynierka.auth.AuthFacade;
 import local.project.Inzynierka.servicelayer.company.CompanyManagementPermissionService;
-import local.project.Inzynierka.servicelayer.promotionitem.PromotionItemAddedEvent;
+import local.project.Inzynierka.servicelayer.promotionitem.event.PromotionItemAddedEvent;
 import local.project.Inzynierka.servicelayer.promotionitem.PromotionItemService;
 import local.project.Inzynierka.shared.UserAccount;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;

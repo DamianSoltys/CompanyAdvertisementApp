@@ -1,6 +1,6 @@
 package local.project.Inzynierka.servicelayer.filestorage;
 
-import local.project.Inzynierka.servicelayer.promotionitem.PromotionItemPhotoAddedEvent;
+import local.project.Inzynierka.servicelayer.promotionitem.event.PromotionItemPhotoAddedEvent;
 import local.project.Inzynierka.shared.utils.EntityName;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;

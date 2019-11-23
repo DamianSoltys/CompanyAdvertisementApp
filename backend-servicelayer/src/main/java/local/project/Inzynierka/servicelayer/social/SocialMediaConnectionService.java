@@ -1,6 +1,5 @@
 package local.project.Inzynierka.servicelayer.social;
 
-import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.FacebookToken;
 import local.project.Inzynierka.persistence.entity.FacebookTokenScope;
 import local.project.Inzynierka.persistence.entity.SocialProfile;
@@ -34,7 +33,7 @@ public class SocialMediaConnectionService {
     }
 
     public List<SocialProfileConnectionDto> getSocialProfileConnections(Long companyId) {
-        return socialProfileRepository.findByCompany(Company.builder().id(companyId).build()).stream()
+        return socialProfileRepository.findByCompany_Id(companyId).stream()
                 .map(profile -> SocialProfileConnectionDto.builder()
                         .socialPlatform(SocialPlatform.fromSocialPlatform(profile.getSocialMediaPlatform()
                                                                                   .getSocialMediaPlatform()))

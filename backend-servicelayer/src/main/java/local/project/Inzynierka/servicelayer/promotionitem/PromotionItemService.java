@@ -16,6 +16,8 @@ import local.project.Inzynierka.servicelayer.dto.promotionitem.PromotionItemAddi
 import local.project.Inzynierka.servicelayer.dto.promotionitem.SendingStatus;
 import local.project.Inzynierka.persistence.constants.SendingStrategy;
 import local.project.Inzynierka.servicelayer.promotionitem.error.InvalidSendingStrategyException;
+import local.project.Inzynierka.servicelayer.promotionitem.event.PromotionItemAddedEvent;
+import local.project.Inzynierka.servicelayer.promotionitem.event.PromotionItemPhotoAddedEvent;
 import local.project.Inzynierka.servicelayer.promotionitem.event.SendingEvent;
 import local.project.Inzynierka.shared.ApplicationConstants;
 import org.springframework.context.ApplicationEventPublisher;

@@ -23,6 +23,7 @@ public class BranchMapper {
         CompanyBranchDto companyBranchDto = new CompanyBranchDto();
         companyBranchDto.setAddress(new AddressMapper().map(branch.getAddress()));
         companyBranchDto.setGeoX(branch.getGeoX());
+        companyBranchDto.setCategory(branch.getCompany().getCategory().getName());
         companyBranchDto.setGeoY(branch.getGeoY());
         companyBranchDto.setName(branch.getName());
         companyBranchDto.setGetLogoURL(branch.getPhotoPath());
@@ -43,6 +44,7 @@ public class BranchMapper {
         persistedBranchDto.setAddress(new AddressMapper().map(branch.getAddress()));
         persistedBranchDto.setHasLogoAdded(branch.isHasLogoAdded());
         persistedBranchDto.setCompanyId(branch.getCompany().getId());
+        persistedBranchDto.setCategory(branch.getCompany().getCategory().getName());
         persistedBranchDto.setGeoX(branch.getGeoX());
         persistedBranchDto.setGeoY(branch.getGeoY());
         persistedBranchDto.setName(branch.getName());

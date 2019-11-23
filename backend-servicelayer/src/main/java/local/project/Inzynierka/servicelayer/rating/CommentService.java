@@ -9,6 +9,7 @@ import local.project.Inzynierka.servicelayer.rating.event.CommentCreatedEvent;
 import local.project.Inzynierka.servicelayer.rating.event.CommentDeletedEvent;
 import local.project.Inzynierka.servicelayer.rating.event.CommentEditedEvent;
 import local.project.Inzynierka.servicelayer.services.UserFacade;
+import local.project.Inzynierka.shared.UserAccount;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -55,46 +56,54 @@ public class CommentService {
                 Comment.builder().id(event.getCommentId()).build());
     }
 
-    public Optional<CommentGetDto> getComment(Long commentId) {
+    public Optional<CommentGetDto> getComment(UserAccount requestingUser, Long commentId) {
         return this.commentRepository.findById(commentId)
-                .map(this::buildCommentGetDto);
+                .map(comment -> this.buildCommentGetDto(comment, requestingUser));
     }
 
-    public Page<CommentGetDto> getCommentsByUser(Long userId, Pageable pageable) {
+    public Page<CommentGetDto> getCommentsByUser(UserAccount requestingUser, Long userId, Pageable pageable) {
         return this.commentRepository
                 .findAllByUser(User.builder().id(userId).build(), pageable)
-                .map(this::buildCommentGetDto);
+                .map(comment -> this.buildCommentGetDto(comment, requestingUser));
     }
 
-    public Page<CommentGetDto> getCommentsByBranchAndUser(Long branchId, Long userId, Pageable pageable) {
+    public Page<CommentGetDto> getCommentsByBranchAndUser(UserAccount requestingUser, Long branchId, Long userId, Pageable pageable) {
         return this.commentRepository
                 .findAllByBranchAndUser(Branch.builder().id(branchId).build(),
                                         User.builder().id(userId).build(),
                                         pageable)
-                .map(this::buildCommentGetDto);
+                .map(comment -> this.buildCommentGetDto(comment, requestingUser));
     }
 
-    public Page<CommentGetDto> getCommentsByBranch(Long branchId, Pageable pageable) {
+    public Page<CommentGetDto> getCommentsByBranch(UserAccount requestingUser, Long branchId, Pageable pageable) {
         return this.commentRepository
                 .findAllByBranch(Branch.builder().id(branchId).build(),
                                  pageable)
-                .map(this::buildCommentGetDto);
+                .map(comment -> this.buildCommentGetDto(comment, requestingUser));
     }
 
-    public Page<CommentGetDto> getComments(Pageable pageable) {
+    public Page<CommentGetDto> getComments(UserAccount requestingUser, Pageable pageable) {
         return this.commentRepository
                 .findAll(pageable)
-                .map(this::buildCommentGetDto);
+                .map(comment -> this.buildCommentGetDto(comment, requestingUser));
     }
 
-    private CommentGetDto buildCommentGetDto(Comment comment) {
+    private CommentGetDto buildCommentGetDto(Comment comment, UserAccount userAccount) {
+        Boolean isOwnBranchCommented = userAccount != null && (userAccount.isNaturalPersonRegistered() &&
+                requestingUserIsOwnerOfCommentedBranch(comment, userAccount));
+
         return CommentGetDto.builder()
+                .isOwnBranchCommented(isOwnBranchCommented)
                 .branchId(comment.getBranch().getId())
                 .commentId(comment.getId())
                 .username(comment.getUser().getName())
                 .userId(comment.getUser().getId())
                 .comment(comment.getComment())
                 .build();
+    }
+
+    private boolean requestingUserIsOwnerOfCommentedBranch(Comment comment, UserAccount userAccount) {
+        return userAccount.personId().equals(comment.getBranch().getCompany().getRegisterer().getId());
     }
 }
 

@@ -85,7 +85,8 @@ public class CommentResource {
     @RequestMapping(method = RequestMethod.GET, value = "/comment/{id}")
     public ResponseEntity<?> getComment(@PathVariable(value = "id") Long commentId) {
 
-        Optional<CommentGetDto> commentGetDto = this.commentService.getComment(commentId);
+        UserAccount userAccount = authFacade.getAuthenticatedUser();
+        Optional<CommentGetDto> commentGetDto = this.commentService.getComment(userAccount, commentId);
 
         if (commentGetDto.isPresent()) {
             return ResponseEntity.ok(commentGetDto.get());
@@ -99,15 +100,16 @@ public class CommentResource {
                                            @RequestParam(value = "branchId", required = false) Long branchId,
                                            Pageable pageable) {
         Page<CommentGetDto> result;
+        UserAccount userAccount = authFacade.getAuthenticatedUser();
 
         if (branchId != null && userId != null) {
-            result = this.commentService.getCommentsByBranchAndUser(branchId, userId, pageable);
+            result = this.commentService.getCommentsByBranchAndUser(userAccount, branchId, userId, pageable);
         } else if (branchId == null && userId != null) {
-            result = this.commentService.getCommentsByUser(userId, pageable);
+            result = this.commentService.getCommentsByUser(userAccount, userId, pageable);
         } else if (branchId != null && userId == null) {
-            result = this.commentService.getCommentsByBranch(branchId, pageable);
+            result = this.commentService.getCommentsByBranch(userAccount, branchId, pageable);
         } else {
-            result = this.commentService.getComments(pageable);
+            result = this.commentService.getComments(userAccount, pageable);
         }
         return result;
     }

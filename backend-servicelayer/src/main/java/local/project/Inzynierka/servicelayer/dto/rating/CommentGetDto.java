@@ -13,4 +13,5 @@ public class CommentGetDto {
     private Long userId;
     private Long branchId;
     private String username;
+    private Boolean isOwnBranchCommented;
 }

@@ -179,9 +179,9 @@ create or replace table promotion_items
     modified_at          timestamp default '0000-00-00 00:00:00' not null on update current_timestamp(),
     name                 varchar(255)                            not null,
     email_title          varchar(255)                            null,
-    was_sent             bit                                     null,
     planned_sending_at   timestamp                               null,
-    send_at              timestamp                               null,
+    sending_strategy     varchar(30)                             not null,
+    adding_completed     boolean                                 not null,
     promoting_company_id bigint                                  not null,
     promotion_type_id    smallint(6)                             not null,
     photos_number        smallint(2)                             not null,
@@ -357,4 +357,15 @@ create or replace table fb_token_scopes
     scope                   varchar(50)                           not null,
     constraint scope_facebook_token_FK
         foreign key (facebook_token_id) references fb_tokens (facebook_token_id)
+);
+
+create or replace table destination_arrivals
+(
+    destination_arrival_id        bigint auto_increment primary key,
+    created_at                    timestamp default current_timestamp()   not null,
+    promotion_item_destination_id bigint                                  not null,
+    status                        varchar(30)                             not null,
+    detail                        varchar(50)                             null,
+    constraint sending_status_FK
+        foreign key (promotion_item_destination_id) references promotion_item_destinations (promotion_item_destination_id)
 );

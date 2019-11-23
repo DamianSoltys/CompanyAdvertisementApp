@@ -7,7 +7,10 @@ import local.project.Inzynierka.servicelayer.promotionitem.PromotionItemService;
 import local.project.Inzynierka.shared.UserAccount;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,7 +39,7 @@ public class PromotionItemResource {
         this.authFacade = authFacade;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "")
+    @PostMapping(value = "")
     public ResponseEntity<?> addPromotionItem(@RequestBody @Valid PromotionItemAddedEvent promotionItemAddedEvent,
                                               HttpServletRequest httpServletRequest) {
         ResponseEntity<?> result;
@@ -52,7 +55,21 @@ public class PromotionItemResource {
         return result;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{promotionItemUUID}/confirmation")
+    @PutMapping(value = "/{promotionItemUUID}/adding")
+    public ResponseEntity<?> getAddingConfirmation(@PathVariable(value = "promotionItemUUID") String promotionItemUUID) {
+
+        ResponseEntity<?> result;
+        if (!authFacade.hasPrincipalHavePermissionToPromotionItemResource(promotionItemUUID)) {
+            result = ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        } else {
+            result = ResponseEntity.ok(promotionItemService.finalizePromotionItemAdding(promotionItemUUID));
+        }
+
+        return result;
+    }
+
+
+    @PutMapping( value = "/{promotionItemUUID}/sending")
     public ResponseEntity<?> getSendingConfirmation(@PathVariable(value = "promotionItemUUID") String promotionItemUUID) {
 
         ResponseEntity<?> result;

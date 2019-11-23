@@ -24,6 +24,10 @@ begin
     truncate inzynierka.voivodeships;
     truncate inzynierka.promotion_item_destinations;
     truncate inzynierka.promotion_item_photos;
+    truncate inzynierka.destination_arrivals;
+    truncate inzynierka.fb_social_profiles;
+    truncate inzynierka.fb_token_scopes;
+    truncate inzynierka.fb_tokens;
     SET FOREIGN_KEY_CHECKS = 1;
 end;
 |
@@ -47,5 +51,8 @@ begin
     call inzynierka.insert_promotion_items();
     call inzynierka.insert_social_platforms();
     call inzynierka.insert_social_profiles();
+    call inzynierka.insert_fb_social_profiles();
+    call inzynierka.insert_fb_tokens();
+    call inzynierka.insert_fb_token_scopes();
 end;
 |

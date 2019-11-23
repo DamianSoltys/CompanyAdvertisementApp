@@ -3,6 +3,7 @@ package local.project.Inzynierka.persistence.repository;
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.NaturalPerson;
 import local.project.Inzynierka.persistence.projections.CompanySendMailInfo;
+import local.project.Inzynierka.persistence.projections.CompanyFacebookCreatePageInfo;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -43,4 +44,6 @@ public interface CompanyRepository extends ApplicationBigRepository<Company>, Jp
     Optional<Company> findByCompanyUUID(String companyUUID);
 
     Optional<CompanySendMailInfo> getSendEmailInfoById(Long companyId);
+
+    Optional<CompanyFacebookCreatePageInfo> getCompanyFacebookCreatePageInfoById(Long companyId);
 }

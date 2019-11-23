@@ -15,10 +15,8 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class GetPromotionItemDto {
     private String promotionItemUUID;
-    private SendingStatus sendingStatus;
-    private List<Destination> destinations;
+    private List<DestinationSendingStatus> sendingStatus;
     private Long addedTime;
-    private Long plannedSendingTime;
     private Long sendTime;
     private String name;
 }

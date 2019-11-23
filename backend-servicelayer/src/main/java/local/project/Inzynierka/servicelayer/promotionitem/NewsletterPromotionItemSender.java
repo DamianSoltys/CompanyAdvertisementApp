@@ -1,7 +1,10 @@
 package local.project.Inzynierka.servicelayer.promotionitem;
 
+import local.project.Inzynierka.servicelayer.dto.promotionitem.Destination;
+import local.project.Inzynierka.servicelayer.dto.promotionitem.SendingStatus;
 import local.project.Inzynierka.servicelayer.newsletter.EmailMimeType;
 import local.project.Inzynierka.servicelayer.newsletter.event.CreatingNewsletterMailEvent;
+import local.project.Inzynierka.servicelayer.promotionitem.event.SendingEvent;
 import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -10,6 +13,9 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.util.StringUtils;
+
+import java.sql.Timestamp;
+import java.time.Instant;
 
 @Configurable(dependencyCheck = true, autowire = Autowire.BY_TYPE, preConstruction = true)
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
@@ -29,7 +35,12 @@ public class NewsletterPromotionItemSender implements PromotionItemSender {
 
     @Override
     public void schedule(Sendable sendable) {
-        threadPoolTaskScheduler.schedule(()-> {
+        applicationEventPublisher.publishEvent(SendingEvent.builder()
+                                                       .destination(Destination.NEWSLETTER)
+                                                       .sendingStatus(SendingStatus.DELAYED)
+                                                       .promotionItemUUUID(sendable.getUUID())
+                                                       .build());
+        threadPoolTaskScheduler.schedule(() -> {
             publishSendable(sendable);
         }, sendable.getPlannedSendingTime());
     }
@@ -42,7 +53,11 @@ public class NewsletterPromotionItemSender implements PromotionItemSender {
                                                                                sendable.getAppUrl(),
                                                                                sendable.getCompanyId(),
                                                                                emailMimeType));
-        applicationEventPublisher.publishEvent(new PromotionItemSentEvent(sendable.getUUID()));
+        applicationEventPublisher.publishEvent(SendingEvent.builder()
+                                                       .destination(Destination.NEWSLETTER)
+                                                       .sendingStatus(SendingStatus.SENT)
+                                                       .promotionItemUUUID(sendable.getUUID())
+                                                       .build());
     }
 
     @Override

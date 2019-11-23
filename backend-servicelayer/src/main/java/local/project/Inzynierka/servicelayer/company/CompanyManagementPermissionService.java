@@ -32,7 +32,7 @@ public class CompanyManagementPermissionService {
 
     public boolean hasManagingAuthority(Long companyId, UserAccount userAccount) {
 
-        if(companyId == null) {
+        if(companyId == null || userAccount == null) {
             return  false;
         }
         User user = userRepository.getByAddressEmail(userAccount.getEmail());
@@ -52,6 +52,10 @@ public class CompanyManagementPermissionService {
     }
 
     public boolean hasManagingAuthority(String companyUUID, UserAccount userAccount) {
+
+        if(userAccount == null) {
+            return false;
+        }
         User user = userRepository.getByAddressEmail(userAccount.getEmail());
 
         if (user == null) {

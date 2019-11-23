@@ -1,6 +1,6 @@
 package local.project.Inzynierka.servicelayer.promotionitem.validation;
 
-import local.project.Inzynierka.servicelayer.promotionitem.PromotionItemAddedEvent;
+import local.project.Inzynierka.servicelayer.promotionitem.event.PromotionItemAddedEvent;
 import org.springframework.util.StringUtils;
 
 import javax.validation.ConstraintValidator;

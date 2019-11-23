@@ -1,6 +1,8 @@
 package local.project.Inzynierka.servicelayer.dto.company;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import local.project.Inzynierka.servicelayer.dto.address.Address;
+import local.project.Inzynierka.servicelayer.dto.social.SocialProfileConnectionDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,5 +27,8 @@ public class CompanyInfoDto {
     private String logoURL;
     private String logoKey;
     private Boolean hasLogoAdded;
+
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    private List<SocialProfileConnectionDto> socialProfileConnectionDtos;
 
 }

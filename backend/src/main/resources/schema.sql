@@ -179,9 +179,9 @@ create or replace table promotion_items
     modified_at          timestamp default '0000-00-00 00:00:00' not null on update current_timestamp(),
     name                 varchar(255)                            not null,
     email_title          varchar(255)                            null,
-    was_sent             bit                                     null,
     planned_sending_at   timestamp                               null,
-    send_at              timestamp                               null,
+    sending_strategy     varchar(30)                             not null,
+    adding_completed     boolean                                 not null,
     promoting_company_id bigint                                  not null,
     promotion_type_id    smallint(6)                             not null,
     photos_number        smallint(2)                             not null,
@@ -254,7 +254,7 @@ create or replace table users
         foreign key (id_email_address) references email_addresses (email_id),
     constraint natural_person_FK
         foreign key (id_natural_person) references natural_persons (id_natural_person)
-            ON DELETE SET NULL,
+            ON delete SET NULL,
     constraint verify_user_token_FK
         foreign key (verification_token_id) references tokens (token_id)
 );
@@ -308,4 +308,64 @@ create or replace table ratings
             on delete cascade,
     constraint rating
         check (`rating` <= 5 and `rating` >= 1)
+);
+
+create or replace table fb_social_profiles
+(
+    facebook_social_profile_id bigint auto_increment
+        primary key,
+    created_at                 timestamp default current_timestamp()   not null,
+    modified_at                timestamp default '0000-00-00 00:00:00' not null on update current_timestamp(),
+    company_id                 bigint                                  not null,
+    platform_id                smallint(6)                             not null,
+    user_id                    bigint                                  not null,
+    user_name                  varchar(255)                            not null,
+    page_id                    bigint                                  null,
+    constraint company_fb_profile_FK
+        foreign key (company_id) references social_profiles (company_id)
+            on delete CASCADE,
+    constraint platform_social_platform_FK
+        foreign key (platform_id) references social_profiles (platform_id)
+            on delete CASCADE,
+    constraint fb_social_profile_user_id_unique unique (user_id),
+    constraint fb_social_profile_page_id_unique unique (page_id)
+);
+
+
+create or replace table fb_tokens
+(
+    facebook_token_id      bigint auto_increment primary key,
+    created_at             timestamp default current_timestamp()   not null,
+    modified_at            timestamp default '0000-00-00 00:00:00' not null on update current_timestamp(),
+    type                   varchar(40)                             not null,
+    expires_at             bigint                                  not null,
+    data_access_expires_at bigint                                  not null,
+    issued_at              bigint                                  not null,
+    is_valid               boolean                                 not null,
+    facebook_profile_id    bigint                                  not null,
+    access_token           varchar(255)                            not null,
+    constraint profile_facebook_token_FK
+        foreign key (facebook_profile_id) references fb_social_profiles (facebook_social_profile_id)
+);
+
+create or replace table fb_token_scopes
+(
+    facebook_token_scope_id bigint auto_increment primary key,
+    created_at              timestamp default current_timestamp() not null,
+    token_scope_type        varchar(30)                           not null,
+    facebook_token_id       bigint                                not null,
+    scope                   varchar(50)                           not null,
+    constraint scope_facebook_token_FK
+        foreign key (facebook_token_id) references fb_tokens (facebook_token_id)
+);
+
+create or replace table destination_arrivals
+(
+    destination_arrival_id        bigint auto_increment primary key,
+    created_at                    timestamp default current_timestamp()   not null,
+    promotion_item_destination_id bigint                                  not null,
+    status                        varchar(30)                             not null,
+    detail                        varchar(50)                             null,
+    constraint sending_status_FK
+        foreign key (promotion_item_destination_id) references promotion_item_destinations (promotion_item_destination_id)
 );

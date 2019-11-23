@@ -1,7 +1,7 @@
 package local.project.Inzynierka.servicelayer.promotionitem.validation;
 
-import local.project.Inzynierka.servicelayer.dto.promotionitem.SendingStrategy;
-import local.project.Inzynierka.servicelayer.promotionitem.PromotionItemAddedEvent;
+import local.project.Inzynierka.persistence.constants.SendingStrategy;
+import local.project.Inzynierka.servicelayer.promotionitem.event.PromotionItemAddedEvent;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

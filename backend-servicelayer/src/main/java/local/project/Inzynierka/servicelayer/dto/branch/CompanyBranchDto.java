@@ -16,6 +16,7 @@ public class CompanyBranchDto {
 
     private Address address;
 
+    private String category;
     private Double geoX;
     private Double geoY;
     private String getLogoURL;

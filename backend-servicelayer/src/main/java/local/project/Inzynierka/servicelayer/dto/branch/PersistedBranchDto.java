@@ -16,4 +16,5 @@ public class PersistedBranchDto {
     private String putLogoURL;
     private String logoKey;
     private Boolean hasLogoAdded;
+    private String category;
 }

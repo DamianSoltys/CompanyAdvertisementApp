@@ -9,14 +9,13 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class GetPromotionItemDto {
+public class PromotionItemAddingStatusDto {
+
     private String promotionItemUUID;
-    private List<DestinationSendingStatus> sendingStatus;
-    private Long addedTime;
-    private Long sendTime;
-    private String name;
+    private List<String> promotionItemPhotosUUIDsDto;
+    private Boolean addingFinished;
 }

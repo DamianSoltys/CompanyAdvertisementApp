@@ -1,8 +1,9 @@
 package local.project.Inzynierka.servicelayer.promotionitem;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import local.project.Inzynierka.servicelayer.dto.promotionitem.Destination;
-import local.project.Inzynierka.servicelayer.dto.promotionitem.SendingStrategy;
+import local.project.Inzynierka.persistence.constants.SendingStrategy;
 import local.project.Inzynierka.servicelayer.promotionitem.validation.AtLeastNMinutesDelay;
 import local.project.Inzynierka.servicelayer.promotionitem.validation.AtLeastOneContent;
 import local.project.Inzynierka.servicelayer.promotionitem.validation.HtmlContentBase64Encoded;
@@ -48,6 +49,8 @@ public class PromotionItemAddedEvent implements Sendable {
 
     @NotNull
     private Long companyId;
+
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
     private Instant plannedSendingTime;
 
     @NotEmpty

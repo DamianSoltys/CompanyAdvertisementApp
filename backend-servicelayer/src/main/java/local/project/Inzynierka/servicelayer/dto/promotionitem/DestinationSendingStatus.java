@@ -6,16 +6,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class PromotionItemSendingStatusDto {
-
-    private String promotionItemUUID;
-    private List<String> promotionItemPhotosUUIDsDto;
-    private Boolean sendingFinished;
+public class DestinationSendingStatus {
+    private SendingStatus sendingStatus;
+    private String detail;
+    private Destination destination;
+    private Long sendAt;
+    private Long plannedSendingAt;
+    private Long failedAt;
 }
+

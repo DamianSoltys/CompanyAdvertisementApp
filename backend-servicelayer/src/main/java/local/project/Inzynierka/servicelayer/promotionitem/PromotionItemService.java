@@ -1,32 +1,41 @@
 package local.project.Inzynierka.servicelayer.promotionitem;
 
 import local.project.Inzynierka.persistence.entity.Company;
+import local.project.Inzynierka.persistence.entity.DestinationArrival;
 import local.project.Inzynierka.persistence.entity.PromotionItem;
 import local.project.Inzynierka.persistence.entity.PromotionItemDestination;
 import local.project.Inzynierka.persistence.entity.PromotionItemPhoto;
+import local.project.Inzynierka.persistence.repository.DestinationArrivalStatusRepository;
 import local.project.Inzynierka.persistence.repository.PromotionItemDestinationRepository;
 import local.project.Inzynierka.persistence.repository.PromotionItemPhotosRepository;
 import local.project.Inzynierka.persistence.repository.PromotionItemRepository;
 import local.project.Inzynierka.servicelayer.dto.promotionitem.Destination;
+import local.project.Inzynierka.servicelayer.dto.promotionitem.DestinationSendingStatus;
 import local.project.Inzynierka.servicelayer.dto.promotionitem.GetPromotionItemDto;
-import local.project.Inzynierka.servicelayer.dto.promotionitem.PromotionItemSendingStatusDto;
+import local.project.Inzynierka.servicelayer.dto.promotionitem.PromotionItemAddingStatusDto;
 import local.project.Inzynierka.servicelayer.dto.promotionitem.SendingStatus;
-import local.project.Inzynierka.servicelayer.dto.promotionitem.SendingStrategy;
+import local.project.Inzynierka.persistence.constants.SendingStrategy;
+import local.project.Inzynierka.servicelayer.promotionitem.error.InvalidSendingStrategyException;
+import local.project.Inzynierka.servicelayer.promotionitem.event.SendingEvent;
 import local.project.Inzynierka.shared.ApplicationConstants;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @Service
 public class PromotionItemService {
@@ -35,15 +44,19 @@ public class PromotionItemService {
     private final PromotionItemTypeFetcher promotionItemTypeFetcher;
     private final PromotionItemDestinationRepository promotionItemDestinationRepository;
     private final PromotionItemPhotosRepository promotionItemPhotosRepository;
+    private final DestinationArrivalStatusRepository destinationArrivalStatusRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    public PromotionItemService(PromotionItemRepository promotionItemRepository, PromotionItemTypeFetcher promotionItemTypeFetcher, PromotionItemDestinationRepository promotionItemDestinationRepository, PromotionItemPhotosRepository promotionItemPhotosRepository) {
+    public PromotionItemService(PromotionItemRepository promotionItemRepository, PromotionItemTypeFetcher promotionItemTypeFetcher, PromotionItemDestinationRepository promotionItemDestinationRepository, PromotionItemPhotosRepository promotionItemPhotosRepository, DestinationArrivalStatusRepository destinationArrivalStatusRepository, ApplicationEventPublisher applicationEventPublisher) {
         this.promotionItemRepository = promotionItemRepository;
         this.promotionItemTypeFetcher = promotionItemTypeFetcher;
         this.promotionItemDestinationRepository = promotionItemDestinationRepository;
         this.promotionItemPhotosRepository = promotionItemPhotosRepository;
+        this.destinationArrivalStatusRepository = destinationArrivalStatusRepository;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
-    public PromotionItemSendingStatusDto addPromotionItem(PromotionItemAddedEvent promotionItemAddedEvent) {
+    public PromotionItemAddingStatusDto addPromotionItem(PromotionItemAddedEvent promotionItemAddedEvent) {
 
         var promotionItem = promotionItemRepository.save(mapNewPromotionItem(promotionItemAddedEvent));
         promotionItemDestinationRepository.saveAll(mapDestinations(promotionItemAddedEvent.getDestinations(), promotionItem));
@@ -53,17 +66,19 @@ public class PromotionItemService {
         List<PromotionItemSender> senders = buildSenders(promotionItemAddedEvent.getDestinations());
 
         promotionItemAddedEvent.setUUID(promotionItem.getPromotionItemUUID());
-        var readyToSend = promotionItemAddedEvent.getNumberOfPhotos() == null;
-        if (readyToSend) {
+        if (Boolean.TRUE.equals(promotionItem.getAddingCompleted()) && !promotionItem.hasAtWillSendingStrategy()) {
             commissionSendingPromotionItem(promotionItemAddedEvent, senders);
         }
+        if (promotionItem.hasAtWillSendingStrategy()) {
+            publishWaitingForActionStatuses(promotionItem);
+        }
 
-        return PromotionItemSendingStatusDto.builder()
+        return PromotionItemAddingStatusDto.builder()
                 .promotionItemPhotosUUIDsDto(StreamSupport.stream(persistedPhotos.spliterator(), false)
                                                      .map(PromotionItemPhoto::getPhotoUUID)
                                                      .collect(Collectors.toList()))
                 .promotionItemUUID(promotionItem.getPromotionItemUUID())
-                .sendingFinished(promotionItemAddedEvent.getNumberOfPhotos() == null)
+                .addingFinished(promotionItem.getAddingCompleted())
                 .build();
     }
 
@@ -72,6 +87,8 @@ public class PromotionItemService {
             if (SendingStrategy.DELAYED.equals(sendable.getSendingStrategy())) {
                 sender.schedule(sendable);
             } else if (SendingStrategy.AT_CREATION.equals(sendable.getSendingStrategy())) {
+                sender.send(sendable);
+            } else if (SendingStrategy.AT_WILL.equals(sendable.getSendingStrategy())) {
                 sender.send(sendable);
             }
         }
@@ -107,19 +124,18 @@ public class PromotionItemService {
         var plannedSendingTime = promotionItemAddedEvent.getSendingStrategy().equals(SendingStrategy.DELAYED) ?
                 Timestamp.from(promotionItemAddedEvent.getPlannedSendingTime()) : null;
         var promotionItemUUID = UUID.randomUUID().toString();
-        var wasSent = numberOfPhotos == 0 &&
-                SendingStrategy.AT_CREATION.equals(promotionItemAddedEvent.getSendingStrategy());
-        var sendAt = wasSent ? Timestamp.from(Instant.now()) : null;
+        var addingCompleted = numberOfPhotos == 0;
+
         return PromotionItem.builder()
                 .company(Company.builder().id(promotionItemAddedEvent.getCompanyId()).build())
                 .htmlContent(promotionItemAddedEvent.getHTMLContent())
                 .name(promotionItemAddedEvent.getName())
+                .addingCompleted(addingCompleted)
                 .emailTitle(promotionItemAddedEvent.getEmailTitle())
                 .nonHtmlContent(promotionItemAddedEvent.getNonHtmlContent())
                 .numberOfPhotos(numberOfPhotos)
+                .sendingStrategy(promotionItemAddedEvent.getSendingStrategy().toString())
                 .plannedSendingAt(plannedSendingTime)
-                .sendAt(sendAt)
-                .wasSent(wasSent)
                 .promotionItemType(promotionItemType)
                 .promotionItemUUID(promotionItemUUID)
                 .build();
@@ -151,60 +167,82 @@ public class PromotionItemService {
 
     private GetPromotionItemDto mapGetDto(PromotionItem promotionItem) {
 
-        var destinations = promotionItemDestinationRepository.findByPromotionItem(promotionItem);
-        var sendingStatus = getSendingStatus(promotionItem);
-        var plannedSendingAt = promotionItem.getPlannedSendingAt() ==
-                null ? null : promotionItem.getPlannedSendingAt().toInstant().getEpochSecond();
-        var sendAt = promotionItem.getSendAt() == null ? null : promotionItem.getSendAt().toInstant().getEpochSecond();
+        var sendingStatuses = getSendingStatus(promotionItem);
 
         return GetPromotionItemDto.builder()
                 .addedTime(promotionItem.getCreatedDate().toInstant().getEpochSecond())
-                .plannedSendingTime(plannedSendingAt)
-                .sendTime(sendAt)
-                .destinations(destinations.stream()
-                                      .map(destination -> Destination.valueOf(destination.getDestination()))
-                                      .collect(Collectors.toList()))
-                .sendingStatus(sendingStatus)
+                .sendingStatus(sendingStatuses)
                 .name(promotionItem.getName())
                 .promotionItemUUID(promotionItem.getPromotionItemUUID())
                 .build();
     }
 
-    private SendingStatus getSendingStatus(PromotionItem promotionItem) {
-        SendingStatus sendingStatus;
+    private List<DestinationSendingStatus> getSendingStatus(PromotionItem promotionItem) {
 
-        if (promotionItem.isWasSent()) {
-            sendingStatus = SendingStatus.SENT;
-        } else {
-            if (promotionItem.getPlannedSendingAt() == null) {
-                sendingStatus = SendingStatus.WAITING_FOR_ACTION;
-            } else {
-                sendingStatus = SendingStatus.DELAYED;
-            }
-        }
-        return sendingStatus;
+        var arrivals = getLastlyCreatedArrivalDestinations(destinationArrivalStatusRepository.findByPromotionItemDestination_PromotionItem(promotionItem));
+        return arrivals.stream()
+                .map(arrival -> DestinationSendingStatus.builder()
+                        .destination(Destination.fromDestination(arrival.getPromotionItemDestination().getDestination()))
+                        .detail(arrival.getDetail())
+                        .failedAt(SendingStatus.fromSendingStatus(arrival.getStatus()).equals(SendingStatus.FAILED) ?
+                                          arrival.getCreatedDate().toInstant().getEpochSecond() :
+                                          null)
+                        .sendAt(SendingStatus.fromSendingStatus(arrival.getStatus()).equals(SendingStatus.SENT) ?
+                                        arrival.getCreatedDate().toInstant().getEpochSecond() :
+                                        null)
+                        .plannedSendingAt(SendingStatus.fromSendingStatus(arrival.getStatus()).equals(SendingStatus.DELAYED) ?
+                                                  arrival.getPromotionItemDestination()
+                                                          .getPromotionItem()
+                                                          .getPlannedSendingAt()
+                                                          .toInstant()
+                                                          .getEpochSecond() :
+                                                  null)
+                        .sendingStatus(SendingStatus.fromSendingStatus(arrival.getStatus()))
+                        .build())
+                .collect(Collectors.toList());
     }
 
-    public Boolean finalizePromotionItemSending(String promotionItemUUID) {
+    public Collection<DestinationArrival> getLastlyCreatedArrivalDestinations(List<DestinationArrival> arrivals) {
+        return arrivals.stream()
+                .collect(groupingBy(DestinationArrival::getPromotionItemDestination))
+                .entrySet()
+                .stream()
+                .collect(Collectors.toMap(Function.identity(), e -> e.getValue()
+                        .stream().max(Comparator.comparing(DestinationArrival::getCreatedDate)).get()))
+                .values();
+    }
+
+    public Boolean finalizePromotionItemAdding(String promotionItemUUID) {
         var promotionItem = promotionItemRepository.findByPromotionItemUUID(promotionItemUUID).get();
 
-        if (!promotionItem.isWasSent()) {
+        if (Boolean.FALSE.equals(promotionItem.getAddingCompleted())) {
             var numberOfPhotosAdded = promotionItemPhotosRepository.countAllByPromotionItemAndWasAddedTrue(promotionItem);
             var readyToSend = numberOfPhotosAdded.equals(promotionItem.getNumberOfPhotos());
             if (readyToSend) {
-                var destinations = promotionItemDestinationRepository.findByPromotionItem(promotionItem)
-                        .stream()
-                        .map(destination -> Destination.valueOf(destination.getDestination()))
-                        .collect(Collectors.toList());
+                promotionItem.setAddingCompleted(true);
+                promotionItemRepository.save(promotionItem);
 
-                var persistedSendable = buildPersistedSendable(promotionItem, destinations);
-                var senders = buildSenders(destinations);
-                commissionSendingPromotionItem(persistedSendable, senders);
+                if (!SendingStrategy.AT_WILL.toString().equals(promotionItem.getSendingStrategy())) {
+                    startSending(promotionItem);
+                } else {
+                    publishWaitingForActionStatuses(promotionItem);
+                }
+
             }
             return readyToSend;
         }
 
         return true;
+    }
+
+    private void publishWaitingForActionStatuses(PromotionItem promotionItem) {
+        promotionItemDestinationRepository.findByPromotionItem(promotionItem).stream()
+                .map(destination -> SendingEvent.builder()
+                        .promotionItemUUUID(promotionItem.getPromotionItemUUID())
+                        .sendingStatus(SendingStatus.WAITING_FOR_ACTION)
+                        .destination(Destination.fromDestination(destination.getDestination()))
+                        .build())
+                .forEach(applicationEventPublisher::publishEvent);
     }
 
     private PersistedSendable buildPersistedSendable(PromotionItem promotionItem, List<Destination> destinations) {
@@ -213,8 +251,8 @@ public class PromotionItemService {
                 .stream()
                 .map(PromotionItemPhoto::getPhotoUUID)
                 .collect(Collectors.toList());
-        var plannedSendingTime =
-                promotionItem.getPlannedSendingAt() == null ? null : promotionItem.getPlannedSendingAt().toInstant();
+        var plannedSendingTime = promotionItem.getPlannedSendingAt() == null ?
+                null : promotionItem.getPlannedSendingAt().toInstant();
 
         return PersistedSendable.builder()
                 .appUrl(ApplicationConstants.CLIENT_URL)
@@ -223,25 +261,12 @@ public class PromotionItemService {
                 .htmlContent(promotionItem.getHtmlContent())
                 .plannedSendingTime(plannedSendingTime)
                 .emailTitle(promotionItem.getEmailTitle())
-                .sendingStrategy(buildSendingStrategy(promotionItem))
+                .sendingStrategy(SendingStrategy.fromSendingStrategy(promotionItem.getSendingStrategy()))
                 .name(promotionItem.getName())
                 .UUID(promotionItem.getPromotionItemUUID())
                 .destinations(destinations)
                 .photoURLs(photosURLs)
                 .build();
-    }
-
-    private SendingStrategy buildSendingStrategy(PromotionItem promotionItem) {
-        SendingStrategy strategy;
-        //ONLY TWO SENDING STRATEGIES BECAUSE THERE IS NO WAY DISCERN
-        // AT_WILL FROM AT_CREATION WITHOUT ADDITIONAL COLUMN IN PROMOTION_ITEM
-        if (promotionItem.getPlannedSendingAt() == null) {
-            strategy = SendingStrategy.AT_CREATION;
-        } else {
-            strategy = SendingStrategy.DELAYED;
-        }
-
-        return strategy;
     }
 
     @Async
@@ -252,12 +277,30 @@ public class PromotionItemService {
         promotionItemPhotosRepository.save(photo);
     }
 
-    @Async
-    @EventListener
-    public void markPromotionItemSent(PromotionItemSentEvent promotionItemSentEvent) {
-        var promotionItem = promotionItemRepository.findByPromotionItemUUID(promotionItemSentEvent.getPromotionItemUUID()).get();
-        promotionItem.setWasSent(true);
-        promotionItem.setSendAt(Timestamp.from(Instant.now()));
-        promotionItemRepository.save(promotionItem);
+    public Boolean finalizePromotionItemSending(String promotionItemUUID) {
+        var promotionItem = promotionItemRepository.findByPromotionItemUUID(promotionItemUUID).get();
+
+        if (Boolean.TRUE.equals(promotionItem.getAddingCompleted())) {
+
+            if (SendingStrategy.AT_WILL.toString().equals(promotionItem.getSendingStrategy())) {
+                startSending(promotionItem);
+                return true;
+            }
+            throw new InvalidSendingStrategyException();
+        }
+
+        return false;
+    }
+
+    private void startSending(PromotionItem promotionItem) {
+        var destinations = promotionItemDestinationRepository.findByPromotionItem(promotionItem)
+                .stream()
+                .map(destination -> Destination.valueOf(destination.getDestination()))
+                .collect(Collectors.toList());
+
+
+        var persistedSendable = buildPersistedSendable(promotionItem, destinations);
+        var senders = buildSenders(destinations);
+        commissionSendingPromotionItem(persistedSendable, senders);
     }
 }

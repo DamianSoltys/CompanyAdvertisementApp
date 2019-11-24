@@ -3,6 +3,7 @@ package local.project.Inzynierka.servicelayer.promotionitem;
 import local.project.Inzynierka.servicelayer.dto.promotionitem.Destination;
 import local.project.Inzynierka.servicelayer.dto.promotionitem.SendingStatus;
 import local.project.Inzynierka.servicelayer.promotionitem.event.SendingEvent;
+import local.project.Inzynierka.servicelayer.social.facebook.event.FacebookPostWithPhotosEvent;
 import local.project.Inzynierka.servicelayer.social.facebook.event.SimpleFacebookPostEvent;
 import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +29,27 @@ public class FacebookPromotionItemSender implements PromotionItemSender {
     }
 
     private void publishSendable(Sendable sendable) {
+
+        if (sendable.getPhotoURLs().isEmpty()) {
+            applicationEventPublisher.publishEvent(getSingleFacebookPost(sendable));
+        } else {
+            applicationEventPublisher.publishEvent(FacebookPostWithPhotosEvent.builder()
+                                                           .simpleFacebookPostEvent(getSingleFacebookPost(sendable))
+                                                           .photoURLs(sendable.getPhotoURLs())
+                                                           .build());
+        }
+
+    }
+
+    private SimpleFacebookPostEvent getSingleFacebookPost(Sendable sendable) {
         String content = sendable.getContent();
         Long companyId = sendable.getCompanyId();
         String promotionItemUUID = sendable.getUUID();
-        applicationEventPublisher.publishEvent(SimpleFacebookPostEvent.builder()
-                                                       .content(content)
-                                                       .companyId(companyId)
-                                                       .promotionItemUUID(promotionItemUUID)
-                                                       .build());
+        return SimpleFacebookPostEvent.builder()
+                .content(content)
+                .companyId(companyId)
+                .promotionItemUUID(promotionItemUUID)
+                .build();
     }
 
     @Override

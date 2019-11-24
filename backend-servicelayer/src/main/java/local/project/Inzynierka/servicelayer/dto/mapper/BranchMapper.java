@@ -7,6 +7,7 @@ import local.project.Inzynierka.persistence.entity.NaturalPerson;
 import local.project.Inzynierka.servicelayer.dto.branch.AddBranchDto;
 import local.project.Inzynierka.servicelayer.dto.branch.CompanyBranchDto;
 import local.project.Inzynierka.servicelayer.dto.branch.PersistedBranchDto;
+import local.project.Inzynierka.shared.utils.CustomCollectionsUtils;
 import local.project.Inzynierka.shared.utils.EntityName;
 import local.project.Inzynierka.shared.utils.FilePathCreator;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Component
 public class BranchMapper {
@@ -56,9 +56,7 @@ public class BranchMapper {
     }
 
     public List<PersistedBranchDto> mapPersistedBranch(Iterable<Branch> branches) {
-        return StreamSupport.stream(branches.spliterator(), false)
-                .map(this::mapPersistedBranch)
-                .collect(Collectors.toList());
+        return CustomCollectionsUtils.convertToListMapping(branches, this::mapPersistedBranch);
     }
 
     public Branch mapAddBranchDto(AddBranchDto addBranchDto, Long companyId, Long personId, Address address) {

@@ -42,6 +42,13 @@ public class SocialMediaConnectionService {
                 .collect(Collectors.toList());
     }
 
+    public boolean existActiveFacebookConnection(Long companyId) {
+        return this.getSocialProfileConnections(companyId).stream()
+                .anyMatch(connection ->
+                                  connection.getSocialPlatform().equals(SocialPlatform.FACEBOOK) &&
+                                          connection.getConnectionStatus().getStatus().equals(Status.CONNECTED));
+    }
+
     private ConnectionStatus getConnectionStatus(SocialProfile profile) {
         ConnectionStatus connectionStatus;
         if (profile.getSocialMediaPlatform().getSocialMediaPlatform().equalsIgnoreCase(SocialPlatform.TWITTER.toString())) {

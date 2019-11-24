@@ -20,6 +20,9 @@ import local.project.Inzynierka.servicelayer.promotionitem.event.PromotionItemAd
 import local.project.Inzynierka.servicelayer.promotionitem.event.PromotionItemPhotoAddedEvent;
 import local.project.Inzynierka.servicelayer.promotionitem.event.SendingEvent;
 import local.project.Inzynierka.shared.ApplicationConstants;
+import local.project.Inzynierka.shared.utils.CustomCollectionsUtils;
+import local.project.Inzynierka.shared.utils.EntityName;
+import local.project.Inzynierka.shared.utils.FilePathCreator;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -49,7 +52,12 @@ public class PromotionItemService {
     private final DestinationArrivalStatusRepository destinationArrivalStatusRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public PromotionItemService(PromotionItemRepository promotionItemRepository, PromotionItemTypeFetcher promotionItemTypeFetcher, PromotionItemDestinationRepository promotionItemDestinationRepository, PromotionItemPhotosRepository promotionItemPhotosRepository, DestinationArrivalStatusRepository destinationArrivalStatusRepository, ApplicationEventPublisher applicationEventPublisher) {
+    public PromotionItemService(PromotionItemRepository promotionItemRepository,
+                                PromotionItemTypeFetcher promotionItemTypeFetcher,
+                                PromotionItemDestinationRepository promotionItemDestinationRepository,
+                                PromotionItemPhotosRepository promotionItemPhotosRepository,
+                                DestinationArrivalStatusRepository destinationArrivalStatusRepository,
+                                ApplicationEventPublisher applicationEventPublisher) {
         this.promotionItemRepository = promotionItemRepository;
         this.promotionItemTypeFetcher = promotionItemTypeFetcher;
         this.promotionItemDestinationRepository = promotionItemDestinationRepository;
@@ -61,9 +69,10 @@ public class PromotionItemService {
     public PromotionItemAddingStatusDto addPromotionItem(PromotionItemAddedEvent promotionItemAddedEvent) {
 
         var promotionItem = promotionItemRepository.save(mapNewPromotionItem(promotionItemAddedEvent));
-        promotionItemDestinationRepository.saveAll(mapDestinations(promotionItemAddedEvent.getDestinations(), promotionItem));
-        List<PromotionItemPhoto> photos = getPromotionItemPhotos(promotionItemAddedEvent, promotionItem);
-        var persistedPhotos = promotionItemPhotosRepository.saveAll(photos);
+        promotionItemDestinationRepository.saveAll(
+                mapDestinations(promotionItemAddedEvent.getDestinations(), promotionItem));
+        var persistedPhotos = promotionItemPhotosRepository.saveAll(
+                getPromotionItemPhotos(promotionItemAddedEvent, promotionItem));
 
         List<PromotionItemSender> senders = buildSenders(promotionItemAddedEvent.getDestinations());
 
@@ -76,9 +85,8 @@ public class PromotionItemService {
         }
 
         return PromotionItemAddingStatusDto.builder()
-                .promotionItemPhotosUUIDsDto(StreamSupport.stream(persistedPhotos.spliterator(), false)
-                                                     .map(PromotionItemPhoto::getPhotoUUID)
-                                                     .collect(Collectors.toList()))
+                .promotionItemPhotosUUIDsDto(CustomCollectionsUtils.convertToListMapping(persistedPhotos,
+                                                                                         PromotionItemPhoto::getPhotoUUID))
                 .promotionItemUUID(promotionItem.getPromotionItemUUID())
                 .addingFinished(promotionItem.getAddingCompleted())
                 .build();
@@ -147,16 +155,13 @@ public class PromotionItemService {
         List<PromotionItemSender> senders = new ArrayList<>();
 
         if (destinations.contains(Destination.FB)) {
-            var fbSender = new FacebookPromotionItemSender();
-            senders.add(fbSender);
+            senders.add(new FacebookPromotionItemSender());
         }
         if (destinations.contains(Destination.TWITTER)) {
-            var twitterSender = new TwitterPromotionItemSender();
-            senders.add(twitterSender);
+            senders.add(new TwitterPromotionItemSender());
         }
         if (destinations.contains(Destination.NEWSLETTER)) {
-            var newsletterSender = new NewsletterPromotionItemSender();
-            senders.add(newsletterSender);
+            senders.add(new NewsletterPromotionItemSender());
         }
         return senders;
     }
@@ -209,8 +214,10 @@ public class PromotionItemService {
                 .collect(groupingBy(DestinationArrival::getPromotionItemDestination))
                 .entrySet()
                 .stream()
-                .collect(Collectors.toMap(Function.identity(), e -> e.getValue()
-                        .stream().max(Comparator.comparing(DestinationArrival::getCreatedDate)).get()))
+                .collect(Collectors.toMap(Function.identity(),
+                                          destinationArrivals -> destinationArrivals.getValue().stream()
+                                                  .max(Comparator.comparing(DestinationArrival::getCreatedDate))
+                                                  .get()))
                 .values();
     }
 
@@ -300,9 +307,19 @@ public class PromotionItemService {
                 .map(destination -> Destination.valueOf(destination.getDestination()))
                 .collect(Collectors.toList());
 
+        var photoURLs = getPhotoURLs(promotionItem);
 
         var persistedSendable = buildPersistedSendable(promotionItem, destinations);
+        persistedSendable.setPhotoURLs(photoURLs);
         var senders = buildSenders(destinations);
         commissionSendingPromotionItem(persistedSendable, senders);
+    }
+
+    private List<String> getPhotoURLs(PromotionItem promotionItem) {
+        return promotionItemPhotosRepository.findByPromotionItem(promotionItem).stream()
+                .map(photo -> FilePathCreator.getFilePath(promotionItem.getPromotionItemUUID(),
+                                                          photo.getPhotoUUID(),
+                                                          EntityName.PROMOTION_ITEM))
+                .collect(Collectors.toList());
     }
 }

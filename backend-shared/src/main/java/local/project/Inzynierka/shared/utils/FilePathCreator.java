@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static local.project.Inzynierka.shared.ApplicationConstants.APPLICATION_URL;
 import static local.project.Inzynierka.shared.ApplicationConstants.URL_PATH_SEPARATOR;

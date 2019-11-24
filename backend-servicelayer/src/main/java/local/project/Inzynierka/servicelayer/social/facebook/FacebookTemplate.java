@@ -13,6 +13,7 @@ import org.springframework.web.util.UriComponents;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Map;
 
 @Component
 public class FacebookTemplate {
@@ -32,7 +33,7 @@ public class FacebookTemplate {
 
     public <T> T exchange(UriComponents uriComponents, HttpMethod httpMethod, TypeReference<T> responseType) throws IOException {
         ResponseEntity<String> exchange = restTemplate.exchange(uriComponents.toUriString(), httpMethod, getDecoratedHttpEntity(), String.class);
-        return objectMapper.readValue( exchange.getBody(), responseType);
+        return objectMapper.readValue(exchange.getBody(), responseType);
     }
 
     public <T> ResponseEntity<T> exchangeForEntity(UriComponents uriComponents, HttpMethod httpMethod, Class<T> tClass) {
@@ -47,5 +48,13 @@ public class FacebookTemplate {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         return new HttpEntity(headers);
+    }
+
+    public Map postForObject(UriComponents uriComponents, Object data) {
+        return restTemplate.postForObject(uriComponents.toUriString(), data, Map.class);
+    }
+
+    public <T> ResponseEntity<T> postForEntity(UriComponents uriComponents, Object data, Class<T> responseType) {
+        return restTemplate.postForEntity(uriComponents.toUriString(), data, responseType);
     }
 }

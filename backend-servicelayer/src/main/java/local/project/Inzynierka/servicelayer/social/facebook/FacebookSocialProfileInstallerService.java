@@ -84,14 +84,18 @@ public class FacebookSocialProfileInstallerService {
             facebookTokenRepository.save(buildPageToken(page, pageTokenInspection, facebookSocialProfile));
         }
 
-        List<FacebookTokenScope> scopes = tokenInspection.getScopes().stream()
+        List<FacebookTokenScope> scopes = getNormalTokenScopes(tokenInspection, userToken);
+        facebookTokenScopesRepository.saveAll(scopes);
+    }
+
+    private List<FacebookTokenScope> getNormalTokenScopes(TokenInspection tokenInspection, FacebookToken userToken) {
+        return tokenInspection.getScopes().stream()
                 .map(scope -> FacebookTokenScope.builder()
                         .facebookToken(userToken)
                         .scope(scope)
                         .tokenScopeType(TokenScopeType.NORMAL)
                         .build())
                 .collect(Collectors.toList());
-        facebookTokenScopesRepository.saveAll(scopes);
     }
 
     private FacebookToken buildPageToken(QueriedPageInfo pageInfo, TokenInspection pageTokenInspection, FacebookSocialProfile facebookSocialProfile) {

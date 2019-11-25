@@ -347,3 +347,21 @@ DELIMITER ;
 CALL insert_destination_arrivals();
 
 DELIMITER |
+
+
+CREATE OR REPLACE PROCEDURE insert_ratings()
+INSERT IGNORE INTO inzynierka.ratings(created_at, modified_at, rating, branch_id, user_id)
+VALUES (current_timestamp(), current_timestamp(), 3, 4, 1),
+       (current_timestamp(), current_timestamp(), 4, 2, 4),
+       (current_timestamp(), current_timestamp(), 5, 2, 5),
+       (current_timestamp(), current_timestamp(), 4, 1, 1),
+       (current_timestamp(), current_timestamp(), 2, 3, 3),
+       (current_timestamp(), current_timestamp(), 3, 2, 3),
+       (current_timestamp(), current_timestamp(), 2, 4, 4),
+       (current_timestamp(), current_timestamp(), 4, 2, 1);
+
+DELIMITER ;
+CALL insert_ratings();
+
+DELIMITER |
+

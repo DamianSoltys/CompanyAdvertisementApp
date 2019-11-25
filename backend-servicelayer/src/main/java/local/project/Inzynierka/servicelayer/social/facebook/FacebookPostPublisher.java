@@ -57,7 +57,7 @@ public class FacebookPostPublisher {
     @Transactional
     public void publishSimpleFacebookPost(SimpleFacebookPostEvent postEvent) throws IOException {
 
-        if (socialMediaConnectionService.existActiveFacebookConnection(postEvent.getCompanyId())) {
+        if (!socialMediaConnectionService.existActiveFacebookConnection(postEvent.getCompanyId())) {
             applicationEventPublisher.publishEvent(getFacebookFailedConnectionEvent(postEvent));
         } else {
             FacebookToken pageToken = getPageAccessToken(postEvent);

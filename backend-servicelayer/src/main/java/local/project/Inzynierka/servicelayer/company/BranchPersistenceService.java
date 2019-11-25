@@ -16,6 +16,7 @@ import local.project.Inzynierka.servicelayer.services.AddressService;
 import local.project.Inzynierka.shared.utils.EntityName;
 import local.project.Inzynierka.shared.utils.FilePathCreator;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +71,7 @@ class BranchPersistenceService {
         return this.branchRepository.findById(branchId);
     }
 
+    @Transactional
     Optional<List<PersistedBranchDto>> saveBranch(List<AddBranchDto> branchDtos, Long companyId, Long personId) {
 
         List<Branch> branches = new ArrayList<>();

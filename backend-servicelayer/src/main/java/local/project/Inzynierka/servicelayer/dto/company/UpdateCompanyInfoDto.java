@@ -29,4 +29,10 @@ public class UpdateCompanyInfoDto {
     @ValidWebProtocolUrl
     private String companyWebsiteLink;
 
+    @NullOrNotBlank
+    private String nip;
+
+    @NullOrNotBlank
+    private String regon;
+
 }

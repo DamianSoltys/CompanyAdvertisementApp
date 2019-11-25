@@ -85,8 +85,9 @@ public class PromotionItemService {
         }
 
         return PromotionItemAddingStatusDto.builder()
-                .promotionItemPhotosUUIDsDto(CustomCollectionsUtils.convertToListMapping(persistedPhotos,
-                                                                                         PromotionItemPhoto::getPhotoUUID))
+                .promotionItemPhotosUUIDsDto(StreamSupport.stream(persistedPhotos.spliterator(), false)
+                                                     .map(PromotionItemPhoto::getPhotoUUID)
+                                                     .collect(Collectors.toList()))
                 .promotionItemUUID(promotionItem.getPromotionItemUUID())
                 .addingFinished(promotionItem.getAddingCompleted())
                 .build();

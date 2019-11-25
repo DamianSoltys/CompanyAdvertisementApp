@@ -4,10 +4,10 @@ import local.project.Inzynierka.persistence.entity.Address;
 import local.project.Inzynierka.persistence.entity.Branch;
 import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.entity.NaturalPerson;
+import local.project.Inzynierka.persistence.repository.CompanyRepository;
 import local.project.Inzynierka.servicelayer.dto.branch.AddBranchDto;
 import local.project.Inzynierka.servicelayer.dto.branch.CompanyBranchDto;
 import local.project.Inzynierka.servicelayer.dto.branch.PersistedBranchDto;
-import local.project.Inzynierka.shared.utils.CustomCollectionsUtils;
 import local.project.Inzynierka.shared.utils.EntityName;
 import local.project.Inzynierka.shared.utils.FilePathCreator;
 import org.springframework.stereotype.Component;
@@ -15,9 +15,14 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Component
 public class BranchMapper {
+
+    private final CompanyRepository companyRepository;
+
+    public BranchMapper(CompanyRepository companyRepository) {this.companyRepository = companyRepository;}
 
     public CompanyBranchDto mapInputBranch(Branch branch) {
         CompanyBranchDto companyBranchDto = new CompanyBranchDto();
@@ -40,11 +45,14 @@ public class BranchMapper {
     }
 
     public PersistedBranchDto mapPersistedBranch(Branch branch) {
+
+        Company company = companyRepository.findById(branch.getCompany().getId()).get();
+
         PersistedBranchDto persistedBranchDto = new PersistedBranchDto();
         persistedBranchDto.setAddress(new AddressMapper().map(branch.getAddress()));
         persistedBranchDto.setHasLogoAdded(branch.isHasLogoAdded());
         persistedBranchDto.setCompanyId(branch.getCompany().getId());
-        persistedBranchDto.setCategory(branch.getCompany().getCategory().getName());
+        persistedBranchDto.setCategory(company.getCategory().getName());
         persistedBranchDto.setGeoX(branch.getGeoX());
         persistedBranchDto.setGeoY(branch.getGeoY());
         persistedBranchDto.setName(branch.getName());
@@ -56,7 +64,9 @@ public class BranchMapper {
     }
 
     public List<PersistedBranchDto> mapPersistedBranch(Iterable<Branch> branches) {
-        return CustomCollectionsUtils.convertToListMapping(branches, this::mapPersistedBranch);
+        return  StreamSupport.stream(branches.spliterator(), false)
+                .map(this::mapPersistedBranch)
+                .collect(Collectors.toList());
     }
 
     public Branch mapAddBranchDto(AddBranchDto addBranchDto, Long companyId, Long personId, Address address) {

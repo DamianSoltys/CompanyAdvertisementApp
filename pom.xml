@@ -26,7 +26,6 @@
         <module>backend-servicelayer</module>
         <module>backend-persistence</module>
         <module>backend-auth</module>
-        <module>fileuploader</module>
     </modules>
 
     <dependencies>

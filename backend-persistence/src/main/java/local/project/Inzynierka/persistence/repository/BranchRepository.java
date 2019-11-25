@@ -25,6 +25,8 @@ public interface BranchRepository extends ApplicationBigRepository<Branch>, JpaS
 
     Optional<Branch> findByBranchUUID(String branchUUID);
 
+    List<Branch> findByCompany_Category_Name(String category);
+
     List<Branch> findByCompany(Company company);
 
     @Query("select b from Branch b " +

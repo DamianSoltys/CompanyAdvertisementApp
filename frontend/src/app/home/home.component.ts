@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { RecommendationService } from '../services/recommendation.service';
 
 @Component({
   selector: 'app-home',
@@ -6,7 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  constructor() {}
+  constructor(private rDataService:RecommendationService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(this.rDataService.countCategories());
+  }
 }

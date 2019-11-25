@@ -58,6 +58,10 @@
       }
     }
 
+    .account-data-form__form-error {
+      margin:auto;
+    }
+
     .account-data-form__input-group {
       padding: 3%;
       margin-top: 2%;
@@ -203,6 +207,9 @@
     }
   }
 
+  .data-container__form-error {
+    margin:auto;
+  }
   .data-container__button-container {
     display: flex;
     justify-content: space-evenly;

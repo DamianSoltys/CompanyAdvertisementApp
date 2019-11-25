@@ -27,6 +27,26 @@ export class GetCompany {
     logoURL?:string;
     logo?:any;
     hasLogoAdded?:boolean;
+    socialProfileConnectionDtos?:MediaConnection[];
+}
+
+export enum ConnectionStatus {
+    Connected = "CONNECTED",
+    Lack_of_page = "LACK_OF_PAGE",
+    Not_connected = "NOT_CONNECTED"
+}
+
+export enum MediaTypeEnum {
+    FB = "FACEBOOK",
+    TWITTER = "TWITTER",
+}
+
+export interface MediaConnection {
+    connectionStatus: {
+        status: ConnectionStatus, 
+        profileURL: string
+    };
+    socialPlatform:MediaTypeEnum;
 }
 
 export class Branch {
@@ -43,6 +63,7 @@ export class Branch {
     getLogoURL?:string;
     logo?:any;
     hasLogoAdded?:boolean;
+    category?:string;
 }
 
 export class Address {

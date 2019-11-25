@@ -11,6 +11,8 @@ import { SelectDropDownComponent } from 'ngx-select-dropdown';
 import  * as moment from 'moment';
 import { PromotionItem, SendingStrategy, Destination, PromotionType } from 'src/app/classes/Newsletter';
 import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
+import { LoginService } from 'src/app/services/login.service';
+import { MediaConnection, MediaTypeEnum, ConnectionStatus } from 'src/app/classes/Company';
 enum FormType {
   info = 'Informacja',
   product = 'Produkt',
@@ -80,6 +82,8 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
   public sendingOptions:PromotionItem;
   public type:FormType;
   public files:File[];
+  public isFBConnected = false;
+  public isTWITTEDConnected = false;
   public typeOptions =[
     'Informacja',
     'Produkt',
@@ -90,9 +94,7 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     'Edytor HTML'
   ]
   public mediaOptions = [
-    'Wysyłka do medii społecznościowych', //if user connected to media TODO
     'Standardowa wysyłka newslettera',
-    'Wysyłka tylko do medii społecznościowych'///if user connected to media TODO
   ]
   public sendingTypeOptions= [
     'Wysyłka z opóźnieniem',
@@ -100,9 +102,6 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     'Wysyłka na żądanie'
   ];
   public mediaTypeOptions =[ //if user connected to media TODO/display:none on select input
-    'Facebook',
-    'Twitter',
-    'Wszystkie media'
   ]
   public config = {
     toolbar: []
@@ -124,7 +123,8 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     date:[],
     time:[],
   });
-  constructor(private nDataService:NewsletterService,private route:ActivatedRoute,private cDataService:CompanyService,private router:Router,private fb:FormBuilder,private snackbar:SnackbarService) {}
+  constructor(private nDataService:NewsletterService,private route:ActivatedRoute,
+    private cDataService:CompanyService,private router:Router,private fb:FormBuilder,private snackbar:SnackbarService,private lDataService:LoginService) {}
   @ViewChild('typeSelect') typeSelect:SelectDropDownComponent;
   @ViewChild('formTypeSelect') formTypeSelect:SelectDropDownComponent;
   @ViewChild('sendingTypeSelect') sendingTypeSelect:SelectDropDownComponent;
@@ -134,19 +134,62 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
   ngOnInit() {
    this.getActualUser();
    this.checkForPermissions();
-   
+   this.registerListeners();
+   this.checkForFBConnection();
   }
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.setDefaultValues();
     }, 0);
+  }
+
+  private checkForMediaConnection() {
+    this.lDataService.checkIfMediaConnected(this.paramId).subscribe(response=>{
+      let connectionData = <MediaConnection[]>response;
+      if(connectionData.length) {
+        connectionData.forEach(data=>{
+          if(data.socialPlatform === MediaTypeEnum.FB && data.connectionStatus.status === ConnectionStatus.Connected) {
+            this.mediaTypeOptions = [...this.mediaTypeOptions,'Facebook'];      
+          } else if(data.socialPlatform === MediaTypeEnum.TWITTER && data.connectionStatus.status === ConnectionStatus.Connected){
+            this.mediaTypeOptions = [...this.mediaTypeOptions,'Twitter'];
+          }
+        });
+
+        if(connectionData.length > 1) {
+          this.mediaTypeOptions = [...this.mediaTypeOptions,'Wszystkie media'];
+        } 
+
+        if(!this.mediaTypeSelect.value && this.mediaTypeOptions.length) {
+          this.mediaOptions = [...this.mediaOptions,'Wysyłka do medii społecznościowych','Wysyłka tylko do medii społecznościowych'];
+          this.isFBConnected = true;
+          this.mediaTypeSelect.writeValue(this.mediaTypeOptions[0]);
+        }
+        
+      }else {
+        console.log(response);
+      }
+    });
   }
   private setDefaultValues() {
     this.mediaSelect.selectItem('Standardowa wysyłka newslettera');
     this.typeSelect.selectItem('Informacja');
     this.formTypeSelect.selectItem('Edytor HTML');
     this.sendingTypeSelect.selectItem('Wysyłka natychmiastowa');
-    this.mediaTypeSelect.selectItem('Facebook');
+  }
+
+  private registerListeners() {
+    this.lDataService.FBConnection.subscribe(data=>{
+      if(data) {
+        this.checkForMediaConnection();
+      } else {
+        this.isFBConnected = false;
+      }
+    });
+  }
+
+  private checkForFBConnection() {
+    this.lDataService.checkIfUserFBLogged();
   }
 
   private setFormVisibility() {
@@ -226,7 +269,6 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     } else {
       this.files = event.target.files;
     }
-    console.log(this.files);
   }
 
   public sendNewsletter(editorName?:string) {
@@ -328,6 +370,7 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
           this.sendingOptions.destinations.push(Destination.TWITTER);
           this.sendingOptions.destinations.push(Destination.FB);
         }
+      
     }
   }
 
@@ -371,6 +414,13 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
 
   public showMediaTypeSelect() {
     if(this.isMedia.value || this.onlyMedia.value) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  public isAnyMediaConnected() {
+    if(this.isFBConnected || this.isTWITTEDConnected) {
       return true;
     } else {
       return false;

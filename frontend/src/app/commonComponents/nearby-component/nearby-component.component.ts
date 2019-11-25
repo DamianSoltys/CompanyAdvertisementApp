@@ -84,7 +84,6 @@ export class NearbyComponent implements OnInit,AfterViewInit {
   public getNearbyBranches() {
     this.bDataService.getBranches().subscribe(response=>{
       this.branches = <Branch[]>response.body['content'];
-      console.log(this.branches)
       this.getMarkerData();    
     },error=>{
       console.log(error);
@@ -111,10 +110,20 @@ export class NearbyComponent implements OnInit,AfterViewInit {
     });
   }
 
+  public isInside(circle_x:number,circle_y:number,rad:number,x:number,y:number) 
+  { 
+      // Compare radius of circle with distance  
+      // of its center from given point 
+      if ((x - circle_x) * (x - circle_x) + 
+      (y - circle_y) * (y - circle_y) <= rad * rad) 
+      return true; 
+      else
+      return false; 
+  } 
+
   public getMarkerData() {
     this.branches.forEach(branch=>{
-      if(Number(branch.geoX) > this.actualPosition.latitude - 0.031 && Number(branch.geoX) < this.actualPosition.latitude + 0.031) {
-        if(Number(branch.geoY) > this.actualPosition.longitude - 0.050 && Number(branch.geoY) < this.actualPosition.longitude + 0.050) {
+      if(this.isInside(this.actualPosition.latitude,this.actualPosition.longitude,0.025,Number(branch.geoX),Number(branch.geoY))) {
           
           let marker:NearbyMarker = {
             latitude:Number(branch.geoX),
@@ -128,7 +137,6 @@ export class NearbyComponent implements OnInit,AfterViewInit {
           }
           this.markersArray.push(marker);
         }
-      }
-    });
+      });
   }
 }

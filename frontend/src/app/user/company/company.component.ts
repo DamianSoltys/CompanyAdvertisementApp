@@ -378,7 +378,7 @@ export class CompanyComponent implements OnInit {
   private patchCompanyData() {
     let companyData: Company;
     companyData = this.companyForm.value;
-
+    console.log(companyData)
     this.cDataService
       .editCompany(companyData, this.editRequestData,this.companyLogo)
       .subscribe(

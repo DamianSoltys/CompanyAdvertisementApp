@@ -67,20 +67,6 @@ export class CommentsComponent implements OnInit {
   public companyId:string;
   public opinions:OpinionListData[] = [];
   public opinionData:OpinionListData;
-  public testData = [
-    {comment:'dupatreretaeretaaetatae',user:'user',rating:5},
-    {comment:'sasasapdasdasdetatae',user:'Lamus',rating:2},
-    {comment:'dupatreretaeretaaetatae',user:'user',rating:5},
-    {comment:'sasasapdasdasdetatae',user:'Lamus',rating:2},
-    {comment:'dupatreretaeretaaetatae',user:'user',rating:5},
-    {comment:'sasasapdasdasdetatae',user:'Lamus',rating:2},
-    {comment:'dupatreretaeretaaetatae',user:'user',rating:5},
-    {comment:'sasasapdasdasdetatae',user:'Lamus',rating:2},
-    {comment:'dupatreretaeretaaetatae',user:'user',rating:5},
-    {comment:'sasasapdasdasdetatae',user:'Lamus',rating:2},
-    {comment:'dupatreretaeretaaetatae',user:'user',rating:5},
-    {comment:'sasasapdasdasdetatae',user:'Lamus',rating:2},
-  ]
   constructor(
     private fb: FormBuilder,
     private cDataService: CommentsService,
@@ -146,7 +132,7 @@ export class CommentsComponent implements OnInit {
           message:'Pomyślnie dodano opinie!',
           snackbarType:SnackbarType.success,
         });
-        this.getOpinions();
+        this.getOpinions(null,true);
         this.isForm.next(false);
       } else {
         this.sDataService.open({
@@ -198,11 +184,14 @@ export class CommentsComponent implements OnInit {
     }
   }
   
-  public getOpinions(pageNumber?:number) {
+  public getOpinions(pageNumber?:number,clearOpinions?:boolean) {
     let subject = new Subject<boolean>();
     subject.subscribe(data=>{
       this.isLoaded.next(true);
     });
+    if(clearOpinions) {
+      this.opinions = [];
+    }
     this.cDataService.getOpinion(this.opinionData,pageNumber).subscribe(data=>{
       console.log(data)
       this.numberOfPages = data.numberOfPages;
@@ -212,7 +201,7 @@ export class CommentsComponent implements OnInit {
           userName: comment.username,
           commentId: comment.commentId,
           userId: comment.userId,
-          isOwner:false,
+          isOwner:comment.isOwnBranchCommented,
         }
         this.opinions.push(opinion);
       });

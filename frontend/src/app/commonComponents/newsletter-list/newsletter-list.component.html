@@ -11,14 +11,13 @@
         <div class="data-container__main-section" *ngFor="let newsletter of newsletterList">
           <div class="main-section__section">
             <p class="section__text-node">Nazwa:{{newsletter.name}}</p>
-            <p class="section__text-node">Data dodania:{{newsletter.addedTime}}</p>
+            <p class="section__text-node">Data dodania:{{newsletter?.addedTime}}</p>
           </div>
           <div class="main-section__section">
-
-            <p class="section__text-node" *ngIf="newsletter.plannedSendingTime">Data wysłania:{{newsletter.plannedSendingTime}}</p>
-            <p class="section__text-node">Status:{{newsletter.sendingStatus}}</p>
+            <p class="section__text-node" *ngIf="newsletter.sendingStatus[0].plannedSendingAt">Planowany czas wysłania:{{newsletter?.sendingStatus[0].plannedSendingAt}}</p>
+            <p class="section__text-node">Status:{{newsletter?.sendingStatus[0].sendingStatus}}</p>
           </div>
-          <div class="main-section__section text-center section--button" *ngIf="checkStatus(newsletter.sendingStatus)">
+          <div class="main-section__section text-center section--button" *ngIf="checkStatus(newsletter.sendingStatus[0].sendingStatus)">
               <button class="btn btn-primary section__button--send" (click)="sendDelayedNewsletter(newsletter.promotionItemUUID)">Wyślij</button>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { PromotionItem } from '../classes/Newsletter';
+import { PromotionItem, SendingStrategy } from '../classes/Newsletter';
 export interface newsletterResponse {
   promotionItemPhotosUUIDsDto:string[];
   promotionItemUUID: string;
@@ -30,14 +30,16 @@ export class NewsletterService {
           formData.append(responseBody.promotionItemPhotosUUIDsDto[i],'Value');
         }
         this.http.put(`http://localhost:8090/static/pi/${responseBody.promotionItemUUID}`,formData).subscribe(response=>{
-          if(newsletterOptions.plannedSendingTime) {
+          console.log(response)
+
             setTimeout(()=>{
-              this.http.get(`http://localhost:8090/api/pi/${responseBody.promotionItemUUID}/confirmation`,{observe:'response'}).subscribe(response=>{
-                if(response.body) {
+              this.http.put(`http://localhost:8090/api/pi/${responseBody.promotionItemUUID}/adding`,{observe:'response'}).subscribe(response=>{
+                if(response) {
+                  console.log(response)
                   subject.next(true);
                 } else {
-                  this.http.get(`http://localhost:8090/api/pi/${responseBody.promotionItemUUID}/confirmation`,{observe:'response'}).subscribe(response=>{
-                    if(response.body) {
+                  this.http.put(`http://localhost:8090/api/pi/${responseBody.promotionItemUUID}/adding`,{observe:'response'}).subscribe(response=>{
+                    if(response) {
                       subject.next(true);
                     } else {
                       subject.next(false);
@@ -52,9 +54,7 @@ export class NewsletterService {
                 subject.next(false);
               });
             },3000)
-          } else {
-            subject.next(true);
-          }
+         
         },error=>{
           console.log(error);
           subject.next(false);
@@ -72,7 +72,7 @@ export class NewsletterService {
 
   public sendDelayedNewsletter(promotionUUID:any) {
     let subject = new Subject<any>();
-    this.http.get(`http://localhost:8090/api/pi/${promotionUUID}/confirmation`,{observe:'response'}).subscribe(response=>{
+    this.http.put(`http://localhost:8090/api/pi/${promotionUUID}/sending`,{observe:'response'}).subscribe(response=>{
       console.log(response);
       subject.next(true);
     },error=>{

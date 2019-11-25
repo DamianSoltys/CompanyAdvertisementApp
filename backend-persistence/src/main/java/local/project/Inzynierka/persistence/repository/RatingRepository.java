@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface RatingRepository extends ApplicationBigRepository<Rating> {
 
@@ -22,5 +24,12 @@ public interface RatingRepository extends ApplicationBigRepository<Rating> {
 
     Page<Rating> findAllByBranchAndUser(Branch branch, User user, Pageable pageable);
 
+    Rating findByBranchAndUser_Id(Branch branch, Long id);
+
     Page<Rating> findAll(Pageable pageable);
+
+    List<Rating> findByBranch(Branch branch);
+
+    @Query(value = "SELECT AVG(rat.rating) from ratings rat where rat.branch_id = :branchId", nativeQuery = true)
+    Float getBranchAverageRating(Long branchId);
 }

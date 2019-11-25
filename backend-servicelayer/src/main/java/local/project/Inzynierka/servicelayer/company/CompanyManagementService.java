@@ -139,6 +139,9 @@ public class CompanyManagementService {
         company.setName(updateCompanyInfoDto.getName() == null ? company.getName() :
                                 updateCompanyInfoDto.getName());
 
+        company.setNIP(updateCompanyInfoDto.getNip() == null ? company.getNIP() : updateCompanyInfoDto.getNip() );
+        company.setREGON(updateCompanyInfoDto.getRegon() == null ? company.getREGON() : updateCompanyInfoDto.getRegon() );
+
 
         return this.companyRepository.save(company);
     }

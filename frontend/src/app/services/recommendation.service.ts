@@ -96,7 +96,7 @@ export class RecommendationService {
 
   public categoryInArray(category) {
     return function callBack(element) {
-      return element === category;
+      return element.category === category;
     }
   }
 

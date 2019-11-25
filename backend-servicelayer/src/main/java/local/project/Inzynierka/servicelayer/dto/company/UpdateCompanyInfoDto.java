@@ -27,7 +27,7 @@ public class UpdateCompanyInfoDto {
     private String category;
 
     @ValidWebProtocolUrl
-    private String companyWebsiteLink;
+    private String companyWebsiteUrl;
 
     @NullOrNotBlank
     private String nip;

@@ -126,7 +126,7 @@ public class CompanyManagementService {
 
     private Company updateCompany(UpdateCompanyInfoDto updateCompanyInfoDto, Company company) {
         AddressMapper addressMapper = new AddressMapper();
-        String companyWebsiteLink = updateCompanyInfoDto.getCompanyWebsiteLink();
+        String companyWebsiteLink = updateCompanyInfoDto.getCompanyWebsiteUrl();
         company.setCompanyWebsiteLink(
                 companyWebsiteLink == null ? company.getCompanyWebsiteLink() : companyWebsiteLink);
         company.setAddress(

@@ -1,6 +1,18 @@
 <div class="home-component">
   <div class="row home-component__header">
-    <h1 class="header__text-node">Popularne firmy</h1>
+    <h1 class="header__text-node">Polecane Zakłady</h1>
   </div>
+  <carousel-component class="home-component__carousel-component" #carousel>
+    <div class="item-carousel" *ngFor="let branch of branchList">
+      <div class="item-carousel__header">Nazwa:{{branch.name}}</div>
+      <img src="{{branch.logo}}" alt="{{branch.name}}" class="item-carousel__image">
+      <div class="item-carousel__content">Dane brancha</div>
+      <div></div>
+    </div>
+    
+</carousel-component>
+<div class="home-component__button-container">
+  <button class="btn btn-primary button-container__button--pause" (click)="toggleCarousel()">{{toggleText}}</button>
+</div>
 </div>
 

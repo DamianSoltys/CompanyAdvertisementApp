@@ -73,3 +73,18 @@ export class Address {
     street: string;
     voivodeship: string;
 }
+
+export interface RecommendationBranch {
+    averageRating: number,
+    branchId: number,
+    category: string,
+    companyId: number,
+    currentUserRating: number,
+    isInsideArea?:number,
+    geoX: number,
+    geoY: number,
+    getLogoURL: string,
+    name: string,
+    recommendRate?:number,
+    logo?:any
+}

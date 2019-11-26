@@ -1,3 +1,5 @@
+@import '../../commonStyles/shared';
+
 .home-component {
   .home-component__header {
     margin: auto;
@@ -8,17 +10,73 @@
       left: 50%;
       transform: translate(-50%);
     }
+    
   }
 
-  .home-component__main-container {
-    border: 1px solid red;
-    background:lightgray;
-    height: 70vh;
-    .carousel-item {
-      padding:50px 0;
+  .home-component__button-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .button-container__button--pause {
+      width: 25%;
+      border-radius: 50px;
+      border: 0;
+      background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
+      transition: all .4s ease-in-out;
+      background-size: 200%;
+      &:hover {
+        background-position: 100% 0;
+      }
+      @include phone {
+        width: 85%;
+      }
     }
-    .card {
-      margin:auto;
+  }
+
+  :host carousel-component{
+    border: 1px solid black;
+    display: block;
+    overflow: hidden;
+    padding: 8vh 6vh;
+    width: 75%;
+    margin: 0 auto;
+    margin-top: 2vh;
+  }
+  
+  .item-carousel{
+    background-color: white;
+    display: flex!important;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-content: stretch;
+    align-items: center;
+    width: 50vh!important;
+    min-height: 50vh!important;
+    top:0vh;
+  }
+  .item-carousel img{
+    height: 50%;
+    width: 50%;
+  }
+  .item-carousel .item-carousel__header {
+    margin:50px;
+  }
+  @include phone {
+    .item-carousel{
+      width: 95vw!important;
     }
+     
+  }
+  
+  @include tablet {
+    :host carousel-component{
+      width: 60%;
+    }
+    .item-carousel{
+      width: 50vh!important;
+      height: 25vh!important;
+    } 
   }
 }

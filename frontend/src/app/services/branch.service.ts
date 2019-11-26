@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { storage_Avaliable } from '../classes/storage_checker';
 import { Route, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Company, Branch, Address, GetCompany } from '../classes/Company';
+import { Company, Branch, Address, GetCompany, RecommendationBranch } from '../classes/Company';
 import { UserREST } from '../classes/User';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { EditRequestData } from '../user/company/company.component';
+
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +31,7 @@ export class BranchService {
     });
   }
 
-  public getBranchLogo(branchData:Branch) {
+  public getBranchLogo(branchData:Branch | RecommendationBranch) {
     let url = branchData.getLogoURL;
     return this.http.get(url,{observe: 'response',responseType:'blob'});
   }

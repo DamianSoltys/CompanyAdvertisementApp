@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RecommendationService } from '../services/recommendation.service';
+import { RecommendationService, RecommendationCount } from '../services/recommendation.service';
 
 @Component({
   selector: 'app-home',
@@ -10,6 +10,15 @@ export class HomeComponent implements OnInit {
   constructor(private rDataService:RecommendationService) {}
 
   ngOnInit() {
-    console.log(this.rDataService.countCategories());
+    let data:RecommendationCount[] | boolean = this.rDataService.countCategories();
+    if(data) {
+      this.rDataService.getRecomendationData(data).subscribe(response=>{
+        if(response) {
+          console.log(response);
+        } else {
+          console.log('error');
+        }
+      });
+    }
   }
 }

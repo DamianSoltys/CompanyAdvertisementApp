@@ -349,6 +349,7 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
       logoKey:this.companyData.logoKey?this.companyData.logoKey:undefined,
       putLogoUrl:this.companyData.putLogoURL?this.companyData.putLogoURL:undefined,
       getLogoUrl:this.companyData.getLogoURL?this.companyData.getLogoURL:undefined,
+      companyData:this.companyData
     };
     //this.canShowEditForm.next(true);
     //this.canShowCompany.next(false);

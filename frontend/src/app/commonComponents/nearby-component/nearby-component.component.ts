@@ -7,6 +7,7 @@ import { BranchService } from 'src/app/services/branch.service';
 import { Branch } from 'src/app/classes/Company';
 import { Router } from '@angular/router';
 import { AgmMap } from '@agm/core';
+import { Subject } from 'rxjs';
 
 export interface NearbyMarker extends Marker {
   branchId?:number,
@@ -36,7 +37,7 @@ export class NearbyComponent implements OnInit,AfterViewInit {
   ngAfterViewInit() {
     this.googleMap.mapReady.subscribe(map=>{
       this.radius = this.setCircleRadius(this.actualPosition.latitude,this.actualPosition.longitude-0.05,this.actualPosition.latitude,this.actualPosition.longitude+0.05)/2;
-    });
+    });   
   }
 
   private getActualPosition() {
@@ -54,6 +55,7 @@ export class NearbyComponent implements OnInit,AfterViewInit {
               'actualPosition',
               JSON.stringify(this.actualPosition)
             );
+             this.actualPosition = JSON.parse(localStorage.getItem('actualPosition'));
           },
           error => {
             this.actualPosition ={
@@ -84,7 +86,7 @@ export class NearbyComponent implements OnInit,AfterViewInit {
   public getNearbyBranches() {
     this.bDataService.getBranches().subscribe(response=>{
       this.branches = <Branch[]>response.body['content'];
-      this.getMarkerData();    
+      this.getMarkerData(); 
     },error=>{
       console.log(error);
     })

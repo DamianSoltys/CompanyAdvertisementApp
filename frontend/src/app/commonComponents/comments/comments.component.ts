@@ -191,6 +191,7 @@ export class CommentsComponent implements OnInit {
     });
     if(clearOpinions) {
       this.opinions = [];
+      this.actualPageLoaded = 0;
     }
     this.cDataService.getOpinion(this.opinionData,pageNumber).subscribe(data=>{
       console.log(data)
@@ -201,7 +202,7 @@ export class CommentsComponent implements OnInit {
           userName: comment.username,
           commentId: comment.commentId,
           userId: comment.userId,
-          isOwner:comment.isOwnBranchCommented,
+          isOwner:comment.isOwnBranchCommented?comment.isOwnBranchCommented:false,
         }
         this.opinions.push(opinion);
       });

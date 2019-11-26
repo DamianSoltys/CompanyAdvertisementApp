@@ -49,7 +49,10 @@ export interface EditRequestData {
   logoKey?:string;
   putLogoUrl?:string;
   getLogoUrl?:string;
+  branchData?:Branch,
+  companyData?:GetCompany
 }
+
 @Component({
   selector: 'app-company',
   templateUrl: './company.component.html',

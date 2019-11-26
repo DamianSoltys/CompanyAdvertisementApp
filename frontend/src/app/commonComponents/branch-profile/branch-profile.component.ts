@@ -85,6 +85,7 @@ export class BranchProfileComponent implements OnInit {
       logoKey:this.branchData.logoKey,
       putLogoUrl:this.branchData.putLogoURL,
       getLogoUrl:this.branchData.getLogoURL,
+      branchData:this.branchData
     };
     this.router.navigate(['edit'],{relativeTo:this.activatedRoute,queryParams:this.editData});
   }

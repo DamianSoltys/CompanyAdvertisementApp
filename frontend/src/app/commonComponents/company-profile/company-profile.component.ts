@@ -6,7 +6,7 @@ import {
   AfterViewInit
 } from '@angular/core';
 import { Router, ParamMap, ActivatedRoute } from '@angular/router';
-import { GetCompany, Branch } from 'src/app/classes/Company';
+import { GetCompany, Branch, ConnectionStatus, MediaTypeEnum } from 'src/app/classes/Company';
 import { CompanyService } from 'src/app/services/company.service';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -38,6 +38,7 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
   public canShowCompany = new BehaviorSubject(true);
   public isNewsletter = new BehaviorSubject(false);
   public isFacebookConnected = false;
+  public otherFBAccount = false;
   public isTwitterConnected = false;
   @ViewChild('checkLabel') label:ElementRef;
 
@@ -65,6 +66,7 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
     });
     this.getCompanyData();
     this.registerListeners();
+    this.checkMediaConnection();
   }
 
   ngAfterViewInit() {
@@ -83,6 +85,18 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
     this.bDataService.getBranchData.subscribe(()=>{
       this.getCompanyData(true);
     });
+    this.lgService.FBstatus.subscribe(()=>{
+      this.getCompanyData(true);
+    });
+    this.lgService.FBConnection.subscribe(data=>{
+      if(data) {
+        this.checkFbConnection();
+      }
+    });
+  }
+
+  private checkMediaConnection() {
+    this.lgService.checkIfUserFBLogged();
   }
 
   private getCompanyData(clearCompanyStorage?:boolean) {
@@ -98,7 +112,7 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
       this.cDataService.getCompany(this.paramId).subscribe(
         response => {
           this.companyData = <GetCompany>response.body;
-          console.log(this.companyData);
+          console.log(this.companyData)
           this.cDataService.getCompanyLogo(this.companyData).subscribe(response=>{
             if(response.status != 204) {
               let reader = new FileReader();
@@ -236,7 +250,7 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
 
   public facebookLogin($event) {
     event.preventDefault();
-    this.lgService.facebookLogin().subscribe(response=>{
+    this.lgService.facebookLogin(this.companyData.companyId).subscribe(response=>{
       console.log(response);
     });
   }
@@ -251,7 +265,6 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
 
   public checkNewsletterSubscription() {
     this.nDataService.getSubscriptionStatus(this.companyData.companyId,this.userREST.userID).subscribe(response=>{
-      console.log(response.body)
       this.isNewsletter.next(<boolean>response.body);
     },error=>{
       console.log(error);
@@ -263,10 +276,17 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
 
     if(this.newsletterFormGuest.valid) {
       this.nDataService.saveToNewsletter(this.newsletterFormGuest.controls.email.value,this.companyData.companyId).subscribe(response=>{
-        this.snackbarService.open({
-          message:'Proszę potwierdzić zapis do newslettera linkiem wysłanym na podany adres!',
-          snackbarType:SnackbarType.success,
-        });~
+        if(this.userREST) {
+          this.snackbarService.open({
+            message:'Zostałeś zapisany na newsletter!',
+            snackbarType:SnackbarType.success,
+          });
+        } else {
+          this.snackbarService.open({
+            message:'Proszę potwierdzić zapis do newslettera linkiem wysłanym na podany adres!',
+            snackbarType:SnackbarType.success,
+          });
+        }
         this.checkNewsletterSubscription();
       },error=>{
         console.log(error);
@@ -297,6 +317,14 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
     this.canShowCompany.next(true);
   }
 
+  public goToFBProfile($event) {
+    this.companyData.socialProfileConnectionDtos.forEach(connection=>{
+      if(connection.socialPlatform === MediaTypeEnum.FB) {
+        window.open(connection.connectionStatus.profileURL, "_blank");
+      }
+    });
+  }
+
   public showBranches() {
     this.canShowCompany.next(false);
     this.canShowBranches.next(true);
@@ -321,6 +349,7 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
       logoKey:this.companyData.logoKey?this.companyData.logoKey:undefined,
       putLogoUrl:this.companyData.putLogoURL?this.companyData.putLogoURL:undefined,
       getLogoUrl:this.companyData.getLogoURL?this.companyData.getLogoURL:undefined,
+      companyData:this.companyData
     };
     //this.canShowEditForm.next(true);
     //this.canShowCompany.next(false);
@@ -348,6 +377,26 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
       }
     } else {
       return false;
+    }
+  }
+
+  public checkFbConnection() {
+    if(this.companyData) {
+      if(this.companyData.socialProfileConnectionDtos) {
+        this.companyData.socialProfileConnectionDtos.forEach(connection=>{
+          if(connection.connectionStatus.status === ConnectionStatus.Connected){
+            if(connection.socialPlatform === MediaTypeEnum.FB) {
+              this.isFacebookConnected = true;
+            }
+          } else {
+            if(connection.socialPlatform === MediaTypeEnum.FB) {
+              this.otherFBAccount = true;
+            }
+          }
+        });
+      } else {
+        this.isFacebookConnected = false;
+      }
     }
   }
 

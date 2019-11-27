@@ -20,16 +20,27 @@ export interface fbAuthResponse {
   userID?: string,
 }
 
+export interface FBPostRequest {
+  authResponse:fbAuthResponse,
+  companyId:number,
+  status:{
+    status:string,
+  }
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
   Logged = new BehaviorSubject(this.CheckLogged());
   public fbResponse:fbResponse;
-  httpOptions = {
+  public httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     observe: 'response' as 'response'
   };
+  public FBConnection = new BehaviorSubject<boolean>(false);
+
+  public FBstatus = new Subject<boolean>();
   constructor(private http: HttpClient, private router: Router) {}
 
   public initFacebookApi() {
@@ -52,33 +63,78 @@ export class LoginService {
      }(document, 'script', 'facebook-jssdk'));
   }
 
-  public facebookLogin() {
+  public facebookLogin(companyId:number) {
     let subject=new Subject<any>();
       if(FB) {
-        console.log("submit login to facebook");
-        // FB.login();
+        
         FB.login((response)=>
             {
               this.fbResponse = response;
               if (response.authResponse)
               {
-                console.log(this.fbResponse);
-                subject.next(true);
+                let postRequest:FBPostRequest = {
+                  authResponse:this.fbResponse.authResponse,
+                  companyId:companyId,
+                  status:{
+                    status:this.fbResponse.status,
+                  }
+                }
+                this.fbPostRequest(postRequest).subscribe(response=>{
+                  if(response) {
+                    subject.next(true);
+                    this.FBstatus.next(true);
+                  } else {
+                    subject.next(false);
+                    this.FBstatus.next(false);
+                  }
+                });
                }
                else
                {
                 subject.next(false);
+                this.FBstatus.next(false);
                console.log('User login failed');
              }
-          });
+          },{scope: 'manage_pages,public_profile,pages_show_list,publish_pages'});
       } else {
         subject.next(false);
+        this.FBstatus.next(false);
       }
       return subject;
   }
 
-  public checkIfFacebookLogged() {
+  public checkIfMediaConnected(companyId:number) {
+    let subject = new Subject<any>();
+    this.http.get(`http://localhost:8090/api/social/connections/${companyId}`,{observe:'response'}).subscribe(response=>{
+      console.log(response)
+      subject.next(response.body);
+    },error=>{
+      console.log(error);
+      subject.next(false);
+    });
+    return subject;
+  }
 
+  private fbPostRequest(fbPostRequest:FBPostRequest) {
+    let subject = new Subject<any>();
+    this.http.post(`http://localhost:8090/api/fb/login_in`,fbPostRequest).subscribe(response=>{
+      console.log(response);
+      subject.next(response);
+    },error=>{
+      console.log(error);
+      subject.next(false);
+    });
+    return subject;
+  }
+
+  public checkIfUserFBLogged() {
+    FB.getLoginStatus(response=> {  
+      if(response.status == "unknown") {
+        this.FBConnection.next(true);      
+      } else {
+        this.FBConnection.next(false);
+      } 
+    },true);
   }
 
   public twitterLogin() {

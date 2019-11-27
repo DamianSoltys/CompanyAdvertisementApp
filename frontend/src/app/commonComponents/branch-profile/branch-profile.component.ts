@@ -7,6 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Position, Marker, EditRequestData } from 'src/app/user/company/company.component';
 import { UserREST } from 'src/app/classes/User';
 import { SnackbarService } from 'src/app/services/snackbar.service';
+import { RecommendationService } from 'src/app/services/recommendation.service';
 
 @Component({
   selector: 'app-branch-profile',
@@ -31,6 +32,7 @@ export class BranchProfileComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private snackbarService:SnackbarService,
+    private rDataService:RecommendationService
   ) {}
 
   ngOnInit() {
@@ -41,7 +43,6 @@ export class BranchProfileComponent implements OnInit {
 
     this.getBranchData();
     this.registerBranchListener();
-    console.log(this.branchData)
   }
 
   public registerBranchListener() {
@@ -84,6 +85,7 @@ export class BranchProfileComponent implements OnInit {
       logoKey:this.branchData.logoKey,
       putLogoUrl:this.branchData.putLogoURL,
       getLogoUrl:this.branchData.getLogoURL,
+      branchData:this.branchData
     };
     this.router.navigate(['edit'],{relativeTo:this.activatedRoute,queryParams:this.editData});
   }
@@ -97,6 +99,9 @@ export class BranchProfileComponent implements OnInit {
       this.bDataService.getBranch(this.branchId).subscribe(
         response => {
           this.branchData = <Branch>response.body;
+          if(this.branchData) {
+            this.rDataService.pushRecommendationData(this.branchData.category,this.branchData.branchId);
+          }
           this.bDataService.getBranchLogo(this.branchData).subscribe(response=>{
             if(response.status !=204) {
               let reader = new FileReader();
@@ -148,6 +153,10 @@ export class BranchProfileComponent implements OnInit {
     
   }
 
+  private setRecommendationData() {
+    
+  }
+
   private getStorageBranchData() {
     if (storage_Avaliable('localStorage')) {
       let branchData: Branch[] = JSON.parse(localStorage.getItem('branchData'));
@@ -155,6 +164,10 @@ export class BranchProfileComponent implements OnInit {
         branchData.forEach(branch => {
           if (this.branchId == branch.branchId) {
             this.branchData = branch;
+
+            if(this.branchData) {
+              this.rDataService.pushRecommendationData(this.branchData.category,this.branchData.branchId);
+            }
           }
         });
       }

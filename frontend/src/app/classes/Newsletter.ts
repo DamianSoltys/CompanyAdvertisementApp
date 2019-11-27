@@ -18,8 +18,15 @@ export interface PromotionItemResponse {
     addedTime?:any,
     plannedSendingTime?:any,
     promotionItemUUID?:string,
-    sendingStatus?:string,
-    destinations?:Destination[],
+    sendingStatus?:SendingStatus[],
+}
+
+export interface SendingStatus {
+    destination: string,
+    detail: string,
+    failedAt: any,
+    sendingStatus: string,
+    plannedSendingAt:any,
 }
 
 export enum Destination {

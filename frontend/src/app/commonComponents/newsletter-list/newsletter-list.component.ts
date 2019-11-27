@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NewsletterService } from 'src/app/services/newsletter.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PromotionItem, PromotionItemResponse } from 'src/app/classes/Newsletter';
+import { PromotionItem, PromotionItemResponse, SendingStatus } from 'src/app/classes/Newsletter';
 import * as moment from 'moment';
 import 'moment/locale/pl';
 import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
@@ -26,8 +26,9 @@ export class NewsletterListComponent implements OnInit {
   private getNewsletters() {
     this.nDataService.getNewsletterData(this.companyId).subscribe(response=>{
       if(response) {
-        console.log(response);
+        console.log(response)
         this.newsletterList = <PromotionItemResponse[]>response.body;
+        console.log(this.newsletterList)
         this.convertUnixToDate();
       }
     });
@@ -37,8 +38,8 @@ export class NewsletterListComponent implements OnInit {
     moment.locale('pl');
     this.newsletterList.map(newsletter=>{
       newsletter.addedTime = moment.unix(newsletter.addedTime).format('LLL');
-      if(newsletter.plannedSendingTime) {
-        newsletter.plannedSendingTime = moment.unix(newsletter.plannedSendingTime).format('LLL');
+      if(newsletter.sendingStatus[0].plannedSendingAt) {
+        newsletter.sendingStatus[0].plannedSendingAt = moment.unix(newsletter.sendingStatus[0].plannedSendingAt).format('LLL');
       }
     });
   }
@@ -59,13 +60,22 @@ export class NewsletterListComponent implements OnInit {
       }
     });
   }
-  public checkStatus(status:string) {
-    if(status == "SENT") {
-      return false;
-    } else {
+  public checkStatus(status:SendingStatus[]) {
+    if(status[0].sendingStatus == "waiting_for_action") { //only_at_will
       return true;
+    } else {
+      return false;
     }
   }
+
+  public showSendTime(status:string) {
+    if(status == "delayed") {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  
   public goBack() {
     this.router.navigate(['/companyProfile',this.companyId]);
   }

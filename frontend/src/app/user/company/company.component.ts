@@ -49,7 +49,10 @@ export interface EditRequestData {
   logoKey?:string;
   putLogoUrl?:string;
   getLogoUrl?:string;
+  branchData?:Branch,
+  companyData?:GetCompany
 }
+
 @Component({
   selector: 'app-company',
   templateUrl: './company.component.html',
@@ -378,7 +381,7 @@ export class CompanyComponent implements OnInit {
   private patchCompanyData() {
     let companyData: Company;
     companyData = this.companyForm.value;
-
+    console.log(companyData)
     this.cDataService
       .editCompany(companyData, this.editRequestData,this.companyLogo)
       .subscribe(

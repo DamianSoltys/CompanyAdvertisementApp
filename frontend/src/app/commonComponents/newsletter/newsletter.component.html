@@ -21,7 +21,7 @@
             <label for="media">Dodatkowy formularz medii</label>
           <ngx-select-dropdown name="media" #mediaSelect [config]="selectConfig" [options]="mediaOptions" (change)="checkForChanges(mediaSelect)" [multiple]="false"></ngx-select-dropdown>
         </div>
-        <div class="type-container__type-select">
+        <div class="type-container__type-select" [ngStyle]="{'display':isAnyMediaConnected() ? 'block' : 'none' }">
           <label for="mediaType">Rodzaj medii społecznościowych</label>
         <ngx-select-dropdown name="mediaType" #mediaTypeSelect [config]="selectConfig" [options]="mediaTypeOptions" (change)="checkForChanges(mediaTypeSelect)" [disabled]="!showMediaTypeSelect()" [multiple]="false"></ngx-select-dropdown>
       </div>

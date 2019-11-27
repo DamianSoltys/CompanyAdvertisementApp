@@ -40,6 +40,8 @@
         }
 
         .main-container__list-container {
+            max-height: 600px;
+            overflow: auto;
             .list-container__empty-list {
                 display:flex;
                 justify-content: center;
@@ -52,9 +54,17 @@
         .empty-list__data-container {
             .data-container__main-section {
                 display: flex;
-                padding:10px 50px;
+                margin:10px 50px;
+                flex-wrap: wrap;
+                border-bottom:1px solid $bgcolor;
+                &:last-child {
+                    border-bottom: none;
+                }
                 .main-section__section {
                     flex:2;
+                    @include phone {
+                        flex-basis: 100%;
+                    }
                     .section__button--send {
                         width:100%;
                         background:$bgcolor;
@@ -71,6 +81,9 @@
         padding-top: 35px;
         width:30%;
         margin: auto;
+        @include phone {
+            width:95%;
+        }
         .back-button__button {
             width:100%;
             min-height: 35px;

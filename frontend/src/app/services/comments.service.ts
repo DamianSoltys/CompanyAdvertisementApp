@@ -26,15 +26,22 @@ export class CommentsService {
 
   constructor(private http:HttpClient) { }
 
-   public postOpinion(opinionData:OpinionData,rateId?:number):Subject<boolean> {
-    let commentData:CommentData = <CommentData>opinionData;
-    let ratingData:RatingData = <RatingData>opinionData;
+   public postOpinion(opinionData:OpinionListData,rateId?:number):Subject<boolean> {
+    let commentData:CommentData = {
+      comment:opinionData.comment,
+      branchId:opinionData.branchId
+    }
+    let ratingData:RatingData = {
+      rating:opinionData.rate,
+      branchId:opinionData.branchId
+    }
+    console.log(commentData)
     let subject = new Subject<boolean>();
      this.http.post(`http://localhost:8090/api/comment`,commentData).subscribe(response=>{
-      if(opinionData.rating) {
+      if(opinionData.rate) {
         if(rateId) {
           console.log(rateId)
-          this.http.patch(`http://localhost:8090/api/rating/${rateId}`,ratingData).subscribe(response=>{
+          this.http.patch(`http://localhost:8090/api/rating/${rateId}`,{rating:opinionData.rate}).subscribe(response=>{
             subject.next(true);
           },error=>{
             console.log(error);
@@ -71,11 +78,11 @@ export class CommentsService {
 
     this.http.get(`http://localhost:8090/api/comment`,{observe:'response',params:httpCommentParams}).subscribe(response=>{
        let responseData = <SearchResponse>response.body;
+       console.log(responseData)
        data.comment = responseData.content;
        data.numberOfPages = responseData.totalPages;
        let httpRatingParams= new HttpParams().set('branchId',opinionData.branchId.toString());
       this.http.get(`http://localhost:8090/api/rating`,{observe:'response',params:httpRatingParams}).subscribe(response=>{
-        console.log(response);
         let responseData = <SearchResponse>response.body;
         data.rating = responseData.content;
         subject.next(data);

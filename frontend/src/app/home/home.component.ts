@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
 import { RecommendationService, RecommendationCount } from '../services/recommendation.service';
 import { RecommendationBranch } from '../classes/Company';
 import { Position } from '../user/company/company.component';
@@ -6,16 +6,17 @@ import { storage_Avaliable } from '../classes/storage_checker';
 import { PositionService } from '../services/position.service';
 import { BranchService } from '../services/branch.service';
 import { CarouselComponent } from 'ngx-carousel-lib';
+import { Subscription } from 'rxjs';
 enum ToggleButton { 
-  stop = "Zatrzymaj",
-  start = "Wznów"
+  stop = "Zatrzymaj autoodtwarzanie",
+  start = "Wznów autoodtwarzanie"
 }
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit,AfterViewInit {
+export class HomeComponent implements OnInit,AfterViewInit,OnDestroy {
   public branchList:RecommendationBranch[];
   public recommendedBranchList:RecommendationBranch[];
   public rateWeight = 2;
@@ -24,19 +25,20 @@ export class HomeComponent implements OnInit,AfterViewInit {
   public carouselInterval:any;
   public intervalStopped:boolean = false;
   public toggleText:string = ToggleButton.stop;
+  private subscription:Subscription;
   @ViewChild('carousel') carousel:CarouselComponent;
   constructor(private rDataService:RecommendationService,private pDataService:PositionService,private bDataService:BranchService) {}
   
   ngOnInit() {
     let data:RecommendationCount[] | boolean = this.rDataService.countCategories();
 
-    this.pDataService.getActualPosition().subscribe(position=>{
+    this.subscription = this.pDataService.getActualPosition().subscribe(position=>{
       this.actualPosition = position;
       console.log(this.actualPosition);
     });
 
     if(data) {
-      this.rDataService.getRecomendationData(data).subscribe(response=>{
+      const subscription = this.rDataService.getRecomendationData(data).subscribe(response=>{
         if(response) {
           this.branchList = response;
           this.sortRecommendedData();
@@ -45,11 +47,18 @@ export class HomeComponent implements OnInit,AfterViewInit {
           console.log('error');
         }
       });
+
+      this.subscription.add(subscription);
     }
   }
 
   ngAfterViewInit() {
     this.setCarouselInterval();
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.carouselInterval);
+    this.subscription.unsubscribe();
   }
 
   public setCarouselInterval() {
@@ -89,7 +98,7 @@ export class HomeComponent implements OnInit,AfterViewInit {
     console.log(this.branchList);
   }
   private getRecommendRate(branch:RecommendationBranch) {
-    return ((branch.currentUserRating | 0 * this.rateWeight) + (branch.isInsideArea * this.positionWeight))/(this.rateWeight+this.positionWeight)
+    return ((branch.averageRating | 0 * this.rateWeight) + (branch.isInsideArea * this.positionWeight))/(this.rateWeight+this.positionWeight)
   }
 
   private compare(a:RecommendationBranch, b:RecommendationBranch) {
@@ -104,7 +113,7 @@ export class HomeComponent implements OnInit,AfterViewInit {
 
  private getBranchListLogo() {
   this.branchList.map(branch=>{
-    this.bDataService.getBranchLogo(branch).subscribe(response=>{
+    const subscription = this.bDataService.getBranchLogo(branch).subscribe(response=>{
       if(response.status !=204) {
         let reader = new FileReader();
       reader.addEventListener("load", () => {
@@ -117,11 +126,12 @@ export class HomeComponent implements OnInit,AfterViewInit {
       } else {
         branch.logo = this.bDataService.defaultLogoUrl;
       }
-    
+      
     },error=>{
       branch.logo = this.bDataService.defaultLogoUrl;
     });
-  })
+    this.subscription.add(subscription);
+  });
  }
 
 

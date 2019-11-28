@@ -156,7 +156,9 @@ public class CompanyManagementService {
 
         return CompanyInfoDto.builder()
                 .hasLogoAdded(company.isHasLogoAdded())
-                .logoURL(company.getLogoPath())
+                .logoKey(FilePathCreator.getFileKey(company.getLogoPath()))
+                .getLogoURL(company.getLogoPath())
+                .putLogoURL(FilePathCreator.getPutLogoURL(company.getLogoPath()))
                 .logoKey(FilePathCreator.getFileKey(company.getLogoPath()))
                 .category(company.getCategory().getName())
                 .companyId(company.getId())

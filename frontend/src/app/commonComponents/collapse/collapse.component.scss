@@ -19,6 +19,14 @@
         color: darken($bgcolor, 10);
         font-size: 1.1rem;
     }
+    .data__logo {
+        display:flex;
+        justify-content: center;
+        .logo__image {
+            width:150px;
+            height:150px;
+        }
+    }
     .data__map {
         agm-map {
             height:200px;

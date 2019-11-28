@@ -50,6 +50,7 @@ export interface MediaConnection {
 }
 
 export class Branch {
+    actualSelectedLogo?:any;
     address: Address;       
     geoX: string;
     geoY: string;

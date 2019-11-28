@@ -39,8 +39,8 @@
           <div class="input-group__inputs">
             <div class="inputs__input-container">
               <label class="input-container__label" for="logo">Logo</label>
-              <img *ngIf="(!imageUrl && companyEditData)" class="input-container__logo" src="{{companyEditData?.logo}}" alt="{{companyEditData?.companyName}}_logo">
-              <img *ngIf="imageUrl" class="input-container__logo" src="{{imageUrl}}" alt="{{imageUrl}}_logo">
+              <img *ngIf="(!companyLogoUrl && companyEditData)" class="input-container__logo" src="{{companyEditData?.logo}}" alt="{{companyEditData?.companyName}}_logo">
+              <img *ngIf="companyLogoUrl" class="input-container__logo" src="{{companyLogoUrl}}" alt="{{companyLogoUrl}}_logo">
               <input name="logo" type="file" class="input-container__input input-container__file form-control-file"
                 (change)="onFileSelected($event, true)" />
             </div>
@@ -332,8 +332,8 @@
             </div>
             <div class="inputs__input-container">
               <label class="input-container__label" for="name">Logo</label>
-              <img *ngIf="(!imageUrl && companyEditData)" class="input-container__logo" src="{{companyEditData?.logo}}" alt="{{companyEditData?.name}}_logo">
-              <img *ngIf="imageUrl" class="input-container__logo" src="{{imageUrl}}" alt="{{imageUrl}}_logo">
+              <img *ngIf="(!branchLogoUrl && companyEditData)" class="input-container__logo" src="{{companyEditData?.logo}}" alt="{{companyEditData?.name}}_logo">
+              <img *ngIf="branchLogoUrl" class="input-container__logo" src="{{branchLogoUrl}}" alt="{{branchLogoUrl}}_logo">
               <input name="logo" type="file" class="input-container__input input-container__file form-control-file"
                 (change)="onFileSelected($event, false)" />
             </div>

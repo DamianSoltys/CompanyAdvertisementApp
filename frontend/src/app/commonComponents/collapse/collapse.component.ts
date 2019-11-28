@@ -36,6 +36,7 @@ export class CollapseComponent implements OnInit {
 
   ngOnInit() {
     this.collapseId = 0;
+    console.log(this.branchData.actualSelectedLogo)
     for(let char of this.branchData.name) {
       this.collapseId+=char.charCodeAt(0) + Math.random();
     }

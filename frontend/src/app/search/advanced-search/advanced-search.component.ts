@@ -144,7 +144,6 @@ export class AdvancedSearchComponent implements OnInit {
       }
     },error=>{
       data.logo = this.sDataService.defaultSearchLogo;
-      console.log(error);
       return true;
     });
   });

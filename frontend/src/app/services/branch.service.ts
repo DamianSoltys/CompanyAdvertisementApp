@@ -44,6 +44,7 @@ export class BranchService {
 
   public addBranches(companyId:number,branches:Branch[],logoList?:File[]):Subject<any> {
     let subject = new Subject<any>();
+    this.getRidOfPreviewLogo(branches);
     this.http.post(`http://localhost:8090/api/companies/${companyId}/branches`,branches).subscribe(response=> {
      if(logoList) {
        console.log(response)
@@ -76,6 +77,12 @@ export class BranchService {
     return subject;
   }
 
+  private getRidOfPreviewLogo(branches:Branch[]) {
+      branches.map(branch=>{
+        branch.actualSelectedLogo = undefined;
+      });
+  }
+
   public editBranch(editRequestData:EditRequestData,branch:Branch,workLogo:File):Subject<any> {
     let subject = new Subject<any>();
     this.http.patch(`http://localhost:8090/api/branch/${editRequestData.workId}`,branch).subscribe(response=>{
@@ -84,6 +91,7 @@ export class BranchService {
         let url = editRequestData.putLogoUrl;
         let logoData = new FormData();
         logoData.append(editRequestData.logoKey,workLogo);
+        logoData.append(editRequestData.logoKey,'Value');
         this.http.put(url,logoData).subscribe(response=>{
           console.log("dodano plcizek");
           subject.next(true);

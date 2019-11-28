@@ -26,7 +26,7 @@ export class SearchService {
   }
 
   public getSearchSectionLogo(searchData: SectionData) {
-    return this.http.get(searchData.logoPath, { observe: 'response', responseType: 'blob' });
+    return this.http.get(searchData.getLogoURL, { observe: 'response', responseType: 'blob' });
   }
 
   public getCitiesByVoivodeship() {

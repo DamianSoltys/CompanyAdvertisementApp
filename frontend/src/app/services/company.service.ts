@@ -26,9 +26,8 @@ export class CompanyService {
     this.isLoaded.subscribe((data)=>{
       subject.next(data);
     });
-
     let subject = new Subject<boolean>();
-
+    this.getRidOfPreviewLogo(companyData);
     this.http.post(`http://localhost:8090/api/companies`, companyData).subscribe(response=>{
       console.log(response);
       if(companyLogo) {
@@ -44,6 +43,14 @@ export class CompanyService {
       this.isLoaded.next(false);
     });
     return subject;
+  }
+
+  private getRidOfPreviewLogo(companyData:Company) {
+    if(companyData.branches) {
+      companyData.branches.map(branch=>{
+        branch.actualSelectedLogo = undefined;
+      });
+    }
   }
 
   public getActualUser() {
@@ -194,7 +201,6 @@ export class CompanyService {
 
   public getCompanyLogo(companyData:GetCompany){
     let url = companyData.logoURL;
-    console.log(companyData);
     return this.http.get(url,{ observe: 'response',responseType: 'blob'}); 
   }
 
@@ -235,12 +241,11 @@ export class CompanyService {
       let companyData:GetCompany = <GetCompany>response;
       if(companyLogo) {
         let logoData = new FormData();
-        let url = companyData.putLogoURL;
+        let url = editRequestData.putLogoUrl;
         logoData.append(companyData.logoKey,companyLogo);
         logoData.append(companyData.logoKey,'Value');
         this.http.put(url,logoData).subscribe(response=> {
         subject.next(true);
-        console.log('dodano pliczek'); 
       },error=>{
         console.log(error);
         subject.next(true);

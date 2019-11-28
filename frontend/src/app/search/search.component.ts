@@ -65,6 +65,7 @@ export class SearchComponent implements OnInit {
     this.branchNumber = 0;
     
     this.searchS.sendSearchData(this.searchData).subscribe(response=>{
+      console.log(response)
       this.responseBody = <SearchResponse>response.body  
       this.totalPages = this.responseBody.totalPages;  
       this.sectionData = this.responseBody.content;

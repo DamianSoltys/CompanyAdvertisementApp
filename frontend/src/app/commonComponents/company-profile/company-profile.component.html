@@ -32,7 +32,7 @@
         <div class="section--main__data" *ngIf="companyData.companyWebsiteUrl">
           <p class="data__text-node">
             <span class="text-node__label">Strona firmy:</span>
-            <a href="companyData.companyWebsiteUrl">{{ companyData.companyWebsiteUrl }}</a>
+            <a href="{{companyData.companyWebsiteUrl}}" target="_blank">{{ companyData.companyWebsiteUrl }}</a>
           </p>
         </div>
         <div class="section--main__data">

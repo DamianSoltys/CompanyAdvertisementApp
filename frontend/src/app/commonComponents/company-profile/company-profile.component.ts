@@ -106,13 +106,12 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
     }
     
     this.getStorageCompanyData();
-    console.log(this.companyData);
 
     if (!this.companyData) {
       this.cDataService.getCompany(this.paramId).subscribe(
         response => {
+          console.log(response)
           this.companyData = <GetCompany>response.body;
-          console.log(this.companyData)
           this.cDataService.getCompanyLogo(this.companyData).subscribe(response=>{
             if(response.status != 204) {
               let reader = new FileReader();
@@ -192,7 +191,6 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
 
     if (this.companyData) {
       this.branchData = [];
-      console.log(this.companyData.branchesIDs)
 
       if(!this.companyData.branchesIDs.length) {
         subject.next(true);
@@ -206,7 +204,6 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
                 if(response.status != 204) {
                   let reader = new FileReader();
                   reader.addEventListener("load", () => {
-                    console.log('elo')
                     branchData.logo = reader.result;
                     branchData.branchId = branchId;
                     this.branchData.push(branchData);
@@ -349,12 +346,11 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
       addWork: false,
       backId:null,
       logoKey:this.companyData.logoKey?this.companyData.logoKey:undefined,
-      putLogoUrl:this.companyData.putLogoURL?this.companyData.putLogoURL:undefined,
+      putLogoUrl:this.companyData.logoURL?this.companyData.logoURL:undefined,
       getLogoUrl:this.companyData.getLogoURL?this.companyData.getLogoURL:undefined,
       companyData:JSON.stringify(editData)
     };
-    //this.canShowEditForm.next(true);
-    //this.canShowCompany.next(false);
+    console.log(this.editData)
     this.router.navigate(['companyEdit'],{relativeTo:this.activatedRoute,queryParams:this.editData});
   }
 

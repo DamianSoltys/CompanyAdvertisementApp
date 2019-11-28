@@ -83,7 +83,8 @@ export class CompanyComponent implements OnInit{
   private workLogo: File;
   private companyEditData:GetCompany | Branch;
   public imagePath;
-  public imageUrl;
+  public companyLogoUrl;
+  public branchLogoUrl;
   @Input() editRequestData: EditRequestData = {
     companyId: null,
     workId: null,
@@ -148,7 +149,6 @@ export class CompanyComponent implements OnInit{
         this.companyEditData = JSON.parse(this.editRequestData.companyData || this.editRequestData.branchData);
         this.getEditLogo(this.editRequestData).subscribe(data=>{
           this.companyEditData = data;
-          console.log(this.companyEditData)
         });
       }
       this.setEditFormData(this.editRequestData);
@@ -312,6 +312,7 @@ export class CompanyComponent implements OnInit{
       userREST.companiesIDs.forEach((companyId,index) => {
         this.cDataService.getCompany(companyId).subscribe(
           response => {
+            console.log(response)
             let companyData:GetCompany = <GetCompany>response.body;
             if(companyData.logoURL) {
               this.cDataService.getCompanyLogo(companyData).subscribe(response=>{            
@@ -358,15 +359,10 @@ export class CompanyComponent implements OnInit{
       subject.next(true);
     }
    } else {
-    console.log('Firmy pobrane ze storage')
     subject.next(true);
    }
       
     }
-  }
-
-  public checkForDoubles() {
-    
   }
 
   private companySort(item1: GetCompany, item2: GetCompany) {
@@ -410,10 +406,13 @@ export class CompanyComponent implements OnInit{
         this._workForm.geoY.setValue(this.actualPosition.longitude);
       }
       this.workNumber++;
-      this.workForms.push(this.workForm.value);
+      let branchData:Branch = this.workForm.value;
       if (this.workLogo) {
+        branchData.actualSelectedLogo = this.branchLogoUrl;
+        this.branchLogoUrl = null;
         this.LogoList.push(this.workLogo);
       }
+      this.workForms.push(branchData);
       this.workForm.reset();
       if (!this.editRequestData.addWork) {
         this.toggleWorkForm();
@@ -449,6 +448,7 @@ export class CompanyComponent implements OnInit{
         this.workForms = undefined;
         this.cDataService.getCompanyData.next(true);
         this.bDataService.getBranchData.next(true);
+        this.setDefaultValues();
         this.router.navigate(['companyProfile',this.editRequestData.backId]); 
       });
     } else {
@@ -468,7 +468,6 @@ export class CompanyComponent implements OnInit{
   private patchCompanyData() {
     let companyData: Company;
     companyData = this.companyForm.value;
-    console.log(companyData)
     this.cDataService
       .editCompany(companyData, this.editRequestData,this.companyLogo)
       .subscribe(
@@ -505,7 +504,6 @@ export class CompanyComponent implements OnInit{
       }
     }
     let branch:Branch = this.workForm.value;
-    console.log(branch)
     this.bDataService.editBranch(this.editRequestData,branch,this.workLogo).subscribe(response=>{
       if(response) {
       this.snackbarService.open({
@@ -514,6 +512,7 @@ export class CompanyComponent implements OnInit{
       });
       this.uDataService.updateUser().subscribe(data=>{
         this.workForms = undefined;
+        this.setDefaultValues();
         this.cDataService.getCompanyData.next(true);
         this.bDataService.getBranchData.next(true);
         this.router.navigate(['companyProfile',this.editRequestData.backId]); 
@@ -539,7 +538,6 @@ export class CompanyComponent implements OnInit{
     this.cDataService.addCompany(companyData,this.LogoList,this.companyLogo).subscribe(
       response => {
         if(response) {
-        console.log(response)
         this.snackbarService.open({
           message:'Pomyślnie dodano firmę',
           snackbarType:SnackbarType.success,
@@ -548,8 +546,6 @@ export class CompanyComponent implements OnInit{
            this.setDefaultValues();
            this.cDataService.getCompanyData.next(true);
            this.toggleDataList();
-          // this.cDataService.deleteStorageData();
-          // location.reload();
         });
       } else {
         this.formErrorService.open({
@@ -582,7 +578,13 @@ export class CompanyComponent implements OnInit{
       this.imagePath = event.target.files;
       reader.readAsDataURL(event.target.files[0]); 
       reader.onload = (_event) => { 
-        this.imageUrl = reader.result; 
+        if(!this.canShowAddsForm()) {
+          this.branchLogoUrl = reader.result; 
+        }
+        if(this.canShowAddsForm()) {
+          this.companyLogoUrl = reader.result; 
+        }
+       
       }
 
     if (!this.LogoList && !companyForm) {
@@ -604,6 +606,8 @@ export class CompanyComponent implements OnInit{
     this.companyList = undefined;
     this.companyLogo = undefined;
     this.workLogo = undefined;
+    this.companyLogoUrl = null;
+    this.branchLogoUrl = null;
   }
 
   private checkForPersonalData() {
@@ -646,6 +650,7 @@ export class CompanyComponent implements OnInit{
   }
 
   public toggleWorkForm() {
+    this.branchLogoUrl = null;
     this.canShowWorkForm.next(!this.canShowWorkForm.value);
   }
 

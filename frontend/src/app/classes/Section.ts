@@ -9,7 +9,8 @@ export interface SectionData {
     category:string;
     logo?:any;
     logoKey?:string;
-    logoPath?:string;
+    putLogoURL?:string;
+    getLogoURL?:string;
 }
 
 export interface SearchResponse {

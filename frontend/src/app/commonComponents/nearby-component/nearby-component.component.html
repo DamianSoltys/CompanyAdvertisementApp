@@ -13,7 +13,8 @@
           <agm-marker
             *ngFor="let marker of markersArray"
             [latitude]="marker.latitude"
-            [longitude]="marker.longitude"             
+            [longitude]="marker.longitude"  
+            [opacity] = "marker?.opacity"           
           >
           <agm-info-window><a class="marker__link" (click)="goToBranchProfile(marker.branchId,marker.companyId)">Profil:{{marker.label}}</a></agm-info-window>
           </agm-marker>
@@ -23,6 +24,14 @@
               [circleDraggable]="false"
               [editable]="false"
               [radius]="radius">
+            </agm-circle>
+            <agm-circle 
+              [latitude]="actualPosition.latitude"
+              [longitude]="actualPosition.longitude"
+              [circleDraggable]="false"
+              [editable]="false"
+              [radius]="biggerRadius"
+              [fillOpacity] = "0.2">
             </agm-circle>
         </agm-map>
       </div>

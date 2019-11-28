@@ -40,6 +40,7 @@ export interface Marker {
   latitude: number;
   longitude: number;
   label: string;
+  opacity?:number;
 }
 
 export interface EditRequestData {

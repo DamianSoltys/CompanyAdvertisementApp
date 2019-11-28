@@ -56,11 +56,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    margin:10px;
 
     .company-logo__logo {
+      min-height: 150px;
+      min-width: 150px;
       width:50%;
       height:100%;
-      padding:10px;
+      max-height: 150px;
+      max-width: 150px;
+      border:1px solid $bgcolor;
     }
   }
 }
@@ -87,10 +92,15 @@
   }
   
   .branch-container__branch-logo {
+    margin:10px;
     .branch-logo__logo {
+      min-height: 150px;
+      min-width: 150px;
       width:50%;
       height:100%;
-      padding:10px;
+      max-height: 150px;
+      max-width: 150px;
+      border:1px solid $bgcolor;
     }
   }
 

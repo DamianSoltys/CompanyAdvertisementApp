@@ -6,7 +6,8 @@ import {
   AfterViewChecked,
   ChangeDetectorRef,
   ViewChild,
-  ElementRef
+  ElementRef,
+  AfterContentChecked
 } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
@@ -49,8 +50,8 @@ export interface EditRequestData {
   logoKey?:string;
   putLogoUrl?:string;
   getLogoUrl?:string;
-  branchData?:Branch,
-  companyData?:GetCompany
+  branchData?:any,
+  companyData?:any
 }
 
 @Component({
@@ -58,7 +59,7 @@ export interface EditRequestData {
   templateUrl: './company.component.html',
   styleUrls: ['./company.component.scss']
 })
-export class CompanyComponent implements OnInit {
+export class CompanyComponent implements OnInit{
   public voivodeshipOptions:string[] = voivodeships;
   public categoryData:any;
   public categoryOptions:string[];
@@ -80,12 +81,19 @@ export class CompanyComponent implements OnInit {
   private LogoList: File[];
   private companyLogo: File;
   private workLogo: File;
+  private companyEditData:GetCompany | Branch;
+  public imagePath;
+  public imageUrl;
   @Input() editRequestData: EditRequestData = {
     companyId: null,
     workId: null,
     addWork: false,
     backId:null,
+    companyData:null,
+    branchData:null,
   };
+ 
+  
 
   public companyForm = this.fb.group({
     description: ['',[Validators.required]],
@@ -136,7 +144,14 @@ export class CompanyComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(params=>{
       this.editRequestData = <EditRequestData>params;
-      console.log(this.editRequestData);
+      if(this.editRequestData.companyData || this.editRequestData.branchData) { 
+        this.companyEditData = JSON.parse(this.editRequestData.companyData || this.editRequestData.branchData);
+        this.getEditLogo(this.editRequestData).subscribe(data=>{
+          this.companyEditData = data;
+          console.log(this.companyEditData)
+        });
+      }
+      this.setEditFormData(this.editRequestData);
     });
     this.checkForPersonalData();
     this.getActualPosition();
@@ -144,6 +159,78 @@ export class CompanyComponent implements OnInit {
     this.showEditForm();
     this.registerGetCompanyListener();
     this.getCategoryData();
+  }
+
+  private getEditLogo(data:EditRequestData) {
+    let subject = new Subject<any>();
+    if(data.companyData) {
+      let editData = JSON.parse(data.companyData);
+      this.cDataService.getCompanyLogo(editData).subscribe(response=>{
+        if(response.status != 204) {
+          let reader = new FileReader();
+          reader.addEventListener("load", () => {
+                editData.logo = reader.result;    
+                subject.next(editData);    
+          }, false);
+  
+          if (response.body) {
+              reader.readAsDataURL(response.body);
+          }
+         } else {
+            editData.logo = this.cDataService.defaultCListUrl;                                    
+            subject.next(editData);
+         }
+          
+        },error=>{                     
+          editData.logo = this.cDataService.defaultCListUrl;                                    
+          subject.next(editData);
+        });
+    }
+    if(data.branchData) {
+      let editData = JSON.parse(data.branchData);
+      this.bDataService.getBranchLogo(editData).subscribe(response=>{
+        if(response.status != 204) {
+          let reader = new FileReader();
+          reader.addEventListener("load", () => {
+                editData.logo = reader.result;    
+                subject.next(editData);    
+          }, false);
+  
+          if (response.body) {
+              reader.readAsDataURL(response.body);
+          }
+         } else {
+            editData.logo = this.bDataService.defaultLogoUrl;                                    
+            subject.next(editData);
+         }
+          
+        },error=>{                     
+          editData.logo = this.bDataService.defaultLogoUrl;                                    
+          subject.next(editData);
+        });
+    }
+    return subject;
+  }
+
+  private setEditFormData(data:EditRequestData) {
+    if(data.companyData) {
+      let companyData:GetCompany = JSON.parse(data.companyData);
+      this._companyForm.name.setValue(companyData.companyName);
+      this._companyForm.nip.setValue(companyData.nip);
+      this._companyForm.regon.setValue(companyData.regon);
+      this._companyForm.companyWebsiteUrl.setValue(companyData.companyWebsiteUrl);
+      this._companyForm.category.setValue(companyData.category);
+      this._companyForm.description.setValue(companyData.description);
+      this._companyAddress.apartmentNo.setValue(companyData.address.apartmentNo);
+      this._companyAddress.buildingNo.setValue(companyData.address.buildingNo);
+      this._companyAddress.city.setValue(companyData.address.city);
+      this._companyAddress.street.setValue(companyData.address.street);
+      this._companyAddress.voivodeship.setValue(companyData.address.voivodeship);
+    } 
+    if(data.branchData) {
+      let branchData:Branch = JSON.parse(data.branchData);
+      this._workForm.name.setValue(branchData.name);
+    }
   }
 
   private getActualPosition() {
@@ -400,13 +487,11 @@ export class CompanyComponent implements OnInit {
           this.formErrorService.open({
             message:'Nie udało się zmienić danych!'
           });
-          this.setDefaultValues();
         }
         },error=>{
           this.formErrorService.open({
             message:'Nie udało się zmienić danych!',
           });
-          this.setDefaultValues();
         }
       );
   }
@@ -437,13 +522,11 @@ export class CompanyComponent implements OnInit {
       this.formErrorService.open({
         message:'Nie udało się zmienić danych!'
       });
-      this.setDefaultValues();
     }
     },error=>{
       this.formErrorService.open({
         message:'Nie udało się zmienić danych!',
       });
-      this.setDefaultValues();
     })
   }
   
@@ -484,6 +567,24 @@ export class CompanyComponent implements OnInit {
   }
 
   public onFileSelected(event, companyForm: boolean) {
+      if (event.target.files.length === 0)
+      return;
+
+      var mimeType = event.target.files[0].type;
+      if (mimeType.match(/image\/*/) == null) {
+        this.formErrorService.open({
+          message:'Prosze wybrać zdjęcie!',
+        });
+        return;
+      }
+
+      var reader = new FileReader();
+      this.imagePath = event.target.files;
+      reader.readAsDataURL(event.target.files[0]); 
+      reader.onload = (_event) => { 
+        this.imageUrl = reader.result; 
+      }
+
     if (!this.LogoList && !companyForm) {
       this.LogoList = [];
     }

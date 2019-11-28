@@ -29,6 +29,12 @@
             {{ companyData.category }}
           </p>
         </div>
+        <div class="section--main__data" *ngIf="companyData.companyWebsiteUrl">
+          <p class="data__text-node">
+            <span class="text-node__label">Strona firmy:</span>
+            <a href="companyData.companyWebsiteUrl">{{ companyData.companyWebsiteUrl }}</a>
+          </p>
+        </div>
         <div class="section--main__data">
           <p class="data__text-node">
             <span class="text-node__label">NIP:</span> {{ companyData.nip }}
@@ -170,17 +176,6 @@
   </div>
     </div>
   </div>
-  <app-company
-    class="company-profile-component__app-company"
-    *ngIf="canShowEditForm.value"
-    [editRequestData]="editData"
-  ></app-company>
-  <app-company
-    class="company-profile-component__app-company"
-    *ngIf="canShowAddBranchForm.value"
-    [editRequestData]="editData"
-  ></app-company>
-
   <div
     class="company-profile-component__shared--buttons col-12"
     *ngIf="!this.canShowCompany.value"

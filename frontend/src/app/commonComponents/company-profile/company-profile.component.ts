@@ -341,6 +341,8 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
   }
 
   public showEditForm() {
+    let editData = this.companyData;
+    editData.logo = null;
     this.editData = {
       companyId: this.companyData.companyId,
       workId: null,
@@ -349,7 +351,7 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
       logoKey:this.companyData.logoKey?this.companyData.logoKey:undefined,
       putLogoUrl:this.companyData.putLogoURL?this.companyData.putLogoURL:undefined,
       getLogoUrl:this.companyData.getLogoURL?this.companyData.getLogoURL:undefined,
-      companyData:this.companyData
+      companyData:JSON.stringify(editData)
     };
     //this.canShowEditForm.next(true);
     //this.canShowCompany.next(false);

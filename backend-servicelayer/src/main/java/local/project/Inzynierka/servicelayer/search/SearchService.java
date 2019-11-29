@@ -5,6 +5,7 @@ import local.project.Inzynierka.persistence.entity.Company;
 import local.project.Inzynierka.persistence.repository.BranchRepository;
 import local.project.Inzynierka.persistence.repository.CompanyRepository;
 import local.project.Inzynierka.servicelayer.dto.mapper.AddressMapper;
+import local.project.Inzynierka.servicelayer.dto.search.SearchResultDto;
 import local.project.Inzynierka.shared.utils.FilePathCreator;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.query.dsl.QueryBuilder;
@@ -36,7 +37,7 @@ public class SearchService {
     }
 
     @Transactional
-    public Page<Object> searchForEntities(String term, Pageable pageable) {
+    public SearchResultDto searchForEntities(String term, Pageable pageable) {
         FullTextEntityManager fullTextEntityManager = org.hibernate.search.jpa.Search.getFullTextEntityManager(entityManager);
 
         QueryBuilder branchBuilder = fullTextEntityManager.getSearchFactory()
@@ -51,21 +52,19 @@ public class SearchService {
 
         List result = jpaQuery.getResultList();
 
-        List<Object> res = extractEntities(result);
-
-        return toPage(res, pageable);
+        return extractEntities(result, pageable);
     }
 
     private Page<Object> toPage(List<Object> list, Pageable pageable) {
-        if (pageable.getOffset() >= list.size()) {
-            return Page.empty();
-        }
-        int startIndex = (int) pageable.getOffset();
-        int endIndex = (int) ((pageable.getOffset() + pageable.getPageSize()) > list.size() ?
-                list.size() :
-                pageable.getOffset() + pageable.getPageSize());
-        List<Object> subList = list.subList(startIndex, endIndex);
-        return new PageImpl<>(subList, pageable, list.size());
+//        if (pageable.getOffset() >= list.size()) {
+//            return Page.empty();
+//        }
+//        int startIndex = (int) pageable.getOffset();
+//        int endIndex = (int) ((pageable.getOffset() + pageable.getPageSize()) > list.size() ?
+//                list.size() :
+//                pageable.getOffset() + pageable.getPageSize());
+//        List<Object> subList = list.subList(startIndex, endIndex);
+        return new PageImpl<>(list, pageable, list.size());
     }
 
     private org.apache.lucene.search.Query buildFinalQuery(String term, QueryBuilder branchBuilder, QueryBuilder companyBuilder) {
@@ -89,21 +88,29 @@ public class SearchService {
                 .createQuery();
     }
 
-    private List<Object> extractEntities(List result) {
+    private SearchResultDto extractEntities(List result, Pageable pageable) {
         List<Object> res = new ArrayList<>();
+        var companiesNumber = new Object() {int value = 0;};
+        var branchesNumber = new Object(){int value = 0;};
+
         result.stream().forEach(entity -> {
-            mapIfBranch(res, entity);
-            mapIfCompany(res, entity);
+            if (entity instanceof Branch) {
+                branchesNumber.value += 1;
+                Branch branch = (Branch) entity;
+                res.add(buildSearchableBranch(branch));
+            }
+            if (entity instanceof Company) {
+                companiesNumber.value += 1;
+                Company company = (Company) entity;
+                res.add(buildSearchableCompany(company));
+
+            }
         });
-        return res;
-    }
-
-    private void mapIfCompany(List<Object> res, Object entity) {
-        if (entity instanceof Company) {
-            Company company = (Company) entity;
-            res.add(buildSearchableCompany(company));
-
-        }
+        return SearchResultDto.builder()
+                .result(toPage(res, pageable))
+                .branchesNumber(branchesNumber.value)
+                .companiesNumber(companiesNumber.value)
+                .build();
     }
 
     private SearchableCompanyDto buildSearchableCompany(Company company) {
@@ -117,13 +124,6 @@ public class SearchService {
                 .name(company.getName())
                 .address(addressMapper.map(company.getAddress()))
                 .build();
-    }
-
-    private void mapIfBranch(List<Object> res, Object entity) {
-        if (entity instanceof Branch) {
-            Branch branch = (Branch) entity;
-            res.add(buildSearchableBranch(branch));
-        }
     }
 
     private SearchableBranchDto buildSearchableBranch(Branch branch) {
@@ -141,18 +141,31 @@ public class SearchService {
     }
 
     @Transactional
-    public Page<Object> searchForEntities(List<SearchSpecification> specifications, Pageable pageable) {
+    public SearchResultDto searchForEntities(List<SearchSpecification> specifications, Pageable pageable) {
+
+        var companiesNumber = new Object() {int value = 0;};
+        var branchesNumber = new Object(){int value = 0;};
 
         List<Object> result = specifications.stream().map(specification -> {
             if (specification instanceof BranchSearchSpecification) {
-                return getBranchesAccordingToBranchSearchSpecification(specification, pageable);
+                var branches = getBranchesAccordingToBranchSearchSpecification(specification, pageable);
+                branchesNumber.value += branches.size();
+                return branches;
             } else if (specification instanceof CompanySearchSpecification) {
-                return getCompaniesAccordingToCompanySearchSpecification(specification, pageable);
+                var companies = getCompaniesAccordingToCompanySearchSpecification(specification, pageable);
+                companiesNumber.value += companies.size();
+                return companies;
             }
             throw new IllegalStateException(String.format("Invalid specification: %s", specification.getClass().getName()));
         }).flatMap(List::stream).collect(Collectors.toList());
 
-        return toPage(result, pageable);
+
+
+        return SearchResultDto.builder()
+                .result(toPage(result, pageable))
+                .branchesNumber(branchesNumber.value)
+                .companiesNumber(companiesNumber.value)
+                .build();
     }
 
     private List<Object> getCompaniesAccordingToCompanySearchSpecification(SearchSpecification searchSpecification, Pageable pageable) {

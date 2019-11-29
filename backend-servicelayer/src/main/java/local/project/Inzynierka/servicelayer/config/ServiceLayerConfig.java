@@ -16,6 +16,7 @@ public class ServiceLayerConfig {
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
         objectMapper.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true);
+
         return objectMapper;
     }
 

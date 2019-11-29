@@ -24,7 +24,8 @@ public class CompanyInfoDto {
     private String REGON;
     private String NIP;
     private List<Long> branchesIDs;
-    private String logoURL;
+    private String getLogoURL;
+    private String putLogoURL;
     private String logoKey;
     private Boolean hasLogoAdded;
 

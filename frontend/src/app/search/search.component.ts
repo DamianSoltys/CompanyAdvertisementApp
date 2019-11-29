@@ -67,9 +67,9 @@ export class SearchComponent implements OnInit {
     this.searchS.sendSearchData(this.searchData).subscribe(response=>{
       console.log(response)
       this.responseBody = <SearchResponse>response.body  
-      this.totalPages = this.responseBody.totalPages;  
-      this.sectionData = this.responseBody.content;
-      this.actualList = this.responseBody.content;
+      this.totalPages = this.responseBody.result.totalPages;  
+      this.sectionData = this.responseBody.result.content;
+      this.actualList = this.responseBody.result.content;
       this.isEmptyMessage.next(this.sectionData.length?false:true);
       subject.next(this.getImages(true));
   },error=>{
@@ -107,7 +107,7 @@ public previousPage() {
   if(this.pageNumber > 0 && this.searchData) {
     this.searchS.getActualPageData(this.searchData,--this.pageNumber).subscribe(response=>{
       let searchResponse = <SearchResponse>response.body;
-      this.actualList = searchResponse.content;
+      this.actualList = searchResponse.result.content;
       this.getImages();
   },error=>{
     console.log(error);
@@ -119,7 +119,7 @@ public nextPage() {
   if((this.pageNumber < this.totalPages-1) && this.searchData) {
     this.searchS.getActualPageData(this.searchData,++this.pageNumber).subscribe(response=>{
     let searchResponse = <SearchResponse>response.body;
-    this.actualList = searchResponse.content;
+    this.actualList = searchResponse.result.content;
     this.getImages();
   },error=>{
     console.log(error);

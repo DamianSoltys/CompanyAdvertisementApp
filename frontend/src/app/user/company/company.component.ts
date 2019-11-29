@@ -315,7 +315,7 @@ export class CompanyComponent implements OnInit{
           response => {
             console.log(response)
             let companyData:GetCompany = <GetCompany>response.body;
-            if(companyData.logoURL) {
+            if(companyData.getLogoURL) {
               this.cDataService.getCompanyLogo(companyData).subscribe(response=>{            
                 if(response.status != 204) {
                  let reader = new FileReader();

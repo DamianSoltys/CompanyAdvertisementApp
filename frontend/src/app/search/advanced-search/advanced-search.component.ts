@@ -107,12 +107,12 @@ export class AdvancedSearchComponent implements OnInit {
     this.sDataService.sendAdvSearchData(this.searchData).subscribe(response=>{
       console.log(response)
       this.responseBody = <SearchResponse>response.body     
-      this.sectionData = this.responseBody.content;
-      this.totalPages = this.responseBody.totalPages;  
-      this.sectionData = this.responseBody.content;
-      this.actualList = this.responseBody.content;
-      this.dataNumber = this.responseBody.totalElements;
-      if(this.sectionData.length) {
+      this.sectionData = this.responseBody.result.content;
+      this.totalPages = this.responseBody.result.totalPages;  
+      this.sectionData = this.responseBody.result.content;
+      this.actualList = this.responseBody.result.content;
+      this.dataNumber = this.responseBody.result.totalElements;
+      if(this.sectionData) {
         this.getImages();
       }else {
         this.sectionData = undefined;
@@ -180,7 +180,7 @@ export class AdvancedSearchComponent implements OnInit {
       this.sDataService.getActualAdvSearchPage(this.searchData,--this.pageNumber).subscribe(response=>{
         console.log(response)
         let searchResponse = <SearchResponse>response.body;
-        this.actualList = searchResponse.content;
+        this.actualList = searchResponse.result.content;
         this.getImages();
     },error=>{
       console.log(error);
@@ -193,7 +193,7 @@ export class AdvancedSearchComponent implements OnInit {
       this.sDataService.getActualAdvSearchPage(this.searchData,++this.pageNumber).subscribe(response=>{
         console.log(response)
       let searchResponse = <SearchResponse>response.body;
-      this.actualList = searchResponse.content;
+      this.actualList = searchResponse.result.content;
       this.getImages();
     },error=>{
       console.log(error);

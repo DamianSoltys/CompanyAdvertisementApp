@@ -346,7 +346,7 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
       addWork: false,
       backId:null,
       logoKey:this.companyData.logoKey?this.companyData.logoKey:undefined,
-      putLogoUrl:this.companyData.logoURL?this.companyData.logoURL:undefined,
+      putLogoUrl:this.companyData.putLogoURL?this.companyData.putLogoURL:undefined,
       getLogoUrl:this.companyData.getLogoURL?this.companyData.getLogoURL:undefined,
       companyData:JSON.stringify(editData)
     };

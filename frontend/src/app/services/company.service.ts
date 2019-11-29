@@ -200,7 +200,7 @@ export class CompanyService {
   }
 
   public getCompanyLogo(companyData:GetCompany){
-    let url = companyData.logoURL;
+    let url = companyData.getLogoURL;
     return this.http.get(url,{ observe: 'response',responseType: 'blob'}); 
   }
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Subject } from 'rxjs';
-import { SearchResponse } from '../classes/Section';
+import { SearchResponse, CommentResponse } from '../classes/Section';
 import { OpinionListData } from '../commonComponents/comments/comments.component';
 
 export interface OpinionData {
@@ -77,13 +77,13 @@ export class CommentsService {
     }
 
     this.http.get(`http://localhost:8090/api/comment`,{observe:'response',params:httpCommentParams}).subscribe(response=>{
-       let responseData = <SearchResponse>response.body;
+       let responseData = <CommentResponse>response.body;
        console.log(responseData)
        data.comment = responseData.content;
        data.numberOfPages = responseData.totalPages;
        let httpRatingParams= new HttpParams().set('branchId',opinionData.branchId.toString());
       this.http.get(`http://localhost:8090/api/rating`,{observe:'response',params:httpRatingParams}).subscribe(response=>{
-        let responseData = <SearchResponse>response.body;
+        let responseData = <CommentResponse>response.body;
         data.rating = responseData.content;
         subject.next(data);
       },error=>{

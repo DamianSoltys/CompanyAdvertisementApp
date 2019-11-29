@@ -24,7 +24,6 @@ export class GetCompany {
     logoKey?:string;
     putLogoURL?:string;
     getLogoURL?:string;
-    logoURL?:string;
     logo?:any;
     hasLogoAdded?:boolean;
     socialProfileConnectionDtos?:MediaConnection[];

@@ -29,7 +29,7 @@ public class SearchableResource {
     @RequestMapping(method = RequestMethod.GET, value = "/search")
     public ResponseEntity<?> search(@RequestParam(value = "q") final String term, Pageable pageable) {
 
-        Page<Object> result = searchService.searchForEntities(term, pageable);
+        var result = searchService.searchForEntities(term, pageable);
 
         return ResponseEntity.ok(result);
     }

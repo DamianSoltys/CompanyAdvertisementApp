@@ -37,7 +37,7 @@ public class SearchService {
     }
 
     @Transactional
-    public Page<Object> searchForEntities(String term, Pageable pageable) {
+    public SearchResultDto searchForEntities(String term, Pageable pageable) {
         FullTextEntityManager fullTextEntityManager = org.hibernate.search.jpa.Search.getFullTextEntityManager(entityManager);
 
         QueryBuilder branchBuilder = fullTextEntityManager.getSearchFactory()
@@ -52,9 +52,7 @@ public class SearchService {
 
         List result = jpaQuery.getResultList();
 
-        List<Object> res = extractEntities(result);
-
-        return toPage(res, pageable);
+        return extractEntities(result, pageable);
     }
 
     private Page<Object> toPage(List<Object> list, Pageable pageable) {
@@ -90,21 +88,29 @@ public class SearchService {
                 .createQuery();
     }
 
-    private List<Object> extractEntities(List result) {
+    private SearchResultDto extractEntities(List result, Pageable pageable) {
         List<Object> res = new ArrayList<>();
+        var companiesNumber = new Object() {int value = 0;};
+        var branchesNumber = new Object(){int value = 0;};
+
         result.stream().forEach(entity -> {
-            mapIfBranch(res, entity);
-            mapIfCompany(res, entity);
+            if (entity instanceof Branch) {
+                branchesNumber.value += 1;
+                Branch branch = (Branch) entity;
+                res.add(buildSearchableBranch(branch));
+            }
+            if (entity instanceof Company) {
+                companiesNumber.value += 1;
+                Company company = (Company) entity;
+                res.add(buildSearchableCompany(company));
+
+            }
         });
-        return res;
-    }
-
-    private void mapIfCompany(List<Object> res, Object entity) {
-        if (entity instanceof Company) {
-            Company company = (Company) entity;
-            res.add(buildSearchableCompany(company));
-
-        }
+        return SearchResultDto.builder()
+                .result(toPage(res, pageable))
+                .branchesNumber(branchesNumber.value)
+                .companiesNumber(companiesNumber.value)
+                .build();
     }
 
     private SearchableCompanyDto buildSearchableCompany(Company company) {
@@ -118,13 +124,6 @@ public class SearchService {
                 .name(company.getName())
                 .address(addressMapper.map(company.getAddress()))
                 .build();
-    }
-
-    private void mapIfBranch(List<Object> res, Object entity) {
-        if (entity instanceof Branch) {
-            Branch branch = (Branch) entity;
-            res.add(buildSearchableBranch(branch));
-        }
     }
 
     private SearchableBranchDto buildSearchableBranch(Branch branch) {

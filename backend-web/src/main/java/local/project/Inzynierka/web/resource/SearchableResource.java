@@ -55,7 +55,7 @@ public class SearchableResource {
 
         List<SearchSpecification> specifications = SearchSpecificationFactory.constructSearchSpecifications(searchSpecificationParameters, entityName);
 
-        Page<Object> result = searchService.searchForEntities(specifications, pageable);
+        var result = searchService.searchForEntities(specifications, pageable);
 
         return ResponseEntity.ok(result);
     }

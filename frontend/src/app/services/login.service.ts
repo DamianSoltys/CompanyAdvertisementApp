@@ -127,16 +127,6 @@ export class LoginService {
     return subject;
   }
 
-  public checkIfUserFBLogged() {
-    FB.getLoginStatus(response=> {  
-      if(response.status == "unknown") {
-        this.FBConnection.next(true);      
-      } else {
-        this.FBConnection.next(false);
-      } 
-    },true);
-  }
-
   public twitterLogin() {
     let subject = new Subject<any>();
 

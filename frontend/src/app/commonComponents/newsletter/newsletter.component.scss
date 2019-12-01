@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-top: 3%;
+  margin-top: 4%;
   margin-bottom: 1%;
 
   @include phone {
@@ -45,8 +45,8 @@
       margin-top:50px;
       .datepicker__label {
         flex:100%;
-        color:$bgcolor;
-        font-size: 1.1rem;
+        color:darken($bgcolor,10%);
+        font-size: 1.2rem;
         margin-top: 40px;
       }
     }
@@ -141,9 +141,13 @@
           margin-top:0;
           height: 300px;
           padding-bottom:40px;
+          &__label {
+            font-size:1.2rem;
+            color:darken($bgcolor,10%);
+          }
           
           .text-form__editor {
-
+            
           }
         }
 
@@ -205,10 +209,16 @@
                   justify-content: center;
                   margin-top: 10px;
                   .images__label {
-                    color:$bgcolor;
-                    font-size: 1.1rem;
+                    color:darken($bgcolor,10%);
+                    font-size: 1.2rem;
                     padding-right: 5px;
                   }
+                }
+              }
+              &__editor {
+                .editor__label {
+                  font-size:1.2rem;
+                  color:darken($bgcolor,10%);
                 }
               }
             }

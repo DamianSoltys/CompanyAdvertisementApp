@@ -24,16 +24,18 @@ export class GetCompany {
     logoKey?:string;
     putLogoURL?:string;
     getLogoURL?:string;
-    logoURL?:string;
     logo?:any;
     hasLogoAdded?:boolean;
     socialProfileConnectionDtos?:MediaConnection[];
 }
 
 export enum ConnectionStatus {
-    Connected = "CONNECTED",
-    Lack_of_page = "LACK_OF_PAGE",
-    Not_connected = "NOT_CONNECTED"
+    connected = "CONNECTED",
+    lack_Of_Page = "LACK_OF_PAGE",
+    not_Connected = "NOT_CONNECTED",
+    expired_Connection = "EXPIRED_CONNECTION",
+    lack_Of_Permissions = "LACK_OF_REQUIRED_FACEBOOK_PERMISSIONS"
+    
 }
 
 export enum MediaTypeEnum {
@@ -50,6 +52,7 @@ export interface MediaConnection {
 }
 
 export class Branch {
+    actualSelectedLogo?:any;
     address: Address;       
     geoX: string;
     geoY: string;

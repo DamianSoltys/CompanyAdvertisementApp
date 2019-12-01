@@ -39,6 +39,8 @@
           <div class="input-group__inputs">
             <div class="inputs__input-container">
               <label class="input-container__label" for="logo">Logo</label>
+              <img *ngIf="(!companyLogoUrl && companyEditData)" class="input-container__logo" src="{{companyEditData?.logo}}" alt="{{companyEditData?.companyName}}_logo">
+              <img *ngIf="companyLogoUrl" class="input-container__logo" src="{{companyLogoUrl}}" alt="{{companyLogoUrl}}_logo">
               <input name="logo" type="file" class="input-container__input input-container__file form-control-file"
                 (change)="onFileSelected($event, true)" />
             </div>
@@ -107,7 +109,7 @@
                   Pole nie może być puste
                 </p>
                 <p class="text-danger error-container__text--danger" *ngIf="this._companyForm.nip.errors.pattern">
-                    Proszę poprawnie uzupełnić polę
+                    Numer NIP powinien posiadać 10 cyfr
                   </p>
               </div>
             </div>
@@ -123,7 +125,7 @@
                   Pole nie może być puste
                 </p>
                 <p class="text-danger error-container__text--danger" *ngIf="this._companyForm.regon.errors.pattern">
-                    Proszę poprawnie uzupełnić polę
+                    Numer REGON powinien posiadać 9 cyfr
                   </p>
               </div>
             </div>
@@ -330,6 +332,8 @@
             </div>
             <div class="inputs__input-container">
               <label class="input-container__label" for="name">Logo</label>
+              <img *ngIf="(!branchLogoUrl && companyEditData)" class="input-container__logo" src="{{companyEditData?.logo}}" alt="{{companyEditData?.name}}_logo">
+              <img *ngIf="branchLogoUrl" class="input-container__logo" src="{{branchLogoUrl}}" alt="{{branchLogoUrl}}_logo">
               <input name="logo" type="file" class="input-container__input input-container__file form-control-file"
                 (change)="onFileSelected($event, false)" />
             </div>

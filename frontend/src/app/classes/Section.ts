@@ -9,10 +9,29 @@ export interface SectionData {
     category:string;
     logo?:any;
     logoKey?:string;
-    logoPath?:string;
+    putLogoURL?:string;
+    getLogoURL?:string;
 }
 
 export interface SearchResponse {
+    branchesNumber: number;
+    companiesNumber: number;
+    result: {
+        content:Array<any>;
+        empty: boolean;
+        first: boolean;
+        last: boolean;
+        number: number;
+        numberOfElements: number;
+        pageable: Pagable;
+        size: number;
+        sort: Sort;
+        totalElements: number;
+        totalPages: number;
+    }
+}
+
+export interface CommentResponse {
     content:Array<any>;
     empty: boolean;
     first: boolean;

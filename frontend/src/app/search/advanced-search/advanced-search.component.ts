@@ -5,6 +5,7 @@ import { TouchSequence } from 'selenium-webdriver';
 import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
 import { SearchResponse, SectionData } from 'src/app/classes/Section';
 import { Subject, BehaviorSubject } from 'rxjs';
+import { Paginator } from '../search.component';
 
 export interface AdvSearchData {
   name?:string;
@@ -75,8 +76,7 @@ export class AdvancedSearchComponent implements OnInit {
   public responseBody:SearchResponse;
   public isLoaded = new BehaviorSubject(false);
   public pageNumber:number = 0;
-  public paginationTable:SectionData[][];
-  public actualList:SectionData[];
+  public actualList:Paginator
   public actualIndex:number = 0;
   public dataNumber:number;
   public companyNumber:number;
@@ -106,13 +106,12 @@ export class AdvancedSearchComponent implements OnInit {
 
     this.sDataService.sendAdvSearchData(this.searchData).subscribe(response=>{
       console.log(response)
-      this.responseBody = <SearchResponse>response.body     
-      this.sectionData = this.responseBody.content;
-      this.totalPages = this.responseBody.totalPages;  
-      this.sectionData = this.responseBody.content;
-      this.actualList = this.responseBody.content;
-      this.dataNumber = this.responseBody.totalElements;
-      if(this.sectionData.length) {
+      this.responseBody = <SearchResponse>response.body  
+      this.sectionData = this.responseBody.result.content;
+      this.dataNumber = this.responseBody.branchesNumber + this.responseBody.companiesNumber;
+      this.actualList = this.sDataService.paginator(this.sectionData,1,3);
+      this.totalPages = this.actualList.total_pages;
+      if(this.sectionData) {
         this.getImages();
       }else {
         this.sectionData = undefined;
@@ -126,7 +125,7 @@ export class AdvancedSearchComponent implements OnInit {
   }
 
   public getImages() {
-    this.actualList.map(data=>{
+    this.sectionData.map(data=>{
       this.sDataService.getSearchSectionLogo(data).subscribe(response=>{
         if(response.status != 204) {
           let reader = new FileReader();
@@ -144,7 +143,6 @@ export class AdvancedSearchComponent implements OnInit {
       }
     },error=>{
       data.logo = this.sDataService.defaultSearchLogo;
-      console.log(error);
       return true;
     });
   });
@@ -177,29 +175,17 @@ export class AdvancedSearchComponent implements OnInit {
 
   
   public previousPage() {
-    if(this.pageNumber > 0 && this.searchData) {
-      this.sDataService.getActualAdvSearchPage(this.searchData,--this.pageNumber).subscribe(response=>{
-        console.log(response)
-        let searchResponse = <SearchResponse>response.body;
-        this.actualList = searchResponse.content;
-        this.getImages();
-    },error=>{
-      console.log(error);
-    });
-  }
+    if(this.actualList.pre_page) {
+      this.actualList = this.sDataService.paginator(this.sectionData,this.actualList.pre_page,3);
+      console.log(this.actualList)
+    }
   }
   
   public nextPage() {
-    if((this.pageNumber < this.totalPages-1) && this.searchData) {
-      this.sDataService.getActualAdvSearchPage(this.searchData,++this.pageNumber).subscribe(response=>{
-        console.log(response)
-      let searchResponse = <SearchResponse>response.body;
-      this.actualList = searchResponse.content;
-      this.getImages();
-    },error=>{
-      console.log(error);
-    });
-  }
+    if(this.actualList.next_page) {
+      this.actualList = this.sDataService.paginator(this.sectionData,this.actualList.next_page,3);
+      console.log(this.actualList)
+    }
   }
   
   public showEmptyMessage() {

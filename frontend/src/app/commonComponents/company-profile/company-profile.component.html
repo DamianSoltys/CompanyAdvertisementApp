@@ -29,6 +29,12 @@
             {{ companyData.category }}
           </p>
         </div>
+        <div class="section--main__data" *ngIf="companyData.companyWebsiteUrl">
+          <p class="data__text-node">
+            <span class="text-node__label">Strona firmy:</span>
+            <a href="{{companyData.companyWebsiteUrl}}" target="_blank">{{ companyData.companyWebsiteUrl }}</a>
+          </p>
+        </div>
         <div class="section--main__data">
           <p class="data__text-node">
             <span class="text-node__label">NIP:</span> {{ companyData.nip }}
@@ -82,17 +88,11 @@
         </div>
       </div>
       <div class="content__section--media-buttons" *ngIf="owner.value">
-        <button class="btn btn-primary form__button--facebook" (click)="facebookLogin($event)" *ngIf="!isFacebookConnected && !otherFBAccount">
+        <button class="btn btn-primary form__button--facebook" (click)="facebookLogin($event)" *ngIf="!isFacebookConnected">
           <span *ngIf="!otherFBAccount">Połącz z facebookiem<i class="fab fa-facebook-square"></i></span>
           </button>
-          <button class="btn btn-primary form__button--facebook" (click)="facebookLogin($event)" *ngIf="otherFBAccount">
-            <span>Przeloguj się<i class="fab fa-facebook-square"></i></span>
-            </button>
           <button class="btn btn-primary form__button--facebook" (click)="goToFBProfile($event)" *ngIf="isFacebookConnected">
             <span>Przejdź do profilu<i class="fab fa-facebook-square"></i></span>
-          </button>
-          <button class="btn btn-primary form__button--twitter" (click)="twitterLogin($event)">
-            Połącz z twitterem<i class="fab fa-twitter-square"></i>
           </button>
       </div>
       <div *ngIf="showNewsletterFormContainer()" class="content-col">
@@ -170,17 +170,6 @@
   </div>
     </div>
   </div>
-  <app-company
-    class="company-profile-component__app-company"
-    *ngIf="canShowEditForm.value"
-    [editRequestData]="editData"
-  ></app-company>
-  <app-company
-    class="company-profile-component__app-company"
-    *ngIf="canShowAddBranchForm.value"
-    [editRequestData]="editData"
-  ></app-company>
-
   <div
     class="company-profile-component__shared--buttons col-12"
     *ngIf="!this.canShowCompany.value"

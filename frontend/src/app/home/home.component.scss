@@ -12,6 +12,14 @@
     }
     
   }
+  .home-component__empty-list {
+    display: flex;
+    justify-content: center;
+    .empty-list__text-node {
+      color:darken($bgcolor,10%);
+      font-size: 1.2rem;
+    }
+  }
 
   .home-component__button-container {
     margin-top: 20px;
@@ -60,6 +68,8 @@
     .item-carousel__image {
       height: 50%;
       width: 50%;
+      max-height: 250px;
+      max-width: 250px;
       @include phone {
         width:70%;
       }

@@ -113,8 +113,8 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
   public paramId:number;
   public textForm = this.fb.group({
     text:[''],
-    title:['',[Validators.required]],
-    name:['',[Validators.required]]
+    title:['Podaj tytuł',[Validators.required]],
+    name:['Nazwa obiektu',[Validators.required]]
   });
   public mediaForm = this.fb.group({
     text:[''],
@@ -134,8 +134,7 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
   ngOnInit() {
    this.getActualUser();
    this.checkForPermissions();
-   this.registerListeners();
-   this.checkForFBConnection();
+   this.checkForMediaConnection();
   }
 
   ngAfterViewInit() {
@@ -149,9 +148,9 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
       let connectionData = <MediaConnection[]>response;
       if(connectionData.length) {
         connectionData.forEach(data=>{
-          if(data.socialPlatform === MediaTypeEnum.FB && data.connectionStatus.status === ConnectionStatus.Connected) {
+          if(data.socialPlatform === MediaTypeEnum.FB && data.connectionStatus.status === ConnectionStatus.connected) {
             this.mediaTypeOptions = [...this.mediaTypeOptions,'Facebook'];      
-          } else if(data.socialPlatform === MediaTypeEnum.TWITTER && data.connectionStatus.status === ConnectionStatus.Connected){
+          } else if(data.socialPlatform === MediaTypeEnum.TWITTER && data.connectionStatus.status === ConnectionStatus.connected){
             this.mediaTypeOptions = [...this.mediaTypeOptions,'Twitter'];
           }
         });
@@ -176,20 +175,6 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     this.typeSelect.selectItem('Informacja');
     this.formTypeSelect.selectItem('Edytor HTML');
     this.sendingTypeSelect.selectItem('Wysyłka natychmiastowa');
-  }
-
-  private registerListeners() {
-    this.lDataService.FBConnection.subscribe(data=>{
-      if(data) {
-        this.checkForMediaConnection();
-      } else {
-        this.isFBConnected = false;
-      }
-    });
-  }
-
-  private checkForFBConnection() {
-    this.lDataService.checkIfUserFBLogged();
   }
 
   private setFormVisibility() {
@@ -282,21 +267,33 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     console.log(this.sendingOptions);
 
     if(this.sendingOptions) {
-        this.nDataService.sendNewsletter(this.sendingOptions,this.files?this.files:null).subscribe(response=>{
-          if(response) {
-            this.snackbar.open({
-              message:'Newsletter zostal pomyślnie wysłany',
-              snackbarType:SnackbarType.success,
-            });
-          } else {
-            this.snackbar.open({
-              message:'Nie udalo się wysłać newslettera',
-              snackbarType:SnackbarType.error,
-            });
-          }
+      if(this.sendingOptions.sendingStrategy === SendingStrategy.DELAYED && !this.sendingOptions.plannedSendingTime) {
+        this.snackbar.open({
+          message:'Podaj poprawny czas wysłania newslettera',
+          snackbarType:SnackbarType.error,
+        });
+      } else {
+        this.newsletterRequest();
+      }
+  }
+  }
+
+  private newsletterRequest() {
+    this.nDataService.sendNewsletter(this.sendingOptions,this.files?this.files:null).subscribe(response=>{
+      if(response) {
+        this.snackbar.open({
+          message:'Newsletter zostal pomyślnie wysłany',
+          snackbarType:SnackbarType.success,
+        });
+      } else {
+        this.snackbar.open({
+          message:'Nie udalo się wysłać newslettera',
+          snackbarType:SnackbarType.error,
+        });
+      }
     });
   }
-  }
+  
   private setStandardValues() {
     this.sendingOptions = {};
     this.sendingOptions.destinations = [];
@@ -384,17 +381,14 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
           let string = `${dateForm.month}/${dateForm.day}/${dateForm.year} ${timeForm.hour}:${timeForm.minute}`;
           let time = moment(string, "M/D/YYYY H:mm").unix();
           this.sendingOptions.plannedSendingTime = time.toString();
-          this.sendingOptions.sendingStrategy = SendingStrategy.DELAYED;
-          console.log(time);
         } else {
           let string = `${dateForm.month}/${dateForm.day}/${dateForm.year}`;
           let time = moment(string, "M/D/YYYY").unix();
           this.sendingOptions.plannedSendingTime = time.toString();
-          this.sendingOptions.sendingStrategy = SendingStrategy.DELAYED;
-          console.log(time);
         }
       }
     }
+    this.sendingOptions.sendingStrategy = SendingStrategy.DELAYED;
   }
   public showEdit() {
     if(!this.isText.value && this.isEdit.value && !this.onlyMedia.value) {
@@ -406,6 +400,16 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
 
   public showText() {
     if(this.isText.value && !this.isEdit.value && !this.onlyMedia.value) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public showTitle() {
+    if(!this.isMedia.value) {
+      return true;
+    } else if(this.isMedia.value && this.isEdit.value && !this.onlyMedia.value) {
       return true;
     } else {
       return false;

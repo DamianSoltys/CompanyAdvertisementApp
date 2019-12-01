@@ -4,7 +4,7 @@
     flex-direction: column;
     width: 85%;
     margin:auto;
-    margin-top: 3%;
+    margin-top: 4%;
     margin-bottom: 1%;
     max-width: 1000px;
 
@@ -48,6 +48,7 @@
                 .empty-list__text-node {
                     color:$bgcolor;
                     font-size: 1.1rem;
+                    padding:10px;
                 }
             }
         }

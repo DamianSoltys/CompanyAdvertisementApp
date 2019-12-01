@@ -62,14 +62,16 @@ export class HomeComponent implements OnInit,AfterViewInit,OnDestroy {
   }
 
   public setCarouselInterval() {
-    this.carouselInterval = setInterval(()=>{
-      if(this.carousel.carousel.items.length-1 == this.carousel.carousel.activeIndex) {
-        this.carousel.slideTo(0);
-      } else {
-        this.carousel.slideNext();
-      }
-      
-    },5000);
+    if(this.carousel) {
+      this.carouselInterval = setInterval(()=>{
+        if(this.carousel.carousel.items.length-1 == this.carousel.carousel.activeIndex) {
+          this.carousel.slideTo(0);
+        } else {
+          this.carousel.slideNext();
+        }
+        
+      },5000);
+    }
   }
 
   public toggleCarousel() {

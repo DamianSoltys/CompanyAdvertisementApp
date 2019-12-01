@@ -1,7 +1,7 @@
 @import '../../commonStyles/shared';
 
 .search-component {
-  margin-top: 5%;
+  margin-top: 4%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -23,25 +23,19 @@
       .buttons__button {
         &--previous,&--next {
           border:0;
-          width: 20%;
           border-radius: 50px;
           background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
           transition: all .4s ease-in-out;
           background-size: 200%;
-          height:35px;
           margin-top:10px;
           &:hover {
             background-position: 100% 0;
-          }
-
-          @include phone {
-            width:40%;
           }
         }
       
       }
       .buttons__text-node {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
         color:darken($bgcolor,10%);
         margin:10px;
       }
@@ -128,7 +122,7 @@
 
     .main-container__button--search {
       margin: auto;
-      margin-top: 5%;
+      margin-top: 4%;
       width: 40%;
     }
   }

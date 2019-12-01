@@ -6,7 +6,8 @@ import {
   AfterViewChecked,
   ChangeDetectorRef,
   ViewChild,
-  ElementRef
+  ElementRef,
+  AfterContentChecked
 } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
@@ -39,6 +40,7 @@ export interface Marker {
   latitude: number;
   longitude: number;
   label: string;
+  opacity?:number;
 }
 
 export interface EditRequestData {
@@ -49,8 +51,8 @@ export interface EditRequestData {
   logoKey?:string;
   putLogoUrl?:string;
   getLogoUrl?:string;
-  branchData?:Branch,
-  companyData?:GetCompany
+  branchData?:any,
+  companyData?:any
 }
 
 @Component({
@@ -58,7 +60,7 @@ export interface EditRequestData {
   templateUrl: './company.component.html',
   styleUrls: ['./company.component.scss']
 })
-export class CompanyComponent implements OnInit {
+export class CompanyComponent implements OnInit{
   public voivodeshipOptions:string[] = voivodeships;
   public categoryData:any;
   public categoryOptions:string[];
@@ -80,19 +82,27 @@ export class CompanyComponent implements OnInit {
   private LogoList: File[];
   private companyLogo: File;
   private workLogo: File;
+  private companyEditData:GetCompany | Branch;
+  public imagePath;
+  public companyLogoUrl;
+  public branchLogoUrl;
   @Input() editRequestData: EditRequestData = {
     companyId: null,
     workId: null,
     addWork: false,
     backId:null,
+    companyData:null,
+    branchData:null,
   };
+ 
+  
 
   public companyForm = this.fb.group({
     description: ['',[Validators.required]],
     category: ['', [Validators.required]],
-    name: ['', [Validators.required,Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
-    nip: ['', [Validators.required,Validators.pattern(new RegExp(/^[0-9]+$/))]],
-    regon: ['', [Validators.required,Validators.pattern(new RegExp(/^[0-9]+$/))]],
+    name: ['', [Validators.required,Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ_ ]+$/))]],
+    nip: ['', [Validators.required,Validators.pattern(new RegExp(/^[0-9]{10}$/))]],
+    regon: ['', [Validators.required,Validators.pattern(new RegExp(/^[0-9]{9}$/))]],
     companyWebsiteUrl: [''],
     address: this.fb.group({
       apartmentNo: ['', [Validators.required, Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/))]],
@@ -113,7 +123,7 @@ export class CompanyComponent implements OnInit {
     }),
     geoX: [''],
     geoY: [''],
-    name: ['', [Validators.required,Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]]
+    name: ['', [Validators.required,Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ_ ]+$/))]]
   });
 
   public config = {
@@ -136,7 +146,13 @@ export class CompanyComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(params=>{
       this.editRequestData = <EditRequestData>params;
-      console.log(this.editRequestData);
+      if(this.editRequestData.companyData || this.editRequestData.branchData) { 
+        this.companyEditData = JSON.parse(this.editRequestData.companyData || this.editRequestData.branchData);
+        this.getEditLogo(this.editRequestData).subscribe(data=>{
+          this.companyEditData = data;
+        });
+      }
+      this.setEditFormData(this.editRequestData);
     });
     this.checkForPersonalData();
     this.getActualPosition();
@@ -144,6 +160,78 @@ export class CompanyComponent implements OnInit {
     this.showEditForm();
     this.registerGetCompanyListener();
     this.getCategoryData();
+  }
+
+  private getEditLogo(data:EditRequestData) {
+    let subject = new Subject<any>();
+    if(data.companyData) {
+      let editData = JSON.parse(data.companyData);
+      this.cDataService.getCompanyLogo(editData).subscribe(response=>{
+        if(response.status != 204) {
+          let reader = new FileReader();
+          reader.addEventListener("load", () => {
+                editData.logo = reader.result;    
+                subject.next(editData);    
+          }, false);
+  
+          if (response.body) {
+              reader.readAsDataURL(response.body);
+          }
+         } else {
+            editData.logo = this.cDataService.defaultCListUrl;                                    
+            subject.next(editData);
+         }
+          
+        },error=>{                     
+          editData.logo = this.cDataService.defaultCListUrl;                                    
+          subject.next(editData);
+        });
+    }
+    if(data.branchData) {
+      let editData = JSON.parse(data.branchData);
+      this.bDataService.getBranchLogo(editData).subscribe(response=>{
+        if(response.status != 204) {
+          let reader = new FileReader();
+          reader.addEventListener("load", () => {
+                editData.logo = reader.result;    
+                subject.next(editData);    
+          }, false);
+  
+          if (response.body) {
+              reader.readAsDataURL(response.body);
+          }
+         } else {
+            editData.logo = this.bDataService.defaultLogoUrl;                                    
+            subject.next(editData);
+         }
+          
+        },error=>{                     
+          editData.logo = this.bDataService.defaultLogoUrl;                                    
+          subject.next(editData);
+        });
+    }
+    return subject;
+  }
+
+  private setEditFormData(data:EditRequestData) {
+    if(data.companyData) {
+      let companyData:GetCompany = JSON.parse(data.companyData);
+      this._companyForm.name.setValue(companyData.companyName);
+      this._companyForm.nip.setValue(companyData.nip);
+      this._companyForm.regon.setValue(companyData.regon);
+      this._companyForm.companyWebsiteUrl.setValue(companyData.companyWebsiteUrl);
+      this._companyForm.category.setValue(companyData.category);
+      this._companyForm.description.setValue(companyData.description);
+      this._companyAddress.apartmentNo.setValue(companyData.address.apartmentNo);
+      this._companyAddress.buildingNo.setValue(companyData.address.buildingNo);
+      this._companyAddress.city.setValue(companyData.address.city);
+      this._companyAddress.street.setValue(companyData.address.street);
+      this._companyAddress.voivodeship.setValue(companyData.address.voivodeship);
+    } 
+    if(data.branchData) {
+      let branchData:Branch = JSON.parse(data.branchData);
+      this._workForm.name.setValue(branchData.name);
+    }
   }
 
   private getActualPosition() {
@@ -225,8 +313,9 @@ export class CompanyComponent implements OnInit {
       userREST.companiesIDs.forEach((companyId,index) => {
         this.cDataService.getCompany(companyId).subscribe(
           response => {
+            console.log(response)
             let companyData:GetCompany = <GetCompany>response.body;
-            if(companyData.logoURL) {
+            if(companyData.getLogoURL) {
               this.cDataService.getCompanyLogo(companyData).subscribe(response=>{            
                 if(response.status != 204) {
                  let reader = new FileReader();
@@ -271,15 +360,10 @@ export class CompanyComponent implements OnInit {
       subject.next(true);
     }
    } else {
-    console.log('Firmy pobrane ze storage')
     subject.next(true);
    }
       
     }
-  }
-
-  public checkForDoubles() {
-    
   }
 
   private companySort(item1: GetCompany, item2: GetCompany) {
@@ -323,10 +407,13 @@ export class CompanyComponent implements OnInit {
         this._workForm.geoY.setValue(this.actualPosition.longitude);
       }
       this.workNumber++;
-      this.workForms.push(this.workForm.value);
+      let branchData:Branch = this.workForm.value;
       if (this.workLogo) {
+        branchData.actualSelectedLogo = this.branchLogoUrl;
+        this.branchLogoUrl = null;
         this.LogoList.push(this.workLogo);
       }
+      this.workForms.push(branchData);
       this.workForm.reset();
       if (!this.editRequestData.addWork) {
         this.toggleWorkForm();
@@ -362,6 +449,7 @@ export class CompanyComponent implements OnInit {
         this.workForms = undefined;
         this.cDataService.getCompanyData.next(true);
         this.bDataService.getBranchData.next(true);
+        this.setDefaultValues();
         this.router.navigate(['companyProfile',this.editRequestData.backId]); 
       });
     } else {
@@ -381,7 +469,6 @@ export class CompanyComponent implements OnInit {
   private patchCompanyData() {
     let companyData: Company;
     companyData = this.companyForm.value;
-    console.log(companyData)
     this.cDataService
       .editCompany(companyData, this.editRequestData,this.companyLogo)
       .subscribe(
@@ -400,13 +487,11 @@ export class CompanyComponent implements OnInit {
           this.formErrorService.open({
             message:'Nie udało się zmienić danych!'
           });
-          this.setDefaultValues();
         }
         },error=>{
           this.formErrorService.open({
             message:'Nie udało się zmienić danych!',
           });
-          this.setDefaultValues();
         }
       );
   }
@@ -420,7 +505,6 @@ export class CompanyComponent implements OnInit {
       }
     }
     let branch:Branch = this.workForm.value;
-    console.log(branch)
     this.bDataService.editBranch(this.editRequestData,branch,this.workLogo).subscribe(response=>{
       if(response) {
       this.snackbarService.open({
@@ -429,6 +513,7 @@ export class CompanyComponent implements OnInit {
       });
       this.uDataService.updateUser().subscribe(data=>{
         this.workForms = undefined;
+        this.setDefaultValues();
         this.cDataService.getCompanyData.next(true);
         this.bDataService.getBranchData.next(true);
         this.router.navigate(['companyProfile',this.editRequestData.backId]); 
@@ -437,13 +522,11 @@ export class CompanyComponent implements OnInit {
       this.formErrorService.open({
         message:'Nie udało się zmienić danych!'
       });
-      this.setDefaultValues();
     }
     },error=>{
       this.formErrorService.open({
         message:'Nie udało się zmienić danych!',
       });
-      this.setDefaultValues();
     })
   }
   
@@ -456,7 +539,6 @@ export class CompanyComponent implements OnInit {
     this.cDataService.addCompany(companyData,this.LogoList,this.companyLogo).subscribe(
       response => {
         if(response) {
-        console.log(response)
         this.snackbarService.open({
           message:'Pomyślnie dodano firmę',
           snackbarType:SnackbarType.success,
@@ -465,8 +547,6 @@ export class CompanyComponent implements OnInit {
            this.setDefaultValues();
            this.cDataService.getCompanyData.next(true);
            this.toggleDataList();
-          // this.cDataService.deleteStorageData();
-          // location.reload();
         });
       } else {
         this.formErrorService.open({
@@ -484,6 +564,30 @@ export class CompanyComponent implements OnInit {
   }
 
   public onFileSelected(event, companyForm: boolean) {
+      if (event.target.files.length === 0)
+      return;
+
+      var mimeType = event.target.files[0].type;
+      if (mimeType.match(/image\/*/) == null) {
+        this.formErrorService.open({
+          message:'Prosze wybrać zdjęcie!',
+        });
+        return;
+      }
+
+      var reader = new FileReader();
+      this.imagePath = event.target.files;
+      reader.readAsDataURL(event.target.files[0]); 
+      reader.onload = (_event) => { 
+        if(!this.canShowAddsForm()) {
+          this.branchLogoUrl = reader.result; 
+        }
+        if(this.canShowAddsForm()) {
+          this.companyLogoUrl = reader.result; 
+        }
+       
+      }
+
     if (!this.LogoList && !companyForm) {
       this.LogoList = [];
     }
@@ -503,6 +607,8 @@ export class CompanyComponent implements OnInit {
     this.companyList = undefined;
     this.companyLogo = undefined;
     this.workLogo = undefined;
+    this.companyLogoUrl = null;
+    this.branchLogoUrl = null;
   }
 
   private checkForPersonalData() {
@@ -545,6 +651,7 @@ export class CompanyComponent implements OnInit {
   }
 
   public toggleWorkForm() {
+    this.branchLogoUrl = null;
     this.canShowWorkForm.next(!this.canShowWorkForm.value);
   }
 

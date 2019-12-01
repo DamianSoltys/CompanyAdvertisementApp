@@ -4,7 +4,15 @@ import * as $ from 'jquery';
 import { SearchService } from '../services/search.service';
 import { SearchResponse, SectionData } from '../classes/Section';
 import { Subject, BehaviorSubject } from 'rxjs';
-
+export interface Paginator {
+    page: any,
+    per_page: any,
+    pre_page: any,
+    next_page: any,
+    total: any,
+    total_pages: any,
+    data: SectionData[]
+}
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -19,7 +27,7 @@ export class SearchComponent implements OnInit {
   public responseBody:SearchResponse;
   public isLoaded = new BehaviorSubject(false);
   public pageNumber:number = 0;
-  public actualList:SectionData[];
+  public actualList:Paginator;
   public actualIndex:number = 0;
   public companyNumber:number;
   public branchNumber:number;
@@ -65,10 +73,14 @@ export class SearchComponent implements OnInit {
     this.branchNumber = 0;
     
     this.searchS.sendSearchData(this.searchData).subscribe(response=>{
+      console.log(response)
       this.responseBody = <SearchResponse>response.body  
-      this.totalPages = this.responseBody.totalPages;  
-      this.sectionData = this.responseBody.content;
-      this.actualList = this.responseBody.content;
+      this.sectionData = this.responseBody.result.content;
+      this.companyNumber = this.responseBody.companiesNumber;
+      this.branchNumber = this.responseBody.branchesNumber;
+      this.actualList = this.searchS.paginator(this.sectionData,1,3);
+      this.totalPages = this.actualList.total_pages;
+      console.log(this.actualList)
       this.isEmptyMessage.next(this.sectionData.length?false:true);
       subject.next(this.getImages(true));
   },error=>{
@@ -78,7 +90,7 @@ export class SearchComponent implements OnInit {
 }
 
 public getImages(firstRequest?:boolean) {
-  this.actualList.map(data=>{
+  this.sectionData.map(data=>{
     this.searchS.getSearchSectionLogo(data).subscribe(response=>{
       if(response.status != 204) {
         let reader = new FileReader();
@@ -103,27 +115,17 @@ public getImages(firstRequest?:boolean) {
 }
 
 public previousPage() {
-  if(this.pageNumber > 0 && this.searchData) {
-    this.searchS.getActualPageData(this.searchData,--this.pageNumber).subscribe(response=>{
-      let searchResponse = <SearchResponse>response.body;
-      this.actualList = searchResponse.content;
-      this.getImages();
-  },error=>{
-    console.log(error);
-  });
-}
+  if(this.actualList.pre_page) {
+    this.actualList = this.searchS.paginator(this.sectionData,this.actualList.pre_page,3);
+    console.log(this.actualList)
+  }
 }
 
 public nextPage() {
-  if((this.pageNumber < this.totalPages-1) && this.searchData) {
-    this.searchS.getActualPageData(this.searchData,++this.pageNumber).subscribe(response=>{
-    let searchResponse = <SearchResponse>response.body;
-    this.actualList = searchResponse.content;
-    this.getImages();
-  },error=>{
-    console.log(error);
-  });
-}
+  if(this.actualList.next_page) {
+    this.actualList = this.searchS.paginator(this.sectionData,this.actualList.next_page,3);
+    console.log(this.actualList)
+  }
 }
 
 public showEmptyMessage() {

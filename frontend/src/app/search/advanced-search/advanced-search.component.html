@@ -31,18 +31,18 @@
     </div>
 </div>
 
-<div class="container__search-data-container" *ngIf="actualList">
+<div class="container__search-data-container" *ngIf="actualList?.data">
         <div class="search-data-container__quantity text-center">
-                znaleziono ({{dataNumber}}) wyników
+                znaleziono ({{dataNumber}}) wyniki
               </div>
     <div class="search-data-container__sections">
-      <app-search-section *ngFor="let data of actualList" [sectionData]="data"></app-search-section>
+      <app-search-section *ngFor="let data of actualList.data" [sectionData]="data"></app-search-section>
     </div>
-    <div class="search-data-container__buttons" *ngIf="totalPages > 1">
+    <div class="search-data-container__buttons" *ngIf="actualList?.total_pages">
       <button class="btn btn-primary buttons__button--previous" (click) = "previousPage();">
         Poprzednia
       </button>
-      <p class="buttons__text-node">{{pageNumber+1}}</p>
+      <p class="buttons__text-node">{{actualList.page}}</p>
       <button class="btn btn-primary buttons__button--next" (click) = "nextPage();">
          Następna
       </button>

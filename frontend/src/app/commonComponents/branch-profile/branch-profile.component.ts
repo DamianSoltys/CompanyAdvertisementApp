@@ -8,6 +8,7 @@ import { Position, Marker, EditRequestData } from 'src/app/user/company/company.
 import { UserREST } from 'src/app/classes/User';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { RecommendationService } from 'src/app/services/recommendation.service';
+import { CompanyService } from 'src/app/services/company.service';
 
 @Component({
   selector: 'app-branch-profile',
@@ -32,7 +33,8 @@ export class BranchProfileComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private snackbarService:SnackbarService,
-    private rDataService:RecommendationService
+    private rDataService:RecommendationService,
+    private cDataService:CompanyService
   ) {}
 
   ngOnInit() {
@@ -77,6 +79,8 @@ export class BranchProfileComponent implements OnInit {
   }
 
   public showEditForm() {
+    let editData = this.branchData;
+    editData.logo = null;
     this.editData = {
       companyId: null,
       workId: this.branchData.branchId,
@@ -85,7 +89,7 @@ export class BranchProfileComponent implements OnInit {
       logoKey:this.branchData.logoKey,
       putLogoUrl:this.branchData.putLogoURL,
       getLogoUrl:this.branchData.getLogoURL,
-      branchData:this.branchData
+      branchData:JSON.stringify(editData)
     };
     this.router.navigate(['edit'],{relativeTo:this.activatedRoute,queryParams:this.editData});
   }

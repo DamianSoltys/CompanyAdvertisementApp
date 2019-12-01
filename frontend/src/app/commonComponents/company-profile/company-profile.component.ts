@@ -66,7 +66,7 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
     });
     this.getCompanyData();
     this.registerListeners();
-    this.checkMediaConnection();
+    this.checkFbConnection();
   }
 
   ngAfterViewInit() {
@@ -90,13 +90,9 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
     });
     this.lgService.FBConnection.subscribe(data=>{
       if(data) {
-        this.checkFbConnection();
+        this.getCompanyData(true);
       }
     });
-  }
-
-  private checkMediaConnection() {
-    this.lgService.checkIfUserFBLogged();
   }
 
   private getCompanyData(clearCompanyStorage?:boolean) {
@@ -106,13 +102,12 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
     }
     
     this.getStorageCompanyData();
-    console.log(this.companyData);
 
     if (!this.companyData) {
       this.cDataService.getCompany(this.paramId).subscribe(
         response => {
           this.companyData = <GetCompany>response.body;
-          console.log(this.companyData)
+          this.checkFbConnection();
           this.cDataService.getCompanyLogo(this.companyData).subscribe(response=>{
             if(response.status != 204) {
               let reader = new FileReader();
@@ -192,7 +187,6 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
 
     if (this.companyData) {
       this.branchData = [];
-      console.log(this.companyData.branchesIDs)
 
       if(!this.companyData.branchesIDs.length) {
         subject.next(true);
@@ -206,7 +200,6 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
                 if(response.status != 204) {
                   let reader = new FileReader();
                   reader.addEventListener("load", () => {
-                    console.log('elo')
                     branchData.logo = reader.result;
                     branchData.branchId = branchId;
                     this.branchData.push(branchData);
@@ -251,14 +244,6 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
   public facebookLogin($event) {
     event.preventDefault();
     this.lgService.facebookLogin(this.companyData.companyId).subscribe(response=>{
-      console.log(response);
-    });
-  }
-
-  public twitterLogin($event) {
-
-    event.preventDefault();
-    this.lgService.twitterLogin().subscribe(response=>{
       console.log(response);
     });
   }
@@ -341,6 +326,8 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
   }
 
   public showEditForm() {
+    let editData = this.companyData;
+    editData.logo = null;
     this.editData = {
       companyId: this.companyData.companyId,
       workId: null,
@@ -349,10 +336,9 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
       logoKey:this.companyData.logoKey?this.companyData.logoKey:undefined,
       putLogoUrl:this.companyData.putLogoURL?this.companyData.putLogoURL:undefined,
       getLogoUrl:this.companyData.getLogoURL?this.companyData.getLogoURL:undefined,
-      companyData:this.companyData
+      companyData:JSON.stringify(editData)
     };
-    //this.canShowEditForm.next(true);
-    //this.canShowCompany.next(false);
+    console.log(this.editData)
     this.router.navigate(['companyEdit'],{relativeTo:this.activatedRoute,queryParams:this.editData});
   }
 
@@ -384,13 +370,26 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
     if(this.companyData) {
       if(this.companyData.socialProfileConnectionDtos) {
         this.companyData.socialProfileConnectionDtos.forEach(connection=>{
-          if(connection.connectionStatus.status === ConnectionStatus.Connected){
-            if(connection.socialPlatform === MediaTypeEnum.FB) {
+          switch(connection.connectionStatus.status) {
+            case ConnectionStatus.connected: {
               this.isFacebookConnected = true;
+              break;
             }
-          } else {
-            if(connection.socialPlatform === MediaTypeEnum.FB) {
-              this.otherFBAccount = true;
+            case ConnectionStatus.expired_Connection: {
+              this.isFacebookConnected = false;
+              break;
+            }
+            case ConnectionStatus.lack_Of_Page: {
+              this.isFacebookConnected = false;
+              break;
+            }
+            case ConnectionStatus.lack_Of_Permissions: {
+              this.isFacebookConnected = false;
+              break;
+            }
+            case ConnectionStatus.not_Connected: {
+              this.isFacebookConnected = false;
+              break;
             }
           }
         });

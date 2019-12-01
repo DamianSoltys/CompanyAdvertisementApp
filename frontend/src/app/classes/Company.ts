@@ -30,9 +30,12 @@ export class GetCompany {
 }
 
 export enum ConnectionStatus {
-    Connected = "CONNECTED",
-    Lack_of_page = "LACK_OF_PAGE",
-    Not_connected = "NOT_CONNECTED"
+    connected = "CONNECTED",
+    lack_Of_Page = "LACK_OF_PAGE",
+    not_Connected = "NOT_CONNECTED",
+    expired_Connection = "EXPIRED_CONNECTION",
+    lack_Of_Permissions = "LACK_OF_REQUIRED_FACEBOOK_PERMISSIONS"
+    
 }
 
 export enum MediaTypeEnum {

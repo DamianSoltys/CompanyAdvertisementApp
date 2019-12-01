@@ -66,7 +66,7 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
     });
     this.getCompanyData();
     this.registerListeners();
-    this.checkMediaConnection();
+    this.checkFbConnection();
   }
 
   ngAfterViewInit() {
@@ -90,13 +90,9 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
     });
     this.lgService.FBConnection.subscribe(data=>{
       if(data) {
-        this.checkFbConnection();
+        this.getCompanyData(true);
       }
     });
-  }
-
-  private checkMediaConnection() {
-    this.lgService.checkIfUserFBLogged();
   }
 
   private getCompanyData(clearCompanyStorage?:boolean) {
@@ -110,8 +106,8 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
     if (!this.companyData) {
       this.cDataService.getCompany(this.paramId).subscribe(
         response => {
-          console.log(response)
           this.companyData = <GetCompany>response.body;
+          this.checkFbConnection();
           this.cDataService.getCompanyLogo(this.companyData).subscribe(response=>{
             if(response.status != 204) {
               let reader = new FileReader();
@@ -252,14 +248,6 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
     });
   }
 
-  public twitterLogin($event) {
-
-    event.preventDefault();
-    this.lgService.twitterLogin().subscribe(response=>{
-      console.log(response);
-    });
-  }
-
   public checkNewsletterSubscription() {
     this.nDataService.getSubscriptionStatus(this.companyData.companyId,this.userREST.userID).subscribe(response=>{
       this.isNewsletter.next(<boolean>response.body);
@@ -382,13 +370,26 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
     if(this.companyData) {
       if(this.companyData.socialProfileConnectionDtos) {
         this.companyData.socialProfileConnectionDtos.forEach(connection=>{
-          if(connection.connectionStatus.status === ConnectionStatus.Connected){
-            if(connection.socialPlatform === MediaTypeEnum.FB) {
+          switch(connection.connectionStatus.status) {
+            case ConnectionStatus.connected: {
               this.isFacebookConnected = true;
+              break;
             }
-          } else {
-            if(connection.socialPlatform === MediaTypeEnum.FB) {
-              this.otherFBAccount = true;
+            case ConnectionStatus.expired_Connection: {
+              this.isFacebookConnected = false;
+              break;
+            }
+            case ConnectionStatus.lack_Of_Page: {
+              this.isFacebookConnected = false;
+              break;
+            }
+            case ConnectionStatus.lack_Of_Permissions: {
+              this.isFacebookConnected = false;
+              break;
+            }
+            case ConnectionStatus.not_Connected: {
+              this.isFacebookConnected = false;
+              break;
             }
           }
         });

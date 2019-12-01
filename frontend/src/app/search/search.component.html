@@ -39,20 +39,20 @@
         Niestety nie znaleziono danych o podanych kryteriach
     </p>
 </div>
-  <div class="search-component__search-data-container" *ngIf="actualList">
+  <div class="search-component__search-data-container" *ngIf="actualList?.data">
     <div class="search-data-container__quantity text-center">
       znaleziono ({{companyNumber}}) firm oraz ({{branchNumber}}) zakładów
     </div>
     <div class="search-data-container__sections">
-      <app-search-section *ngFor="let data of actualList" [sectionData]="data"></app-search-section>
+      <app-search-section *ngFor="let data of actualList.data" [sectionData]="data"></app-search-section>
     </div>
-    <div class="search-data-container__buttons" *ngIf="totalPages > 1">
-      <button class="btn btn-primary buttons__button--previous" (click) = "previousPage();">
-        Poprzednia
+    <div class="search-data-container__buttons" *ngIf="actualList?.total_pages > 1">
+      <button class="btn btn-primary buttons__button--previous" (click) = "previousPage();" *ngIf="actualList?.pre_page">
+        <i class="fas fa-arrow-circle-left fa-lg"></i>
       </button>
-      <p class="buttons__text-node">{{pageNumber+1}}</p>
-      <button class="btn btn-primary buttons__button--next" (click) = "nextPage();">
-         Następna
+      <p class="buttons__text-node">{{actualList.page}}</p>
+      <button class="btn btn-primary buttons__button--next" (click) = "nextPage();" *ngIf="actualList?.next_page">
+       <i class="fas fa-arrow-circle-right fa-lg"></i>
       </button>
     </div>
   </div>

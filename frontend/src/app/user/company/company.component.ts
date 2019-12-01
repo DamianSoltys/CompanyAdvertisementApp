@@ -100,9 +100,9 @@ export class CompanyComponent implements OnInit{
   public companyForm = this.fb.group({
     description: ['',[Validators.required]],
     category: ['', [Validators.required]],
-    name: ['', [Validators.required,Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]],
-    nip: ['', [Validators.required,Validators.pattern(new RegExp(/^[0-9]+$/))]],
-    regon: ['', [Validators.required,Validators.pattern(new RegExp(/^[0-9]+$/))]],
+    name: ['', [Validators.required,Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ_ ]+$/))]],
+    nip: ['', [Validators.required,Validators.pattern(new RegExp(/^[0-9]{10}$/))]],
+    regon: ['', [Validators.required,Validators.pattern(new RegExp(/^[0-9]{9}$/))]],
     companyWebsiteUrl: [''],
     address: this.fb.group({
       apartmentNo: ['', [Validators.required, Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/))]],
@@ -123,7 +123,7 @@ export class CompanyComponent implements OnInit{
     }),
     geoX: [''],
     geoY: [''],
-    name: ['', [Validators.required,Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]+$/))]]
+    name: ['', [Validators.required,Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ_ ]+$/))]]
   });
 
   public config = {

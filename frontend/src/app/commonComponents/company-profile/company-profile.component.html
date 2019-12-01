@@ -88,17 +88,11 @@
         </div>
       </div>
       <div class="content__section--media-buttons" *ngIf="owner.value">
-        <button class="btn btn-primary form__button--facebook" (click)="facebookLogin($event)" *ngIf="!isFacebookConnected && !otherFBAccount">
+        <button class="btn btn-primary form__button--facebook" (click)="facebookLogin($event)" *ngIf="!isFacebookConnected">
           <span *ngIf="!otherFBAccount">Połącz z facebookiem<i class="fab fa-facebook-square"></i></span>
           </button>
-          <button class="btn btn-primary form__button--facebook" (click)="facebookLogin($event)" *ngIf="otherFBAccount">
-            <span>Przeloguj się<i class="fab fa-facebook-square"></i></span>
-            </button>
           <button class="btn btn-primary form__button--facebook" (click)="goToFBProfile($event)" *ngIf="isFacebookConnected">
             <span>Przejdź do profilu<i class="fab fa-facebook-square"></i></span>
-          </button>
-          <button class="btn btn-primary form__button--twitter" (click)="twitterLogin($event)">
-            Połącz z twitterem<i class="fab fa-twitter-square"></i>
           </button>
       </div>
       <div *ngIf="showNewsletterFormContainer()" class="content-col">

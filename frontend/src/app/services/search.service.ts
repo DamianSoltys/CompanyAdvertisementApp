@@ -15,7 +15,7 @@ export class SearchService {
     if(searchData) {
       let query: string = searchData.join('%');
       console.log(query)
-      let httpParams:HttpParams = new HttpParams().set('q',query).set('size','3');
+      let httpParams:HttpParams = new HttpParams().set('q',query);
       return this.http.get(`http://localhost:8090/api/search`, { observe: 'response' ,params:httpParams});
     }
   }
@@ -51,6 +51,25 @@ export class SearchService {
     );
 
   }
+
+  public paginator(items, page?, per_page?) {
+ 
+    var page = page || 1,
+    per_page = per_page || 10,
+    offset = (page - 1) * per_page,
+    paginatedItems = items.slice(offset).slice(0, per_page),
+    total_pages = Math.ceil(items.length / per_page);
+    return {
+      page: page,
+      per_page: per_page,
+      pre_page: page - 1 ? page - 1 : null,
+      next_page: (total_pages > page) ? page + 1 : null,
+      total: items.length,
+      total_pages: total_pages,
+      data: paginatedItems
+    };
+  }
+  
   public getActualAdvSearchPage(formData: AdvSearchData, pageNumber:number) {
     if(formData.type) {
       formData.type = formData.type.map(value=>{  
@@ -76,7 +95,6 @@ export class SearchService {
           httpParams = httpParams.set(param, formData[param]);
       }
   });
-  httpParams = httpParams.set('size','3');
 
     if(pageNumber) {
       httpParams = httpParams.set('page',`${pageNumber}`);

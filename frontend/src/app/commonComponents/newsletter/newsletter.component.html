@@ -29,9 +29,11 @@
       <div class="newsletter-container__form-container">
         <div class="form-container__type--information">
           <div class="type--information__text-input" [formGroup]="textForm">
-            <label for="title">Tytuł newslettera<span class="label__required">*</span></label>
-            <input type="text" name="title" class="text-form__input form-control" formControlName="title">
-            <label for="name">Nazwa newslettera<span class="label__required">*</span></label>
+            <div *ngIf="showTitle()">
+              <label for="title">Tytuł newslettera<span class="label__required">*</span></label>
+              <input type="text" name="title" class="text-form__input form-control" formControlName="title">
+            </div>
+            <label for="name">Nazwa obiektu promocyjnego<span class="label__required">*</span></label>
             <input type="text" name="name" class="text-form__input form-control" formControlName="name">
           </div>
             <div class="type--information__editor" *ngIf="showEdit()" @heightAnimate>
@@ -51,7 +53,7 @@
                 </div>
             </div>
             <div class="type--info__datepicker datepicker-container" [formGroup] = "datePicker" *ngIf="isDatePicker.value" @heightAnimate>
-              <p class="datepicker__label text-center">Wybierz czas wysłania newslettera(można zostawić puste)</p>
+              <p class="datepicker__label text-center">Wybierz czas wysłania newslettera</p>
               <div class="datepicker__date">
                   <ngb-datepicker formControlName="date" (select)="onDateSelect($event)"></ngb-datepicker>
               </div>

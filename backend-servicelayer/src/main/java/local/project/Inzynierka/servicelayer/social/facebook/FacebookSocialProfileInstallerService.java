@@ -80,7 +80,7 @@ public class FacebookSocialProfileInstallerService {
         FacebookSocialProfile facebookSocialProfile = facebookSocialProfileRepository.save(buildFacebookSocialProfile(facebookLogin, pageData, socialProfile));
 
         FacebookToken userToken = facebookTokenRepository.save(buildUserToken(event, tokenInspection, facebookSocialProfile));
-        if(page != null ) {
+        if (page != null) {
             facebookTokenRepository.save(buildPageToken(page, pageTokenInspection, facebookSocialProfile));
         }
 
@@ -124,14 +124,19 @@ public class FacebookSocialProfileInstallerService {
 
     private FacebookSocialProfile buildFacebookSocialProfile(FacebookLogin facebookLogin, PageData pageData, SocialProfile socialProfile) {
 
-       Long pageId = pageData == null ? null : pageData.getId();
+        Long pageId = pageData == null ? null : pageData.getId();
 
-        return FacebookSocialProfile.builder()
-                .pageId(pageId)
-                .socialProfile(socialProfile)
-                .userId(facebookLogin.getAuthResponse().getUserID())
-                .userName("")
-                .build();
+        var fbProfile = facebookSocialProfileRepository.findByUserId(facebookLogin.getAuthResponse().getUserID());
+
+        return fbProfile.map(profile -> {
+            profile.setPageId(pageId);
+            return profile;
+        }).orElse(FacebookSocialProfile.builder()
+                          .pageId(pageId)
+                          .socialProfile(socialProfile)
+                          .userId(facebookLogin.getAuthResponse().getUserID())
+                          .userName("")
+                          .build());
     }
 
     private SocialProfile buildSocialProfile(FacebookLogin facebookLogin, PageData pageData) {

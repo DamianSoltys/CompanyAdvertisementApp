@@ -39,7 +39,7 @@ import java.util.Set;
 @PlannedSendingTimeRequiredWhenDelayed
 @LackOfDelayTimeWhenNotDelayedStrategy
 @ValidContentSize
-public class PromotionItemAddedEvent implements Sendable {
+public class    PromotionItemAddedEvent implements Sendable {
 
     @NotEmpty
     private String name;

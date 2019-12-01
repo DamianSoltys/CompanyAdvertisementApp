@@ -103,6 +103,7 @@ export class BranchProfileComponent implements OnInit {
       this.bDataService.getBranch(this.branchId).subscribe(
         response => {
           this.branchData = <Branch>response.body;
+          this.branchData.branchId = this.branchId;
           if(this.branchData) {
             this.rDataService.pushRecommendationData(this.branchData.category,this.branchData.branchId);
           }
@@ -112,6 +113,7 @@ export class BranchProfileComponent implements OnInit {
             reader.addEventListener("load", () => {
                 this.branchData.logo = reader.result;
                 this.checkBranchOwnership();
+                this.bDataService.storeBranchData(this.branchData);
                 this.mapMarker = {
                   latitude: Number(this.branchData.geoX),
                   longitude: Number(this.branchData.geoY),
@@ -125,6 +127,7 @@ export class BranchProfileComponent implements OnInit {
             } else {
               this.branchData.logo = this.bDataService.defaultLogoUrl;
               this.checkBranchOwnership();
+              this.bDataService.storeBranchData(this.branchData);
               this.mapMarker = {
                 latitude: Number(this.branchData.geoX),
                 longitude: Number(this.branchData.geoY),
@@ -135,6 +138,7 @@ export class BranchProfileComponent implements OnInit {
           },error=>{
             this.branchData.logo = this.bDataService.defaultLogoUrl;
             this.checkBranchOwnership();
+            this.bDataService.storeBranchData(this.branchData);
             this.mapMarker = {
               latitude: Number(this.branchData.geoX),
               longitude: Number(this.branchData.geoY),

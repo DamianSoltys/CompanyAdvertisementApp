@@ -75,7 +75,7 @@ export class SearchComponent implements OnInit {
     this.searchS.sendSearchData(this.searchData).subscribe(response=>{
       console.log(response)
       this.responseBody = <SearchResponse>response.body  
-      this.sectionData = this.responseBody.result.content;
+      this.sectionData = this.responseBody.result;
       this.companyNumber = this.responseBody.companiesNumber;
       this.branchNumber = this.responseBody.branchesNumber;
       this.actualList = this.searchS.paginator(this.sectionData,1,3);

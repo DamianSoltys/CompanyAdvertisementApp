@@ -38,9 +38,9 @@ export class RecommendationService {
     return subject;
   }
 
-  public pushRecommendationData(category:string,branchId:number) {
-    console.log('pushrecodata')
+  public pushRecommendationData(category:string,branchId:any) {
     let inArray:boolean = false;
+    console.log(branchId)
     if(storage_Avaliable('localStorage')) {
       let data:RecommendationData[] = JSON.parse(localStorage.getItem('recommendationData'));
       if(data) {

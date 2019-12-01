@@ -100,7 +100,11 @@ export class HomeComponent implements OnInit,AfterViewInit,OnDestroy {
     console.log(this.branchList);
   }
   private getRecommendRate(branch:RecommendationBranch) {
-    return ((branch.averageRating | 0 * this.rateWeight) + (branch.isInsideArea * this.positionWeight))/(this.rateWeight+this.positionWeight)
+    if(this.actualPosition) {
+      return ((branch.averageRating | 0 * this.rateWeight) + (branch.isInsideArea * this.positionWeight))/(this.rateWeight+this.positionWeight);
+    } else {
+      return (branch.averageRating | 0 * this.rateWeight)/this.rateWeight;
+    }
   }
 
   private compare(a:RecommendationBranch, b:RecommendationBranch) {

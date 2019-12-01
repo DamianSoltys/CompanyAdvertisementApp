@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NewsletterService } from 'src/app/services/newsletter.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PromotionItem, PromotionItemResponse, SendingStatus } from 'src/app/classes/Newsletter';
+import { PromotionItem, PromotionItemResponse, SendingStatus, SendStatus, SendingStrategy, Destination, SendStatusPL } from 'src/app/classes/Newsletter';
 import * as moment from 'moment';
 import 'moment/locale/pl';
 import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
@@ -28,8 +28,43 @@ export class NewsletterListComponent implements OnInit {
       if(response) {
         console.log(response)
         this.newsletterList = <PromotionItemResponse[]>response.body;
+        this.translateText();
         console.log(this.newsletterList)
         this.convertUnixToDate();
+      }
+    });
+  }
+
+  private translateText() {
+    this.newsletterList.map(newsletter=>{
+      switch(newsletter.sendingStatus[0].sendingStatus) {
+        case SendStatus.DELAYED:{
+          newsletter.sendingStatus[0].sendingStatus = 'Wysyłka opóźniona';
+          break;
+        }
+        case SendStatus.SENT:{
+          newsletter.sendingStatus[0].sendingStatus = 'Wysłany';
+          break;
+        }
+        case SendStatus.WAITING:{
+          newsletter.sendingStatus[0].sendingStatus = 'Oczekiwanie na wysłanie';
+          break;
+        }
+      }
+
+      switch(newsletter.sendingStatus[0].destination.toUpperCase()) {
+        case Destination.FB:{
+          newsletter.sendingStatus[0].destination = "Facebook"
+          break;
+        }
+        case  Destination.TWITTER:{
+          newsletter.sendingStatus[0].destination = 'Twitter';
+          break;
+        }
+        case  Destination.NEWSLETTER:{
+          newsletter.sendingStatus[0].destination = 'Newsletter';
+          break;
+        }
       }
     });
   }
@@ -60,8 +95,8 @@ export class NewsletterListComponent implements OnInit {
       }
     });
   }
-  public checkStatus(status:SendingStatus[]) {
-    if(status[0].sendingStatus == "waiting_for_action") { //only_at_will
+  public checkStatus(status:string) {
+    if(status === SendStatusPL.WAITING) { //only_at_will
       return true;
     } else {
       return false;
@@ -69,7 +104,7 @@ export class NewsletterListComponent implements OnInit {
   }
 
   public showSendTime(status:string) {
-    if(status == "delayed") {
+    if(status == SendStatusPL.DELAYED) {
       return true;
     } else {
       return false;

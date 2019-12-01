@@ -4,14 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class SearchResultDto {
-    private Page<Object> result;
+    private List<Object> result;
     private Integer companiesNumber;
     private Integer branchesNumber;
 }

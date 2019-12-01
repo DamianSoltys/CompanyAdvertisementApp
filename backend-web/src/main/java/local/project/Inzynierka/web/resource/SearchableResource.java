@@ -27,9 +27,9 @@ public class SearchableResource {
     public SearchableResource(SearchService searchService) {this.searchService = searchService;}
 
     @RequestMapping(method = RequestMethod.GET, value = "/search")
-    public ResponseEntity<?> search(@RequestParam(value = "q") final String term, Pageable pageable) {
+    public ResponseEntity<?> search(@RequestParam(value = "q") final String term) {
 
-        var result = searchService.searchForEntities(term, pageable);
+        var result = searchService.searchForEntities(term);
 
         return ResponseEntity.ok(result);
     }
@@ -39,8 +39,8 @@ public class SearchableResource {
                                                   @RequestParam(value = "voivodeship", required = false) final List<String> voivodeships,
                                                   @RequestParam(value = "city", required = false) final List<String> cities,
                                                   @RequestParam(value = "name", required = false) final List<String> names,
-                                                  @RequestParam(value = "category", required = false) final List<String> categories,
-                                                  Pageable pageable) {
+                                                  @RequestParam(value = "category", required = false) final List<String> categories
+                                                  ) {
 
         EntityName entityName = getEntityName(type);
         List<Voivodeship> voivodeships1 = getVoivodeships(voivodeships);
@@ -55,7 +55,7 @@ public class SearchableResource {
 
         List<SearchSpecification> specifications = SearchSpecificationFactory.constructSearchSpecifications(searchSpecificationParameters, entityName);
 
-        var result = searchService.searchForEntities(specifications, pageable);
+        var result = searchService.searchForEntities(specifications);
 
         return ResponseEntity.ok(result);
     }

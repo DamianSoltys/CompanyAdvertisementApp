@@ -37,7 +37,7 @@ public class SearchService {
     }
 
     @Transactional
-    public SearchResultDto searchForEntities(String term, Pageable pageable) {
+    public SearchResultDto searchForEntities(String term) {
         FullTextEntityManager fullTextEntityManager = org.hibernate.search.jpa.Search.getFullTextEntityManager(entityManager);
 
         QueryBuilder branchBuilder = fullTextEntityManager.getSearchFactory()
@@ -52,19 +52,7 @@ public class SearchService {
 
         List result = jpaQuery.getResultList();
 
-        return extractEntities(result, pageable);
-    }
-
-    private Page<Object> toPage(List<Object> list, Pageable pageable) {
-//        if (pageable.getOffset() >= list.size()) {
-//            return Page.empty();
-//        }
-//        int startIndex = (int) pageable.getOffset();
-//        int endIndex = (int) ((pageable.getOffset() + pageable.getPageSize()) > list.size() ?
-//                list.size() :
-//                pageable.getOffset() + pageable.getPageSize());
-//        List<Object> subList = list.subList(startIndex, endIndex);
-        return new PageImpl<>(list, pageable, list.size());
+        return extractEntities(result);
     }
 
     private org.apache.lucene.search.Query buildFinalQuery(String term, QueryBuilder branchBuilder, QueryBuilder companyBuilder) {
@@ -88,7 +76,7 @@ public class SearchService {
                 .createQuery();
     }
 
-    private SearchResultDto extractEntities(List result, Pageable pageable) {
+    private SearchResultDto extractEntities(List result) {
         List<Object> res = new ArrayList<>();
         var companiesNumber = new Object() {int value = 0;};
         var branchesNumber = new Object(){int value = 0;};
@@ -107,7 +95,7 @@ public class SearchService {
             }
         });
         return SearchResultDto.builder()
-                .result(toPage(res, pageable))
+                .result(res)
                 .branchesNumber(branchesNumber.value)
                 .companiesNumber(companiesNumber.value)
                 .build();
@@ -141,18 +129,18 @@ public class SearchService {
     }
 
     @Transactional
-    public SearchResultDto searchForEntities(List<SearchSpecification> specifications, Pageable pageable) {
+    public SearchResultDto searchForEntities(List<SearchSpecification> specifications) {
 
         var companiesNumber = new Object() {int value = 0;};
         var branchesNumber = new Object(){int value = 0;};
 
         List<Object> result = specifications.stream().map(specification -> {
             if (specification instanceof BranchSearchSpecification) {
-                var branches = getBranchesAccordingToBranchSearchSpecification(specification, pageable);
+                var branches = getBranchesAccordingToBranchSearchSpecification(specification);
                 branchesNumber.value += branches.size();
                 return branches;
             } else if (specification instanceof CompanySearchSpecification) {
-                var companies = getCompaniesAccordingToCompanySearchSpecification(specification, pageable);
+                var companies = getCompaniesAccordingToCompanySearchSpecification(specification);
                 companiesNumber.value += companies.size();
                 return companies;
             }
@@ -162,21 +150,21 @@ public class SearchService {
 
 
         return SearchResultDto.builder()
-                .result(toPage(result, pageable))
+                .result(result)
                 .branchesNumber(branchesNumber.value)
                 .companiesNumber(companiesNumber.value)
                 .build();
     }
 
-    private List<Object> getCompaniesAccordingToCompanySearchSpecification(SearchSpecification searchSpecification, Pageable pageable) {
-        return companyRepository.findAll((CompanySearchSpecification) searchSpecification, pageable)
+    private List<Object> getCompaniesAccordingToCompanySearchSpecification(SearchSpecification searchSpecification) {
+        return companyRepository.findAll((CompanySearchSpecification) searchSpecification)
                 .stream()
                 .map(this::buildSearchableCompany)
                 .collect(Collectors.toList());
     }
 
-    private List<Object> getBranchesAccordingToBranchSearchSpecification(SearchSpecification searchSpecification, Pageable pageable) {
-        return branchRepository.findAll((BranchSearchSpecification) searchSpecification, pageable)
+    private List<Object> getBranchesAccordingToBranchSearchSpecification(SearchSpecification searchSpecification) {
+        return branchRepository.findAll((BranchSearchSpecification) searchSpecification)
                 .stream()
                 .map(this::buildSearchableBranch)
                 .collect(Collectors.toList());

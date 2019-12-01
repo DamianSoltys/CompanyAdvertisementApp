@@ -29,8 +29,16 @@ export class NewsletterListComponent implements OnInit {
         console.log(response)
         this.newsletterList = <PromotionItemResponse[]>response.body;
         this.translateText();
-        console.log(this.newsletterList)
         this.convertUnixToDate();
+        this.removeUnwantedString();
+      }
+    });
+  }
+
+  private removeUnwantedString() {
+    this.newsletterList.map(newsletter=>{
+      if(newsletter.sendingStatus[0].detail) {
+        newsletter.sendingStatus[0].detail = newsletter.sendingStatus[0].detail.replace('Post resource: ','');
       }
     });
   }
@@ -75,6 +83,9 @@ export class NewsletterListComponent implements OnInit {
       newsletter.addedTime = moment.unix(newsletter.addedTime).format('LLL');
       if(newsletter.sendingStatus[0].plannedSendingAt) {
         newsletter.sendingStatus[0].plannedSendingAt = moment.unix(newsletter.sendingStatus[0].plannedSendingAt).format('LLL');
+      }
+      if(newsletter.sendingStatus[0].sendAt) {
+        newsletter.sendingStatus[0].sendAt = moment.unix(newsletter.sendingStatus[0].sendAt).format('LLL');
       }
     });
   }

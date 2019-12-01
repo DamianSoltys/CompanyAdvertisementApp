@@ -49,9 +49,9 @@
 
         .data-container__section--rating {
             margin:5px;
-            max-height:40vh;
+            max-height:300px;
             overflow: auto;
-            min-height: 300px;
+            min-height: 301px;
             .section--rating__comment {
               display:flex;
               flex-direction: column;

@@ -89,6 +89,7 @@
     margin-left: 5px;
     margin-right: 5px;
     border-radius: 50px;
+    min-width:170px;
     border: 0;
     background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
     transition: all .4s ease-in-out;

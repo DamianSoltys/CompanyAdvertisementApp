@@ -2,8 +2,9 @@ package local.project.Inzynierka.web.resource;
 
 import local.project.Inzynierka.auth.AuthFacade;
 import local.project.Inzynierka.servicelayer.company.CompanyManagementPermissionService;
-import local.project.Inzynierka.servicelayer.promotionitem.event.PromotionItemAddedEvent;
+import local.project.Inzynierka.servicelayer.dto.promotionitem.GetPromotionItemDto;
 import local.project.Inzynierka.servicelayer.promotionitem.PromotionItemService;
+import local.project.Inzynierka.servicelayer.promotionitem.event.PromotionItemAddedEvent;
 import local.project.Inzynierka.shared.UserAccount;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 @RequestMapping("/api/pi")
 @RestController
@@ -82,9 +84,9 @@ public class PromotionItemResource {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "")
-    public ResponseEntity<?> getPromotionItems(@RequestParam(value = "companyId") Long companyId) {
+    public ResponseEntity<List<GetPromotionItemDto>> getPromotionItems(@RequestParam(value = "companyId") Long companyId) {
 
-        ResponseEntity<?> result;
+        ResponseEntity<List<GetPromotionItemDto>> result;
 
         UserAccount userAccount = authFacade.getAuthenticatedUser();
         if (!companyManagementPermissionService.hasManagingAuthority(companyId, userAccount)) {

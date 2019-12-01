@@ -139,8 +139,9 @@ public class CompanyManagementService {
         company.setName(updateCompanyInfoDto.getName() == null ? company.getName() :
                                 updateCompanyInfoDto.getName());
 
-        company.setNIP(updateCompanyInfoDto.getNip() == null ? company.getNIP() : updateCompanyInfoDto.getNip() );
-        company.setREGON(updateCompanyInfoDto.getRegon() == null ? company.getREGON() : updateCompanyInfoDto.getRegon() );
+        company.setNIP(updateCompanyInfoDto.getNip() == null ? company.getNIP() : updateCompanyInfoDto.getNip());
+        company.setREGON(
+                updateCompanyInfoDto.getRegon() == null ? company.getREGON() : updateCompanyInfoDto.getRegon());
 
 
         return this.companyRepository.save(company);
@@ -148,7 +149,10 @@ public class CompanyManagementService {
 
     private CompanyInfoDto buildCompanyInfoDto(Company company, UserAccount userAccount) {
 
-        boolean isAllowedToSeeConnectionStatus = userAccount.isNaturalPersonRegistered() && company.getRegisterer().getId().equals(userAccount.personId());
+        boolean isAllowedToSeeConnectionStatus = Optional.ofNullable(userAccount)
+                .map(account -> userAccount.isNaturalPersonRegistered() &&
+                        company.getRegisterer().getId().equals(userAccount.personId()))
+                .orElse(false);
         List<SocialProfileConnectionDto> socialMediaConnections = isAllowedToSeeConnectionStatus ?
                 socialMediaConnectionService.getSocialProfileConnections(company.getId()) :
                 Collections.emptyList();

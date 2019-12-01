@@ -1,12 +1,12 @@
 <div class="container-fluid newsletter-component">
   <div class="newsletter-component__main-container">
     <div class="main-container__header">
-      <span class="header__text-node">Newsletter</span>
+      <span class="header__text-node">Obiekt promocyjny</span>
     </div>
     <div class="main-container__newsletter-container" *ngIf="!isNewsletterList.value">
       <div class="newsletter-container__type-container">
        <div class="type-container__type-select">
-        <label for="type">Typ newslettera</label>
+        <label for="type">Typ obiektu promocyjnego</label>
         <ngx-select-dropdown name="type" #typeSelect [config]="selectConfig" [options]="typeOptions" (change)="checkForChanges(typeSelect)" [multiple]="false"></ngx-select-dropdown>
        </div>
         <div class="type-container__type-select">
@@ -30,22 +30,22 @@
         <div class="form-container__type--information">
           <div class="type--information__text-input" [formGroup]="textForm">
             <div *ngIf="showTitle()">
-              <label for="title">Tytuł newslettera<span class="label__required">*</span></label>
+              <label for="title">Tytuł obiektu promocyjnego<span class="label__required">*</span></label>
               <input type="text" name="title" class="text-form__input form-control" formControlName="title">
             </div>
             <label for="name">Nazwa obiektu promocyjnego<span class="label__required">*</span></label>
             <input type="text" name="name" class="text-form__input form-control" formControlName="name">
           </div>
             <div class="type--information__editor" *ngIf="showEdit()" @heightAnimate>
-                <p class="text-center editor__label">Edytor newslettera HTML</p> 
+                <p class="text-center editor__label">Edytor HTML</p> 
               <app-grape-editor [editorName]="'infoEditor'"></app-grape-editor>
             </div>
             <div class="type--information__text-form text-form" *ngIf="showText()" [formGroup]="textForm" @heightAnimate>
-                <p class="text-center text-form__label">Treść newslettera</p>
+                <p class="text-center text-form__label">Treść tekstowa</p>
                 <quill-editor class="text-form__editor" formControlName="text" [modules]="config"></quill-editor>
             </div>
             <div class="type--information__media-form media-form" *ngIf="isMedia.value" [formGroup]="mediaForm" @heightAnimate>
-                <p class="text-center media-form__label">Treść newslettera do medii społecznościowych</p>
+                <p class="text-center media-form__label">Treść tekstowa</p>
                 <quill-editor class="media-form__editor" formControlName="text" [modules]="config"></quill-editor>
                 <div class="media-form__images">
                     <label for="images" class=images__label>Zdjęcia :</label>
@@ -53,7 +53,7 @@
                 </div>
             </div>
             <div class="type--info__datepicker datepicker-container" [formGroup] = "datePicker" *ngIf="isDatePicker.value" @heightAnimate>
-              <p class="datepicker__label text-center">Wybierz czas wysłania newslettera</p>
+              <p class="datepicker__label text-center">Wybierz czas wysłania obiektu promocyjnego</p>
               <div class="datepicker__date">
                   <ngb-datepicker formControlName="date" (select)="onDateSelect($event)"></ngb-datepicker>
               </div>
@@ -62,7 +62,7 @@
               </div>
             </div>
             <div class="type--information__submit-button button-container">
-              <button class="submit-button__button--submit btn btn-primary button-type--submit" (click)="sendNewsletter('infoEditor')" [disabled]="!textForm.valid">Wyśwlij newsletter</button>
+              <button class="submit-button__button--submit btn btn-primary button-type--submit" (click)="sendNewsletter('infoEditor')" [disabled]="!textForm.valid">Wyślij obiekt promocyjny</button>
             </div>
         </div>
       </div>

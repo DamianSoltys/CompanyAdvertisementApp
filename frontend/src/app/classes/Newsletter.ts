@@ -27,6 +27,7 @@ export interface SendingStatus {
     failedAt: any,
     sendingStatus: string,
     plannedSendingAt:any,
+    sendAt:any,
 }
 
 export enum SendStatus {

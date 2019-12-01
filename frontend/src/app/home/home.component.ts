@@ -71,6 +71,10 @@ export class HomeComponent implements OnInit,AfterViewInit,OnDestroy {
         }
         
       },5000);
+    } else {
+      setTimeout(()=>{
+        this.setCarouselInterval();
+      },2000);
     }
   }
 

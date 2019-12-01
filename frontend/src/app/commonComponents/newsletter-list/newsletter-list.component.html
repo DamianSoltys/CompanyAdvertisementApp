@@ -1,11 +1,11 @@
 <div class="newsletter-list-component">
   <div class="newsletter-list-component__main-container">
     <div class="main-container__header">
-      <p class="header__text-node">Lista newsletterów</p>
+      <p class="header__text-node">Lista obiektów promocyjnych</p>
     </div>
     <div class="main-container__list-container">
       <div class="list-container__empty-list" *ngIf="!newsletterList.length">
-        <p class="empty-list__text-node">Nie masz żadnych oczekujących newsletterów</p>
+        <p class="empty-list__text-node">Nie masz żadnych oczekujących obiektów promocyjnych</p>
       </div>
       <div class="empty-list__data-container" *ngIf="newsletterList.length">
         <div class="data-container__main-section" *ngFor="let newsletter of newsletterList">
@@ -16,7 +16,7 @@
           </div>
           <div class="main-section__section">
             <p class="section__text-node" *ngIf="newsletter.sendingStatus[0].plannedSendingAt">Planowany czas wysłania:{{newsletter?.sendingStatus[0].plannedSendingAt}}</p>
-            <p class="section__text-node">Status:{{newsletter?.sendingStatus[0].sendingStatus}}</p>
+            <p class="section__text-node">Status: {{newsletter?.sendingStatus[0].sendingStatus}}</p>
           </div>
           <div class="main-section__section text-center section--button" *ngIf="checkStatus(newsletter.sendingStatus[0].sendingStatus)">
               <button class="btn btn-primary section__button--send" (click)="sendDelayedNewsletter(newsletter.promotionItemUUID)">Wyślij</button>

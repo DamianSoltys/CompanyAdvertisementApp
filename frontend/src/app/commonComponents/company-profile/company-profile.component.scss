@@ -271,6 +271,9 @@
           @include phone {
             width: 95%;
           }
+          @include tablet {
+            width:95%;
+         }
 
           .owner-buttons__button {
             &--edit {
@@ -295,7 +298,8 @@
         .section--buttons__button {
           &--comments,
           &--branches,
-          &--newsletters {
+          &--newsletters,
+          &--newsletter-list {
             width: 20%;
             margin: 10px;
             border-radius: 50px;
@@ -309,6 +313,19 @@
             @include phone {
               width: 95%;
             }
+            @include tablet {
+               width:95%;
+            }
+          }
+          &--newsletter-list {
+            width:30%;
+            min-width: 240px;
+            @include phone {
+              width: 95%;
+            }
+            @include tablet {
+              width:95%;
+           }
           }
         }
       }

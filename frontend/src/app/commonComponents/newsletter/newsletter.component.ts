@@ -330,6 +330,10 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
         this.sendingOptions.sendingStrategy = SendingStrategy.AT_WILL;
         break;
       }
+      case  SendStrategy.delayed: {
+        this.sendingOptions.sendingStrategy = SendingStrategy.DELAYED;
+        break;
+      }
     }
   }
 
@@ -388,7 +392,6 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
         }
       }
     }
-    this.sendingOptions.sendingStrategy = SendingStrategy.DELAYED;
   }
   public showEdit() {
     if(!this.isText.value && this.isEdit.value && !this.onlyMedia.value) {

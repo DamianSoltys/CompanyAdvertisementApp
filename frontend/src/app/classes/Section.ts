@@ -16,19 +16,7 @@ export interface SectionData {
 export interface SearchResponse {
     branchesNumber: number;
     companiesNumber: number;
-    result: {
-        content:Array<any>;
-        empty: boolean;
-        first: boolean;
-        last: boolean;
-        number: number;
-        numberOfElements: number;
-        pageable: Pagable;
-        size: number;
-        sort: Sort;
-        totalElements: number;
-        totalPages: number;
-    }
+    result: SectionData[];
 }
 
 export interface CommentResponse {

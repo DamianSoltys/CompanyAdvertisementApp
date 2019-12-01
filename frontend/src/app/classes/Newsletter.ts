@@ -29,6 +29,18 @@ export interface SendingStatus {
     plannedSendingAt:any,
 }
 
+export enum SendStatus {
+    SENT = 'sent',
+    WAITING = 'waiting_for_action',
+    DELAYED = 'delayed'
+}
+
+export enum SendStatusPL {
+    SENT = 'Wysłany',
+    WAITING = 'Oczekiwanie na wysłanie',
+    DELAYED = 'Wysyłka opóźniona'
+}
+
 export enum Destination {
     FB='FB',
     TWITTER='TWITTER',

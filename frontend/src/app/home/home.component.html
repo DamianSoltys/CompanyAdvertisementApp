@@ -12,15 +12,15 @@
                   <div class="information__data">
                     <p class="data__text-node">Kategoria:{{branch.category}}</p>
                   </div>
-                <div class="information__rate-container" *ngIf="branch.currentUserRating">
+                <div class="information__rate-container" *ngIf="branch.averageRating">
                   <span class="rate-container__text-node">Ocena:</span>
-                    <ngb-rating class="rate-container__rate" [(rate)]="branch.currentUserRating" [max]="5" [readonly]="true" >
+                    <ngb-rating class="rate-container__rate" [(rate)]="branch.averageRating" [max]="5" [readonly]="true" >
                         <ng-template let-fill="fill" let-index="index">
                             <span class="star" [class.filled]="fill === 100">&#9733;</span>
                           </ng-template>
                       </ngb-rating>
                 </div>
-                <div class="information__empty-rate" *ngIf="!branch.currentUserRating">
+                <div class="information__empty-rate" *ngIf="!branch.averageRating">
                   <p class="empty-rate__text-node">Zakład nie został jeszcze oceniony</p>
                 </div>
                 <div class="information__nearby" *ngIf="branch.isInsideArea">

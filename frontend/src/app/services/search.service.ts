@@ -53,7 +53,6 @@ export class SearchService {
   }
 
   public paginator(items, page?, per_page?) {
- 
     var page = page || 1,
     per_page = per_page || 10,
     offset = (page - 1) * per_page,

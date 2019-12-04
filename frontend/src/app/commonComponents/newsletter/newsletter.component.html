@@ -18,13 +18,9 @@
           <ngx-select-dropdown name="sendingType" #sendingTypeSelect [config]="selectConfig" [options]="sendingTypeOptions" (change)="checkForChanges(sendingTypeSelect)" [multiple]="false"></ngx-select-dropdown>
         </div>
         <div class="type-container__type-select">
-            <label for="media">Dodatkowy formularz medii</label>
-          <ngx-select-dropdown name="media" #mediaSelect [config]="selectConfig" [options]="mediaOptions" (change)="checkForChanges(mediaSelect)" [multiple]="false"></ngx-select-dropdown>
+            <label for="media">Destynacja</label>
+          <ngx-select-dropdown name="media" #mediaSelect [config]="selectConfig" [options]="mediaOptions" (change)="checkForChanges(mediaSelect)" [multiple]="true"></ngx-select-dropdown>
         </div>
-        <div class="type-container__type-select" [ngStyle]="{'display':isAnyMediaConnected() ? 'block' : 'none' }">
-          <label for="mediaType">Rodzaj medii społecznościowych</label>
-        <ngx-select-dropdown name="mediaType" #mediaTypeSelect [config]="selectConfig" [options]="mediaTypeOptions" (change)="checkForChanges(mediaTypeSelect)" [disabled]="!showMediaTypeSelect()" [multiple]="false"></ngx-select-dropdown>
-      </div>
       </div>
       <div class="newsletter-container__form-container">
         <div class="form-container__type--information">

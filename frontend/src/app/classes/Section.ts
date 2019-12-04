@@ -16,11 +16,25 @@ export interface SectionData {
 export interface SearchResponse {
     branchesNumber: number;
     companiesNumber: number;
-    result: SectionData[];
+    result: SearchContent;
 }
 
 export interface CommentResponse {
     content:Array<any>;
+    empty: boolean;
+    first: boolean;
+    last: boolean;
+    number: number;
+    numberOfElements: number;
+    pageable: Pagable;
+    size: number;
+    sort: Sort;
+    totalElements: number;
+    totalPages: number;
+}
+
+export interface SearchContent {
+    content:SectionData[];
     empty: boolean;
     first: boolean;
     last: boolean;

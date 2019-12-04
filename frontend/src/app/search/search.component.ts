@@ -75,12 +75,11 @@ export class SearchComponent implements OnInit {
     this.searchS.sendSearchData(this.searchData).subscribe(response=>{
       console.log(response)
       this.responseBody = <SearchResponse>response.body  
-      this.sectionData = this.responseBody.result;
+      this.sectionData = this.responseBody.result.content;
       this.companyNumber = this.responseBody.companiesNumber;
       this.branchNumber = this.responseBody.branchesNumber;
       this.actualList = this.searchS.paginator(this.sectionData,1,3);
       this.totalPages = this.actualList.total_pages;
-      console.log(this.actualList)
       this.isEmptyMessage.next(this.sectionData.length?false:true);
       subject.next(this.getImages(true));
   },error=>{

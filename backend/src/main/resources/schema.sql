@@ -278,11 +278,12 @@ create or replace table comments
 
 create or replace table favourite_branches
 (
-    branch_id   bigint                                  not null,
-    user_id     bigint                                  not null,
-    created_at  timestamp default current_timestamp()   not null,
-    modified_at timestamp default '0000-00-00 00:00:00' not null on update current_timestamp(),
-    primary key (branch_id, user_id),
+    favourite_branch_id bigint auto_increment primary key,
+    uuid                varchar(36)                             not null,
+    branch_id           bigint                                  not null,
+    user_id             bigint                                  not null,
+    created_at          timestamp default current_timestamp()   not null,
+    modified_at         timestamp default '0000-00-00 00:00:00' not null on update current_timestamp(),
     constraint favourite_branches_branch_FK
         foreign key (branch_id) references branches (branch_id)
             on delete cascade,
@@ -362,10 +363,10 @@ create or replace table fb_token_scopes
 create or replace table destination_arrivals
 (
     destination_arrival_id        bigint auto_increment primary key,
-    created_at                    timestamp default current_timestamp()   not null,
-    promotion_item_destination_id bigint                                  not null,
-    status                        varchar(30)                             not null,
-    detail                        varchar(255)                             null,
+    created_at                    timestamp default current_timestamp() not null,
+    promotion_item_destination_id bigint                                not null,
+    status                        varchar(30)                           not null,
+    detail                        varchar(255)                          null,
     constraint sending_status_FK
         foreign key (promotion_item_destination_id) references promotion_item_destinations (promotion_item_destination_id)
 );

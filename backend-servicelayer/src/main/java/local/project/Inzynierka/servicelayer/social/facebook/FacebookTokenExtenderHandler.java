@@ -40,6 +40,7 @@ public class FacebookTokenExtenderHandler {
                 getUriComponentsBuilder(facebookLogin), HttpMethod.GET, String.class);
 
         log.info(String.valueOf(result));
+        log.info(result.getBody());
         String tokenToInspect;
         boolean tokenExtended = tokenExtendedSuccessfully(result);
         if (tokenExtended) {

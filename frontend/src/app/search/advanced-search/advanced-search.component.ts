@@ -107,7 +107,7 @@ export class AdvancedSearchComponent implements OnInit {
     this.sDataService.sendAdvSearchData(this.searchData).subscribe(response=>{
       console.log(response)
       this.responseBody = <SearchResponse>response.body  
-      this.sectionData = this.responseBody.result.content;
+      this.sectionData = this.responseBody.result;
       this.dataNumber = this.responseBody.branchesNumber + this.responseBody.companiesNumber;
       this.actualList = this.sDataService.paginator(this.sectionData,1,3);
       this.totalPages = this.actualList.total_pages;

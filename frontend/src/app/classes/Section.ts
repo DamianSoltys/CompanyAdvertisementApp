@@ -16,7 +16,7 @@ export interface SectionData {
 export interface SearchResponse {
     branchesNumber: number;
     companiesNumber: number;
-    result: SearchContent;
+    result: SectionData[];
 }
 
 export interface CommentResponse {

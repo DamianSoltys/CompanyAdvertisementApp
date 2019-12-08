@@ -28,6 +28,7 @@ public class BranchMapper {
         CompanyBranchDto companyBranchDto = new CompanyBranchDto();
         companyBranchDto.setAddress(new AddressMapper().map(branch.getAddress()));
         companyBranchDto.setGeoX(branch.getGeoX());
+        companyBranchDto.setCompanyId(branch.getCompany().getId());
         companyBranchDto.setCategory(branch.getCompany().getCategory().getName());
         companyBranchDto.setGeoY(branch.getGeoY());
         companyBranchDto.setName(branch.getName());

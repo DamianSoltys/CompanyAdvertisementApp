@@ -56,8 +56,12 @@
             .data-container__main-section {
                 display: flex;
                 margin:10px 50px;
-                flex-wrap: wrap;
-                border-bottom:1px solid $bgcolor;
+                .main-section__separator {
+                    border-bottom:1px solid $bgcolor;
+                    width:100%;
+                    display: flex;
+                    flex-wrap: wrap;
+                }
                 &:last-child {
                     border-bottom: none;
                 }

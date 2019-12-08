@@ -33,6 +33,20 @@ export interface CommentResponse {
     totalPages: number;
 }
 
+export interface SearchContent {
+    content:SectionData[];
+    empty: boolean;
+    first: boolean;
+    last: boolean;
+    number: number;
+    numberOfElements: number;
+    pageable: Pagable;
+    size: number;
+    sort: Sort;
+    totalElements: number;
+    totalPages: number;
+}
+
 interface Sort {
     sorted?: boolean; 
     unsorted?: boolean; 

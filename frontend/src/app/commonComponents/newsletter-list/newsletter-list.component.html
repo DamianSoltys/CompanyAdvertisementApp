@@ -9,20 +9,21 @@
       </div>
       <div class="empty-list__data-container" *ngIf="newsletterList.length">
         <div class="data-container__main-section" *ngFor="let newsletter of newsletterList">
-          <div class="main-section__section">
-            <p class="section__text-node"><span class="text-node__label">Nazwa:</span> {{newsletter.name}}</p>
-            <p class="section__text-node"><span class="text-node__label">Destynacja:</span> {{newsletter?.sendingStatus[0].destination}}</p>
-            <p class="section__text-node"><span class="text-node__label">Status:</span> {{newsletter?.sendingStatus[0].sendingStatus}}</p>
-            <p class="section__text-node detail--link" *ngIf="newsletter?.sendingStatus[0].detail"><span class="text-node__label">Szczegóły:</span> <a class="text-node__detail" href="{{newsletter?.sendingStatus[0].detail}}" target="_blank">{{newsletter?.sendingStatus[0].detail}}</a></p>
-          </div>
-          <div class="main-section__section">
-            <p class="section__text-node" *ngIf="newsletter.sendingStatus[0].plannedSendingAt"><span class="text-node__label">Planowany czas wysłania: </span>{{newsletter?.sendingStatus[0].plannedSendingAt}}</p>
-            <p class="section__text-node"><span class="text-node__label">Data dodania:</span> {{newsletter?.addedTime}}</p>
-            <p class="section__text-node" *ngIf="newsletter.sendingStatus[0].sendAt"><span class="text-node__label">Data wysłania:</span> {{newsletter?.sendingStatus[0].sendAt}}</p>
-          
-          </div>
-          <div class="main-section__section text-center section--button" *ngIf="checkStatus(newsletter.sendingStatus[0].sendingStatus)">
-              <button class="btn btn-primary section__button--send" (click)="sendDelayedNewsletter(newsletter.promotionItemUUID)">Wyślij</button>
+          <div *ngIf="newsletter?.sendingStatus" class="main-section__separator">
+            <div class="main-section__section">
+              <p class="section__text-node"><span class="text-node__label">Nazwa:</span> {{newsletter.name}}</p>
+              <p class="section__text-node"><span class="text-node__label">Destynacja:</span> {{newsletter?.sendingStatus[0].destination}}</p>
+              <p class="section__text-node"><span class="text-node__label">Status:</span> {{newsletter?.sendingStatus[0].sendingStatus}}</p>
+              <p class="section__text-node detail--link" *ngIf="newsletter?.sendingStatus[0].detail"><span class="text-node__label">Szczegóły:</span> <a class="text-node__detail" href="{{newsletter?.sendingStatus[0].detail}}" target="_blank">{{newsletter?.sendingStatus[0].detail}}</a></p>
+            </div>
+            <div class="main-section__section">
+              <p class="section__text-node" *ngIf="newsletter.sendingStatus[0].plannedSendingAt"><span class="text-node__label">Planowany czas wysłania: </span>{{newsletter?.sendingStatus[0].plannedSendingAt}}</p>
+              <p class="section__text-node"><span class="text-node__label">Data dodania:</span> {{newsletter?.addedTime}}</p>
+              <p class="section__text-node" *ngIf="newsletter.sendingStatus[0].sendAt"><span class="text-node__label">Data wysłania:</span> {{newsletter?.sendingStatus[0].sendAt}}</p>
+            </div>
+            <div class="main-section__section text-center section--button" *ngIf="checkStatus(newsletter.sendingStatus[0].sendingStatus)">
+                <button class="btn btn-primary section__button--send" (click)="sendDelayedNewsletter(newsletter.promotionItemUUID)">Wyślij</button>
+            </div>
           </div>
         </div>
       </div>

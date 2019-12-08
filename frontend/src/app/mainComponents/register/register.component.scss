@@ -1,0 +1,132 @@
+@import '../../../commonStyles/shared';
+.register-component__form {
+
+  .form__register-form {
+    text-align: center;
+    margin: auto;
+    margin-top: 4%;
+    width: 30vw;
+    min-width: 20%;
+    @include boxShadow(0px 4px 5px 0px rgba(187, 185, 191, 1));
+    border: 0;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+
+    .register-form__header {
+      position: relative;
+      min-height: 50px;
+      height: 6vh;
+      max-height: 70px;
+      background-color: $bgcolor;
+      border: 0;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+
+      .header__text-node {
+        color: #fff;
+        position: relative;
+        top: 50%;
+        transform: translate(0, -50%);
+        font-size: 1.2em;
+
+        .fa-file-signature {
+          margin-right: 5px;
+        }
+      }
+    }
+
+    .register-form__input-group {
+      margin-top: 8%;
+
+      .input-group__container {
+        width: 60%;
+        margin: auto;
+        text-align: left;
+        transition: all 0.2s ease-in-out;
+
+        .input-group__input {
+          width: 100%;
+          margin: auto;
+        }
+
+        &:focus-within {
+          color: $bgcolor;
+
+          @include tablet() {
+            transform: translate(-25px);
+
+            .input-group__input {
+              width: calc(100% + 50px);
+            }
+          }
+
+          @include desktop() {
+            transform: translate(-25px);
+
+            .input-group__input {
+              width: calc(100% + 50px);
+            }
+          }
+        }
+
+        @include phone {
+          width: 90%;
+        }
+      }
+
+      .error-container__text-danger {
+        margin: 5px;
+      }
+      .error-container__text-success {
+        margin: 5px;
+      }
+
+      padding-bottom: 5%;
+    }
+
+    .register-form__button--submit {
+      width: 60%;
+      margin-bottom: 2%;
+      border-radius: 50px;
+      border: 0;
+      background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
+      transition: all .4s ease-in-out;
+      margin-top: 4%;
+      background-size: 200%;
+      &:hover {
+        background-position: 100% 0;
+      }
+
+      @include phone {
+        width: 75%;
+      }
+    }
+
+    .input-group__register-link {
+      color: transparent;
+      background: #666666;
+      -webkit-background-clip: text;
+      -moz-background-clip: text;
+      background-clip: text;
+      text-shadow: 0px 3px 3px rgba(255, 255, 255, 0.5);
+      transition: 0.5s;
+
+      &:hover {
+        color: $bgcolor1;
+        opacity: 0.8;
+      }
+    }
+
+    @include phone {
+      width: 95vw;
+      margin-top: 20px;
+    }
+
+    @include tablet {
+      width: 50vw;
+    }
+    @include desktop {
+      min-width: 450px;
+    }
+  }
+}

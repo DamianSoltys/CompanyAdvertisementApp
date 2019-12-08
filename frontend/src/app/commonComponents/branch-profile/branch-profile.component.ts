@@ -4,11 +4,12 @@ import { BranchService } from 'src/app/services/branch.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
 import { BehaviorSubject } from 'rxjs';
-import { Position, Marker, EditRequestData } from 'src/app/user/company/company.component';
+import { Position, Marker, EditRequestData } from 'src/app/mainComponents/user/company/company.component';
 import { UserREST } from 'src/app/classes/User';
-import { SnackbarService } from 'src/app/services/snackbar.service';
+import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
 import { RecommendationService } from 'src/app/services/recommendation.service';
 import { CompanyService } from 'src/app/services/company.service';
+import { FavouriteService, FavouritePost, FavouriteResponse } from 'src/app/services/favourite.service';
 
 @Component({
   selector: 'app-branch-profile',
@@ -27,6 +28,10 @@ export class BranchProfileComponent implements OnInit {
   private companyId: number;
   public owner = new BehaviorSubject(false);
   public editData:EditRequestData;
+  public userData:UserREST;
+  public favouriteData:FavouriteResponse[];
+  public isFavourite:boolean = false;
+  private favUuid:string;
 
   constructor(
     private bDataService: BranchService,
@@ -34,7 +39,8 @@ export class BranchProfileComponent implements OnInit {
     private router: Router,
     private snackbarService:SnackbarService,
     private rDataService:RecommendationService,
-    private cDataService:CompanyService
+    private cDataService:CompanyService,
+    private fDataService:FavouriteService
   ) {}
 
   ngOnInit() {
@@ -42,9 +48,10 @@ export class BranchProfileComponent implements OnInit {
       this.branchId = params['idBranch'];
       this.companyId = params['idCompany'];
     });
-
+    this.getUserData();
     this.getBranchData();
     this.registerBranchListener();
+    this.getFavBranches();
   }
 
   public registerBranchListener() {
@@ -65,10 +72,9 @@ export class BranchProfileComponent implements OnInit {
       let companyList: GetCompany[] = JSON.parse(
         localStorage.getItem('companyData')
       );
-      let userREST: UserREST = JSON.parse(localStorage.getItem('userREST'));
-      if (companyList && userREST) {
-        if(userREST.companiesIDs) {
-          userREST.companiesIDs.forEach(companyId => {
+      if (companyList && this.userData) {
+        if(this.userData.companiesIDs) {
+          this.userData.companiesIDs.forEach(companyId => {
             if (companyId == this.companyId) {
               this.owner.next(true);
             }
@@ -92,6 +98,78 @@ export class BranchProfileComponent implements OnInit {
       branchData:JSON.stringify(editData)
     };
     this.router.navigate(['edit'],{relativeTo:this.activatedRoute,queryParams:this.editData});
+  }
+
+  public setFavouriteBranch() {
+    let favouriteData:FavouritePost = {
+      userId:this.userData.userID,
+      branchId:this.branchId
+    }
+    this.fDataService.setFavouriteBranch(favouriteData).subscribe(response=>{
+      if(response) {
+        this.getFavBranches();
+        this.snackbarService.open({
+          message:'Dodanie do ulubionych powiodło się!',
+          snackbarType:SnackbarType.success
+        });
+      } else {
+        this.snackbarService.open({
+          message:'Dodanie do ulubionych się nie powiodło!',
+          snackbarType:SnackbarType.error
+        });
+      }
+    })
+  }
+
+  private getFavBranches() {
+    if(this.userData) {
+      this.fDataService.getFavouriteBranches(this.userData.userID).subscribe(response=>{
+        if(response) {
+          this.favouriteData = response;
+          this.isFavourite = false;
+          this.favouriteData.forEach(fav=>{
+            if(this.branchId == fav.branchId) {
+              this.isFavourite = true;
+              this.favUuid = fav.favouriteBranchId;
+            }
+          });
+        } else {
+          this.isFavourite = false;
+        }
+      });
+    }
+  }
+
+  public deleteFavouriteBranch() {
+    if(this.favUuid) {
+      this.fDataService.deleteFavouriteBranch(this.favUuid).subscribe(response=>{
+        if(response){
+          this.getFavBranches();
+          this.snackbarService.open({
+            message:'Usunięcie z ulubionych się powiodło!',
+            snackbarType:SnackbarType.success
+          });
+        } else {
+          this.snackbarService.open({
+            message:'Usunięcie z ulubionych się nie powiodło!',
+            snackbarType:SnackbarType.error
+          });
+        }
+      });
+    }
+  }
+
+  private getUserData() {
+    if(storage_Avaliable('localStorage')) {
+      let userREST: UserREST = JSON.parse(localStorage.getItem('userREST')); 
+      if(userREST) {
+        this.userData = userREST;
+      } else {
+        console.log('Użytkownik nie jest zalogowany');
+      }   
+    } else {
+      console.log('Storage nie jest dostępny');
+    }
   }
 
   private getBranchData(clearDataStorage?:boolean) {

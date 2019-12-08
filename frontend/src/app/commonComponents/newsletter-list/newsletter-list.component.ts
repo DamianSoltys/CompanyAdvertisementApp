@@ -37,41 +37,45 @@ export class NewsletterListComponent implements OnInit {
 
   private removeUnwantedString() {
     this.newsletterList.map(newsletter=>{
-      if(newsletter.sendingStatus[0].detail) {
-        newsletter.sendingStatus[0].detail = newsletter.sendingStatus[0].detail.replace('Post resource: ','');
+      if(newsletter.sendingStatus) {
+        if(newsletter.sendingStatus[0].detail) {
+          newsletter.sendingStatus[0].detail = newsletter.sendingStatus[0].detail.replace('Post resource: ','');
+        }
       }
     });
   }
 
   private translateText() {
     this.newsletterList.map(newsletter=>{
-      switch(newsletter.sendingStatus[0].sendingStatus) {
-        case SendStatus.DELAYED:{
-          newsletter.sendingStatus[0].sendingStatus = 'Wysyłka opóźniona';
-          break;
+      if(newsletter.sendingStatus) {
+        switch(newsletter.sendingStatus[0].sendingStatus) {
+          case SendStatus.DELAYED:{
+            newsletter.sendingStatus[0].sendingStatus = 'Wysyłka opóźniona';
+            break;
+          }
+          case SendStatus.SENT:{
+            newsletter.sendingStatus[0].sendingStatus = 'Wysłany';
+            break;
+          }
+          case SendStatus.WAITING:{
+            newsletter.sendingStatus[0].sendingStatus = 'Oczekiwanie na wysłanie';
+            break;
+          }
         }
-        case SendStatus.SENT:{
-          newsletter.sendingStatus[0].sendingStatus = 'Wysłany';
-          break;
-        }
-        case SendStatus.WAITING:{
-          newsletter.sendingStatus[0].sendingStatus = 'Oczekiwanie na wysłanie';
-          break;
-        }
-      }
-
-      switch(newsletter.sendingStatus[0].destination.toUpperCase()) {
-        case Destination.FB:{
-          newsletter.sendingStatus[0].destination = "Facebook"
-          break;
-        }
-        case  Destination.TWITTER:{
-          newsletter.sendingStatus[0].destination = 'Twitter';
-          break;
-        }
-        case  Destination.NEWSLETTER:{
-          newsletter.sendingStatus[0].destination = 'Newsletter';
-          break;
+  
+        switch(newsletter.sendingStatus[0].destination.toUpperCase()) {
+          case Destination.FB:{
+            newsletter.sendingStatus[0].destination = "Facebook"
+            break;
+          }
+          case  Destination.TWITTER:{
+            newsletter.sendingStatus[0].destination = 'Twitter';
+            break;
+          }
+          case  Destination.NEWSLETTER:{
+            newsletter.sendingStatus[0].destination = 'Newsletter';
+            break;
+          }
         }
       }
     });
@@ -81,11 +85,13 @@ export class NewsletterListComponent implements OnInit {
     moment.locale('pl');
     this.newsletterList.map(newsletter=>{
       newsletter.addedTime = moment.unix(newsletter.addedTime).format('LLL');
-      if(newsletter.sendingStatus[0].plannedSendingAt) {
-        newsletter.sendingStatus[0].plannedSendingAt = moment.unix(newsletter.sendingStatus[0].plannedSendingAt).format('LLL');
-      }
-      if(newsletter.sendingStatus[0].sendAt) {
-        newsletter.sendingStatus[0].sendAt = moment.unix(newsletter.sendingStatus[0].sendAt).format('LLL');
+      if(newsletter.sendingStatus) {
+        if(newsletter.sendingStatus[0].plannedSendingAt) {
+          newsletter.sendingStatus[0].plannedSendingAt = moment.unix(newsletter.sendingStatus[0].plannedSendingAt).format('LLL');
+        }
+        if(newsletter.sendingStatus[0].sendAt) {
+          newsletter.sendingStatus[0].sendAt = moment.unix(newsletter.sendingStatus[0].sendAt).format('LLL');
+        }
       }
     });
   }

@@ -61,7 +61,7 @@
                 [latitude]="mapMarker.latitude"
                 [longitude]="mapMarker.longitude"             
               >
-              <agm-info-window>Lokalizacvja</agm-info-window>
+              <agm-info-window>Lokalizacja</agm-info-window>
               </agm-marker>
             </agm-map>
           </div>
@@ -74,6 +74,22 @@
             (click)="showEditForm()"
           >
             Edycja danych
+          </button>
+        </span>
+        <span class="section--buttons__user-buttons" *ngIf="!owner.value && userData">
+          <button
+            class="btn btn-primary user-buttons__button--favourites"
+            (click)="setFavouriteBranch()"
+            *ngIf="!isFavourite"
+          >
+            Dodaj do ulubionych
+          </button>
+          <button
+            class="btn btn-primary user-buttons__button--favourites"
+            (click)="deleteFavouriteBranch()"
+            *ngIf="isFavourite"
+          >
+            Usuń z ulubionych
           </button>
         </span>
       </div>

@@ -26,15 +26,14 @@ enum SendStrategy {
 }
 
 enum MediaOptions {
-  withMedia = 'Wysyłka do medii społecznościowych',
-  withoutMedia = 'Standardowa wysyłka newslettera',
-  onlyMedia = 'Wysyłka tylko do medii społecznościowych'
+  withoutMedia = 'Newsletter',
+  withMedia = 'Facebook'
 }
 
 enum MediaType {
   FB = 'Facebook',
   TWITTER = 'Twitter',
-  ALL = 'Wszystkie media'
+  NEWSLETTER = 'Newsletter'
 }
 
 @Component({
@@ -94,7 +93,7 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     'Edytor HTML'
   ]
   public mediaOptions = [
-    'Standardowa wysyłka newslettera',
+    'Newsletter',
   ]
   public sendingTypeOptions= [
     'Wysyłka z opóźnieniem',
@@ -129,7 +128,6 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
   @ViewChild('formTypeSelect') formTypeSelect:SelectDropDownComponent;
   @ViewChild('sendingTypeSelect') sendingTypeSelect:SelectDropDownComponent;
   @ViewChild('mediaSelect') mediaSelect:SelectDropDownComponent;
-  @ViewChild('mediaTypeSelect') mediaTypeSelect:SelectDropDownComponent;
 
   ngOnInit() {
    this.getActualUser();
@@ -147,38 +145,31 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     this.lDataService.checkIfMediaConnected(this.paramId).subscribe(response=>{
       let connectionData = <MediaConnection[]>response;
       if(connectionData.length) {
-        connectionData.forEach(data=>{
-          if(data.socialPlatform === MediaTypeEnum.FB && data.connectionStatus.status === ConnectionStatus.connected) {
-            this.mediaTypeOptions = [...this.mediaTypeOptions,'Facebook'];      
-          } else if(data.socialPlatform === MediaTypeEnum.TWITTER && data.connectionStatus.status === ConnectionStatus.connected){
-            this.mediaTypeOptions = [...this.mediaTypeOptions,'Twitter'];
-          }
-        });
+        // connectionData.forEach(data=>{
+        //   if(data.socialPlatform === MediaTypeEnum.FB && data.connectionStatus.status === ConnectionStatus.connected) {
+        //     this.mediaTypeOptions = [...this.mediaTypeOptions,'Facebook'];      
+        //   } else if(data.socialPlatform === MediaTypeEnum.TWITTER && data.connectionStatus.status === ConnectionStatus.connected){
+        //     this.mediaTypeOptions = [...this.mediaTypeOptions,'Twitter'];
+        //   }
+        // });   
 
-        if(connectionData.length > 1) {
-          this.mediaTypeOptions = [...this.mediaTypeOptions,'Wszystkie media'];
-        } 
-
-        if(!this.mediaTypeSelect.value && this.mediaTypeOptions.length) {
-          this.mediaOptions = [...this.mediaOptions,'Wysyłka do medii społecznościowych','Wysyłka tylko do medii społecznościowych'];
-          this.isFBConnected = true;
-          this.mediaTypeSelect.writeValue(this.mediaTypeOptions[0]);
-        }
-        
+        this.mediaOptions = [...this.mediaOptions,'Facebook'];
+        this.isFBConnected = true;
+       
       }else {
         console.log(response);
       }
     });
   }
   private setDefaultValues() {
-    this.mediaSelect.selectItem('Standardowa wysyłka newslettera');
+    this.mediaSelect.selectItem('Newsletter');
     this.typeSelect.selectItem('Informacja');
     this.formTypeSelect.selectItem('Edytor HTML');
     this.sendingTypeSelect.selectItem('Wysyłka natychmiastowa');
   }
 
   private setFormVisibility() {
-    if(this.mediaSelect.value === MediaOptions.onlyMedia) {
+    if(this.mediaSelect.value[0] === MediaOptions.withMedia && this.mediaSelect.value.length == 1) {
       this.onlyMedia.next(true);
       this.isText.next(false);
       this.isEdit.next(false);
@@ -200,7 +191,7 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
       this.isEdit.next(false);
     }
 
-    if(this.mediaSelect.value === MediaOptions.withoutMedia) {
+    if(this.mediaSelect.value[0] === MediaOptions.withoutMedia && this.mediaSelect.value.length == 1) {
       this.isMedia.next(false);  
     }else {
       this.isMedia.next(true);
@@ -229,7 +220,7 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
 
   public checkForChanges(element:SelectDropDownComponent) {
     this.setFormVisibility();
-    if(!element.value) {
+    if(!element.value || !element.value.length) {
       element.selectItem(element.options[0]);
     }
   }
@@ -263,9 +254,7 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     this.setContentValues(editorName);
     this.setDateValues();
     this.setMediaValues();
-  
-    console.log(this.sendingOptions);
-
+    console.log(this.sendingOptions)
     if(this.sendingOptions) {
       if(this.sendingOptions.sendingStrategy === SendingStrategy.DELAYED && !this.sendingOptions.plannedSendingTime) {
         this.snackbar.open({
@@ -299,7 +288,6 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     this.sendingOptions.destinations = [];
 
     this.sendingOptions.companyId = this.paramId;
-    this.sendingOptions.destinations.push(Destination.NEWSLETTER);
     this.sendingOptions.emailTitle = this.textForm.controls.title.value;
     this.sendingOptions.name = this.textForm.controls.name.value;
   }
@@ -363,15 +351,17 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
         this.sendingOptions.destinations = [];
       }
 
-        if(this.mediaTypeSelect.value === MediaType.FB) {
+      let destinationValue:any[] = this.mediaSelect.value;
+
+      destinationValue.forEach(value=>{
+        if(value === MediaType.FB) {
           this.sendingOptions.destinations.push(Destination.FB);
-        } else if(this.mediaTypeSelect.value === MediaType.TWITTER) {
-          this.sendingOptions.destinations.push(Destination.TWITTER);
         } else {
-          this.sendingOptions.destinations.push(Destination.TWITTER);
-          this.sendingOptions.destinations.push(Destination.FB);
+          this.sendingOptions.destinations.push(Destination.NEWSLETTER);
         }
-      
+      });
+    } else {
+      this.sendingOptions.destinations.push(Destination.NEWSLETTER);
     }
   }
 

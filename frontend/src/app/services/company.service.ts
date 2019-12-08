@@ -5,7 +5,7 @@ import { HttpClient, HttpHeaders, HttpRequest, HttpResponse, HttpParams } from '
 import { Company, Branch, Address, GetCompany } from '../classes/Company';
 import { UserREST } from '../classes/User';
 import { BehaviorSubject, Subject, Observable } from 'rxjs';
-import { EditRequestData } from '../user/company/company.component';
+import { EditRequestData } from '../mainComponents/user/company/company.component';
 import { UserService } from './user.service';
 
 @Injectable({
@@ -166,11 +166,12 @@ export class CompanyService {
 
   }
 
-  public storeCompanyData(company: GetCompany) {
+  public storeCompanyData(company: GetCompany,profile?:boolean) {
+    let storeKey = profile?'companyProfileData':'companyData';
     if (storage_Avaliable('localStorage')) {
-      if (localStorage.getItem('companyData')) {
+      if (localStorage.getItem(storeKey)) {
         let companyData: GetCompany[] = JSON.parse(
-          localStorage.getItem('companyData')
+          localStorage.getItem(storeKey)
         );
        let data = companyData.find((element)=>{
         return element.companyId === company.companyId;
@@ -179,14 +180,14 @@ export class CompanyService {
         if (!data) {
           companyData.push(company);
           console.log('data')
-          localStorage.setItem('companyData', JSON.stringify(companyData));
+          localStorage.setItem(storeKey, JSON.stringify(companyData));
         }
 
       } else {
         let companyData:GetCompany[] = [];
         companyData.push(company);
         console.log('data')
-        localStorage.setItem('companyData', JSON.stringify(companyData));
+        localStorage.setItem(storeKey, JSON.stringify(companyData));
       }
     } else {
       console.log('Store niedostępny');

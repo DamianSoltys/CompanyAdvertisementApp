@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { SearchResponse, SectionData } from '../classes/Section';
 import { FormGroup } from '@angular/forms';
-import { AdvSearchData } from '../search/advanced-search/advanced-search.component';
+import { AdvSearchData } from '../mainComponents/search/advanced-search/advanced-search.component';
 
 @Injectable({
   providedIn: 'root'
@@ -53,7 +53,6 @@ export class SearchService {
   }
 
   public paginator(items, page?, per_page?) {
- 
     var page = page || 1,
     per_page = per_page || 10,
     offset = (page - 1) * per_page,

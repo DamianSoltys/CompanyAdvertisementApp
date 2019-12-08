@@ -1,0 +1,46 @@
+<div class="home-component">
+  <div class="row home-component__header">
+    <h1 class="header__text-node">Polecane Zakłady</h1>
+  </div>
+  <div *ngIf="branchList">
+      <carousel-component class="home-component__carousel-component" #carousel>
+          <div class="item-carousel" *ngFor="let branch of branchList">
+            <div class="item-carousel__header">Zakład:{{branch.name}}</div>
+            <img src="{{branch.logo}}" alt="{{branch.name}}" class="item-carousel__image">
+            <div class="item-carousel__content">
+              <div class="content__information" >
+                  <div class="information__data">
+                    <p class="data__text-node">Kategoria:{{branch.category}}</p>
+                  </div>
+                <div class="information__rate-container" *ngIf="branch.averageRating">
+                  <span class="rate-container__text-node">Ocena:</span>
+                    <ngb-rating class="rate-container__rate" [(rate)]="branch.averageRating" [max]="5" [readonly]="true" >
+                        <ng-template let-fill="fill" let-index="index">
+                            <span class="star" [class.filled]="fill === 100">&#9733;</span>
+                          </ng-template>
+                      </ngb-rating>
+                </div>
+                <div class="information__empty-rate" *ngIf="!branch.averageRating">
+                  <p class="empty-rate__text-node">Zakład nie został jeszcze oceniony</p>
+                </div>
+                <div class="information__nearby" *ngIf="branch.isInsideArea">
+                    <p class="nearby__text-node">Ten zakład znajduje się obok ciebie</p>
+                  </div>
+              </div>
+              <div class="content__button">
+                <a [routerLink]="[ '/branchProfile', branch.companyId,branch.branchId ]" class="btn btn-primary button--link">Przejdź do profilu</a>
+              </div>
+            </div>
+            <div></div>
+          </div>
+          
+      </carousel-component>
+      <div class="home-component__button-container">
+        <button class="btn btn-primary button-container__button--pause" (click)="toggleCarousel()">{{toggleText}}</button>
+      </div>
+  </div>
+  <div class="home-component__empty-list" *ngIf="!branchList">
+    <p class="empty-list__text-node">Niestety nie udało się znaleść żadnych zakładów pasujących do twoich preferencji</p>
+  </div>
+</div>
+

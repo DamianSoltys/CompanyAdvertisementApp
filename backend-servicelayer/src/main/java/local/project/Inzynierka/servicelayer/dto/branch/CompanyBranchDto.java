@@ -23,4 +23,5 @@ public class CompanyBranchDto {
     private String putLogoURL;
     private String logoKey;
     private Boolean hasLogoAdded;
+    private Long companyId;
 }

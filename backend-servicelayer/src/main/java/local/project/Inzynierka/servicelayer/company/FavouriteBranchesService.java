@@ -8,7 +8,6 @@ import local.project.Inzynierka.persistence.repository.FavouriteBranchRepository
 import local.project.Inzynierka.servicelayer.dto.branch.FavouriteBranchGetDto;
 import local.project.Inzynierka.servicelayer.dto.branch.FavouriteBranchPostDto;
 import local.project.Inzynierka.servicelayer.errors.UnexistingBranchException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

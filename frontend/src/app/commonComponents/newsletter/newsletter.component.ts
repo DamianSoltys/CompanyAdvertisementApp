@@ -360,6 +360,8 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
           this.sendingOptions.destinations.push(Destination.NEWSLETTER);
         }
       });
+    } else {
+      this.sendingOptions.destinations.push(Destination.NEWSLETTER);
     }
   }
 

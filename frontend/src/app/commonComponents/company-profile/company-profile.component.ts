@@ -11,7 +11,7 @@ import { CompanyService } from 'src/app/services/company.service';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { BranchService } from 'src/app/services/branch.service';
-import { EditRequestData } from 'src/app/user/company/company.component';
+import { EditRequestData } from 'src/app/mainComponents/user/company/company.component';
 import { UserREST } from 'src/app/classes/User';
 import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
 import { FormErrorService } from 'src/app/services/form-error.service';

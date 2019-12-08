@@ -1,0 +1,129 @@
+@import '../../../commonStyles/shared';
+
+.search-component {
+  margin-top: 4%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  .search-component__search-data-container {
+    width: 60%;
+    @include phone {
+      width: 100%;
+    }
+
+    .search-data-container__quantity {
+      color:darken($bgcolor,10%);
+      font-size: 1.2rem;
+      padding-top:10px;
+    }
+    .search-data-container__buttons {
+      display: flex;
+      justify-content: center;
+      .buttons__button {
+        &--previous,&--next {
+          border:0;
+          border-radius: 50px;
+          background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
+          transition: all .4s ease-in-out;
+          background-size: 200%;
+          margin-top:10px;
+          &:hover {
+            background-position: 100% 0;
+          }
+        }
+      
+      }
+      .buttons__text-node {
+        font-size: 1.5rem;
+        color:darken($bgcolor,10%);
+        margin:10px;
+      }
+    }
+  }
+
+  .search-component__empty {
+    margin-top:20px;
+    .empty__text-node {
+      font-size: 1.2rem;
+      color:darken($bgcolor,10%);
+    }
+  }
+}
+
+.search-component__form {
+  width: 50%;
+  position: relative;
+  text-align: center;
+
+  .form__text-node {
+    font-size: 2em;
+  }
+
+  .form_main-container {
+    display: flex;
+
+    .main-container__icon {
+      position: relative;
+      left: 50%;
+      top: 45%;
+      transform: translate(-50%, -50%);
+      font-size: 1.5em;
+      color: $bgcolor;
+    }
+
+    .main-container__input {
+      margin-left: 2%;
+      margin-right: 2%;
+    }
+
+    .main-container__button--search {
+      width: 30%;
+      background-color: $bgcolor;
+      border: 0;
+      transition: 0.5s;
+
+      &:hover {
+        opacity: 0.8;
+        background-color: $bgcolor1;
+      }
+
+      @include phone() {
+        width: 95%;
+        position: relative;
+      }
+    }
+
+    .main-container__span-icon {
+      height: 38px;
+    }
+
+    .main-container__popover {
+      display: none;
+    }
+  }
+}
+
+@include phone() {
+  .search-component__form {
+    width: 100%;
+
+    .form__text-node {
+      font-size: 1.5rem;
+    }
+  }
+
+  .form_main-container {
+    flex-wrap: wrap;
+
+    .main-container__span-icon {
+      margin: auto;
+    }
+
+    .main-container__button--search {
+      margin: auto;
+      margin-top: 4%;
+      width: 40%;
+    }
+  }
+}

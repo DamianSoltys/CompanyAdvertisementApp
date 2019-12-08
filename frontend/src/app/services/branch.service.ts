@@ -5,7 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Company, Branch, Address, GetCompany, RecommendationBranch } from '../classes/Company';
 import { UserREST } from '../classes/User';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { EditRequestData } from '../user/company/company.component';
+import { EditRequestData } from '../mainComponents/user/company/company.component';
 
 
 @Injectable({

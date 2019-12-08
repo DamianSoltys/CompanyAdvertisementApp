@@ -5,7 +5,7 @@ import { HttpClient, HttpHeaders, HttpRequest, HttpResponse, HttpParams } from '
 import { Company, Branch, Address, GetCompany } from '../classes/Company';
 import { UserREST } from '../classes/User';
 import { BehaviorSubject, Subject, Observable } from 'rxjs';
-import { EditRequestData } from '../user/company/company.component';
+import { EditRequestData } from '../mainComponents/user/company/company.component';
 import { UserService } from './user.service';
 
 @Injectable({

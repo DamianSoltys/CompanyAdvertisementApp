@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BranchProfileComponent } from './branch-profile.component';
 import { BranchProfileRoutingModule } from './branch-profile-routing.module';
 import { AgmCoreModule } from '@agm/core';
-import { CompanyModule } from 'src/app/user/company/company.module';
+import { CompanyModule } from 'src/app/mainComponents/user/company/company.module';
 import { CommentsModule } from '../comments/comments.module';
 
 @NgModule({

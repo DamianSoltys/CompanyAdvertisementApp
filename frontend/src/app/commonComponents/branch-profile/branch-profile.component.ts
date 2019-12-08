@@ -4,7 +4,7 @@ import { BranchService } from 'src/app/services/branch.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
 import { BehaviorSubject } from 'rxjs';
-import { Position, Marker, EditRequestData } from 'src/app/user/company/company.component';
+import { Position, Marker, EditRequestData } from 'src/app/mainComponents/user/company/company.component';
 import { UserREST } from 'src/app/classes/User';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { RecommendationService } from 'src/app/services/recommendation.service';

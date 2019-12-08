@@ -5,14 +5,16 @@ import { CommentResponse } from 'src/app/classes/Section';
 import { storage_Avaliable } from 'src/app/classes/storage_checker';
 import { UserREST } from 'src/app/classes/User';
 import { BranchService } from 'src/app/services/branch.service';
-import { CommentsService, OpinionData } from 'src/app/services/comments.service';
+import { CommentsService, OpinionData, RatingData } from 'src/app/services/comments.service';
 import { HttpParams } from '@angular/common/http';
 import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
 export interface FavBranchData {
   favData?:FavouriteResponse,
   branchData?:Branch,
-  rating?:OpinionData
+  rating?:RatingData[],
+  avgRate?:number,
 }
+
 @Component({
   selector: 'app-favourite-branches',
   templateUrl: './favourite-branches.component.html',
@@ -54,7 +56,8 @@ export class FavouriteBranchesComponent implements OnInit {
                 let httpParams = new HttpParams().set('branchId',favResponse.favData.branchId.toString());
                 this.cDataService.getRating(httpParams).subscribe(response=>{
                   if(response) {
-                    favResponse.rating = response;
+                    favResponse.rating = response.rating;
+                    favResponse.avgRate = this.calculateAvgRate(favResponse.rating);
                     this.bDataService.getBranchLogo(favResponse.branchData).subscribe(response=>{
                       if(response.status !=204) {
                         let reader = new FileReader();
@@ -78,12 +81,19 @@ export class FavouriteBranchesComponent implements OnInit {
               }
             });
           });
-          console.log(this.branchData)
         } else {
           this.loaded = true;  
         }
       });
     }
+  }
+
+  private calculateAvgRate(rateData:RatingData[]):number {
+    let avgRate:number = 0;
+    rateData.forEach(data=>{
+      avgRate+=data.rating;
+    });
+    return avgRate/=rateData.length;
   }
 
   public deleteFavBranch(favId:string) {

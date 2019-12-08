@@ -85,6 +85,14 @@
                             .text-node__label {
                                 font-size: 1.1rem;
                                 color:darken($bgcolor,10%);
+                                padding-right: 5px;
+                            }
+                            .star {
+                                color:darken($bgcolor,10%);
+                                font-size:1.2rem;
+                            }                     
+                            .filled {
+                                color: #fff200;
                             }
                         }
                     }

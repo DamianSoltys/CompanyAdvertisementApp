@@ -13,11 +13,19 @@
             <img src="{{fav.branchData.logo}}" alt="{{fav.branchData.name}}" class="logo__image">
           </div>
           <div class="container__info">
-            <p class="info__text-node"><span class="text-node__label">Nazwa zakładu</span>:{{fav.branchData.name}}</p>
+            <p class="info__text-node"><span class="text-node__label">Nazwa zakładu:</span>{{fav.branchData.name}}</p>
+            <p class="info__text-node"><span class="text-node__label">Kategoria:</span>{{fav.branchData.category}}</p>
+            <p class="info__text-node"><span class="text-node__label">Ocena:</span>
+              <ngb-rating class="rate_rating-component" [(rate)]="fav.avgRate" [max]="5" [readonly]="true">
+                <ng-template let-fill="fill" let-index="index">
+                  <span class="star" [class.filled]="fill === 100">&#9733;</span>
+                </ng-template>
+              </ngb-rating>
+            </p>
           </div>
           <div class="container__button">
             <button (click)="deleteFavBranch(fav.favData.favouriteBranchId)" class="btn btn-primary button__button">Usuń z ulubionych</button>
-            <button class="btn btn-primary button__button">Przejdź do profilu</button>
+            <button class="btn btn-primary button__button" [routerLink]="['/branchProfile',fav.branchData.companyId,fav.favData.branchId]">Przejdź do profilu</button>
           </div>
         </div>
       </div>

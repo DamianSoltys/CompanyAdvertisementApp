@@ -5,19 +5,25 @@ import { SearchResponse, CommentResponse } from '../classes/Section';
 import { OpinionListData } from '../commonComponents/comments/comments.component';
 
 export interface OpinionData {
-  comment?:any;
-  rating?:any;
+  comment?:CommentData[];
+  rating?:RatingData[];
   numberOfPages?:number;
 }
 
-interface CommentData {
-  comment?:string;
-  branchId:number;
+export interface CommentData {
+  comment?:string,
+  branchId:number,
+  commentId?:number,
+  userId?:number,
+  isOwnBranchCommented?:boolean,
+  username?:string,
 }
 
-interface RatingData {
-  rating?:number;
-  branchId:number;
+export interface RatingData {
+  rating?:number,
+  branchId?:number,
+  ratingId?:number,
+  userId?:number,
 }
 @Injectable({
   providedIn: 'root'

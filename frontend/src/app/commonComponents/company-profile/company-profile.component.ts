@@ -113,7 +113,7 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
               let reader = new FileReader();
                 reader.addEventListener("load", () => {
                     this.companyData.logo = reader.result;
-                    this.cDataService.storeCompanyData(this.companyData);
+                    this.cDataService.storeCompanyData(this.companyData,true);
                     this.checkForCompanyOwnership();
                     this.getBranchData();
                 }, false);
@@ -123,13 +123,13 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
                 }
             } else {
             this.companyData.logo = this.cDataService.defaultCProfileUrl;
-            this.cDataService.storeCompanyData(this.companyData);
+            this.cDataService.storeCompanyData(this.companyData,true);
             this.checkForCompanyOwnership();
             this.getBranchData();
             }
           },error=>{
             this.companyData.logo = this.cDataService.defaultCProfileUrl;
-            this.cDataService.storeCompanyData(this.companyData);
+            this.cDataService.storeCompanyData(this.companyData,true);
             this.checkForCompanyOwnership();
             this.getBranchData();
           });
@@ -148,7 +148,7 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
   private getStorageCompanyData() {
     if (storage_Avaliable('localStorage')) {
       let companyData: GetCompany[] = JSON.parse(
-        localStorage.getItem('companyData')
+        localStorage.getItem('companyProfileData')
       );
       if(companyData) {
         companyData.forEach(company => {
@@ -262,6 +262,7 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
     if(this.newsletterFormGuest.valid) {
       this.nDataService.saveToNewsletter(this.newsletterFormGuest.controls.email.value,this.companyData.companyId).subscribe(response=>{
         if(this.userREST) {
+          this.checkNewsletterSubscription();
           this.snackbarService.open({
             message:'Zostałeś zapisany na newsletter!',
             snackbarType:SnackbarType.success,

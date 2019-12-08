@@ -67,6 +67,35 @@ export class CommentsService {
   }
 
   public getOpinion(opinionData:OpinionListData,pageNumber?:number):Subject<OpinionData> {
+    let subject = new Subject<OpinionData>();
+
+       this.getComment(opinionData,pageNumber).subscribe(response=>{
+        let httpRatingParams= new HttpParams().set('branchId',opinionData.branchId.toString());
+        this.getRating(httpRatingParams,response).subscribe(response=>{
+          subject.next(response);
+        });
+       });
+    
+    return subject;
+  }
+
+  public getRating(httpRatingParams:HttpParams,data?:OpinionData,) {
+    if(!data) {
+       data = {};
+    }  
+    let subject = new Subject<OpinionData>();
+    this.http.get(`http://localhost:8090/api/rating`,{observe:'response',params:httpRatingParams}).subscribe(response=>{
+      let responseData = <CommentResponse>response.body;
+      data.rating = responseData.content;
+      subject.next(data);
+    },error=>{
+      console.log(error);
+      subject.next(null);
+    });
+    return subject;
+  }
+
+  public getComment(opinionData:OpinionListData,pageNumber?:number) {
     let data:OpinionData ={};
     let subject = new Subject<OpinionData>();
     let httpCommentParams:HttpParams;
@@ -75,25 +104,17 @@ export class CommentsService {
     } else {
       httpCommentParams= new HttpParams().set('branchId',opinionData.branchId.toString()).set('size','3').set('page',pageNumber.toString());
     }
-
     this.http.get(`http://localhost:8090/api/comment`,{observe:'response',params:httpCommentParams}).subscribe(response=>{
        let responseData = <CommentResponse>response.body;
        console.log(responseData)
        data.comment = responseData.content;
        data.numberOfPages = responseData.totalPages;
-       let httpRatingParams= new HttpParams().set('branchId',opinionData.branchId.toString());
-      this.http.get(`http://localhost:8090/api/rating`,{observe:'response',params:httpRatingParams}).subscribe(response=>{
-        let responseData = <CommentResponse>response.body;
-        data.rating = responseData.content;
-        subject.next(data);
-      },error=>{
-        console.log(error);
-        subject.next(null);
-      });
+       subject.next(data);
      },error=>{
        console.log(error);
        subject.next(null);
      });
+
     return subject;
   }
 }

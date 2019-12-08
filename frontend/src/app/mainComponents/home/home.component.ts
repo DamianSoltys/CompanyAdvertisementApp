@@ -58,7 +58,9 @@ export class HomeComponent implements OnInit,AfterViewInit,OnDestroy {
 
   ngOnDestroy() {
     clearInterval(this.carouselInterval);
-    this.subscription.unsubscribe();
+    if(this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   public setCarouselInterval() {

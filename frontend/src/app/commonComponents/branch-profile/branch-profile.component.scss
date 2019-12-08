@@ -150,15 +150,15 @@
           flex-direction: column;
         }
 
-        .section--buttons__owner-buttons {
+        .section--buttons__owner-buttons,.section--buttons__user-buttons {
           width: 20%;
           margin: 10px;
           @include phone {
             width: 95%;
           }
 
-          .owner-buttons__button {
-            &--edit {
+          .owner-buttons__button,.user-buttons__button {
+            &--edit,&--favourites {
               width: 100%;
               border-radius: 50px;
               border: 0;

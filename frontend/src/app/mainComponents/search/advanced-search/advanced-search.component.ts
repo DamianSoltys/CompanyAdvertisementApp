@@ -82,7 +82,7 @@ export class AdvancedSearchComponent implements OnInit {
   public companyNumber:number;
   public branchNumber:number;
   public searchData:any;
-  public totalPages:number;
+  public resultText:string;
   constructor(private sDataService:SearchService,private fb:FormBuilder,private snackbarService:SnackbarService) { }
 
   ngOnInit() {
@@ -110,7 +110,7 @@ export class AdvancedSearchComponent implements OnInit {
       this.sectionData = this.responseBody.result;
       this.dataNumber = this.responseBody.branchesNumber + this.responseBody.companiesNumber;
       this.actualList = this.sDataService.paginator(this.sectionData,1,3);
-      this.totalPages = this.actualList.total_pages;
+      this.resultText = this.resultText = this.sDataService.polishPlural('wynik','wyniki','wyników',this.dataNumber);
       if(this.sectionData) {
         this.getImages();
       }else {

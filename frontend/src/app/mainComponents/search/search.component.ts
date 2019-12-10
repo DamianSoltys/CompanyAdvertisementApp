@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import * as $ from 'jquery';
-import { SearchService } from '../../services/search.service';
 import { SearchResponse, SectionData } from '../../classes/Section';
 import { Subject, BehaviorSubject } from 'rxjs';
+import { SearchService } from 'src/app/services/search.service';
 export interface Paginator {
     page: any,
     per_page: any,
@@ -32,9 +32,10 @@ export class SearchComponent implements OnInit {
   public companyNumber:number;
   public branchNumber:number;
   public searchData:any;
-  public totalPages:number;
+  public companyResultText:string;
+  public branchResultText:string;
   public isEmptyMessage = new BehaviorSubject(false);
-  constructor(private fb: FormBuilder, private searchS: SearchService) {
+  constructor(private fb: FormBuilder, private sDataService: SearchService) {
     this.searchform = fb.group({
       search: ['']
     });
@@ -72,14 +73,15 @@ export class SearchComponent implements OnInit {
     this.companyNumber = 0;
     this.branchNumber = 0;
     
-    this.searchS.sendSearchData(this.searchData).subscribe(response=>{
+    this.sDataService.sendSearchData(this.searchData).subscribe(response=>{
       console.log(response)
       this.responseBody = <SearchResponse>response.body  
       this.sectionData = this.responseBody.result;
       this.companyNumber = this.responseBody.companiesNumber;
       this.branchNumber = this.responseBody.branchesNumber;
-      this.actualList = this.searchS.paginator(this.sectionData,1,3);
-      this.totalPages = this.actualList.total_pages;
+      this.actualList = this.sDataService.paginator(this.sectionData,1,3);
+      this.companyResultText = this.sDataService.polishPlural('firmę','firm','firmy',this.companyNumber);
+      this.branchResultText = this.sDataService.polishPlural('zakład','zakładów','zakłady',this.branchNumber);
       this.isEmptyMessage.next(this.sectionData.length?false:true);
       subject.next(this.getImages(true));
   },error=>{
@@ -90,7 +92,7 @@ export class SearchComponent implements OnInit {
 
 public getImages(firstRequest?:boolean) {
   this.sectionData.map(data=>{
-    this.searchS.getSearchSectionLogo(data).subscribe(response=>{
+    this.sDataService.getSearchSectionLogo(data).subscribe(response=>{
       if(response.status != 204) {
         let reader = new FileReader();
         reader.addEventListener("load", () => {
@@ -102,11 +104,11 @@ public getImages(firstRequest?:boolean) {
           reader.readAsDataURL(<any>response.body);
       }
     }else {
-      data.logo = this.searchS.defaultSearchLogo;
+      data.logo = this.sDataService.defaultSearchLogo;
       return true;
     }
   },error=>{
-    data.logo = this.searchS.defaultSearchLogo;
+    data.logo = this.sDataService.defaultSearchLogo;
     console.log(error);
     return true;
   });
@@ -115,14 +117,14 @@ public getImages(firstRequest?:boolean) {
 
 public previousPage() {
   if(this.actualList.pre_page) {
-    this.actualList = this.searchS.paginator(this.sectionData,this.actualList.pre_page,3);
+    this.actualList = this.sDataService.paginator(this.sectionData,this.actualList.pre_page,3);
     console.log(this.actualList)
   }
 }
 
 public nextPage() {
   if(this.actualList.next_page) {
-    this.actualList = this.searchS.paginator(this.sectionData,this.actualList.next_page,3);
+    this.actualList = this.sDataService.paginator(this.sectionData,this.actualList.next_page,3);
     console.log(this.actualList)
   }
 }

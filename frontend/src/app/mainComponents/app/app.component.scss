@@ -113,25 +113,13 @@ html {
 
 .logo-container__logo-img {
   max-width: 150px;
-  left: -10px;
   transition: 0.5s;
   position: absolute;
-  top: -70px;
-
-  @include tablet {
-    max-width: 300px;
-    top: -120px;
-  }
-
-  @include tabletbig {
-    max-width: 220px;
-    left: -20px;
-    top: -80px;
-  }
+  top: -27px;
 
   @include desktop {
-    max-width: 350px;
-    top: -140px;
+    max-width: 250px;
+    top: -20px;
   }
 }
 
@@ -142,8 +130,8 @@ html {
 .logo-container__link-span {
   position: absolute;
   z-index: 1;
-  width: 295px;
-  height: 50px;
+  width: 255px;
+  height: 55px;
 
   &:hover {
     cursor: pointer;
@@ -160,8 +148,8 @@ html {
   @include phone {
     top: -10px;
     left: 3px;
-    width: 122px;
-    height: 20px;
+    width: 150px;
+    height: 25px;
   }
 
   @include tabletbig {

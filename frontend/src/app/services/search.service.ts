@@ -34,15 +34,19 @@ export class SearchService {
   }
 
   public sendAdvSearchData(formData: AdvSearchData) {
-    if(formData.type) {
-      formData.type = formData.type.map(value=>{  
-        if(value == 'Firma') {
-          return value = 'company';
-        } else {
-          return value = 'branch';
-        }
-      });
+    if(formData.type.length) {
+        formData.type = formData.type.map(value=>{  
+          if(value == 'Firma') {
+            return value = 'company';
+          } else  {
+            return value = 'branch';
+          } 
+        });
+      
+    } else {
+      formData.type = null;
     }
+
     let httpParams = this.setParams(formData);
     console.log(httpParams)
     return this.http.get(
@@ -79,31 +83,13 @@ export class SearchService {
     }
   }
   
-  public getActualAdvSearchPage(formData: AdvSearchData, pageNumber:number) {
-    if(formData.type) {
-      formData.type = formData.type.map(value=>{  
-        if(value == 'Firma') {
-          return value = 'company';
-        } else {
-          return value = 'branch';
-        }
-      });
-    }
-    let httpParams = this.setParams(formData,pageNumber);
-    console.log(httpParams)
-    return this.http.get(
-      `http://localhost:8090/api/search-adv`,
-      { observe: 'response' ,params: httpParams}
-    );
-
-  }
   public setParams(formData:AdvSearchData,pageNumber?:number):HttpParams {
     let httpParams:HttpParams = new HttpParams();
     Object.keys(formData).forEach(param => {
       if (formData[param]) {
           httpParams = httpParams.set(param, formData[param]);
       }
-  });
+    });
 
     if(pageNumber) {
       httpParams = httpParams.set('page',`${pageNumber}`);

@@ -23,9 +23,12 @@
     
     .section-container__section-logo {
       .section-logo__logo {
-        width:50%;
-        height:100%;
-        padding:10px;
+        min-height: 150px;
+        min-width: 150px;
+        max-height: 150px;
+        max-width: 150px;
+        border:1px solid $bgcolor;
+        margin:10px;
       }
     }
   

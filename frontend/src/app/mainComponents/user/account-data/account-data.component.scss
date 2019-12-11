@@ -2,6 +2,10 @@
 
 .account-data-component {
   width: 95%;
+  @include phone {
+    margin-bottom: 20px;
+    margin-top: 20px;
+  }
 }
 .account-data-component__form {
   margin-top: 4%;

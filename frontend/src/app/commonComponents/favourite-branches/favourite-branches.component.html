@@ -5,7 +5,7 @@
     </div>
     <div class="main-container__data">
       <div *ngIf="!branchData.length && loaded" class="data__empty-list">
-        nie ma
+        <p class="empty-list__text-node">Na daną chwilę nie posiadasz ulubionych zakładów</p>
       </div>
       <div *ngIf="branchData.length && loaded">
         <div *ngFor="let fav of branchData" class="data__container">

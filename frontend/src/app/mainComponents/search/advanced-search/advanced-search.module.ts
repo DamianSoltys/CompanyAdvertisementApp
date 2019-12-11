@@ -4,7 +4,8 @@ import { AdvancedSearchComponent } from './advanced-search.component';
 import { AdvancedSearchRoutingModule } from './advanced-search-routing.module';
 import { SelectDropDownModule } from 'ngx-select-dropdown'
 import { ReactiveFormsModule } from '@angular/forms';
-import { SearchSectionModule } from 'src/app/commonComponents/search-section/search-section.module';
+import { SearchSectionModule } from '../search-section/search-section.module';
+
 
 @NgModule({
   declarations: [AdvancedSearchComponent],

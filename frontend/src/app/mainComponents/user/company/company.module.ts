@@ -20,7 +20,7 @@ import { SelectDropDownModule } from 'ngx-select-dropdown';
     ReactiveFormsModule,
     QuillModule.forRoot(),
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDymmSbQ_6KBgygpEZwcztemgH3HXTOYrI'
+      apiKey: 'xxx'
     }),
     FormErrorModule,
     SelectDropDownModule

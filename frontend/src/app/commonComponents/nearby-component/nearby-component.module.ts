@@ -10,7 +10,7 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     RouterModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDymmSbQ_6KBgygpEZwcztemgH3HXTOYrI'
+      apiKey: 'xxx'
     }),
   ],exports:[
     NearbyComponent

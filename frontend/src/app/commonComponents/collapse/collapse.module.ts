@@ -8,7 +8,7 @@ import { AgmCoreModule } from '@agm/core';
   imports: [
     CommonModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDymmSbQ_6KBgygpEZwcztemgH3HXTOYrI'
+      apiKey: 'xxx'
     }),
   ],
   exports:[CollapseComponent]

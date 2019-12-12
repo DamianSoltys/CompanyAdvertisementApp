@@ -16,7 +16,7 @@ import { CommentsModule } from '../comments/comments.module';
     FormsModule,
     ReactiveFormsModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDymmSbQ_6KBgygpEZwcztemgH3HXTOYrI'
+      apiKey: 'xxx'
     }),
     CompanyModule,
     CommentsModule

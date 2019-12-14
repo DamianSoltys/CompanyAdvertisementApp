@@ -102,7 +102,7 @@ export class CompanyComponent implements OnInit{
     category: ['', [Validators.required]],
     name: ['', [Validators.required,Validators.pattern(new RegExp(/^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ_ ]+$/))]],
     nip: ['', [Validators.required,Validators.pattern(new RegExp(/^[0-9]{10}$/))]],
-    regon: ['', [Validators.required,Validators.pattern(new RegExp(/^[0-9]{9}$/))]],
+    regon: ['', [Validators.required,Validators.pattern(new RegExp(/^([0-9]{9}|[0-9]{14})$/))]],
     companyWebsiteUrl: [''],
     address: this.fb.group({
       apartmentNo: ['', [Validators.required, Validators.pattern(new RegExp(/^[0-9A-Za-z]+$/))]],
@@ -263,6 +263,46 @@ export class CompanyComponent implements OnInit{
         }
       }
     }
+  }
+
+  private isValidNip(nip:string) {
+    if(typeof nip !== 'string') {
+        return false;
+    }
+
+    nip = nip.replace(/[\ \-]/gi, '');
+    let weight = [6, 5, 7, 2, 3, 4, 5, 6, 7];
+    let sum = 0;
+    let controlNumber = parseInt(nip.substring(9, 10));
+
+    for (let i = 0; i < weight.length; i++) {
+        sum += (parseInt(nip.substring(i, i + 1)) * weight[i]);
+    }
+    return sum % 11 === controlNumber;
+  }
+
+  private isValidRegon(regon:string) {
+    if(typeof regon !== 'string') {
+        return false;
+    }
+
+    regon = regon.replace(/[\ \-]/gi, '');
+    let sum = 0;
+    let weight;
+    let controlNumber;
+
+    if(regon.length == 9) {
+      weight = [8,9,2,3,4,5,6,7];
+      controlNumber = parseInt(regon.substring(8,9));
+    } else {
+      weight = [2,4,8,5,0,9,7,3,6,1,2,4,8];
+      controlNumber = parseInt(regon.substring(13,14));
+    }
+
+    for (let i = 0; i < weight.length; i++) {
+        sum += (parseInt(regon.substring(i, i + 1)) * weight[i]);
+    }
+    return sum % 11 === controlNumber;
   }
 
   private registerGetCompanyListener() {
@@ -468,32 +508,46 @@ export class CompanyComponent implements OnInit{
 
   private patchCompanyData() {
     let companyData: Company;
+    let validNip = false;
+    let validRegon = false;
     companyData = this.companyForm.value;
-    this.cDataService
-      .editCompany(companyData, this.editRequestData,this.companyLogo)
-      .subscribe(
-        response => {
-          if(response) {
-          this.snackbarService.open({
-            message:'Dane firmy uległy edycji',
-            snackbarType:SnackbarType.success,
-          });
-          this.getCompanyList(true);
-          this.uDataService.updateUser().subscribe(data=>{
-            this.cDataService.getCompanyData.next(true);
-          this.router.navigate(['companyProfile',this.editRequestData.companyId]);      
-          });
-        } else {
-          this.formErrorService.open({
-            message:'Nie udało się zmienić danych!'
-          });
-        }
-        },error=>{
-          this.formErrorService.open({
-            message:'Nie udało się zmienić danych!',
-          });
-        }
-      );
+    if((validNip = this.isValidNip(companyData.nip)) && (validRegon = this.isValidRegon(companyData.regon))) {
+      this.cDataService
+        .editCompany(companyData, this.editRequestData,this.companyLogo)
+        .subscribe(
+          response => {
+            if(response) {
+            this.snackbarService.open({
+              message:'Dane firmy uległy edycji',
+              snackbarType:SnackbarType.success,
+            });
+            this.getCompanyList(true);
+            this.uDataService.updateUser().subscribe(data=>{
+              this.cDataService.getCompanyData.next(true);
+            this.router.navigate(['companyProfile',this.editRequestData.companyId]);      
+            });
+          } else {
+            this.formErrorService.open({
+              message:'Nie udało się zmienić danych!'
+            });
+          }
+          },error=>{
+            this.formErrorService.open({
+              message:'Nie udało się zmienić danych!',
+            });
+          }
+        );
+    } else {
+      if(!validNip) {
+        this.formErrorService.open({
+          message:'Niepoprawny numer NIP!',
+        });
+      } else if(!validRegon){
+        this.formErrorService.open({
+          message:'Niepoprawny numer Regon!',
+        });
+      }
+    }
   }
 
   private patchWorkIdData() {
@@ -535,32 +589,45 @@ export class CompanyComponent implements OnInit{
     let companyData: Company;
     companyData = this.companyForm.value;
     companyData.branches = this.workForms;
-
-    this.cDataService.addCompany(companyData,this.LogoList,this.companyLogo).subscribe(
-      response => {
-        if(response) {
-        this.snackbarService.open({
-          message:'Pomyślnie dodano firmę',
-          snackbarType:SnackbarType.success,
-        });
-        this.uDataService.updateUser().subscribe(data=>{
-           this.setDefaultValues();
-           this.cDataService.getCompanyData.next(true);
-           this.toggleDataList();
-        });
-      } else {
+    let validNip = false;
+    let validRegon = false;
+    if((validNip = this.isValidNip(companyData.nip)) && (validRegon = this.isValidRegon(companyData.regon))) {
+      this.cDataService.addCompany(companyData,this.LogoList,this.companyLogo).subscribe(
+        response => {
+          if(response) {
+          this.snackbarService.open({
+            message:'Pomyślnie dodano firmę',
+            snackbarType:SnackbarType.success,
+          });
+          this.uDataService.updateUser().subscribe(data=>{
+            this.setDefaultValues();
+            this.cDataService.getCompanyData.next(true);
+            this.toggleDataList();
+          });
+        } else {
+          this.formErrorService.open({
+            message:'Nie udało się dodać firmy!',
+          });
+          this.setDefaultValues();
+        }
+        },error=>{
+          this.formErrorService.open({
+            message:'Nie udało się dodać firmy!',
+          });
+          this.setDefaultValues();
+        } 
+      );
+    } else {
+      if(!validNip) {
         this.formErrorService.open({
-          message:'Nie udało się dodać firmy!',
+          message:'Niepoprawny numer NIP!',
         });
-        this.setDefaultValues();
+      } else if(!validRegon){
+        this.formErrorService.open({
+          message:'Niepoprawny numer Regon!',
+        });
       }
-      },error=>{
-        this.formErrorService.open({
-          message:'Nie udało się dodać firmy!',
-        });
-        this.setDefaultValues();
-      } 
-    );
+    }
   }
 
   public onFileSelected(event, companyForm: boolean) {

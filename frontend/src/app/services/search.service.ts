@@ -33,6 +33,17 @@ export class SearchService {
     return this.http.get(`http://localhost:8090/api/cities`, { observe: 'response' });
   }
 
+  public engToPl(data:SectionData[]) {
+
+    data.map(data=>{
+      if(data.type === 'Branch') {
+        data.type = 'Zakład';
+      } else {
+        data.type = 'Firma';
+      }
+    });
+  }
+
   public sendAdvSearchData(formData: AdvSearchData) {
     if(formData.type.length) {
         formData.type = formData.type.map(value=>{  

@@ -74,9 +74,9 @@ export class SearchComponent implements OnInit {
     this.branchNumber = 0;
     
     this.sDataService.sendSearchData(this.searchData).subscribe(response=>{
-      console.log(response)
       this.responseBody = <SearchResponse>response.body  
       this.sectionData = this.responseBody.result;
+      this.sDataService.engToPl(this.sectionData);
       this.companyNumber = this.responseBody.companiesNumber;
       this.branchNumber = this.responseBody.branchesNumber;
       this.actualList = this.sDataService.paginator(this.sectionData,1,3);
@@ -89,6 +89,8 @@ export class SearchComponent implements OnInit {
     subject.next(true);
   })
 }
+
+
 
 public getImages(firstRequest?:boolean) {
   this.sectionData.map(data=>{

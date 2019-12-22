@@ -105,9 +105,9 @@ export class AdvancedSearchComponent implements OnInit {
     });
 
     this.sDataService.sendAdvSearchData(this.searchData).subscribe(response=>{
-      console.log(response)
       this.responseBody = <SearchResponse>response.body  
       this.sectionData = this.responseBody.result;
+      this.sDataService.engToPl(this.sectionData);
       this.dataNumber = this.responseBody.branchesNumber + this.responseBody.companiesNumber;
       this.actualList = this.sDataService.paginator(this.sectionData,1,3);
       this.resultText = this.resultText = this.sDataService.polishPlural('wynik','wyniki','wyników',this.dataNumber);

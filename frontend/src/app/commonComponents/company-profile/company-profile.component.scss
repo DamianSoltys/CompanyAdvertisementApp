@@ -151,9 +151,8 @@
           align-items: center;
           .content__section--logo__logo {
             border:1px solid $bgcolor;
-            width: 100%;
-            height: 100%;
-            margin:10px;
+            width: 95%;
+            height: 95%;
             max-height: 300px;
             max-width: 300px;
             @include phone {

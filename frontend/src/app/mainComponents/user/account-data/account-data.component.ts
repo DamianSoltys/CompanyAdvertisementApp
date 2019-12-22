@@ -102,7 +102,7 @@ export class AccountDataComponent implements OnInit {
         .subscribe(
           response => {
             this.snackbarService.open({
-              message:'Hasło zostało zmienione',
+              message: 'Hasło zostało zmienione',
               snackbarType:SnackbarType.success,
             });
             let newToken = window.btoa(
@@ -112,7 +112,7 @@ export class AccountDataComponent implements OnInit {
             this.uDataService.updateUser().subscribe(()=>{
               this.accountDataForm.reset();
               this.showAccountData();
-            });           
+            });
           },
           error => {
             this.formErrorService.open({

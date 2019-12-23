@@ -97,7 +97,7 @@ export class CompanyProfileComponent implements OnInit,AfterViewInit {
 
   private getCompanyData(clearCompanyStorage?:boolean) {
     if(clearCompanyStorage) {
-      this.cDataService.deleteStorageData();
+      this.cDataService.deleteStorageData(true);
       this.companyData = undefined;
     }
     

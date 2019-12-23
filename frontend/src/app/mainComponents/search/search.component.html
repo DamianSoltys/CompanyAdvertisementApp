@@ -41,7 +41,7 @@
 </div>
   <div class="search-component__search-data-container" *ngIf="actualList?.data">
     <div class="search-data-container__quantity text-center">
-      znaleziono ({{companyNumber}}) firm oraz ({{branchNumber}}) zakładów
+      znaleziono ({{companyNumber}}) {{companyResultText}} oraz ({{branchNumber}}) {{branchResultText}}
     </div>
     <div class="search-data-container__sections">
       <app-search-section *ngFor="let data of actualList.data" [sectionData]="data"></app-search-section>

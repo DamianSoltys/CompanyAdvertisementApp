@@ -80,8 +80,8 @@ export class SearchComponent implements OnInit {
       this.companyNumber = this.responseBody.companiesNumber;
       this.branchNumber = this.responseBody.branchesNumber;
       this.actualList = this.sDataService.paginator(this.sectionData,1,3);
-      this.companyResultText = this.sDataService.polishPlural('firmę','firm','firmy',this.companyNumber);
-      this.branchResultText = this.sDataService.polishPlural('zakład','zakładów','zakłady',this.branchNumber);
+      this.companyResultText = this.sDataService.polishPlural('firmę','firmy','firm',this.companyNumber);
+      this.branchResultText = this.sDataService.polishPlural('zakład','zakłady','zakładów',this.branchNumber);
       this.isEmptyMessage.next(this.sectionData.length?false:true);
       subject.next(this.getImages(true));
   },error=>{

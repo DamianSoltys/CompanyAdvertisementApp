@@ -231,6 +231,11 @@ export class CompanyComponent implements OnInit{
     if(data.branchData) {
       let branchData:Branch = JSON.parse(data.branchData);
       this._workForm.name.setValue(branchData.name);
+      this._workAddress.city.setValue(branchData.address.city);
+      this._workAddress.apartmentNo.setValue(branchData.address.apartmentNo);
+      this._workAddress.buildingNo.setValue(branchData.address.buildingNo);
+      this._workAddress.street.setValue(branchData.address.street);
+      this._workAddress.voivodeship.setValue(branchData.address.voivodeship);
     }
   }
 

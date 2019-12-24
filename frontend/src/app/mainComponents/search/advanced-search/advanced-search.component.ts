@@ -6,6 +6,8 @@ import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service
 import { SearchResponse, SectionData } from 'src/app/classes/Section';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { Paginator } from '../search.component';
+import { CompanyService } from 'src/app/services/company.service';
+import { categories } from '../../../classes/Category';
 
 export interface AdvSearchData {
   name?:string;
@@ -22,17 +24,7 @@ export interface AdvSearchData {
 
 export class AdvancedSearchComponent implements OnInit {
 
-  public categoryOptions:string[] = [
-    'Usługi transportowe',
-    'Usługi medyczne',
-    'Mechanika samochodowa',
-    'Naprawa sprzętu domowego',
-    'Ogrodnictwo',
-    'Usługi opieki',
-    'Usługi kosmetyczne',
-    'Usługi informatyczne',
-    'Sprzedaż produktów',
-  ];
+  public categoryOptions:string[];
   public typeOptions = [
     'Firma',
     'Zakład'
@@ -83,11 +75,21 @@ export class AdvancedSearchComponent implements OnInit {
   public branchNumber:number;
   public searchData:any;
   public resultText:string;
-  constructor(private sDataService:SearchService,private fb:FormBuilder,private snackbarService:SnackbarService) { }
+  constructor(private sDataService:SearchService,private fb:FormBuilder,private snackbarService:SnackbarService,private cDataService:CompanyService) { }
 
   ngOnInit() {
     this.getCityData();
+    this.getCategoryData();
+  }
 
+  private getCategoryData() {
+    this.cDataService.getCategoryData().subscribe(data=>{
+      if(data) {
+        this.categoryOptions = data.body;
+      } else {
+        this.categoryOptions = categories;
+      }
+    });
   }
 
   public getSearchData() {

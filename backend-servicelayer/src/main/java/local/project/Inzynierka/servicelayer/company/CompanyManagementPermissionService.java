@@ -8,6 +8,7 @@ import local.project.Inzynierka.persistence.repository.UserRepository;
 import local.project.Inzynierka.shared.UserAccount;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,20 +36,15 @@ public class CompanyManagementPermissionService {
         if(companyId == null || userAccount == null) {
             return  false;
         }
-        User user = userRepository.getByAddressEmail(userAccount.getEmail());
-
-        if (user == null) {
-            return false;
-        }
-        NaturalPerson naturalPerson = user.getNaturalPerson();
-        if (naturalPerson == null) {
-            return false;
-        }
 
         Company requestedCompany = companyRepository.findById(companyId).orElse(new Company());
-        List<Company> userCompanies = companyRepository.findByRegisterer(naturalPerson);
 
-        return userCompanies.stream().anyMatch(usersCompany -> usersCompany.equals(requestedCompany));
+        return Optional.ofNullable(userRepository.getByAddressEmail(userAccount.getEmail()))
+                .map(User::getNaturalPerson)
+                .map(companyRepository::findByRegisterer)
+                .stream()
+                .flatMap(Collection::stream)
+                .anyMatch(company -> company.equals(requestedCompany));
     }
 
     public boolean hasManagingAuthority(String companyUUID, UserAccount userAccount) {

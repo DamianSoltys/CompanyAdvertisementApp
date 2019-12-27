@@ -26,6 +26,8 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -85,16 +87,13 @@ public class FileResource {
     private Map<String, MultipartFile> getUUIDToMultiPartFileMapping(StandardMultipartHttpServletRequest request) {
         MultiValueMap<String, MultipartFile> filesMap = request.getMultiFileMap();
         List<String> photoUUIDs = Collections.list(request.getParameterNames());
-        Map<String, MultipartFile> files = new LinkedHashMap<>();
-        for (var uuid : photoUUIDs) {
-            List<MultipartFile> file = filesMap.get(uuid);
-            if (file == null) {
-                throw new LogoKeyDoesNotMatchRequestParameterException();
-            }
-            files.put(uuid, file.get(0));
-        }
 
-        return files;
+        return photoUUIDs.stream()
+                .collect(Collectors.toMap(Function.identity(), uuid ->
+                        filesMap.get(uuid)
+                                .stream()
+                                .findFirst()
+                                .orElseThrow(LogoKeyDoesNotMatchRequestParameterException::new)));
     }
 
     @GetMapping(value = "/company/{companyUUID}/{logoUUID}", produces = MediaType.IMAGE_PNG_VALUE)

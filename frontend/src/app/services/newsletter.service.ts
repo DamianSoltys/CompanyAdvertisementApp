@@ -38,6 +38,7 @@ export class NewsletterService {
                   console.log(response)
                   subject.next(true);
                 } else {
+                  setTimeout(()=>{
                   this.http.put(`http://localhost:8090/api/pi/${responseBody.promotionItemUUID}/adding`,{observe:'response'}).subscribe(response=>{
                     if(response) {
                       subject.next(true);
@@ -48,6 +49,7 @@ export class NewsletterService {
                     console.log(error);
                     subject.next(false);
                   });
+                },3000);
                 }
               },error=>{
                 console.log(error);

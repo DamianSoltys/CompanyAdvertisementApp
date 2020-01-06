@@ -19,10 +19,6 @@ public class ApplicationsUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        /*
-        Logging in using email instead of name.
-         TODO Add logging in using also name option.
-        **/
 
         return Optional.ofNullable(userFacade.findByEmailAddress(email))
                 .map(UserPrincipal::new)

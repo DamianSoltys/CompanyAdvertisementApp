@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,13 +46,14 @@ public class AuthenticationResource {
         this.authenticationManager = authenticationManager;
     }
 
-    @RequestMapping(value = "/auth/registration", method = RequestMethod.POST)
-    public ResponseEntity registerNewUser(@RequestBody final UserRegistrationDto userRegistrationDto,
+    @PostMapping(value = "/auth/registration")
+    public ResponseEntity<String> registerNewUser(@RequestBody final UserRegistrationDto userRegistrationDto,
                                           final HttpServletRequest request) {
 
         try {
             authenticationService.registerNewUser(userRegistrationDto);
-            eventPublisher.publishEvent(new OnRegistrationEvent(userRegistrationDto.getEmail(), request.getHeader(ORIGIN_HEADER)));
+            eventPublisher.publishEvent(new OnRegistrationEvent(userRegistrationDto.getEmail(),
+                                                                request.getHeader(ORIGIN_HEADER)));
 
             return ResponseEntity.ok().body("");
         } catch (UserAlreadyExistsException | EmailAlreadyTakenException e) {
@@ -94,7 +96,7 @@ public class AuthenticationResource {
                 .body(userInfo);
     }
 
-    private HttpHeaders createAuthorizationHTTPHeader(@RequestBody LoginDto loginDto) {
+    private HttpHeaders createAuthorizationHTTPHeader(LoginDto loginDto) {
         AuthorizationHeader authorizationHeader = new AuthorizationHeader(loginDto.getEmail(), loginDto.getPassword());
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, authorizationHeader.getAuthorizationHeaderValue());

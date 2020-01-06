@@ -143,9 +143,10 @@ export class CompanyService {
     });
   }
 
-  public deleteStorageData() {
+  public deleteStorageData(profile?:boolean) {
     if(storage_Avaliable('localStorage')) {
-      localStorage.removeItem('companyData');
+      let storeKey = profile?'companyProfileData':'companyData';
+      localStorage.removeItem(storeKey);
     }
   }
 

@@ -148,6 +148,7 @@ export class PersonalDataComponent implements OnInit {
   }
 
   public showEditForm() {
+    this.setEditFormValues();
     this.showData.next(false);
     this.showAddingForm.next(false);
     this.showEditingForm.next(true);
@@ -156,6 +157,17 @@ export class PersonalDataComponent implements OnInit {
     this.showData.next(false);
     this.showAddingForm.next(true);
     this.showEditingForm.next(false);
+  }
+
+  private setEditFormValues() {
+    this.formAddress.voivodeship.setValue(this.naturalUserDataObject.address.voivodeship);
+    this.formAddress.apartmentNo.setValue(this.naturalUserDataObject.address.apartmentNo);
+    this.formAddress.buildingNo.setValue(this.naturalUserDataObject.address.buildingNo);
+    this.formAddress.city.setValue(this.naturalUserDataObject.address.city);
+    this.formAddress.street.setValue(this.naturalUserDataObject.address.street);
+    this.form.firstName.setValue(this.naturalUserDataObject.firstName);
+    this.form.lastName.setValue(this.naturalUserDataObject.lastName);
+    this.form.phoneNo.setValue(this.naturalUserDataObject.phoneNo);
   }
 
   private getPersonalDataServer() {
@@ -237,7 +249,6 @@ export class PersonalDataComponent implements OnInit {
   }
 
   private checkIfPostDataSuccess() {
-    console.log(this.userObject);
     this.pdataService
       .sendPersonalData(
         this.personalDataForm.value as PersonalData,
@@ -249,12 +260,13 @@ export class PersonalDataComponent implements OnInit {
             message:'Dane zostały zapisane',
             snackbarType:SnackbarType.success,
           });
+
           this.setStoragePersonalData(this.personalDataForm.value);
           this.personalDataForm.reset();
           this.userService.updateUser().subscribe(()=>{
             this.checkForPersonalData();
           });
-          
+
         },
         error => {
           this.formErrorService.open({
@@ -304,6 +316,7 @@ export class PersonalDataComponent implements OnInit {
             message:'Dane zostały usunięte',
             snackbarType:SnackbarType.success,
           });
+
           this.userService.updateUser();
           this.deleteStoragePersonalData();
           this.showAddForm();

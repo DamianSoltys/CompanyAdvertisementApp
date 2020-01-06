@@ -67,28 +67,30 @@ export class SearchComponent implements OnInit {
       this.isLoaded.next(true);
     });
 
-   if(this.searchData) {
-    this.searchData = this.searchData.split([' ',',','.']);
-   }
-    this.companyNumber = 0;
-    this.branchNumber = 0;
-    
-    this.sDataService.sendSearchData(this.searchData).subscribe(response=>{
-      console.log(response)
-      this.responseBody = <SearchResponse>response.body  
-      this.sectionData = this.responseBody.result;
-      this.companyNumber = this.responseBody.companiesNumber;
-      this.branchNumber = this.responseBody.branchesNumber;
-      this.actualList = this.sDataService.paginator(this.sectionData,1,3);
-      this.companyResultText = this.sDataService.polishPlural('firmę','firm','firmy',this.companyNumber);
-      this.branchResultText = this.sDataService.polishPlural('zakład','zakładów','zakłady',this.branchNumber);
-      this.isEmptyMessage.next(this.sectionData.length?false:true);
-      subject.next(this.getImages(true));
-  },error=>{
-    console.log(error);
-    subject.next(true);
-  })
-}
+    if(this.searchData) {
+      this.searchData = this.searchData.split([' ',',','.']);
+    }
+      this.companyNumber = 0;
+      this.branchNumber = 0;
+      
+      this.sDataService.sendSearchData(this.searchData).subscribe(response=>{
+        this.responseBody = <SearchResponse>response.body  
+        this.sectionData = this.responseBody.result;
+        this.sDataService.engToPl(this.sectionData);
+        this.companyNumber = this.responseBody.companiesNumber;
+        this.branchNumber = this.responseBody.branchesNumber;
+        this.actualList = this.sDataService.paginator(this.sectionData,1,3);
+        this.companyResultText = this.sDataService.polishPlural('firmę','firmy','firm',this.companyNumber);
+        this.branchResultText = this.sDataService.polishPlural('zakład','zakłady','zakładów',this.branchNumber);
+        this.isEmptyMessage.next(this.sectionData.length?false:true);
+        subject.next(this.getImages(true));
+    },error=>{
+      console.log(error);
+      subject.next(true);
+    });
+  }
+
+
 
 public getImages(firstRequest?:boolean) {
   this.sectionData.map(data=>{

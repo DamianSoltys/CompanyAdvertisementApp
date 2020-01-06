@@ -14,7 +14,7 @@
     </div>
   </div>
   <div class="section-container__section-action">
-    <div class="section-action__button-container" *ngIf="sectionData.type === 'Branch'">
+    <div class="section-action__button-container" *ngIf="sectionData.type === 'Zakład' || sectionData.type === 'Branch'">
       <a
         [routerLink]="[
           '/branchProfile',
@@ -25,7 +25,7 @@
         >Profil</a
       >
     </div>
-    <div class="section-action__button-container" *ngIf="sectionData.type === 'Company'">
+    <div class="section-action__button-container" *ngIf="sectionData.type === 'Firma' || sectionData.type === 'Company'">
       <a
         [routerLink]="[
           '/companyProfile',

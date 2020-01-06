@@ -54,7 +54,8 @@ public class CommentResource {
     }
 
     @RequestMapping(method = RequestMethod.PATCH, value = "/comment/{id}")
-    public ResponseEntity<?> editComment(@RequestBody final EditCommentDto editCommentDto, @PathVariable(value = "id") Long commentId) {
+    public ResponseEntity<?> editComment(@RequestBody final EditCommentDto editCommentDto,
+                                         @PathVariable(value = "id") Long commentId) {
 
         if (this.authFacade.hasPrincipalHavePermissionToCommentResource(commentId)) {
             CommentEditedEvent commentEditedEvent = CommentEditedEvent.builder()
@@ -63,10 +64,10 @@ public class CommentResource {
                     .build();
             applicationEventPublisher.publishEvent(commentEditedEvent);
 
-            return ResponseEntity.ok(null);
+            return ResponseEntity.ok("");
         }
 
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("");
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/comment/{id}")

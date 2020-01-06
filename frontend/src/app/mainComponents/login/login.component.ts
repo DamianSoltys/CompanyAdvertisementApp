@@ -51,15 +51,16 @@ export class LoginComponent implements OnInit {
     this.lgservice.Login(User_data).subscribe(
       (data: HttpResponse<any>) => {
           this.snackbarService.open({
-            message:'Pomyślnie zalogowano',
-            snackbarType:SnackbarType.success,
-          });          
+            message: 'Pomyślnie zalogowano',
+            snackbarType: SnackbarType.success,
+          });
+
           this.loginStorageSet(data);
-          this.pDataService.getPersonalDataObject();       
+          this.pDataService.getPersonalDataObject();
       },
       error => {
         this.formErrorService.open({
-          message:'Coś poszło nie tak!',
+          message: 'Coś poszło nie tak!',
         });
       }
     );
@@ -78,11 +79,9 @@ export class LoginComponent implements OnInit {
 
       localStorage.setItem('token', data.headers.get('Authorization'));
       localStorage.setItem('userREST', JSON.stringify(userObject));
-      console.log(userObject)
 
       this.lgservice.ChangeLogged();
       this.router.navigate(['']);
-      console.log('Użytkownik został zalogowany');
     } else {
       this.formErrorService.open({
         message:'Coś poszło nie tak!',

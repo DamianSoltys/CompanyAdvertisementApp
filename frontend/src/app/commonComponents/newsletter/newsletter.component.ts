@@ -254,7 +254,7 @@ export class NewsletterComponent implements OnInit,AfterViewInit{
     this.setContentValues(editorName);
     this.setDateValues();
     this.setMediaValues();
-    console.log(this.sendingOptions)
+
     if(this.sendingOptions) {
       if(this.sendingOptions.sendingStrategy === SendingStrategy.DELAYED && !this.sendingOptions.plannedSendingTime) {
         this.snackbar.open({

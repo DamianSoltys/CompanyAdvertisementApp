@@ -21,7 +21,7 @@ export interface NearbyMarker extends Marker {
 })
 export class NearbyComponent implements OnInit{
   @Input() name;
-  public zoom = 10;
+  public zoom = 9;
   public draggable = false;
   public actualPosition: Position;
   public radius:number;
@@ -36,9 +36,11 @@ export class NearbyComponent implements OnInit{
     this.pDataService.getActualPosition().subscribe(position=>{
       if(position) {
         this.actualPosition = position;
-        this.radius = this.pDataService.calculatePointDistance(this.actualPosition.latitude,this.actualPosition.longitude-0.3,this.actualPosition.latitude,this.actualPosition.longitude+0.3)/2;
-        this.biggerRadius = this.pDataService.calculatePointDistance(this.actualPosition.latitude,this.actualPosition.longitude-0.6,this.actualPosition.latitude,this.actualPosition.longitude+0.6)/2;
+        this.radius = this.pDataService.calculatePointDistance(this.actualPosition.latitude,this.actualPosition.longitude-0.48,this.actualPosition.latitude,this.actualPosition.longitude+0.48)/2;
+        this.biggerRadius = this.pDataService.calculatePointDistance(this.actualPosition.latitude,this.actualPosition.longitude-0.95,this.actualPosition.latitude,this.actualPosition.longitude+0.95)/2;
         this.getNearbyBranches();
+        console.log(this.radius);
+        console.log(this.biggerRadius);
       }
     });
     

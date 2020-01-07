@@ -1,5 +1,17 @@
 # Inzynierka
 
+CLIENT PART INSTALLATION
+***
+
+1. You must install Node.js with NPM, it can be downloaded from there: https://nodejs.org/en/
+2. After that you can download Angular Cli by simply typing in CMD "npm install -g @angular/cli"
+3. Next you must open CMD and go to application "frontend" folder.
+4. There you can type in console "npm install".
+5. To start application type "ng serve" while youre in "frontend" folder.
+6. Now you can open your browser and go to "localhost:4200".
+
+***
+
 SERVER PART INSTALLATION
 ***
 First install:
@@ -214,6 +226,3 @@ to run application
 
 ***
 Open application navigating to **localhost:8090** in your web browser
-
-
-

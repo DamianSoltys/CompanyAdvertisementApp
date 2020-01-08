@@ -1,10 +1,23 @@
 # Inzynierka
 
+CLIENT PART INSTALLATION
+***
+
+1. You must install Node.js with NPM, it can be downloaded from there: https://nodejs.org/en/.
+2. After that you can download Angular Cli by simply typing in CMD "npm install -g @angular/cli".
+3. Next you must open CMD and go to application "frontend" folder.
+4. There you can type in console "npm install".
+5. To start application type "ng serve" while you're in "frontend" folder.
+6. Now you can open your browser and go to "localhost:4200".
+
+***
+
 SERVER PART INSTALLATION
 ***
 First install:
 * OpenJDK 11.0.3 2019-04-16
 * OpenJDK Runtime Environment (build 11.0.3+4)
+* Intellij IDEA 2019.1+
 
 
 If you already had Java installed, 
@@ -26,7 +39,7 @@ In db console run:
 **GRANT ALL PRIVILEGES ON inzynierka.\* TO \`user\`@\`localhost\`**
 
 ***
-Initialization:
+Initialization of database ( data and schema have to be initialized before server starting )
 
 **FIRST METHOD** 
 
@@ -74,7 +87,6 @@ run them from context menu (option `Run 'schema.sql'` and `Run 'data.sql'` respe
 
 **THIRD OPTION** 
 --
-IT DIDN'T WORK FOR ME, BUT YOU CAN TRY (DB Navigator will be useful)
 
 Install Database Navigator plugin in Intellij Community Edition:
 
@@ -201,19 +213,16 @@ To `refresh data` (after execution the database will only contain data that were
 
 ***
 
-Navigate to root folder and run:
+To start project:
+
+Find path of org.springframework:spring-instrument:5.1.9.RELEASE library jar and paste it
+into VM options of start configuration like this: -javaagent:{{path}}
 
 
-* mvn spring-boot:build
+![JVM configuration](./docs/file7.png)
 
-to build application
+Now find file InzynierkaApplication.java and click on
+green arrow to start server application like this
 
-* mvn spring-boot:run 
-
-to run application
-
-***
-Open application navigating to **localhost:8090** in your web browser
-
-
+![Start server](./docs/file8.png)
 

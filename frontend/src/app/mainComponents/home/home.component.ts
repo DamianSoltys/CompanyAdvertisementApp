@@ -94,7 +94,7 @@ export class HomeComponent implements OnInit,AfterViewInit,OnDestroy {
 
   private sortRecommendedData() {
     this.branchList.map(branch=>{
-      if(this.pDataService.isInside(this.actualPosition.latitude,this.actualPosition.longitude,0.025,Number(branch.geoX),Number(branch.geoY))) {
+      if(this.pDataService.isInside(this.actualPosition.latitude,this.actualPosition.longitude,0.33,Number(branch.geoX),Number(branch.geoY))) {
         branch.isInsideArea = 1;     
       } else {
         branch.isInsideArea = 0;

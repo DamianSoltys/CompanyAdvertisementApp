@@ -1,6 +1,6 @@
 # Inzynierka
 
-CLIENT PART INSTALLATION
+CLIENT PART INSTALLATION - DamianSoltys
 ***
 
 1. You must install Node.js with NPM, it can be downloaded from there: https://nodejs.org/en/.
@@ -12,7 +12,7 @@ CLIENT PART INSTALLATION
 
 ***
 
-SERVER PART INSTALLATION
+SERVER PART INSTALLATION - mmateu
 ***
 First install:
 * OpenJDK 11.0.3 2019-04-16

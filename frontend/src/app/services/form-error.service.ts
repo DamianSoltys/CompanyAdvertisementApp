@@ -15,12 +15,11 @@ export class FormErrorService {
     isOpen: false
   });
 
-  constructor() {}
+  constructor() { }
 
   public open(formErrorOptions: FormErrorOptions) {
     if (this.formErrorOptions.value.isOpen) {
       this.close();
-
       setTimeout(() => {
         this.open(formErrorOptions);
       }, 200);
@@ -29,6 +28,7 @@ export class FormErrorService {
         isOpen: true,
         message: formErrorOptions.message
       });
+
       if (formErrorOptions.duration) {
         setTimeout(() => {
           this.close();
@@ -36,6 +36,7 @@ export class FormErrorService {
       }
     }
   }
+
   public close() {
     this.formErrorOptions.next({
       isOpen: false

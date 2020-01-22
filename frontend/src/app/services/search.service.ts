@@ -9,18 +9,17 @@ import { AdvSearchData } from '../mainComponents/search/advanced-search/advanced
 })
 export class SearchService {
   public defaultSearchLogo: string = '../../assets/Img/default_logo.png';
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   public sendSearchData(searchData: Array<string>) {
-    if(searchData) {
+    if (searchData) {
       let query: string = searchData.join('%');
-      console.log(query)
-      let httpParams:HttpParams = new HttpParams().set('q',query);
-      return this.http.get(`http://localhost:8090/api/search`, { observe: 'response' ,params:httpParams});
+      let httpParams: HttpParams = new HttpParams().set('q', query);
+      return this.http.get(`http://localhost:8090/api/search`, { observe: 'response', params: httpParams });
     }
   }
 
-  public getActualPageData(searchData: Array<string>,pageNumber:number) {
+  public getActualPageData(searchData: Array<string>, pageNumber: number) {
     let query: string = searchData.join('%');
     return this.http.get(`http://localhost:8090/api/search?q=${query}&size=3&page=${pageNumber}`, { observe: 'response' });
   }
@@ -33,10 +32,9 @@ export class SearchService {
     return this.http.get(`http://localhost:8090/api/cities`, { observe: 'response' });
   }
 
-  public engToPl(data:SectionData[]) {
-
-    data.map(data=>{
-      if(data.type === 'Branch') {
+  public engToPl(data: SectionData[]) {
+    data.map(data => {
+      if (data.type === 'Branch') {
         data.type = 'Zakład';
       } else {
         data.type = 'Firma';
@@ -45,34 +43,33 @@ export class SearchService {
   }
 
   public sendAdvSearchData(formData: AdvSearchData) {
-    if(formData.type.length) {
-        formData.type = formData.type.map(value=>{  
-          if(value == 'Firma') {
-            return value = 'company';
-          } else  {
-            return value = 'branch';
-          } 
-        });
-      
+    if (formData.type.length) {
+      formData.type = formData.type.map(value => {
+        if (value == 'Firma') {
+          return value = 'company';
+        } else {
+          return value = 'branch';
+        }
+      });
+
     } else {
       formData.type = null;
     }
 
     let httpParams = this.setParams(formData);
-    console.log(httpParams)
     return this.http.get(
       `http://localhost:8090/api/search-adv`,
-      { observe: 'response' ,params: httpParams}
+      { observe: 'response', params: httpParams }
     );
 
   }
 
   public paginator(items, page?, per_page?) {
     var page = page || 1,
-    per_page = per_page || 10,
-    offset = (page - 1) * per_page,
-    paginatedItems = items.slice(offset).slice(0, per_page),
-    total_pages = Math.ceil(items.length / per_page);
+      per_page = per_page || 10,
+      offset = (page - 1) * per_page,
+      paginatedItems = items.slice(offset).slice(0, per_page),
+      total_pages = Math.ceil(items.length / per_page);
     return {
       page: page,
       per_page: per_page,
@@ -86,24 +83,25 @@ export class SearchService {
 
   public polishPlural(singularNominativ, pluralNominativ, pluralGenitive, value) {
     if (value === 1) {
-        return singularNominativ;
+      return singularNominativ;
     } else if (value % 10 >= 2 && value % 10 <= 4 && (value % 100 < 10 || value % 100 >= 20)) {
-        return pluralNominativ;
+      return pluralNominativ;
     } else {
-        return pluralGenitive;
+      return pluralGenitive;
     }
   }
-  
-  public setParams(formData:AdvSearchData,pageNumber?:number):HttpParams {
-    let httpParams:HttpParams = new HttpParams();
+
+  public setParams(formData: AdvSearchData, pageNumber?: number): HttpParams {
+    let httpParams: HttpParams = new HttpParams();
+
     Object.keys(formData).forEach(param => {
       if (formData[param]) {
-          httpParams = httpParams.set(param, formData[param]);
+        httpParams = httpParams.set(param, formData[param]);
       }
     });
 
-    if(pageNumber) {
-      httpParams = httpParams.set('page',`${pageNumber}`);
+    if (pageNumber) {
+      httpParams = httpParams.set('page', `${pageNumber}`);
     }
     return httpParams;
   }

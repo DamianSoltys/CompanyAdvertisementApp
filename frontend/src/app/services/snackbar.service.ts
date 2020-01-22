@@ -8,10 +8,10 @@ export enum SnackbarType {
 }
 
 export interface SnackbarOptions {
-  snackbarType?:SnackbarType,
-  message?:string,
-  isOpen?:boolean,
-  duration?:number,
+  snackbarType?: SnackbarType,
+  message?: string,
+  isOpen?: boolean,
+  duration?: number,
 }
 
 @Injectable({
@@ -19,36 +19,36 @@ export interface SnackbarOptions {
 })
 export class SnackbarService {
   public snackbarOptions = new BehaviorSubject(<SnackbarOptions>{
-    isOpen:false,
+    isOpen: false,
   });
+
   constructor() { }
 
-  public open(snackbarOptions:SnackbarOptions) {
-    if(this.snackbarOptions.value.isOpen) {
+  public open(snackbarOptions: SnackbarOptions) {
+    if (this.snackbarOptions.value.isOpen) {
       this.close();
-
-      setTimeout(()=>{
+      setTimeout(() => {
         this.open(snackbarOptions);
-      },200);
+      }, 200);
     } else {
-    this.snackbarOptions.next({
-      isOpen:true,
-      message:snackbarOptions.message,
-      snackbarType:snackbarOptions.snackbarType,
-    });
+      this.snackbarOptions.next({
+        isOpen: true,
+        message: snackbarOptions.message,
+        snackbarType: snackbarOptions.snackbarType,
+      });
 
-    if(!snackbarOptions.duration) {
-      snackbarOptions.duration = 3000;
+      if (!snackbarOptions.duration) {
+        snackbarOptions.duration = 3000;
+      }
+
+      setTimeout(() => {
+        this.close();
+      }, snackbarOptions.duration);
     }
-
-    setTimeout(()=>{
-      this.close();
-    },snackbarOptions.duration);
-  }
   }
   public close() {
     this.snackbarOptions.next({
-      isOpen:false,
+      isOpen: false,
     });
   }
 }

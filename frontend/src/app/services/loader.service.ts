@@ -6,7 +6,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 })
 export class LoaderService {
   showLoaderComponent = new BehaviorSubject<boolean>(false);
-  constructor() {}
+  constructor() { }
 
   public showLoader() {
     this.showLoaderComponent.next(true);

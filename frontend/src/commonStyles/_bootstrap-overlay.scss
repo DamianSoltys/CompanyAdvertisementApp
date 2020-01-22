@@ -1,34 +1,33 @@
-
 .form-control {
-    transition:all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 
-    &:focus {
-        box-shadow:0 0 0 0.1rem rgba(0,123,255,.25);
-    }
+  &:focus {
+    box-shadow: 0 0 0 0.1rem rgba(0, 123, 255, .25);
+  }
 }
 
 .btn-primary {
-    transition:all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 
-    &:focus {
-        box-shadow:0 0 0 0.1rem rgba(38,143,255,.5);
-    }
+  &:focus {
+    box-shadow: 0 0 0 0.1rem rgba(38, 143, 255, .5);
+  }
 }
 
 .container-fluid {
-    @include phone {
-        padding: 0;
-    }
+  @include phone {
+    padding: 0;
+  }
 }
 
 .dropdown-menu {
-    .dropdown-item {
-        &:focus {
-            background: $bgcolor !important;
-        }
+  .dropdown-item {
+    &:focus {
+      background: $bgcolor !important;
     }
+  }
 }
 
 .container {
-    padding:0!important;
+  padding: 0 !important;
 }

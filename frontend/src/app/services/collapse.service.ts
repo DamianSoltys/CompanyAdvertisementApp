@@ -7,6 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 export class CollapseService {
   public saveId = new BehaviorSubject<number>(null);
   public isOpen = new BehaviorSubject<boolean>(null);
+
   constructor() { }
 
   public open(collapseId) {

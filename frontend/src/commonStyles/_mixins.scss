@@ -1,36 +1,36 @@
 @mixin boxShadow($property) {
-    -webkit-box-shadow: $property;
-    -moz-box-shadow: $property;
-    box-shadow: $property;
+  -webkit-box-shadow: $property;
+  -moz-box-shadow: $property;
+  box-shadow: $property;
+}
+
+@mixin phone() {
+  @media (min-width: #{$phone-width}) and (max-width: #{$tablet-width}) {
+    @content;
   }
-  
-  @mixin phone() {
-    @media (min-width: #{$phone-width}) and (max-width: #{$tablet-width}) {
-      @content;
-    }
-  
+
+}
+
+@mixin tablet() {
+
+  @media (min-width: #{$tablet-width + 1}) and (max-width: #{$desktop-width}) {
+    @content;
   }
-  
-  @mixin tablet() {
-  
-    @media (min-width: #{$tablet-width + 1}) and (max-width: #{$desktop-width}) {
-      @content;
-    }
-  
+
+}
+
+@mixin tabletbig() {
+
+  @media (min-width: #{$tablet-width}) and (max-width: #{$tablet-width+132}) {
+    @content;
   }
-  
-  @mixin tabletbig() {
-  
-    @media (min-width: #{$tablet-width}) and (max-width: #{$tablet-width+132}) {
-      @content;
-    }
-  
+
+}
+
+@mixin desktop() {
+
+  @media (min-width: #{$desktop-width}) {
+    @content;
   }
-  
-  @mixin desktop() {
-  
-    @media (min-width: #{$desktop-width}) {
-      @content;
-    }
-  
-  }
+
+}

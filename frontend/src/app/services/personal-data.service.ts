@@ -59,8 +59,7 @@ export class PersonalDataService {
     naturalPersonId: number
   ): Observable<any> {
     return this.http.get(
-      `http://localhost:8090/api/user/${userId}/naturalperson/${naturalPersonId}`,
-      { observe: 'response' }
+      `http://localhost:8090/api/user/${userId}/naturalperson/${naturalPersonId}`, { observe: 'response' }
     );
   }
 
@@ -69,9 +68,7 @@ export class PersonalDataService {
     naturalPersonId: number
   ): Observable<any> {
     return this.http.delete(
-      `http://localhost:8090/api/user/${userId}/naturalperson/${naturalPersonId}`,
-      { observe: 'response' }
-    );
+      `http://localhost:8090/api/user/${userId}/naturalperson/${naturalPersonId}`, { observe: 'response' });
   }
 
   public getPersonalDataObject() {
@@ -82,9 +79,9 @@ export class PersonalDataService {
       this.personalData.next(
         JSON.parse(localStorage.getItem('naturalUserData'))
       );
-      console.log('dud')
     } else {
       let userREST: UserREST = JSON.parse(localStorage.getItem('userREST'));
+
       if (userREST && userREST.naturalPersonID) {
         this.getPersonalData(
           userREST.userID,

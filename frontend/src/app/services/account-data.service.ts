@@ -7,20 +7,13 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AccountDataService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   public deleteAccount(userId: number) {
     return this.http.delete(`http://localhost:8090/api/user/${userId}`);
   }
 
-  public changePassword(
-    currentPassword: string,
-    newPassword: string,
-    userId: number
-  ) {
-    return this.http.patch(`http://localhost:8090/api/user/${userId}`, {
-      currentPassword: currentPassword,
-      newPassword: newPassword
-    });
+  public changePassword(currentPassword: string, newPassword: string, userId: number) {
+    return this.http.patch(`http://localhost:8090/api/user/${userId}`, { currentPassword: currentPassword, newPassword: newPassword });
   }
 }

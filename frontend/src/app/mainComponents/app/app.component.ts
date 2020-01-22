@@ -53,15 +53,15 @@ import { NearbyComponent } from '../../commonComponents/nearby-component/nearby-
       state(
         'visible',
         style({
-          height:'*',
-          overflow:'hidden'
+          height: '*',
+          overflow: 'hidden'
         })
       ),
       state(
         'hidden',
         style({
-          height:'0px',
-          overflow:'hidden'
+          height: '0px',
+          overflow: 'hidden'
         })
       ),
       transition('visible <=> hidden', [animate('.2s')])
@@ -83,7 +83,7 @@ export class AppComponent implements OnInit {
   constructor(
     private lgservice: LoginService,
     private pDataService: PersonalDataService,
-    private snackbarService:SnackbarService,
+    private snackbarService: SnackbarService,
     private modalService: NgbModal,
   ) {
     document.body.addEventListener('click', e => {
@@ -94,16 +94,16 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.lgservice.Logged.subscribe(value => {
+    this.lgservice.logged.subscribe(value => {
       this.logged = value;
       this.getStorageObjects();
     });
     this.lgservice.initFacebookApi();
   }
-  
+
 
   public openNearbyModal() {
-    const modalRef = this.modalService.open(NearbyComponent,{size:'lg'});
+    const modalRef = this.modalService.open(NearbyComponent, { size: 'lg' });
     modalRef.componentInstance.name = 'World';
   }
 
@@ -120,15 +120,15 @@ export class AppComponent implements OnInit {
     this.nearby_toggle = !this.nearby_toggle;
     this.visible = !this.visible;
   }
-  public toggleMenu() {   
-      this.displayHamburgerMenu.next(!this.displayHamburgerMenu.value);
+  public toggleMenu() {
+    this.displayHamburgerMenu.next(!this.displayHamburgerMenu.value);
   }
 
   public logOut() {
     this.logOut_success = true;
     this.snackbarService.open({
-      message:'Pomyślnie wylogowano',
-      snackbarType:SnackbarType.success,
+      message: 'Pomyślnie wylogowano',
+      snackbarType: SnackbarType.success,
     });
     this.lgservice.logoutStorageClean();
   }

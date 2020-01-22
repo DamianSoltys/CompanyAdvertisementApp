@@ -1,4 +1,4 @@
-# Inzynierka
+# CompanyAdvertisementApp
 
 CLIENT PART INSTALLATION - DamianSoltys
 ***

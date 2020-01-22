@@ -8,6 +8,6 @@ import { FormErrorModule } from '../../commonComponents/form-error/form-error.mo
 
 @NgModule({
   declarations: [LoginComponent],
-  imports: [CommonModule, LoginRoutingModule, ReactiveFormsModule,FormErrorModule]
+  imports: [CommonModule, LoginRoutingModule, ReactiveFormsModule, FormErrorModule]
 })
-export class LoginModule {}
+export class LoginModule { }

@@ -7,14 +7,13 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './newsletter-auth.component.html',
   styleUrls: ['./newsletter-auth.component.scss']
 })
-export class NewsletterAuthComponent implements OnInit,AfterViewInit,OnDestroy {
+export class NewsletterAuthComponent implements OnInit, AfterViewInit, OnDestroy {
   private type: string;
   private token: string;
-  public time:number;
   private interval;
-  constructor(private nDataService:NewsletterService, 
-    private activatedRoute: ActivatedRoute,
-    private router: Router,) { }
+  public time: number;
+
+  constructor(private nDataService: NewsletterService, private activatedRoute: ActivatedRoute, private router: Router, ) { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
@@ -25,29 +24,29 @@ export class NewsletterAuthComponent implements OnInit,AfterViewInit,OnDestroy {
   }
 
   ngAfterViewInit() {
-    if(this.type === 'signup') {
-      this.nDataService.sendSignUpData(this.token,this.type).subscribe(
+    if (this.type === 'signup') {
+      this.nDataService.sendSignUpData(this.token, this.type).subscribe(
         response => {
-          this.interval = setInterval(()=>{
+          this.interval = setInterval(() => {
             this.time--;
-          },1000);
-          setTimeout(()=>{
+          }, 1000);
+          setTimeout(() => {
             this.router.navigate(['/home']);
-          },9000);
+          }, 9000);
         },
         error => {
           console.log(error);
         }
       );
     } else {
-      this.nDataService.sendSingOutData(this.token,this.type).subscribe(
+      this.nDataService.sendSingOutData(this.token, this.type).subscribe(
         response => {
-          this.interval = setInterval(()=>{
+          this.interval = setInterval(() => {
             this.time--;
-          },1000);
-          setTimeout(()=>{
+          }, 1000);
+          setTimeout(() => {
             this.router.navigate(['/home']);
-          },9000);
+          }, 9000);
         },
         error => {
           console.log(error);

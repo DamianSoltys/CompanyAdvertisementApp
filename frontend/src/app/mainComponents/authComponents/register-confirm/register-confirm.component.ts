@@ -7,15 +7,12 @@ import { RegisterAuthService } from 'src/app/services/register-auth.service';
   templateUrl: './register-confirm.component.html',
   styleUrls: ['./register-confirm.component.scss']
 })
-export class RegisterConfirmComponent implements OnInit, AfterViewInit,OnDestroy {
+export class RegisterConfirmComponent implements OnInit, AfterViewInit, OnDestroy {
   private param: string;
-  public time:number;
   private interval;
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private registerAuth: RegisterAuthService
-  ) {}
+  public time: number;
+
+  constructor(private activatedRoute: ActivatedRoute, private router: Router, private registerAuth: RegisterAuthService) { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
@@ -23,21 +20,23 @@ export class RegisterConfirmComponent implements OnInit, AfterViewInit,OnDestroy
     });
     this.time = 10;
   }
+
   ngAfterViewInit() {
     this.registerAuth.registerAuth(this.param).subscribe(
       response => {
-        this.interval = setInterval(()=>{
+        this.interval = setInterval(() => {
           this.time--;
-        },1000);
-        setTimeout(()=>{
+        }, 1000);
+        setTimeout(() => {
           this.router.navigate(['/login']);
-        },9000);
+        }, 9000);
       },
       error => {
         console.log(error);
       }
     );
   }
+
   ngOnDestroy() {
     clearInterval(this.interval);
   }

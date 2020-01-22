@@ -1,70 +1,76 @@
 @import '../../../../commonStyles/shared';
+
 .section-section__section-container {
-    margin-top: 4%;
-    @include boxShadow(0px 0px 5px -2px $bgcolor);
-    border-radius: 5px;
-    margin: 10px;
-    display: flex;
-    @include phone {
+  margin-top: 4%;
+  @include boxShadow(0px 0px 5px -2px $bgcolor);
+  border-radius: 5px;
+  margin: 10px;
+  display: flex;
+
+  @include phone {
+    flex-direction: column;
+  }
+
+  .section-container__section-data {
+    flex: 1;
+
+    .section-data__data-container {
+      padding-left: 10px;
+
+      .data-container__text-node {
+        padding: 10px;
+        margin: 0;
+      }
+    }
+  }
+
+  .section-container__section-logo {
+    .section-logo__logo {
+      min-height: 150px;
+      min-width: 150px;
+      max-height: 150px;
+      max-width: 150px;
+      border: 1px solid $bgcolor;
+      margin: 10px;
+    }
+  }
+
+  .section-container__section-action {
+    flex: 1;
+
+    .section-action__button-container {
+      display: flex;
       flex-direction: column;
-    }
-  
-    .section-container__section-data {
-      flex: 1;
-  
-      .section-data__data-container {
-        padding-left: 10px;
-        .data-container__text-node {
-          padding: 10px;
-          margin: 0;
-        }
-      }
-    }
-    
-    .section-container__section-logo {
-      .section-logo__logo {
-        min-height: 150px;
-        min-width: 150px;
-        max-height: 150px;
-        max-width: 150px;
-        border:1px solid $bgcolor;
-        margin:10px;
-      }
-    }
-  
-    .section-container__section-action {
-      flex: 1;
-      .section-action__button-container {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        justify-content: center;
-        align-items: center;
-  
-        .section-action__button {
-          &--delete,
-          &--profile {
-            background-color: $bgcolor;
-            border: 1px solid $btborder;
-            margin: 5px;
-            width: 50%;
-  
-            @include phone {
-              width: 65%;
-            }
-            &:hover {
-              background-color: $bgcolor1;
-              opacity: 0.8;
-            }
+      height: 100%;
+      justify-content: center;
+      align-items: center;
+
+      .section-action__button {
+
+        &--delete,
+        &--profile {
+          background-color: $bgcolor;
+          border: 1px solid $btborder;
+          margin: 5px;
+          width: 50%;
+
+          @include phone {
+            width: 65%;
+          }
+
+          &:hover {
+            background-color: $bgcolor1;
+            opacity: 0.8;
           }
         }
       }
     }
-  
-    .section-container__section-logo {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
   }
+
+  .section-container__section-logo {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

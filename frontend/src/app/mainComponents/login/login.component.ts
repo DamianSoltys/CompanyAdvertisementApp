@@ -21,15 +21,16 @@ import { FormErrorService } from '../../services/form-error.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  loginForm: FormGroup;
+  public loginForm: FormGroup;
+
   constructor(
     private fb: FormBuilder,
     private lgservice: LoginService,
     private router: Router,
-    private pDataService:PersonalDataService,
-    private snackbarService:SnackbarService,
-    private formErrorService:FormErrorService
-  ) {}
+    private pDataService: PersonalDataService,
+    private snackbarService: SnackbarService,
+    private formErrorService: FormErrorService
+  ) { }
 
   ngOnInit() {
     this.loginForm = this.fb.group({
@@ -50,13 +51,13 @@ export class LoginComponent implements OnInit {
   private checkIfLoginSuccess(User_data: UserLog) {
     this.lgservice.Login(User_data).subscribe(
       (data: HttpResponse<any>) => {
-          this.snackbarService.open({
-            message: 'Pomyślnie zalogowano',
-            snackbarType: SnackbarType.success,
-          });
+        this.snackbarService.open({
+          message: 'Pomyślnie zalogowano',
+          snackbarType: SnackbarType.success,
+        });
 
-          this.loginStorageSet(data);
-          this.pDataService.getPersonalDataObject();
+        this.loginStorageSet(data);
+        this.pDataService.getPersonalDataObject();
       },
       error => {
         this.formErrorService.open({
@@ -70,6 +71,7 @@ export class LoginComponent implements OnInit {
     const User_data = new UserLog();
     User_data.email = this.loginForm.get('email').value;
     User_data.password = this.loginForm.get('password').value;
+
     return User_data;
   }
 
@@ -84,7 +86,7 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['']);
     } else {
       this.formErrorService.open({
-        message:'Coś poszło nie tak!',
+        message: 'Coś poszło nie tak!',
       });
     }
   }

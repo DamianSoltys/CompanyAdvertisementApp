@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { RegisterConfirmComponent } from './register-confirm.component';
 
 const routes: Routes = [
-  {path: '', component: RegisterConfirmComponent}
+  { path: '', component: RegisterConfirmComponent }
 ];
 
 @NgModule({

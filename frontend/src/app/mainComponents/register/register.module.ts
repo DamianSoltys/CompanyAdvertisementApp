@@ -8,6 +8,6 @@ import { FormErrorModule } from '../../commonComponents/form-error/form-error.mo
 
 @NgModule({
   declarations: [RegisterComponent],
-  imports: [CommonModule, RegisterRoutingModule, ReactiveFormsModule,FormErrorModule]
+  imports: [CommonModule, RegisterRoutingModule, ReactiveFormsModule, FormErrorModule]
 })
-export class RegisterModule {}
+export class RegisterModule { }

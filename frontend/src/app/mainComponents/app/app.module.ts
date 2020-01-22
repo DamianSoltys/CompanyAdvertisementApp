@@ -31,10 +31,10 @@ import { NearbyComponent } from '../../commonComponents/nearby-component/nearby-
     NearbyComponentModule
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true}
+    { provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
-  entryComponents:[
+  entryComponents: [
     NearbyComponent
   ]
 

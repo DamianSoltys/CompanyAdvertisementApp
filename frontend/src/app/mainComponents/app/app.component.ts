@@ -120,6 +120,7 @@ export class AppComponent implements OnInit {
     this.nearby_toggle = !this.nearby_toggle;
     this.visible = !this.visible;
   }
+
   public toggleMenu() {
     this.displayHamburgerMenu.next(!this.displayHamburgerMenu.value);
   }

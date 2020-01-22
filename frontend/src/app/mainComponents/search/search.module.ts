@@ -10,6 +10,6 @@ import { SearchSectionModule } from './search-section/search-section.module';
 
 @NgModule({
   declarations: [SearchComponent],
-  imports: [CommonModule, SearchRoutingModule, ReactiveFormsModule,CompanyModule,SearchSectionModule]
+  imports: [CommonModule, SearchRoutingModule, ReactiveFormsModule, CompanyModule, SearchSectionModule]
 })
-export class SearchModule {}
+export class SearchModule { }

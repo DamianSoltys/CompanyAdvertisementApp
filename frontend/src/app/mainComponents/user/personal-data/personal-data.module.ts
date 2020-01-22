@@ -9,6 +9,6 @@ import { SelectDropDownModule } from 'ngx-select-dropdown'
 
 @NgModule({
   declarations: [PersonalDataComponent],
-  imports: [CommonModule, PersonalDataRoutingModule, ReactiveFormsModule,FormErrorModule,SelectDropDownModule]
+  imports: [CommonModule, PersonalDataRoutingModule, ReactiveFormsModule, FormErrorModule, SelectDropDownModule]
 })
-export class PersonalDataModule {}
+export class PersonalDataModule { }

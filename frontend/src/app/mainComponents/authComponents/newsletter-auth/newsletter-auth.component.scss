@@ -1,13 +1,13 @@
 .newsletter-confirm-component {
-    height: 30vh;
+  height: 30vh;
+}
+
+.newsletter-confirm-component__main-container {
+  .main-container__text-node {
+    color: rgb(28, 216, 28);
+    position: relative;
+    top: 50%;
+    font-size: 1.5em;
+    padding-top: 5%;
   }
-  .newsletter-confirm-component__main-container {
-    .main-container__text-node {
-      color: rgb(28, 216, 28);
-      position: relative;
-      top: 50%;
-      font-size: 1.5em;
-      padding-top: 5%;
-    }
-  }
-  
+}

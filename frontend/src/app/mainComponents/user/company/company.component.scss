@@ -1,8 +1,10 @@
 @import '../../../../commonStyles/shared';
+
 .company-component__edit {
   width: 100% !important;
   margin-top: 0 !important;
 }
+
 .company-component {
   display: flex;
   flex-direction: column;
@@ -13,6 +15,7 @@
   @include tablet {
     width: 85%;
   }
+
   @include phone {
     width: 95%;
     padding: 0;
@@ -20,32 +23,37 @@
 
   .company-component__personal-data-text {
     font-size: 1.2rem;
-    color:darken($bgcolor,10%);
+    color: darken($bgcolor, 10%);
   }
 
   .form-container__form-collapse {
     display: flex;
+
     @include phone {
       flex-direction: column;
     }
+
     .form-container__collapse {
-      width:50%;
-      border-left:1px solid $bgcolor;
-      padding:0 10px;
-      margin:20px 0;
+      width: 50%;
+      border-left: 1px solid $bgcolor;
+      padding: 0 10px;
+      margin: 20px 0;
+
       @include phone {
-        width:100%;
-        border:none;
-        border-top:1px solid $bgcolor;
-        margin:20px 0;
+        width: 100%;
+        border: none;
+        border-top: 1px solid $bgcolor;
+        margin: 20px 0;
       }
+
       .collapse__container {
-        border:1px solid darken($bgcolor, 10);
-        padding:15px 0;
+        border: 1px solid darken($bgcolor, 10);
+        padding: 15px 0;
         @include boxShadow(inset 0px 15px 8px -15px rgba(32, 99, 143, 0.66));
         border-radius: 6px;
         border-width: 1px 0 0 0;
       }
+
       .collapse__header {
         .header__text-node {
           font-size: 1.1rem;
@@ -56,26 +64,32 @@
       }
     }
   }
+
   .company-component__company-section {
     .company-section__title {
-      color:$bgcolor;
+      color: $bgcolor;
       font-size: 1.5rem;
     }
+
     .company-section__text-node {
       font-size: 1.2rem;
       color: $bgcolor;
     }
+
     .company-section__company-container {
       max-height: 50vh;
       overflow: auto;
     }
   }
+
   .company-component__rodo-container {
     margin: 15px 1rem;
+
     .rodo-container__text-node {
       font-size: 0.8rem;
       margin: 15px 1rem;
       text-align: justify;
+
       .text-node__star {
         font-size: 1rem;
         color: red;
@@ -90,11 +104,12 @@
     margin-left: 5px;
     margin-right: 5px;
     border-radius: 50px;
-    min-width:170px;
+    min-width: 170px;
     border: 0;
-    background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
+    background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor, 20%) 51%, $bgcolor 100%);
     transition: all .4s ease-in-out;
     background-size: 200%;
+
     &:hover {
       background-position: 100% 0;
     }
@@ -103,8 +118,9 @@
       color: white;
       margin: 0;
     }
+
     @include phone {
-      width:95%;
+      width: 95%;
     }
   }
 
@@ -162,9 +178,7 @@
             border-width: 1px 0 0 0;
             border-radius: 6px;
             padding: 20px;
-            @include boxShadow(
-              inset 0px 15px 8px -15px rgba(32, 99, 143, 0.66)
-            );
+            @include boxShadow(inset 0px 15px 8px -15px rgba(32, 99, 143, 0.66));
             display: flex;
             flex-wrap: wrap;
             justify-content: space-evenly;
@@ -178,13 +192,16 @@
                 .map-container__label {
                   color: $bgcolor;
                 }
+
                 .map-container__map-wrapper {
                   border-color: $bgcolor;
                 }
               }
+
               .map-container__label {
                 transition: all 0.2s ease-in-out;
               }
+
               .map-container__map-wrapper {
                 transition: all 0.2s ease-in-out;
                 border: 2px solid black;
@@ -215,18 +232,21 @@
                 width: 95%;
                 flex-basis: 100%;
               }
+
               @include tablet {
                 flex-basis: 40%;
               }
+
               .input-container__logo {
                 width: 100%;
                 height: 100%;
                 min-height: 200px;
-                max-height:300px;
+                max-height: 300px;
                 max-width: 400px;
-                padding:10px;
-                margin:auto;
+                padding: 10px;
+                margin: auto;
               }
+
               .input-container__select-wrapper {
                 display: flex;
                 flex-direction: column;
@@ -246,6 +266,7 @@
                   right: 10px;
                   color: $bgcolor;
                 }
+
                 .select-wrapper__select-input {
                   -moz-appearance: none;
                   -webkit-appearance: none;
@@ -259,8 +280,9 @@
 
               .input-container__label {
                 font-size: 1rem;
+
                 .label__required {
-                  color:red;
+                  color: red;
                 }
               }
 
@@ -297,6 +319,7 @@
               }
             }
           }
+
           .input-group__description-container {
             display: flex;
             flex-direction: column;
@@ -311,17 +334,20 @@
               width: 100%;
               padding: 0 5px;
             }
+
             .description-container__label {
               .label__required {
-                color:red;
+                color: red;
               }
             }
+
             .description-container__editor {
               height: 150px;
+
               @include phone {
                 height: 100px;
               }
-              
+
             }
           }
         }
@@ -351,9 +377,10 @@
       margin-right: 5px;
       border-radius: 50px;
       border: 0;
-      background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
+      background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor, 20%) 51%, $bgcolor 100%);
       transition: all .4s ease-in-out;
       background-size: 200%;
+
       &:hover {
         background-position: 100% 0;
       }
@@ -361,6 +388,7 @@
       .button--add__text-node {
         color: white;
       }
+
       @include phone {
         margin: 10px;
         width: 100%;
@@ -371,6 +399,7 @@
   .company-component__separator {
     height: 100%;
   }
+
   .company-component__information-container {
     display: flex;
     align-self: center;
@@ -378,9 +407,10 @@
 }
 
 .company-component__branches {
-  width:100%;
+  width: 100%;
   max-width: 1500px;
+
   @include phone {
-    width:95%;
+    width: 95%;
   }
- }
+}

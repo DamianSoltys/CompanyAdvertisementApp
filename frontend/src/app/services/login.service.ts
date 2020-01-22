@@ -43,18 +43,6 @@ export class LoginService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  private fbPostRequest(fbPostRequest: FBPostRequest) {
-    let subject = new Subject<any>();
-
-    this.http.post(`http://localhost:8090/api/fb/login_in`, fbPostRequest).subscribe(response => {
-      subject.next(response);
-    }, error => {
-      console.log(error);
-      subject.next(false);
-    });
-    return subject;
-  }
-
   public initFacebookApi() {
     (window as any).fbAsyncInit = function () {
       FB.init({ appId: "422141488475751", cookie: true, xfbml: true, version: "v5.0" });
@@ -158,5 +146,17 @@ export class LoginService {
     } else {
       console.log("Storage nie jest dostępny");
     }
+  }
+
+  private fbPostRequest(fbPostRequest: FBPostRequest) {
+    let subject = new Subject<any>();
+
+    this.http.post(`http://localhost:8090/api/fb/login_in`, fbPostRequest).subscribe(response => {
+      subject.next(response);
+    }, error => {
+      console.log(error);
+      subject.next(false);
+    });
+    return subject;
   }
 }

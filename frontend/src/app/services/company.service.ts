@@ -10,69 +10,17 @@ import { UserService } from "./user.service";
 
 @Injectable({ providedIn: "root" })
 export class CompanyService {
-  private isCompany = new BehaviorSubject(false);
-  private isLoaded = new Subject<boolean>();
   public CompanyData: GetCompany[] = [];
   public getCompanyData = new Subject<boolean>();
   public defaultCProfileUrl = "../../../assets/Img/default_logo.png";
   public defaultCListUrl = "../../assets/Img/default_logo.png";
   public userREST: UserREST;
+  private isCompany = new BehaviorSubject(false);
+  private isLoaded = new Subject<boolean>();
 
   constructor(private http: HttpClient, private uDataService: UserService) { }
 
-  private getRidOfPreviewLogo(companyData: Company) {
-    if (companyData.branches) {
-      companyData.branches.map(branch => {
-        branch.actualSelectedLogo = undefined;
-      });
-    }
-  }
 
-  private workLogoRequest(response, logoList: File[]) {
-    let counter: number = 0;
-
-    logoList.forEach((logo, index) => {
-      let url = response["branchBuildDTOs"][index]["putLogoURL"];
-      let logoData = new FormData();
-
-      logoData.append(response["branchBuildDTOs"][index]["logoKey"], logo);
-      logoData.append(response["branchBuildDTOs"][index]["logoKey"], "Value");
-      this.http.put(url, logoData).subscribe(response => {
-        counter++;
-
-        if (counter === logoList.length) {
-          this.isLoaded.next(true);
-        }
-      }, error => {
-        console.log(error);
-        counter++;
-
-        if (counter === logoList.length) {
-          this.isLoaded.next(true);
-        }
-        console.log(`nie dodano logo brancha ${index}`);
-      });
-    });
-  }
-
-  private companyLogoRequest(response, companyLogo: File, logoList?: File[]) {
-    let logoData = new FormData();
-    let url = response["putLogoURL"];
-
-    logoData.append(response["logoKey"], companyLogo);
-    logoData.append(response["logoKey"], "Value");
-    this.http.put(url, logoData).subscribe(response2 => {
-
-      if (logoList) {
-        this.workLogoRequest(response, logoList);
-      } else {
-        this.isLoaded.next(true);
-      }
-    }, error2 => {
-      console.log(error2);
-      this.isLoaded.next(true);
-    });
-  }
 
   public addCompany(companyData: Company, logoList?: File[], companyLogo?: File): Subject<boolean> {
     let subject = new Subject<boolean>();
@@ -251,5 +199,59 @@ export class CompanyService {
     );
 
     return subject;
+  }
+
+  private getRidOfPreviewLogo(companyData: Company) {
+    if (companyData.branches) {
+      companyData.branches.map(branch => {
+        branch.actualSelectedLogo = undefined;
+      });
+    }
+  }
+
+  private workLogoRequest(response, logoList: File[]) {
+    let counter: number = 0;
+
+    logoList.forEach((logo, index) => {
+      let url = response["branchBuildDTOs"][index]["putLogoURL"];
+      let logoData = new FormData();
+
+      logoData.append(response["branchBuildDTOs"][index]["logoKey"], logo);
+      logoData.append(response["branchBuildDTOs"][index]["logoKey"], "Value");
+      this.http.put(url, logoData).subscribe(response => {
+        counter++;
+
+        if (counter === logoList.length) {
+          this.isLoaded.next(true);
+        }
+      }, error => {
+        console.log(error);
+        counter++;
+
+        if (counter === logoList.length) {
+          this.isLoaded.next(true);
+        }
+        console.log(`nie dodano logo brancha ${index}`);
+      });
+    });
+  }
+
+  private companyLogoRequest(response, companyLogo: File, logoList?: File[]) {
+    let logoData = new FormData();
+    let url = response["putLogoURL"];
+
+    logoData.append(response["logoKey"], companyLogo);
+    logoData.append(response["logoKey"], "Value");
+    this.http.put(url, logoData).subscribe(response2 => {
+
+      if (logoList) {
+        this.workLogoRequest(response, logoList);
+      } else {
+        this.isLoaded.next(true);
+      }
+    }, error2 => {
+      console.log(error2);
+      this.isLoaded.next(true);
+    });
   }
 }

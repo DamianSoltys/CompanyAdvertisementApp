@@ -2,11 +2,13 @@
 
 .account-data-component {
   width: 95%;
+
   @include phone {
     margin-bottom: 20px;
     margin-top: 20px;
   }
 }
+
 .account-data-component__form {
   margin-top: 4%;
 
@@ -42,17 +44,20 @@
     margin: auto;
     padding: 0;
     padding-bottom: 20px;
+
     .account-data-form__button-container {
       margin: 0;
       justify-content: space-evenly;
+
       .account-data-form__button--submit {
         width: 45%;
         border-radius: 50px;
         border: 0;
-        background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
+        background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor, 20%) 51%, $bgcolor 100%);
         transition: all .4s ease-in-out;
         background-size: 200%;
-        margin-bottom:10px;
+        margin-bottom: 10px;
+
         &:hover {
           background-position: 100% 0;
         }
@@ -64,7 +69,7 @@
     }
 
     .account-data-form__form-error {
-      margin:auto;
+      margin: auto;
     }
 
     .account-data-form__input-group {
@@ -97,9 +102,11 @@
         @include phone {
           padding: 20px 0;
         }
+
         @include boxShadow(inset 0px 15px 8px -15px rgba(32, 99, 143, 0.66));
 
         .section-container__error-container {
+
           .error-container__text--danger,
           .error-container__text--success {
             margin-bottom: 0;
@@ -132,6 +139,7 @@
               right: 10px;
               color: $bgcolor;
             }
+
             .section-container__select-input {
               -moz-appearance: none;
               -webkit-appearance: none;
@@ -142,6 +150,7 @@
               }
             }
           }
+
           .section-container__input {
             padding: 0;
           }
@@ -189,6 +198,7 @@
   align-self: center;
   padding: 0;
   padding-bottom: 20px;
+
   .data-container__header {
     position: relative;
     min-height: 30px;
@@ -213,8 +223,9 @@
   }
 
   .data-container__form-error {
-    margin:auto;
+    margin: auto;
   }
+
   .data-container__button-container {
     display: flex;
     justify-content: space-evenly;
@@ -226,10 +237,11 @@
       width: 40%;
       border-radius: 50px;
       border: 0;
-      background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
+      background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor, 20%) 51%, $bgcolor 100%);
       transition: all .4s ease-in-out;
       background-size: 200%;
-      margin-bottom:10px;
+      margin-bottom: 10px;
+
       &:hover {
         background-position: 100% 0;
       }
@@ -244,16 +256,19 @@
     padding: 3%;
     margin-top: 2%;
   }
+
   .data-group-container__data-group {
     margin: auto;
 
     .data-group__header {
       padding: 0;
+
       .header__text-node {
         font-size: 1.1rem;
         margin: 0 15px;
         font-weight: bold;
         color: darken($bgcolor, 10);
+
         .text-node__icon {
           padding-right: 5px;
         }
@@ -269,12 +284,15 @@
       margin-bottom: 5px;
       z-index: 1;
       @include boxShadow(inset 0px 15px 8px -15px rgba(32, 99, 143, 0.66));
+
       .container__data-list {
         list-style: none;
         padding: 0;
         justify-content: space-evenly;
+
         .data-list__item {
           padding: 10px;
+
           .data-list__caption {
             padding-right: 10px;
             font-size: 1.1rem;
@@ -282,6 +300,7 @@
           }
         }
       }
+
       @include phone() {
         padding: 10px;
       }

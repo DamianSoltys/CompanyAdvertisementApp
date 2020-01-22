@@ -7,7 +7,8 @@ import { SectionData } from 'src/app/classes/Section';
   styleUrls: ['./search-section.component.scss']
 })
 export class SearchSectionComponent implements OnInit {
-  @Input() sectionData:SectionData;
+  @Input() sectionData: SectionData;
+
   constructor() { }
 
   ngOnInit() {

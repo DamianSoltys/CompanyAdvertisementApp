@@ -14,19 +14,6 @@ export class UserService {
     this.getUserObject();
   }
 
-  private getUserObject() {
-    if (
-      storage_Avaliable('localStorage') &&
-      JSON.parse(localStorage.getItem('userREST'))
-    ) {
-      this.userREST.next(JSON.parse(localStorage.getItem('userREST')));
-    } else {
-      this.userREST.next(null);
-      localStorage.clear();
-      this.updateUser();
-    }
-  }
-
   public getActualUser(userId): Observable<any> {
     return this.http.get(`http://localhost:8090/api/user/${userId}`, {
       observe: 'response'
@@ -58,6 +45,20 @@ export class UserService {
     } else {
       subject.next(false);
     }
+
     return subject;
+  }
+
+  private getUserObject() {
+    if (
+      storage_Avaliable('localStorage') &&
+      JSON.parse(localStorage.getItem('userREST'))
+    ) {
+      this.userREST.next(JSON.parse(localStorage.getItem('userREST')));
+    } else {
+      this.userREST.next(null);
+      localStorage.clear();
+      this.updateUser();
+    }
   }
 }

@@ -54,10 +54,10 @@ export class AccountDataComponent implements OnInit {
     private accountService: AccountDataService,
     private router: Router,
     private lgService: LoginService,
-    private snackbarService:SnackbarService,
-    private formErrorService:FormErrorService,
-    private uDataService:UserService,
-  ) {}
+    private snackbarService: SnackbarService,
+    private formErrorService: FormErrorService,
+    private uDataService: UserService,
+  ) { }
 
   ngOnInit() {
     this.checkForUserData();
@@ -65,11 +65,12 @@ export class AccountDataComponent implements OnInit {
 
   private checkForUserData() {
     this.userObject = JSON.parse(localStorage.getItem('userREST'));
+
     if (storage_Avaliable('localStorage') && this.userObject) {
       this.showAccountData();
     } else {
       this.formErrorService.open({
-        message:'Nie udało się pobrać danych!'
+        message: 'Nie udało się pobrać danych!'
       });
     }
   }
@@ -93,36 +94,34 @@ export class AccountDataComponent implements OnInit {
 
   public onSubmit() {
     if (this.form.newPassword.value === this.form.checkPassword.value) {
-      this.accountService
-        .changePassword(
-          this.form.oldPassword.value,
-          this.form.newPassword.value,
-          this.userObject.userID
-        )
-        .subscribe(
-          response => {
-            this.snackbarService.open({
-              message: 'Hasło zostało zmienione',
-              snackbarType:SnackbarType.success,
-            });
-            let newToken = window.btoa(
-              `${this.userObject.emailAddress}:${this.form.newPassword.value}`
-            );
-            localStorage.setItem('token', newToken);
-            this.uDataService.updateUser().subscribe(()=>{
-              this.accountDataForm.reset();
-              this.showAccountData();
-            });
-          },
-          error => {
-            this.formErrorService.open({
-              message:'Nie udało się zmienić danych!'
-            });
-          }
-        );
+      this.accountService.changePassword(
+        this.form.oldPassword.value,
+        this.form.newPassword.value,
+        this.userObject.userID
+      ).subscribe(
+        response => {
+          this.snackbarService.open({
+            message: 'Hasło zostało zmienione',
+            snackbarType: SnackbarType.success,
+          });
+          let newToken = window.btoa(
+            `${this.userObject.emailAddress}:${this.form.newPassword.value}`
+          );
+          localStorage.setItem('token', newToken);
+          this.uDataService.updateUser().subscribe(() => {
+            this.accountDataForm.reset();
+            this.showAccountData();
+          });
+        },
+        error => {
+          this.formErrorService.open({
+            message: 'Nie udało się zmienić danych!'
+          });
+        }
+      );
     } else {
       this.formErrorService.open({
-        message:'Hasła się od siebie różnią!'
+        message: 'Hasła się od siebie różnią!'
       });
     }
   }
@@ -130,16 +129,15 @@ export class AccountDataComponent implements OnInit {
   public deleteAccount() {
     this.accountService.deleteAccount(this.userObject.userID).subscribe(
       response => {
-        console.log(response);
         this.snackbarService.open({
-          message:'Konto zostało usunięte!',
-          snackbarType:SnackbarType.success,
+          message: 'Konto zostało usunięte!',
+          snackbarType: SnackbarType.success,
         });
         this.lgService.logoutStorageClean();
       },
       error => {
         this.formErrorService.open({
-          message:'Nie udało się usunąć danych!'
+          message: 'Nie udało się usunąć danych!'
         });
       }
     );

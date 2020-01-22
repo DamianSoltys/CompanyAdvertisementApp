@@ -35,7 +35,7 @@ export class PersonalDataComponent implements OnInit {
   public showData = new BehaviorSubject<boolean>(false);
   public showAddingForm = new BehaviorSubject<boolean>(false);
   public showEditingForm = new BehaviorSubject<boolean>(false);
-  public voivodeshipOptions:string[] = [
+  public voivodeshipOptions: string[] = [
     'dolnośląskie',
     'kujawsko-pomorskie',
     'lubelskie',
@@ -55,8 +55,7 @@ export class PersonalDataComponent implements OnInit {
   ];
   public selectConfig = {
     height: '300px',
-  }
-
+  };
   public personalDataForm = this.fb.group({
     address: this.fb.group({
       voivodeship: ['', [Validators.required]],
@@ -114,28 +113,21 @@ export class PersonalDataComponent implements OnInit {
     private pdataService: PersonalDataService,
     private renderer: Renderer2,
     private userService: UserService,
-    private snackbarService:SnackbarService,
-    private formErrorService:FormErrorService
-  ) {}
+    private snackbarService: SnackbarService,
+    private formErrorService: FormErrorService
+  ) { }
 
   ngOnInit() {
     this.getUserObject();
     this.checkForPersonalData();
   }
 
-  private checkForPersonalData() {
-    if (this.checkIfPersonalDataStorage()) {
-      this.naturalUserDataObject = this.getPersonalDataStorage();
-      this.showPersonalData();
-    } else {
-      this.getPersonalDataServer();
-    }
+  get form() {
+    return this.personalDataForm.controls;
   }
 
-  private getUserObject() {
-    this.userService.userREST.subscribe(data => {
-      this.userObject = data;
-    });
+  get formAddress() {
+    return this.personalDataForm.get('address')['controls'];
   }
 
   public showPersonalData(e?: Event) {
@@ -159,6 +151,49 @@ export class PersonalDataComponent implements OnInit {
     this.showEditingForm.next(false);
   }
 
+  public onSubmit() {
+    if (!this.showEditingForm.getValue()) {
+      this.checkIfPostDataSuccess();
+    } else {
+      this.checkIfEditDataSuccess();
+    }
+  }
+
+  public deleteData() {
+    this.pdataService.deletePersonalData(this.userObject.userID, this.userObject.naturalPersonID).subscribe(
+      response => {
+        this.snackbarService.open({
+          message: 'Dane zostały usunięte',
+          snackbarType: SnackbarType.success,
+        });
+
+        this.userService.updateUser();
+        this.deleteStoragePersonalData();
+        this.showAddForm();
+      },
+      error => {
+        this.formErrorService.open({
+          message: 'Nie udało się usunąć danych!',
+        });
+      }
+    );
+  }
+
+  private checkForPersonalData() {
+    if (this.checkIfPersonalDataStorage()) {
+      this.naturalUserDataObject = this.getPersonalDataStorage();
+      this.showPersonalData();
+    } else {
+      this.getPersonalDataServer();
+    }
+  }
+
+  private getUserObject() {
+    this.userService.userREST.subscribe(data => {
+      this.userObject = data;
+    });
+  }
+
   private setEditFormValues() {
     this.formAddress.voivodeship.setValue(this.naturalUserDataObject.address.voivodeship);
     this.formAddress.apartmentNo.setValue(this.naturalUserDataObject.address.apartmentNo);
@@ -172,22 +207,20 @@ export class PersonalDataComponent implements OnInit {
 
   private getPersonalDataServer() {
     if (this.userObject.naturalPersonID) {
-      this.pdataService
-        .getPersonalData(
-          this.userObject.userID,
-          this.userObject.naturalPersonID
-        )
-        .subscribe(
-          response => {
-            this.naturalUserDataObject = response.body as PersonalData;
-            this.setStoragePersonalData(this.naturalUserDataObject);
-            this.checkForPersonalData();
-          },
-          error => {
-            this.naturalUserDataObject = {} as PersonalData;
-            this.showAddForm();
-          }
-        );
+      this.pdataService.getPersonalData(
+        this.userObject.userID,
+        this.userObject.naturalPersonID
+      ).subscribe(
+        response => {
+          this.naturalUserDataObject = response.body as PersonalData;
+          this.setStoragePersonalData(this.naturalUserDataObject);
+          this.checkForPersonalData();
+        },
+        error => {
+          this.naturalUserDataObject = {} as PersonalData;
+          this.showAddForm();
+        }
+      );
     } else {
       this.naturalUserDataObject = {} as PersonalData;
       this.showAddForm();
@@ -196,10 +229,12 @@ export class PersonalDataComponent implements OnInit {
 
   private getPersonalDataStorage(): PersonalData {
     let naturalUserDataObject = {} as PersonalData;
+
     if (storage_Avaliable('localStorage')) {
       naturalUserDataObject = JSON.parse(
         localStorage.getItem('naturalUserData')
       );
+
       return naturalUserDataObject;
     }
   }
@@ -232,100 +267,55 @@ export class PersonalDataComponent implements OnInit {
     }
   }
 
-  get form() {
-    return this.personalDataForm.controls;
-  }
-
-  get formAddress() {
-    return this.personalDataForm.get('address')['controls'];
-  }
-
-  public onSubmit() {
-    if (!this.showEditingForm.getValue()) {
-      this.checkIfPostDataSuccess();
-    } else {
-      this.checkIfEditDataSuccess();
-    }
-  }
-
   private checkIfPostDataSuccess() {
-    this.pdataService
-      .sendPersonalData(
-        this.personalDataForm.value as PersonalData,
-        this.userObject.userID
-      )
-      .subscribe(
-        (response: HttpResponse<any>) => {
-          this.snackbarService.open({
-            message:'Dane zostały zapisane',
-            snackbarType:SnackbarType.success,
-          });
+    this.pdataService.sendPersonalData(
+      this.personalDataForm.value as PersonalData,
+      this.userObject.userID
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        this.snackbarService.open({
+          message: 'Dane zostały zapisane',
+          snackbarType: SnackbarType.success,
+        });
 
-          this.setStoragePersonalData(this.personalDataForm.value);
-          this.personalDataForm.reset();
-          this.userService.updateUser().subscribe(()=>{
-            this.checkForPersonalData();
-          });
+        this.setStoragePersonalData(this.personalDataForm.value);
+        this.personalDataForm.reset();
+        this.userService.updateUser().subscribe(() => {
+          this.checkForPersonalData();
+        });
 
-        },
-        error => {
-          this.formErrorService.open({
-            message:'Nie udało się zapisać danych!',
-          });
-        }
-      );
+      },
+      error => {
+        this.formErrorService.open({
+          message: 'Nie udało się zapisać danych!',
+        });
+      }
+    );
   }
 
   private checkIfEditDataSuccess() {
-    this.pdataService
-      .editPersonalData(
-        this.personalDataForm.value as PersonalData,
-        this.userObject.userID,
-        this.userObject.naturalPersonID
-      )
-      .subscribe(
-        (response: HttpResponse<any>) => {
-          this.snackbarService.open({
-            message:'Dane uległy edycji',
-            snackbarType:SnackbarType.success,
-          });
-          this.setStoragePersonalData(this.personalDataForm.value);
-          this.personalDataForm.reset();
-          this.deleteStoragePersonalData();
-          this.userService.updateUser();
-          this.getUserObject();
-          this.checkForPersonalData();
-        },
-        error => {
-          this.formErrorService.open({
-            message:'Nie udało się zmienić danych!',
-          });
-        }
-      );
-  }
-
-  public deleteData() {
-    this.pdataService
-      .deletePersonalData(
-        this.userObject.userID,
-        this.userObject.naturalPersonID
-      )
-      .subscribe(
-        response => {
-          this.snackbarService.open({
-            message:'Dane zostały usunięte',
-            snackbarType:SnackbarType.success,
-          });
-
-          this.userService.updateUser();
-          this.deleteStoragePersonalData();
-          this.showAddForm();
-        },
-        error => {
-          this.formErrorService.open({
-            message:'Nie udało się usunąć danych!',
-          });
-        }
-      );
+    this.pdataService.editPersonalData(
+      this.personalDataForm.value as PersonalData,
+      this.userObject.userID,
+      this.userObject.naturalPersonID
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        this.snackbarService.open({
+          message: 'Dane uległy edycji',
+          snackbarType: SnackbarType.success,
+        });
+        this.setStoragePersonalData(this.personalDataForm.value);
+        this.personalDataForm.reset();
+        this.deleteStoragePersonalData();
+        this.userService.updateUser();
+        this.getUserObject();
+        this.checkForPersonalData();
+      },
+      error => {
+        this.formErrorService.open({
+          message: 'Nie udało się zmienić danych!',
+        });
+      }
+    );
   }
 }

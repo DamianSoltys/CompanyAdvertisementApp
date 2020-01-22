@@ -15,18 +15,6 @@ export interface RecommendationCount {
 export class RecommendationService {
   constructor(private http: HttpClient) { }
 
-  private sortData(recomendationData: RecommendationCount[]) {
-    recomendationData.sort(function (a, b) {
-      if (a.count > b.count) {
-        return -1;
-      }
-      if (b.count > a.count) {
-        return 1;
-      }
-      return 0;
-    });
-  }
-
   public getRecomendationData(recomendationData: RecommendationCount[]) {
     let subject = new Subject<any>();
     let httpParams = new HttpParams();
@@ -130,5 +118,17 @@ export class RecommendationService {
     return function callBack(element) {
       return element.category === category;
     };
+  }
+
+  private sortData(recomendationData: RecommendationCount[]) {
+    recomendationData.sort(function (a, b) {
+      if (a.count > b.count) {
+        return -1;
+      }
+      if (b.count > a.count) {
+        return 1;
+      }
+      return 0;
+    });
   }
 }

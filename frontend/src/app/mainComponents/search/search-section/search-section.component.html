@@ -14,26 +14,20 @@
     </div>
   </div>
   <div class="section-container__section-action">
-    <div class="section-action__button-container" *ngIf="sectionData.type === 'Zakład' || sectionData.type === 'Branch'">
-      <a
-        [routerLink]="[
+    <div class="section-action__button-container"
+      *ngIf="sectionData.type === 'Zakład' || sectionData.type === 'Branch'">
+      <a [routerLink]="[
           '/branchProfile',
           sectionData.companyId,
           sectionData.id
-        ]"
-        class="btn btn-primary section-action__button--profile"
-        >Profil</a
-      >
+        ]" class="btn btn-primary section-action__button--profile">Profil</a>
     </div>
-    <div class="section-action__button-container" *ngIf="sectionData.type === 'Firma' || sectionData.type === 'Company'">
-      <a
-        [routerLink]="[
+    <div class="section-action__button-container"
+      *ngIf="sectionData.type === 'Firma' || sectionData.type === 'Company'">
+      <a [routerLink]="[
           '/companyProfile',
           sectionData.id   
-        ]"
-        class="btn btn-primary section-action__button--profile"
-        >Profil</a
-      >
+        ]" class="btn btn-primary section-action__button--profile">Profil</a>
     </div>
   </div>
 </div>

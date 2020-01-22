@@ -1,4 +1,5 @@
 @import '../../../commonStyles/shared';
+
 .register-component__form {
 
   .form__register-form {
@@ -77,6 +78,7 @@
       .error-container__text-danger {
         margin: 5px;
       }
+
       .error-container__text-success {
         margin: 5px;
       }
@@ -89,10 +91,11 @@
       margin-bottom: 2%;
       border-radius: 50px;
       border: 0;
-      background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
+      background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor, 20%) 51%, $bgcolor 100%);
       transition: all .4s ease-in-out;
       margin-top: 4%;
       background-size: 200%;
+
       &:hover {
         background-position: 100% 0;
       }
@@ -126,6 +129,7 @@
     @include tablet {
       width: 50vw;
     }
+
     @include desktop {
       min-width: 450px;
     }

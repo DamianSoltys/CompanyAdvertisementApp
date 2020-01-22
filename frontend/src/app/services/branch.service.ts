@@ -19,12 +19,6 @@ export class BranchService {
 
   constructor(private http: HttpClient) { }
 
-  private getRidOfPreviewLogo(branches: Branch[]) {
-    branches.map(branch => {
-      branch.actualSelectedLogo = undefined;
-    });
-  }
-
   public getBranches() {
     return this.http.get(`http://localhost:8090/api/branch`, { observe: "response" });
   }
@@ -125,5 +119,11 @@ export class BranchService {
     if (storage_Avaliable("localStorage")) {
       localStorage.removeItem("branchData");
     }
+  }
+
+  private getRidOfPreviewLogo(branches: Branch[]) {
+    branches.map(branch => {
+      branch.actualSelectedLogo = undefined;
+    });
   }
 }

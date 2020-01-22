@@ -6,47 +6,56 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
+
   .search-component__search-data-container {
     width: 60%;
+
     @include phone {
       width: 100%;
     }
 
     .search-data-container__quantity {
-      color:darken($bgcolor,10%);
+      color: darken($bgcolor, 10%);
       font-size: 1.2rem;
-      padding-top:10px;
+      padding-top: 10px;
     }
+
     .search-data-container__buttons {
       display: flex;
       justify-content: center;
+
       .buttons__button {
-        &--previous,&--next {
-          border:0;
+
+        &--previous,
+        &--next {
+          border: 0;
           border-radius: 50px;
-          background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
+          background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor, 20%) 51%, $bgcolor 100%);
           transition: all .4s ease-in-out;
           background-size: 200%;
-          margin-top:10px;
+          margin-top: 10px;
+
           &:hover {
             background-position: 100% 0;
           }
         }
-      
+
       }
+
       .buttons__text-node {
         font-size: 1.5rem;
-        color:darken($bgcolor,10%);
-        margin:10px;
+        color: darken($bgcolor, 10%);
+        margin: 10px;
       }
     }
   }
 
   .search-component__empty {
-    margin-top:20px;
+    margin-top: 20px;
+
     .empty__text-node {
       font-size: 1.2rem;
-      color:darken($bgcolor,10%);
+      color: darken($bgcolor, 10%);
     }
   }
 }

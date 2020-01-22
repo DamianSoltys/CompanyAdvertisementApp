@@ -1,24 +1,10 @@
 <div class="container-fluid search-component">
-  <form
-    class="search-component__form"
-    [formGroup]="searchform"
-    (ngSubmit)="onSubmit()"
-  >
+  <form class="search-component__form" [formGroup]="searchform" (ngSubmit)="onSubmit()">
     <p class="form__text-node">Znajdź swoją wymarzoną firmę!</p>
     <div class="form_main-container">
-      <span class="main-container__span-icon"
-        ><i class="fas fa-search main-container__icon"></i
-      ></span>
-      <input
-        formControlName="search"
-        autocomplete="off"
-        type="text"
-        class="form-control main-container__input"
-        name="search-input"
-        data-popover-content="#popoverHelp"
-        data-toggle="popover"
-        data-placement="bottom"
-      />
+      <span class="main-container__span-icon"><i class="fas fa-search main-container__icon"></i></span>
+      <input formControlName="search" autocomplete="off" type="text" class="form-control main-container__input"
+        name="search-input" data-popover-content="#popoverHelp" data-toggle="popover" data-placement="bottom" />
       <div id="popoverHelp" class="main-container__popover">
         <div class="popover-body popover__popover-container">
           <p class="popover-container__text-node">
@@ -26,19 +12,16 @@
           </p>
         </div>
       </div>
-      <button
-        type="submit"
-        class="btn btn-primary pull-right main-container__button--search"
-      >
+      <button type="submit" class="btn btn-primary pull-right main-container__button--search">
         Szukaj
       </button>
     </div>
   </form>
   <div class="search-component__empty text-center" *ngIf="showEmptyMessage()">
     <p class="empty__text-node">
-        Niestety nie znaleziono danych o podanych kryteriach
+      Niestety nie znaleziono danych o podanych kryteriach
     </p>
-</div>
+  </div>
   <div class="search-component__search-data-container" *ngIf="actualList?.data">
     <div class="search-data-container__quantity text-center">
       znaleziono ({{companyNumber}}) {{companyResultText}} oraz ({{branchNumber}}) {{branchResultText}}
@@ -47,12 +30,12 @@
       <app-search-section *ngFor="let data of actualList.data" [sectionData]="data"></app-search-section>
     </div>
     <div class="search-data-container__buttons" *ngIf="actualList?.total_pages > 1">
-      <button class="btn btn-primary buttons__button--previous" (click) = "previousPage();" *ngIf="actualList?.pre_page">
+      <button class="btn btn-primary buttons__button--previous" (click)="previousPage();" *ngIf="actualList?.pre_page">
         <i class="fas fa-arrow-circle-left fa-lg"></i>
       </button>
       <p class="buttons__text-node">{{actualList.page}}</p>
-      <button class="btn btn-primary buttons__button--next" (click) = "nextPage();" *ngIf="actualList?.next_page">
-       <i class="fas fa-arrow-circle-right fa-lg"></i>
+      <button class="btn btn-primary buttons__button--next" (click)="nextPage();" *ngIf="actualList?.next_page">
+        <i class="fas fa-arrow-circle-right fa-lg"></i>
       </button>
     </div>
   </div>

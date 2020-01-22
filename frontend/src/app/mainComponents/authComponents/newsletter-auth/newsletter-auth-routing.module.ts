@@ -8,4 +8,4 @@ const routes: Routes = [{ path: '', component: NewsletterAuthComponent }];
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class NewsletterAuthRoutingModule {}
+export class NewsletterAuthRoutingModule { }

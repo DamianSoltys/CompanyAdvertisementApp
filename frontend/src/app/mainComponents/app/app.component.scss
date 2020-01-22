@@ -1,7 +1,9 @@
 @import '../../../commonStyles/shared';
+
 :host {
   display: block;
 }
+
 body,
 html {
   height: 100%;
@@ -26,20 +28,21 @@ html {
   top: 40vh;
   transform: rotate(-90deg);
   transform-origin: top left;
-  width:200px;
+  width: 200px;
+
   @include phone {
-    display:none;
+    display: none;
   }
-  
+
 
   .nearby-container__button-nearby {
-    width:100%;
+    width: 100%;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-    padding:0;
-    margin:0;
+    padding: 0;
+    margin: 0;
     background: $bgcolor;
-    border:0;
+    border: 0;
   }
 }
 
@@ -91,9 +94,10 @@ html {
         all: initial;
         width: 100%;
       }
+
       border-radius: 0;
     }
-    
+
     border-radius: 0;
 
     &:hover,
@@ -141,7 +145,7 @@ html {
     outline: none;
   }
 
-  &:hover + .logo-container__logo-img {
+  &:hover+.logo-container__logo-img {
     opacity: 0.8;
   }
 
@@ -166,7 +170,7 @@ html {
   border: 1px solid $bgcolor;
   z-index: 10;
   right: -5px;
-  top:48px;
+  top: 48px;
   width: calc(100vw + 10px);
   background: #fff;
 
@@ -215,6 +219,7 @@ html {
     &:focus {
       outline: none;
     }
+
     cursor: default;
   }
 }

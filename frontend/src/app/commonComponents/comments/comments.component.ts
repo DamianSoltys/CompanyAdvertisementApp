@@ -15,19 +15,19 @@ import {
   OpinionData
 } from 'src/app/services/comments.service';
 import { UserService } from 'src/app/services/user.service';
-import { UserREST } from 'src/app/classes/User';
+import { UserREST } from 'src/app/interfaces/User';
 import { ActivatedRoute } from '@angular/router';
 import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
 import { CompanyService } from 'src/app/services/company.service';
 export interface OpinionListData {
-  comment?:string,
-  rate?:number
-  userName?:string,
-  userId?:number,
-  branchId?:number,
-  ratingId?:number,
-  isOwner?:boolean,
-  commentId?:number,
+  comment?: string,
+  rate?: number
+  userName?: string,
+  userId?: number,
+  branchId?: number,
+  ratingId?: number,
+  isOwner?: boolean,
+  commentId?: number,
 }
 @Component({
   selector: 'app-comments',
@@ -47,7 +47,7 @@ export interface OpinionListData {
   ]
 })
 export class CommentsComponent implements OnInit {
-  @ViewChild('scrollContainer') scrollContainer:ElementRef;
+  @ViewChild('scrollContainer') scrollContainer: ElementRef;
   public ratingForm = this.fb.group({
     commentText: ['', [Validators.required]]
   });
@@ -55,26 +55,26 @@ export class CommentsComponent implements OnInit {
   public isEditForm = new BehaviorSubject(false);
   public isLoaded = new BehaviorSubject(false);
   public isOwner = new BehaviorSubject(false);
-  public currentRate = this.isOwner.value?1:null;
-  public numberOfPages:number;
-  public actualPageLoaded:number = 0;
+  public currentRate = this.isOwner.value ? 1 : null;
+  public numberOfPages: number;
+  public actualPageLoaded: number = 0;
 
   public config = {
     toolbar: [['bold', 'italic', 'underline']]
   };
   public userREST: UserREST;
   public branchId: string;
-  public companyId:string;
-  public opinions:OpinionListData[] = [];
-  public opinionData:OpinionListData;
+  public companyId: string;
+  public opinions: OpinionListData[] = [];
+  public opinionData: OpinionListData;
   constructor(
     private fb: FormBuilder,
     private cDataService: CommentsService,
     private uDataService: UserService,
     private activatedRoute: ActivatedRoute,
-    private sDataService:SnackbarService,
-    private coDataService:CompanyService
-  ) {}
+    private sDataService: SnackbarService,
+    private coDataService: CompanyService
+  ) { }
 
   ngOnInit() {
     this.activatedRoute.parent.params.subscribe(params => {
@@ -88,17 +88,17 @@ export class CommentsComponent implements OnInit {
   public getData() {
     this.uDataService.userREST.subscribe(data => {
       this.userREST = data;
-      if(this.userREST) {
-        if(this.userREST.userID) {
+      if (this.userREST) {
+        if (this.userREST.userID) {
           this.opinionData = {
-            userId:this.userREST.userID,
-            branchId:Number(this.branchId),
+            userId: this.userREST.userID,
+            branchId: Number(this.branchId),
           };
         }
       } else {
         this.opinionData = {
-          userId:null,
-          branchId:Number(this.branchId),
+          userId: null,
+          branchId: Number(this.branchId),
         };
       }
       this.getOpinions();
@@ -112,39 +112,39 @@ export class CommentsComponent implements OnInit {
     event.preventDefault();
 
     this.opinionData.comment = this.ratingForm.controls.commentText.value;
-    if(this.currentRate) {
+    if (this.currentRate) {
       this.opinionData.rate = this.currentRate;
     } else {
       this.opinionData.rate = null;
     }
     let rateId = null;
-    if(this.opinions) {
-      this.opinions.forEach(opinion=>{
-        if(opinion.userId == this.opinionData.userId) {
-          
+    if (this.opinions) {
+      this.opinions.forEach(opinion => {
+        if (opinion.userId == this.opinionData.userId) {
+
           rateId = opinion.ratingId;
         }
       });
     }
-    this.cDataService.postOpinion(this.opinionData,rateId).subscribe(response => {
-      if(response) {
+    this.cDataService.postOpinion(this.opinionData, rateId).subscribe(response => {
+      if (response) {
         this.sDataService.open({
-          message:'Pomyślnie dodano opinie!',
-          snackbarType:SnackbarType.success,
+          message: 'Pomyślnie dodano opinie!',
+          snackbarType: SnackbarType.success,
         });
-        this.getOpinions(null,true);
+        this.getOpinions(null, true);
         this.isForm.next(false);
       } else {
         this.sDataService.open({
-          message:'Nie udało się dodać opinii!',
-          snackbarType:SnackbarType.error,
+          message: 'Nie udało się dodać opinii!',
+          snackbarType: SnackbarType.error,
         });
       }
     });
   }
 
   public canShowAddButton() {
-    if(this.userREST) {
+    if (this.userREST) {
       return true;
     } else {
       return false;
@@ -152,15 +152,15 @@ export class CommentsComponent implements OnInit {
   }
 
   public canShowRatingForm() {
-    if(!this.isOwner.value) {
+    if (!this.isOwner.value) {
       return true;
     } else {
       return false;
     }
   }
   public canShowEmptyData() {
-    if(this.opinions) {
-      if(this.opinions.length) {
+    if (this.opinions) {
+      if (this.opinions.length) {
         return false;
       } else {
         return true;
@@ -172,54 +172,54 @@ export class CommentsComponent implements OnInit {
 
 
   @HostListener('scroll', ['$event'])
-  public onScroll(event:any) {
+  public onScroll(event: any) {
     //dokonczyc
     let tracker = event.target;
     let limit = tracker.scrollHeight - tracker.clientHeight;
     if (event.target.scrollTop === limit) {
-      if(this.actualPageLoaded < this.numberOfPages) {
-        this.getOpinions(this.actualPageLoaded+1);
+      if (this.actualPageLoaded < this.numberOfPages) {
+        this.getOpinions(this.actualPageLoaded + 1);
         this.actualPageLoaded++;
       }
     }
   }
-  
-  public getOpinions(pageNumber?:number,clearOpinions?:boolean) {
+
+  public getOpinions(pageNumber?: number, clearOpinions?: boolean) {
     let subject = new Subject<boolean>();
-    subject.subscribe(data=>{
+    subject.subscribe(data => {
       this.isLoaded.next(true);
     });
-    if(clearOpinions) {
+    if (clearOpinions) {
       this.opinions = [];
       this.actualPageLoaded = 0;
     }
-    this.cDataService.getOpinion(this.opinionData,pageNumber).subscribe(data=>{
+    this.cDataService.getOpinion(this.opinionData, pageNumber).subscribe(data => {
       console.log(data)
       this.numberOfPages = data.numberOfPages;
       data.comment.forEach(comment => {
-        let opinion:OpinionListData = {
+        let opinion: OpinionListData = {
           comment: comment.comment,
           userName: comment.username,
           commentId: comment.commentId,
           userId: comment.userId,
-          isOwner:comment.isOwnBranchCommented?comment.isOwnBranchCommented:false,
+          isOwner: comment.isOwnBranchCommented ? comment.isOwnBranchCommented : false,
         }
         this.opinions.push(opinion);
       });
 
-      data.rating.forEach(rate=>{
+      data.rating.forEach(rate => {
         this.opinions.map(opinion => {
-          if(rate.userId === opinion.userId) {
+          if (rate.userId === opinion.userId) {
             opinion.rate = rate.rating;
             opinion.ratingId = rate.ratingId;
-          } 
+          }
         });
       });
 
       console.log(this.opinions);
       this.isOwner.next(this.coDataService.checkForUserPermission(Number(this.companyId)));
       subject.next(true);
-    },error=>{
+    }, error => {
       subject.next(false);
     });
   }

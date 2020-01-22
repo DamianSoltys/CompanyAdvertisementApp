@@ -3,7 +3,8 @@ export function storage_Avaliable(type) {
     let x = '__storage_test__';
     storage = window[type];
     storage.setItem(x, x);
-    if(storage.getItem(x) === x) {
+
+    if (storage.getItem(x) === x) {
         storage.removeItem(x);
         return true;
     } else {

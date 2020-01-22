@@ -20,7 +20,8 @@ export class AuthGuard implements CanActivate {
     private lgservice: LoginService,
     private uDataService: UserService,
     private sDataService: SnackbarService
-  ) {}
+  ) { }
+
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
@@ -33,6 +34,7 @@ export class AuthGuard implements CanActivate {
         message: 'Nie jesteś zalogowany!'
       });
       this.router.navigate(['']);
+
       return false;
     }
   }

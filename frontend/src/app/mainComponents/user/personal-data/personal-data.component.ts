@@ -15,10 +15,10 @@ import {
 import { BehaviorSubject } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 
-import { PersonalData, UserREST } from 'src/app/classes/User';
+import { PersonalData, UserREST } from 'src/app/interfaces/User';
 import { PersonalDataService } from 'src/app/services/personal-data.service';
-import { voivodeships } from 'src/app/classes/Voivodeship';
-import { storage_Avaliable } from 'src/app/classes/storage_checker';
+import { voivodeships } from 'src/app/interfaces/Voivodeship';
+import { storage_Avaliable } from 'src/app/interfaces/storage_checker';
 import { UserService } from 'src/app/services/user.service';
 import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
 import { FormErrorService } from 'src/app/services/form-error.service';

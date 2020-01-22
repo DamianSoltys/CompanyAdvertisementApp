@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
-import { storage_Avaliable } from "../classes/storage_checker";
+import { storage_Avaliable } from "../interfaces/storage_checker";
 import { Route, Router } from "@angular/router";
 import { HttpClient, HttpHeaders, HttpRequest, HttpResponse, HttpParams } from "@angular/common/http";
-import { Company, Branch, Address, GetCompany } from "../classes/Company";
-import { UserREST } from "../classes/User";
+import { Company, Branch, Address, GetCompany } from "../interfaces/Company";
+import { UserREST } from "../interfaces/User";
 import { BehaviorSubject, Subject, Observable } from "rxjs";
 import { EditRequestData } from "../mainComponents/user/company/company.component";
 import { UserService } from "./user.service";

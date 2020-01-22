@@ -8,5 +8,4 @@ export let categories = [
     'Usługi kosmetyczne',
     'Usługi informatyczne',
     'Sprzedaż produktów',
-    
-]
+];

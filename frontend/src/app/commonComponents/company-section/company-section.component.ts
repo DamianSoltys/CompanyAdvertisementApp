@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { Company, GetCompany, Branch } from 'src/app/classes/Company';
-import { storage_Avaliable } from 'src/app/classes/storage_checker';
-import { UserREST } from 'src/app/classes/User';
+import { Company, GetCompany, Branch } from 'src/app/interfaces/Company';
+import { storage_Avaliable } from 'src/app/interfaces/storage_checker';
+import { UserREST } from 'src/app/interfaces/User';
 import { BehaviorSubject } from 'rxjs';
 import { CompanyService } from 'src/app/services/company.service';
 import { UserService } from 'src/app/services/user.service';
@@ -23,14 +23,14 @@ export class CompanySectionComponent implements OnInit, OnDestroy {
     private cDataService: CompanyService,
     private uDataService: UserService,
     private bDataService: BranchService
-  ) {}
+  ) { }
 
   ngOnInit() {
     if (storage_Avaliable('localStorage')) {
       let userREST: UserREST = JSON.parse(localStorage.getItem('userREST'));
       if (userREST) {
         if (this.companyData) {
-          if(userREST.companiesIDs) {
+          if (userREST.companiesIDs) {
             userREST.companiesIDs.forEach(value => {
               if (value === this.companyData.companyId) this.owner.next(true);
             });
@@ -40,9 +40,9 @@ export class CompanySectionComponent implements OnInit, OnDestroy {
     }
   }
   public showBranches() {
-    if(this.showWorks && this.companyData && this.branchData) {
+    if (this.showWorks && this.companyData && this.branchData) {
       return true;
-    }else {
+    } else {
       return false;
     }
   }
@@ -50,7 +50,7 @@ export class CompanySectionComponent implements OnInit, OnDestroy {
   public deleteCompany() {
     this.cDataService.deleteCompany(this.companyData.companyId).subscribe(
       response => {
-        this.uDataService.updateUser().subscribe(()=>{
+        this.uDataService.updateUser().subscribe(() => {
           this.cDataService.removeCompanyFromLocalStorage(this.companyData.companyId);
           this.cDataService.getCompanyData.next(false);
         });
@@ -64,7 +64,7 @@ export class CompanySectionComponent implements OnInit, OnDestroy {
   public deleteBranch() {
     this.bDataService.deleteBranch(this.branchData.branchId).subscribe(
       response => {
-        this.uDataService.updateUser().subscribe(()=>{
+        this.uDataService.updateUser().subscribe(() => {
           this.bDataService.getBranchData.next(true);
         });
       },

@@ -5,11 +5,11 @@ import {
   FormControl,
   Validators
 } from '@angular/forms';
-import { UserLog, UserREST, UserReg, PersonalData } from '../../classes/User';
+import { UserLog, UserREST, UserReg, PersonalData } from '../../interfaces/User';
 import { LoginService } from '../../services/login.service';
 import { Router } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
-import { storage_Avaliable } from '../../classes/storage_checker';
+import { storage_Avaliable } from '../../interfaces/storage_checker';
 import { UserService } from '../../services/user.service';
 import { SnackbarService, SnackbarType } from '../../services/snackbar.service';
 import { PersonalDataService } from '../../services/personal-data.service';
@@ -68,7 +68,7 @@ export class LoginComponent implements OnInit {
   }
 
   private setUserData(): UserLog {
-    const User_data = new UserLog();
+    let User_data: UserLog = {};
     User_data.email = this.loginForm.get('email').value;
     User_data.password = this.loginForm.get('password').value;
 

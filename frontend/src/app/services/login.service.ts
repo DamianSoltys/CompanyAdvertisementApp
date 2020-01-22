@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { UserLog } from "../classes/User";
+import { UserLog } from "../interfaces/User";
 import { Observable, BehaviorSubject, observable, Subject } from "rxjs";
-import { storage_Avaliable } from "../classes/storage_checker";
+import { storage_Avaliable } from "../interfaces/storage_checker";
 import { Route, Router } from "@angular/router";
 
 declare var FB: any;

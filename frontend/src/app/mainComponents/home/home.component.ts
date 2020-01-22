@@ -1,8 +1,8 @@
 import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
 import { RecommendationService, RecommendationCount } from '../../services/recommendation.service';
-import { RecommendationBranch } from '../../classes/Company';
+import { RecommendationBranch } from '../../interfaces/Company';
 import { Position } from '../user/company/company.component';
-import { storage_Avaliable } from '../../classes/storage_checker';
+import { storage_Avaliable } from '../../interfaces/storage_checker';
 import { PositionService } from '../../services/position.service';
 import { BranchService } from '../../services/branch.service';
 import { CarouselComponent } from 'ngx-carousel-lib';

@@ -10,9 +10,9 @@ import {
   AfterContentChecked
 } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { storage_Avaliable } from 'src/app/classes/storage_checker';
-import { voivodeships } from 'src/app/classes/Voivodeship';
-import { categories } from 'src/app/classes/Category';
+import { storage_Avaliable } from 'src/app/interfaces/storage_checker';
+import { voivodeships } from 'src/app/interfaces/Voivodeship';
+import { categories } from 'src/app/interfaces/Category';
 import {
   FormGroup,
   FormControl,
@@ -20,10 +20,10 @@ import {
   Validators
 } from '@angular/forms';
 import { MouseEvent } from '@agm/core';
-import { Company, Branch, GetCompany } from 'src/app/classes/Company';
+import { Company, Branch, GetCompany } from 'src/app/interfaces/Company';
 import { PersonalDataService } from 'src/app/services/personal-data.service';
 import { CompanyService } from 'src/app/services/company.service';
-import { UserREST } from 'src/app/classes/User';
+import { UserREST } from 'src/app/interfaces/User';
 import { UserService } from 'src/app/services/user.service';
 import { HttpEventType, HttpRequest, HttpResponse } from '@angular/common/http';
 import { LoaderService } from 'src/app/services/loader.service';

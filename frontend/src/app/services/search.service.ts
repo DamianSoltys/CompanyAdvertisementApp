@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { SearchResponse, SectionData } from '../classes/Section';
+import { SearchResponse, SectionData } from '../interfaces/Section';
 import { FormGroup } from '@angular/forms';
 import { AdvSearchData } from '../mainComponents/search/advanced-search/advanced-search.component';
 

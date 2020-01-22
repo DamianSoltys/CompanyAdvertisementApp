@@ -17,8 +17,8 @@ import {
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LoginService } from '../../services/login.service';
 import { Router, RouterOutlet } from '@angular/router';
-import { storage_Avaliable } from '../../classes/storage_checker';
-import { UserREST, PersonalData } from '../../classes/User';
+import { storage_Avaliable } from '../../interfaces/storage_checker';
+import { UserREST, PersonalData } from '../../interfaces/User';
 import { PersonalDataService } from '../../services/personal-data.service';
 import { SnackbarService, SnackbarType } from '../../services/snackbar.service';
 import { slideInAnimation } from '../../animations/route-animation';

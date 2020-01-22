@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { Position } from '../mainComponents/user/company/company.component';
-import { storage_Avaliable } from '../classes/storage_checker';
+import { storage_Avaliable } from '../interfaces/storage_checker';
 
 @Injectable({
   providedIn: 'root'

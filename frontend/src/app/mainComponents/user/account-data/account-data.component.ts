@@ -15,8 +15,8 @@ import {
 import { BehaviorSubject } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 
-import { UserREST } from 'src/app/classes/User';
-import { storage_Avaliable } from 'src/app/classes/storage_checker';
+import { UserREST } from 'src/app/interfaces/User';
+import { storage_Avaliable } from 'src/app/interfaces/storage_checker';
 import { UserService } from 'src/app/services/user.service';
 import { AccountDataService } from 'src/app/services/account-data.service';
 import { Router } from '@angular/router';

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { SectionData } from 'src/app/classes/Section';
+import { SectionData } from 'src/app/interfaces/Section';
 
 @Component({
   selector: 'app-search-section',

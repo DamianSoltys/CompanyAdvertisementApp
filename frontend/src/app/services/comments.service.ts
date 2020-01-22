@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Subject } from 'rxjs';
-import { SearchResponse, CommentResponse } from '../classes/Section';
+import { SearchResponse, CommentResponse } from '../interfaces/Section';
 import { OpinionListData } from '../commonComponents/comments/comments.component';
 
 export interface OpinionData {

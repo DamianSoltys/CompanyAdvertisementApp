@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import * as $ from 'jquery';
-import { SearchResponse, SectionData } from '../../classes/Section';
+import { SearchResponse, SectionData } from '../../interfaces/Section';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { SearchService } from 'src/app/services/search.service';
 export interface Paginator {

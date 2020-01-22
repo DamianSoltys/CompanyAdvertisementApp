@@ -14,7 +14,7 @@ import { LoaderService } from '../services/loader.service';
 
 @Injectable()
 export class HttpConfigInterceptor implements HttpInterceptor {
-  constructor(public loaderService: LoaderService) {}
+  constructor(public loaderService: LoaderService) { }
 
   intercept(
     request: HttpRequest<any>,
@@ -22,6 +22,7 @@ export class HttpConfigInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     this.loaderService.showLoader();
     const token: string = localStorage.getItem('token');
+
     if (token) {
       request = request.clone({
         headers: request.headers.set('Authorization', 'Basic ' + token)

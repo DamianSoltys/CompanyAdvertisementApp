@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { storage_Avaliable } from "../classes/storage_checker";
+import { storage_Avaliable } from "../interfaces/storage_checker";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Subject } from "rxjs";
 export interface RecommendationData {

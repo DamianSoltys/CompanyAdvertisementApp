@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { PersonalData, UserREST, UserReg } from '../classes/User';
+import { PersonalData, UserREST, UserReg } from '../interfaces/User';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
-import { storage_Avaliable } from '../classes/storage_checker';
+import { storage_Avaliable } from '../interfaces/storage_checker';
 
 @Injectable({
   providedIn: 'root'

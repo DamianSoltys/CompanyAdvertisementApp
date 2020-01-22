@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Branch } from 'src/app/classes/Company';
+import { Branch } from 'src/app/interfaces/Company';
 import { BehaviorSubject } from 'rxjs';
 import { trigger, style, animate, transition ,state } from '@angular/animations';
 import { CollapseService } from 'src/app/services/collapse.service';

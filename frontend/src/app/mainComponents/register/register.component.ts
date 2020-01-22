@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms";
-import { UserReg } from "../../classes/User";
+import { UserReg } from "../../interfaces/User";
 import { RegisterService } from "../../services/register.service";
 import { HttpResponse } from "@angular/common/http";
 import { SnackbarOptions, SnackbarService, SnackbarType } from "../../services/snackbar.service";
@@ -62,7 +62,7 @@ export class RegisterComponent implements OnInit {
   }
 
   private setUserData(): UserReg {
-    const User_Data = new UserReg();
+    let User_Data: UserReg = {};
     User_Data.name = this.registerForm.get("name").value;
     User_Data.email = this.registerForm.get("email").value;
     User_Data.password = this.registerForm.get("password").value;

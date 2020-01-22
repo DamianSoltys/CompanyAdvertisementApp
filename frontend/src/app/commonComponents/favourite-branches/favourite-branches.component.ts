@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FavouriteResponse, FavouriteService } from 'src/app/services/favourite.service';
-import { Branch } from 'src/app/classes/Company';
-import { CommentResponse } from 'src/app/classes/Section';
-import { storage_Avaliable } from 'src/app/classes/storage_checker';
-import { UserREST } from 'src/app/classes/User';
+import { Branch } from 'src/app/interfaces/Company';
+import { CommentResponse } from 'src/app/interfaces/Section';
+import { storage_Avaliable } from 'src/app/interfaces/storage_checker';
+import { UserREST } from 'src/app/interfaces/User';
 import { BranchService } from 'src/app/services/branch.service';
 import { CommentsService, OpinionData, RatingData } from 'src/app/services/comments.service';
 import { HttpParams } from '@angular/common/http';

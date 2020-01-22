@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { storage_Avaliable } from 'src/app/classes/storage_checker';
+import { storage_Avaliable } from 'src/app/interfaces/storage_checker';
 import { Position, Marker } from 'src/app/mainComponents/user/company/company.component';
 import { SearchService } from 'src/app/services/search.service';
 import { BranchService } from 'src/app/services/branch.service';
-import { Branch } from 'src/app/classes/Company';
+import { Branch } from 'src/app/interfaces/Company';
 import { Router } from '@angular/router';
 import { AgmMap } from '@agm/core';
 import { Subject } from 'rxjs';

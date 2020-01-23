@@ -15,14 +15,14 @@ import {
 import { BehaviorSubject } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 
-import { UserREST } from 'src/app/interfaces/User';
-import { storage_Avaliable } from 'src/app/interfaces/storage_checker';
-import { UserService } from 'src/app/services/user.service';
-import { AccountDataService } from 'src/app/services/account-data.service';
+import { UserREST } from '@interfaces/User';
+import { storage_Avaliable } from '@interfaces/storage_checker';
+import { UserService } from '@services/user.service';
+import { AccountDataService } from '@services/account-data.service';
 import { Router } from '@angular/router';
-import { LoginService } from 'src/app/services/login.service';
-import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
-import { FormErrorService } from 'src/app/services/form-error.service';
+import { LoginService } from '@services/login.service';
+import { SnackbarService, SnackbarType } from '@services/snackbar.service';
+import { FormErrorService } from '@services/form-error.service';
 
 @Component({
   selector: 'app-account-data',

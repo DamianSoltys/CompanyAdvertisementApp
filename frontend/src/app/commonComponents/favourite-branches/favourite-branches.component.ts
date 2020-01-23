@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FavouriteResponse, FavouriteService } from 'src/app/services/favourite.service';
-import { Branch } from 'src/app/interfaces/Company';
-import { CommentResponse } from 'src/app/interfaces/Section';
-import { storage_Avaliable } from 'src/app/interfaces/storage_checker';
-import { UserREST } from 'src/app/interfaces/User';
-import { BranchService } from 'src/app/services/branch.service';
-import { CommentsService, OpinionData, RatingData } from 'src/app/services/comments.service';
+import { FavouriteResponse, FavouriteService } from '@services/favourite.service';
+import { Branch } from '@interfaces/Company';
+import { CommentResponse } from '@interfaces/Section';
+import { storage_Avaliable } from '@interfaces/storage_checker';
+import { UserREST } from '@interfaces/User';
+import { BranchService } from '@services/branch.service';
+import { CommentsService, OpinionData, RatingData } from '@services/comments.service';
 import { HttpParams } from '@angular/common/http';
-import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
+import { SnackbarService, SnackbarType } from '@services/snackbar.service';
 export interface FavBranchData {
   favData?: FavouriteResponse,
   branchData?: Branch,

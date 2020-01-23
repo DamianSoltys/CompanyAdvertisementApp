@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { SearchService } from 'src/app/services/search.service';
+import { SearchService } from '@services/search.service';
 import { FormBuilder } from '@angular/forms';
 import { TouchSequence } from 'selenium-webdriver';
-import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
-import { SearchResponse, SectionData } from 'src/app/interfaces/Section';
+import { SnackbarService, SnackbarType } from '@services/snackbar.service';
+import { SearchResponse, SectionData } from '@interfaces/Section';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { Paginator } from '../search.component';
-import { CompanyService } from 'src/app/services/company.service';
-import { categories } from '../../../interfaces/Category';
+import { CompanyService } from '@services/company.service';
+import { categories } from '@interfaces/Category';
 
 export interface AdvSearchData {
   name?: string;

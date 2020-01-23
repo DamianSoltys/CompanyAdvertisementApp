@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { SearchResponse, SectionData } from '../interfaces/Section';
+import { SearchResponse, SectionData } from '@interfaces/Section';
 import { FormGroup } from '@angular/forms';
-import { AdvSearchData } from '../mainComponents/search/advanced-search/advanced-search.component';
+import { AdvSearchData } from '@mainComponents/search/advanced-search/advanced-search.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SearchService {
-  public defaultSearchLogo: string = '../../assets/Img/default_logo.png';
+  public defaultSearchLogo: string = 'assets/Img/default_logo.png';
   constructor(private http: HttpClient) { }
 
   public sendSearchData(searchData: Array<string>) {

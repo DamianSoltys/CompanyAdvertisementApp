@@ -15,13 +15,14 @@ import {
 import { BehaviorSubject } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 
-import { PersonalData, UserREST } from 'src/app/interfaces/User';
-import { PersonalDataService } from 'src/app/services/personal-data.service';
-import { voivodeships } from 'src/app/interfaces/Voivodeship';
-import { storage_Avaliable } from 'src/app/interfaces/storage_checker';
-import { UserService } from 'src/app/services/user.service';
-import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
-import { FormErrorService } from 'src/app/services/form-error.service';
+import { PersonalData, UserREST } from '@interfaces/User';
+import { PersonalDataService } from '@services/personal-data.service';
+import { voivodeships } from '@interfaces/Voivodeship';
+import { storage_Avaliable } from '@interfaces/storage_checker';
+import { UserService } from '@services/user.service';
+import { SnackbarService, SnackbarType } from '@services/snackbar.service';
+import { FormErrorService } from '@services/form-error.service';
+import { CompanyService } from '@services/company.service';
 
 @Component({
   selector: 'app-personal-data',
@@ -114,7 +115,8 @@ export class PersonalDataComponent implements OnInit {
     private renderer: Renderer2,
     private userService: UserService,
     private snackbarService: SnackbarService,
-    private formErrorService: FormErrorService
+    private formErrorService: FormErrorService,
+    private cDataService: CompanyService,
   ) { }
 
   ngOnInit() {
@@ -310,6 +312,7 @@ export class PersonalDataComponent implements OnInit {
         this.userService.updateUser();
         this.getUserObject();
         this.checkForPersonalData();
+        this.cDataService.deleteStorageData(true);
       },
       error => {
         this.formErrorService.open({

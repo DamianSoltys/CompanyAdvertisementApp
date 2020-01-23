@@ -1,10 +1,10 @@
 import { Component, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
-import { RecommendationService, RecommendationCount } from '../../services/recommendation.service';
-import { RecommendationBranch } from '../../interfaces/Company';
-import { Position } from '../user/company/company.component';
-import { storage_Avaliable } from '../../interfaces/storage_checker';
-import { PositionService } from '../../services/position.service';
-import { BranchService } from '../../services/branch.service';
+import { RecommendationService, RecommendationCount } from '@services/recommendation.service';
+import { RecommendationBranch } from '@interfaces/Company';
+import { Position } from '@mainComponents/user/company/company.component';
+import { storage_Avaliable } from '@interfaces/storage_checker';
+import { PositionService } from '@services/position.service';
+import { BranchService } from '@services/branch.service';
 import { CarouselComponent } from 'ngx-carousel-lib';
 import { Subscription } from 'rxjs';
 enum ToggleButton {
@@ -17,7 +17,7 @@ enum ToggleButton {
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
-  private subscription: Subscription;
+  @ViewChild('carousel') carousel: CarouselComponent;
   public branchList: RecommendationBranch[];
   public recommendedBranchList: RecommendationBranch[];
   public rateWeight = 2;
@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   public carouselInterval: any;
   public intervalStopped: boolean = false;
   public toggleText: string = ToggleButton.stop;
-  @ViewChild('carousel') carousel: CarouselComponent;
+  private subscription: Subscription;
 
   constructor(private rDataService: RecommendationService, private pDataService: PositionService, private bDataService: BranchService) { }
 

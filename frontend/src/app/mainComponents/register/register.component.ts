@@ -1,14 +1,19 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms";
-import { UserReg } from "../../interfaces/User";
-import { RegisterService } from "../../services/register.service";
+import { UserReg } from "@interfaces/User";
+import { RegisterService } from "@services/register.service";
 import { HttpResponse } from "@angular/common/http";
-import { SnackbarOptions, SnackbarService, SnackbarType } from "../../services/snackbar.service";
-import { FormErrorService } from "../../services/form-error.service";
+import { SnackbarOptions, SnackbarService, SnackbarType } from "@services/snackbar.service";
+import { FormErrorService } from "@services/form-error.service";
 
-@Component({ selector: "app-register", templateUrl: "./register.component.html", styleUrls: ["./register.component.scss"] })
+@Component({
+  selector: "app-register",
+  templateUrl: "./register.component.html",
+  styleUrls: ["./register.component.scss"]
+})
 export class RegisterComponent implements OnInit {
-  registerForm: FormGroup;
+  public registerForm: FormGroup;
+
   constructor(private fb: FormBuilder, private regService: RegisterService, private snackbarService: SnackbarService, private formErrorService: FormErrorService) { }
 
   ngOnInit() {

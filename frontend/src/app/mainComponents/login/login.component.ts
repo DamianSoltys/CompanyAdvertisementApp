@@ -5,15 +5,15 @@ import {
   FormControl,
   Validators
 } from '@angular/forms';
-import { UserLog, UserREST, UserReg, PersonalData } from '../../interfaces/User';
-import { LoginService } from '../../services/login.service';
+import { UserLog, UserREST, UserReg, PersonalData } from '@interfaces/User';
+import { LoginService } from '@services/login.service';
 import { Router } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
-import { storage_Avaliable } from '../../interfaces/storage_checker';
-import { UserService } from '../../services/user.service';
-import { SnackbarService, SnackbarType } from '../../services/snackbar.service';
-import { PersonalDataService } from '../../services/personal-data.service';
-import { FormErrorService } from '../../services/form-error.service';
+import { storage_Avaliable } from '@interfaces/storage_checker';
+import { UserService } from '@services/user.service';
+import { SnackbarService, SnackbarType } from '@services/snackbar.service';
+import { PersonalDataService } from '@services/personal-data.service';
+import { FormErrorService } from '@services/form-error.service';
 
 @Component({
   selector: 'app-login',

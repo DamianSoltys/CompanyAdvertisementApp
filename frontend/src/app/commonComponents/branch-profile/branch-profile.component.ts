@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { Branch, GetCompany } from 'src/app/interfaces/Company';
-import { BranchService } from 'src/app/services/branch.service';
+import { Branch, GetCompany } from '@interfaces/Company';
+import { BranchService } from '@services/branch.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { storage_Avaliable } from 'src/app/interfaces/storage_checker';
+import { storage_Avaliable } from '@interfaces/storage_checker';
 import { BehaviorSubject } from 'rxjs';
-import { Position, Marker, EditRequestData } from 'src/app/mainComponents/user/company/company.component';
-import { UserREST } from 'src/app/interfaces/User';
-import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
-import { RecommendationService } from 'src/app/services/recommendation.service';
-import { CompanyService } from 'src/app/services/company.service';
-import { FavouriteService, FavouritePost, FavouriteResponse } from 'src/app/services/favourite.service';
+import { Position, Marker, EditRequestData } from '@mainComponents/user/company/company.component';
+import { UserREST } from '@interfaces/User';
+import { SnackbarService, SnackbarType } from '@services/snackbar.service';
+import { RecommendationService } from '@services/recommendation.service';
+import { CompanyService } from '@services/company.service';
+import { FavouriteService, FavouritePost, FavouriteResponse } from '@services/favourite.service';
 
 @Component({
   selector: 'app-branch-profile',

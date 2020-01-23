@@ -15,15 +15,15 @@ import {
   query
 } from '@angular/animations';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { LoginService } from '../../services/login.service';
+import { LoginService } from '@services/login.service';
 import { Router, RouterOutlet } from '@angular/router';
-import { storage_Avaliable } from '../../interfaces/storage_checker';
-import { UserREST, PersonalData } from '../../interfaces/User';
-import { PersonalDataService } from '../../services/personal-data.service';
-import { SnackbarService, SnackbarType } from '../../services/snackbar.service';
-import { slideInAnimation } from '../../animations/route-animation';
+import { storage_Avaliable } from '@interfaces/storage_checker';
+import { UserREST, PersonalData } from '@interfaces/User';
+import { PersonalDataService } from '@services/personal-data.service';
+import { SnackbarService, SnackbarType } from '@services/snackbar.service';
+import { slideInAnimation } from '@app/animations/route-animation';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { NearbyComponent } from '../../commonComponents/nearby-component/nearby-component.component';
+import { NearbyComponent } from '@commonComponents/nearby-component/nearby-component.component';
 
 @Component({
   selector: 'app-root',

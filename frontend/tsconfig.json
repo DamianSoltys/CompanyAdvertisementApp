@@ -17,6 +17,14 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@interfaces/*": ["src/app/interfaces/*"],
+      "@commonStyles/*": ["src/commonStyles/*"],
+      "@mainComponents/*": ["src/app/mainComponents/*"],
+      "@commonComponents/*": ["src/app/commonComponents/*"],
+      "@services/*": ["src/app/services/*"],
+      "@app/*": ["src/app/*"],
+    },
   }
 }

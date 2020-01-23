@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, AfterViewChecked } from '@angular/core';
-import { LoaderService } from 'src/app/services/loader.service';
+import { LoaderService } from '@services/loader.service';
 import { BehaviorSubject, Subject } from 'rxjs';
 
 @Component({

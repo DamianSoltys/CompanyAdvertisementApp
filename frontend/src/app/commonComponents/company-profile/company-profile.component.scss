@@ -1,4 +1,4 @@
-@import '../../../commonStyles/shared';
+@import 'shared';
 
 .company-profile-component {
   display: flex;
@@ -12,32 +12,38 @@
     width: 95%;
     padding: 0;
   }
+
   @include tablet {
     width: 85%;
   }
 
   .content-col {
-    width:50%;
-    padding:15px;
+    width: 50%;
+    padding: 15px;
+
     @include phone() {
-      width:100%;
+      width: 100%;
     }
   }
+
   .company-profile-component__app-company {
     margin-bottom: 5px;
   }
 
   .company-profile-component__branch-sections {
-    padding-top:10px;
+    padding-top: 10px;
+
     .branch-sections__branch-section {
       max-height: 50vh;
       overflow: auto;
     }
+
     .branch-sections__button-container {
       display: flex;
       justify-content: center;
       padding-top: 10px;
       padding-bottom: 20px;
+
       .button-container__button--add {
         width: 30%;
         border-radius: 50px;
@@ -45,9 +51,11 @@
         background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor, 20%) 51%, $bgcolor 100%);
         transition: all 0.4s ease-in-out;
         background-size: 200%;
+
         &:hover {
           background-position: 100% 0;
         }
+
         @include phone {
           width: 95%;
         }
@@ -58,10 +66,12 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+
       .empty-branches__text-node {
         color: $bgcolor;
         font-size: 1.2rem;
       }
+
       .empty-branches__button--add {
         width: 25%;
         border-radius: 50px;
@@ -69,9 +79,11 @@
         background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor, 20%) 51%, $bgcolor 100%);
         transition: all 0.4s ease-in-out;
         background-size: 200%;
+
         &:hover {
           background-position: 100% 0;
         }
+
         @include phone {
           width: 85%;
         }
@@ -83,6 +95,7 @@
     display: flex;
     justify-content: center;
     padding: 0;
+
     .shared--buttons__button--back {
       width: 30%;
       margin-bottom: 2%;
@@ -92,9 +105,11 @@
       background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor, 20%) 51%, $bgcolor 100%);
       transition: all 0.4s ease-in-out;
       background-size: 200%;
+
       &:hover {
         background-position: 100% 0;
       }
+
       margin-top: 4%;
 
       @include phone {
@@ -107,6 +122,7 @@
     @include boxShadow(0px 4px 5px 0px #bbb9bf);
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
+
     .main-container__header {
       display: flex;
       align-items: center;
@@ -118,6 +134,7 @@
       border: 0;
       border-bottom-left-radius: 20px;
       border-bottom-right-radius: 20px;
+
       .header__text-node {
         color: #fff;
         font-size: 1.2rem;
@@ -127,16 +144,19 @@
     .main-container__content {
       display: flex;
       flex-wrap: wrap;
+
       @include phone {
         height: unset;
       }
 
       .content__section {
+
         &--main,
         &--address {
           .data__text-node {
             margin: 0;
             padding: 10px;
+
             .text-node__label {
               padding-right: 10px;
               color: darken($bgcolor, 10);
@@ -146,65 +166,79 @@
         }
 
         &--logo {
-          display:flex;
+          display: flex;
           justify-content: center;
           align-items: center;
+
           .content__section--logo__logo {
-            border:1px solid $bgcolor;
+            border: 1px solid $bgcolor;
             width: 95%;
             height: 95%;
             max-height: 300px;
             max-width: 300px;
+
             @include phone {
-              margin:10px 0;
+              margin: 10px 0;
             }
           }
         }
 
-        &--media-buttons {      
-            display:flex;
-            flex-direction: column;
-            align-items: flex-end;
-            width:50%;
-            padding:15px;
-            @include phone {
-              align-items: center;
-              width:100%;
+        &--media-buttons {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          width: 50%;
+          padding: 15px;
+
+          @include phone {
+            align-items: center;
+            width: 100%;
+          }
+
+          .form__button {
+
+            &--facebook,
+            &--twitter {
+              width: 50%;
+              padding: 2px;
+              margin: 5px;
+              border: 0;
+
+              .fab {
+                padding-left: 5px;
+              }
+
+              @include phone {
+                width: 80%;
+              }
             }
-            .form__button {
-              &--facebook,&--twitter {
-                width:50%;
-                padding:2px;
-                margin:5px;
-                border:0;
-                .fab {
-                  padding-left: 5px;
-                }
-                @include phone {
-                  width:80%;
-                }
-              }
-              &--facebook {
-                background:#3b5998;
-              }
-              &--twitter {
-                background:#1DA1F2;
-              }
+
+            &--facebook {
+              background: #3b5998;
             }
+
+            &--twitter {
+              background: #1DA1F2;
+            }
+          }
         }
       }
+
       .content__section--description {
-        width:50%;
-        padding:15px;
+        width: 50%;
+        padding: 15px;
+
         @include phone() {
           width: 100%;
         }
+
         .section--description__data {
           min-height: 100px;
-          padding:10px;
+          padding: 10px;
+
           .data__text-node {
             font-size: 1.1rem;
-            color:darken($bgcolor, 10%);
+            color: darken($bgcolor, 10%);
           }
         }
       }
@@ -217,6 +251,7 @@
         display: flex;
         flex-direction: column;
         align-items: flex-end;
+
         @include phone {
           width: 100%;
           padding: 10px;
@@ -225,14 +260,16 @@
         .save-newsletter__form {
           display: flex;
           flex-direction: column;
-          width:60%;
+          width: 60%;
 
           @include phone {
             width: 100%;
           }
+
           @include tablet {
             width: 100%;
           }
+
           .form__text-node {
             color: darken($bgcolor, 10%);
           }
@@ -240,6 +277,7 @@
           .form__label {
             padding-left: 5px;
           }
+
           .form__checkbox {
             display: inline;
           }
@@ -252,9 +290,11 @@
             background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor, 20%) 51%, $bgcolor 100%);
             transition: all 0.4s ease-in-out;
             background-size: 200%;
+
             &:hover {
               background-position: 100% 0;
             }
+
             @include phone {
               width: 100%;
             }
@@ -266,6 +306,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+
         @include phone {
           flex-direction: column;
         }
@@ -273,12 +314,14 @@
         .section--buttons__owner-buttons {
           width: 20%;
           margin: 10px;
+
           @include phone {
             width: 95%;
           }
+
           @include tablet {
-            width:95%;
-         }
+            width: 95%;
+          }
 
           .owner-buttons__button {
             &--edit {
@@ -288,11 +331,14 @@
               background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor, 20%) 51%, $bgcolor 100%);
               transition: all 0.4s ease-in-out;
               background-size: 200%;
+
               &:hover {
                 background-position: 100% 0;
               }
+
               color: #fff;
               min-width: 125px;
+
               &:hover {
                 cursor: pointer;
               }
@@ -301,6 +347,7 @@
         }
 
         .section--buttons__button {
+
           &--comments,
           &--branches,
           &--newsletters,
@@ -312,28 +359,35 @@
             background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor, 20%) 51%, $bgcolor 100%);
             transition: all 0.4s ease-in-out;
             background-size: 200%;
+
             &:hover {
               background-position: 100% 0;
             }
+
             @include phone {
               width: 95%;
             }
+
             @include tablet {
-               width:95%;
+              width: 95%;
             }
           }
+
           &--newsletters {
             min-width: 155px;
           }
+
           &--newsletter-list {
-            width:30%;
+            width: 30%;
             min-width: 240px;
+
             @include phone {
               width: 95%;
             }
+
             @include tablet {
-              width:95%;
-           }
+              width: 95%;
+            }
           }
         }
       }

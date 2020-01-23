@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AccountDataRoutingModule } from './account-data-routing.module';
 import { AccountDataComponent } from './account-data.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FormErrorModule } from 'src/app/commonComponents/form-error/form-error.module';
+import { FormErrorModule } from '@commonComponents/form-error/form-error.module';
 
 @NgModule({
   declarations: [AccountDataComponent],

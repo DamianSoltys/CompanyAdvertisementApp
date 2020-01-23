@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { Company, GetCompany, Branch } from 'src/app/interfaces/Company';
-import { storage_Avaliable } from 'src/app/interfaces/storage_checker';
-import { UserREST } from 'src/app/interfaces/User';
+import { Company, GetCompany, Branch } from '@interfaces/Company';
+import { storage_Avaliable } from '@interfaces/storage_checker';
+import { UserREST } from '@interfaces/User';
 import { BehaviorSubject } from 'rxjs';
-import { CompanyService } from 'src/app/services/company.service';
-import { UserService } from 'src/app/services/user.service';
-import { BranchService } from 'src/app/services/branch.service';
+import { CompanyService } from '@services/company.service';
+import { UserService } from '@services/user.service';
+import { BranchService } from '@services/branch.service';
 import { Router } from '@angular/router';
 
 @Component({

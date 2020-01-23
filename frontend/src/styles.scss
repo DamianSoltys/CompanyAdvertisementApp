@@ -1,12 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
-*{
-    //Application styles
-    font-family: 'Source Sans Pro', sans-serif;
-    //font-family: 'Montserrat', sans-serif;
-    
-    
+* {
+  //Application styles
+  font-family: 'Source Sans Pro', sans-serif;
+  //font-family: 'Montserrat', sans-serif;
+
+
 
 }
+
 //Styles from other sources
 @import '~bootstrap/dist/css/bootstrap.min.css';
 @import '~grapesjs/dist/css/grapes.min.css';
@@ -17,5 +18,3 @@
 @import '~@fortawesome/fontawesome-free/css/all.css';
 @import './commonStyles/quill.bubble';
 @import './commonStyles/quill.snow';
-
-

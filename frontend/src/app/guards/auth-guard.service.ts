@@ -7,9 +7,9 @@ import {
   Route
 } from "@angular/router";
 import { Observable } from "rxjs";
-import { LoginService } from "../services/login.service";
-import { UserService } from "../services/user.service";
-import { SnackbarService, SnackbarType } from "../services/snackbar.service";
+import { LoginService } from "@services/login.service";
+import { UserService } from "@services/user.service";
+import { SnackbarService, SnackbarType } from "@services/snackbar.service";
 
 @Injectable({
   providedIn: "root"

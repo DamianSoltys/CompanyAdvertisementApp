@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { PromotionItem, SendingStrategy } from '../interfaces/Newsletter';
+import { PromotionItem, SendingStrategy } from '@interfaces/Newsletter';
 export interface newsletterResponse {
   promotionItemPhotosUUIDsDto: string[];
   promotionItemUUID: string;

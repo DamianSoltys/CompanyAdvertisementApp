@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { PersonalData, UserREST } from '../interfaces/User';
+import { PersonalData, UserREST } from '@interfaces/User';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { storage_Avaliable } from '../interfaces/storage_checker';
+import { storage_Avaliable } from '@interfaces/storage_checker';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PersonalDataService {
-  personalData = new BehaviorSubject(<PersonalData>null);
+  public personalData = new BehaviorSubject(<PersonalData>null);
 
   constructor(private http: HttpClient) {
     this.getPersonalDataObject();

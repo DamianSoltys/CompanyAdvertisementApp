@@ -1,14 +1,14 @@
 import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { storage_Avaliable } from 'src/app/interfaces/storage_checker';
-import { Position, Marker } from 'src/app/mainComponents/user/company/company.component';
-import { SearchService } from 'src/app/services/search.service';
-import { BranchService } from 'src/app/services/branch.service';
-import { Branch } from 'src/app/interfaces/Company';
+import { storage_Avaliable } from '@interfaces/storage_checker';
+import { Position, Marker } from '@mainComponents/user/company/company.component';
+import { SearchService } from '@services/search.service';
+import { BranchService } from '@services/branch.service';
+import { Branch } from '@interfaces/Company';
 import { Router } from '@angular/router';
 import { AgmMap } from '@agm/core';
 import { Subject } from 'rxjs';
-import { PositionService } from 'src/app/services/position.service';
+import { PositionService } from '@services/position.service';
 
 export interface NearbyMarker extends Marker {
   branchId?: number,

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { NewsletterService } from 'src/app/services/newsletter.service';
+import { NewsletterService } from '@services/newsletter.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PromotionItem, PromotionItemResponse, SendingStatus, SendStatus, SendingStrategy, Destination, SendStatusPL } from 'src/app/interfaces/Newsletter';
+import { PromotionItem, PromotionItemResponse, SendingStatus, SendStatus, SendingStrategy, Destination, SendStatusPL } from '@interfaces/Newsletter';
 import * as moment from 'moment';
 import 'moment/locale/pl';
-import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
+import { SnackbarService, SnackbarType } from '@services/snackbar.service';
 
 @Component({
   selector: 'app-newsletter-list',

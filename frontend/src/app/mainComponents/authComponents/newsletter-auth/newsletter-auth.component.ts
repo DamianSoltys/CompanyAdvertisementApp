@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
-import { NewsletterService } from '../../../services/newsletter.service';
+import { NewsletterService } from '@services/newsletter.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -8,10 +8,10 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./newsletter-auth.component.scss']
 })
 export class NewsletterAuthComponent implements OnInit, AfterViewInit, OnDestroy {
+  public time: number;
   private type: string;
   private token: string;
   private interval;
-  public time: number;
 
   constructor(private nDataService: NewsletterService, private activatedRoute: ActivatedRoute, private router: Router, ) { }
 

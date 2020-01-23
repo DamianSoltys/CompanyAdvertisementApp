@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
-import { storage_Avaliable } from "../interfaces/storage_checker";
+import { storage_Avaliable } from "@interfaces/storage_checker";
 import { Route, Router } from "@angular/router";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Company, Branch, Address, GetCompany, RecommendationBranch } from "../interfaces/Company";
-import { UserREST } from "../interfaces/User";
+import { Company, Branch, Address, GetCompany, RecommendationBranch } from "@interfaces/Company";
+import { UserREST } from "@interfaces/User";
 import { BehaviorSubject, Subject } from "rxjs";
-import { EditRequestData } from "../mainComponents/user/company/company.component";
+import { EditRequestData } from "@mainComponents/user/company/company.component";
 
 @Injectable({
   providedIn: "root"
@@ -15,7 +15,7 @@ export class BranchService {
   public branchData: Branch[] = [];
   public getBranchData = new Subject<boolean>();
   public deletedId: number;
-  public defaultLogoUrl = "../../../assets/Img/default_logo.png";
+  public defaultLogoUrl = "assets/Img/default_logo.png";
 
   constructor(private http: HttpClient) { }
 

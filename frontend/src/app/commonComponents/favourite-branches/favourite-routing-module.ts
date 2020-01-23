@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard } from 'src/app/guards/auth-guard.service';
+import { AuthGuard } from '@app/guards/auth-guard.service';
 import { FavouriteBranchesComponent } from './favourite-branches.component';
 
 const routes: Routes = [
@@ -11,4 +11,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class FavouriteBranchesRoutingModule {}
+export class FavouriteBranchesRoutingModule { }

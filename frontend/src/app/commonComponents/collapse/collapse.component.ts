@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Branch } from 'src/app/interfaces/Company';
+import { Branch } from '@interfaces/Company';
 import { BehaviorSubject } from 'rxjs';
 import { trigger, style, animate, transition, state } from '@angular/animations';
-import { CollapseService } from 'src/app/services/collapse.service';
+import { CollapseService } from '@services/collapse.service';
 
 @Component({
   selector: 'app-collapse',

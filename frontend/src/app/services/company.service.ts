@@ -1,19 +1,19 @@
 import { Injectable } from "@angular/core";
-import { storage_Avaliable } from "../interfaces/storage_checker";
+import { storage_Avaliable } from "@interfaces/storage_checker";
 import { Route, Router } from "@angular/router";
 import { HttpClient, HttpHeaders, HttpRequest, HttpResponse, HttpParams } from "@angular/common/http";
-import { Company, Branch, Address, GetCompany } from "../interfaces/Company";
-import { UserREST } from "../interfaces/User";
+import { Company, Branch, Address, GetCompany } from "@interfaces/Company";
+import { UserREST } from "@interfaces/User";
 import { BehaviorSubject, Subject, Observable } from "rxjs";
-import { EditRequestData } from "../mainComponents/user/company/company.component";
-import { UserService } from "./user.service";
+import { EditRequestData } from "@mainComponents/user/company/company.component";
+import { UserService } from "@services/user.service";
 
 @Injectable({ providedIn: "root" })
 export class CompanyService {
   public CompanyData: GetCompany[] = [];
   public getCompanyData = new Subject<boolean>();
-  public defaultCProfileUrl = "../../../assets/Img/default_logo.png";
-  public defaultCListUrl = "../../assets/Img/default_logo.png";
+  public defaultCProfileUrl = "assets/Img/default_logo.png";
+  public defaultCListUrl = "assets/Img/default_logo.png";
   public userREST: UserREST;
   private isCompany = new BehaviorSubject(false);
   private isLoaded = new Subject<boolean>();

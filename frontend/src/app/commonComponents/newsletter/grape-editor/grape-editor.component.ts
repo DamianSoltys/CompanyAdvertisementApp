@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, Input, AfterViewChecked } from '@angular/core';
 import grapesjs from 'grapesjs';
 import customPreset from 'grapesjs-preset-newsletter';
-import { NewsletterService } from 'src/app/services/newsletter.service';
+import { NewsletterService } from '@services/newsletter.service';
 
 @Component({
   selector: 'app-grape-editor',

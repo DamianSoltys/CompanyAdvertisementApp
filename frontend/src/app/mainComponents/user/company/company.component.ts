@@ -10,9 +10,9 @@ import {
   AfterContentChecked
 } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { storage_Avaliable } from 'src/app/interfaces/storage_checker';
-import { voivodeships } from 'src/app/interfaces/Voivodeship';
-import { categories } from 'src/app/interfaces/Category';
+import { storage_Avaliable } from '@interfaces/storage_checker';
+import { voivodeships } from '@interfaces/Voivodeship';
+import { categories } from '@interfaces/Category';
 import {
   FormGroup,
   FormControl,
@@ -20,17 +20,17 @@ import {
   Validators
 } from '@angular/forms';
 import { MouseEvent } from '@agm/core';
-import { Company, Branch, GetCompany } from 'src/app/interfaces/Company';
-import { PersonalDataService } from 'src/app/services/personal-data.service';
-import { CompanyService } from 'src/app/services/company.service';
-import { UserREST } from 'src/app/interfaces/User';
-import { UserService } from 'src/app/services/user.service';
+import { Company, Branch, GetCompany } from '@interfaces/Company';
+import { PersonalDataService } from '@services/personal-data.service';
+import { CompanyService } from '@services/company.service';
+import { UserREST } from '@interfaces/User';
+import { UserService } from '@services/user.service';
 import { HttpEventType, HttpRequest, HttpResponse } from '@angular/common/http';
-import { LoaderService } from 'src/app/services/loader.service';
-import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
-import { FormErrorService } from 'src/app/services/form-error.service';
+import { LoaderService } from '@services/loader.service';
+import { SnackbarService, SnackbarType } from '@services/snackbar.service';
+import { FormErrorService } from '@services/form-error.service';
 import { ActivatedRoute, Route, Router } from '@angular/router';
-import { BranchService } from 'src/app/services/branch.service';
+import { BranchService } from '@services/branch.service';
 
 export interface Position {
   latitude?: number;
@@ -644,6 +644,7 @@ export class CompanyComponent implements OnInit {
               snackbarType: SnackbarType.success,
             });
             this.getCompanyList(true);
+            this.cDataService.deleteStorageData(true);
             this.uDataService.updateUser().subscribe(data => {
               this.cDataService.getCompanyData.next(true);
               this.router.navigate(['companyProfile', this.editRequestData.companyId]);

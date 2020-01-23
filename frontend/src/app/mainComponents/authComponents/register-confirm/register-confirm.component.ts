@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { RegisterAuthService } from 'src/app/services/register-auth.service';
+import { RegisterAuthService } from '@services/register-auth.service';
 
 @Component({
   selector: 'app-register-confirm',
@@ -8,9 +8,9 @@ import { RegisterAuthService } from 'src/app/services/register-auth.service';
   styleUrls: ['./register-confirm.component.scss']
 })
 export class RegisterConfirmComponent implements OnInit, AfterViewInit, OnDestroy {
+  public time: number;
   private param: string;
   private interval;
-  public time: number;
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router, private registerAuth: RegisterAuthService) { }
 

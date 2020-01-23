@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
-import { FormErrorOptions, FormErrorService } from 'src/app/services/form-error.service';
+import { FormErrorOptions, FormErrorService } from '@services/form-error.service';
 
 @Component({
   selector: 'app-form-error',

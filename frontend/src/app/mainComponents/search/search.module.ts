@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { SearchRoutingModule } from './search-routing.module';
 import { SearchComponent } from './search.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CompanyModule } from '../user/company/company.module';
+import { CompanyModule } from '@mainComponents/user/company/company.module';
 import { SearchSectionModule } from './search-section/search-section.module';
 
 

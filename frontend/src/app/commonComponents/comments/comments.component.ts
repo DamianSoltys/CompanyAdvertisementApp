@@ -13,12 +13,12 @@ import {
 import {
   CommentsService,
   OpinionData
-} from 'src/app/services/comments.service';
-import { UserService } from 'src/app/services/user.service';
-import { UserREST } from 'src/app/interfaces/User';
+} from '@services/comments.service';
+import { UserService } from '@services/user.service';
+import { UserREST } from '@interfaces/User';
 import { ActivatedRoute } from '@angular/router';
-import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
-import { CompanyService } from 'src/app/services/company.service';
+import { SnackbarService, SnackbarType } from '@services/snackbar.service';
+import { CompanyService } from '@services/company.service';
 export interface OpinionListData {
   comment?: string,
   rate?: number

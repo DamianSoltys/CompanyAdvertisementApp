@@ -297,8 +297,6 @@ export class CompanyComponent implements OnInit {
     }
 
     if (this.workForm) {
-      let branchData: Branch = this.workForm.value;
-
       if (this.mapMarker) {
         this._workForm.geoX.setValue(this.mapMarker.latitude);
         this._workForm.geoY.setValue(this.mapMarker.longitude);
@@ -308,6 +306,7 @@ export class CompanyComponent implements OnInit {
         this._workForm.geoY.setValue(this.actualPosition.longitude);
       }
       this.workNumber++;
+      let branchData: Branch = this.workForm.value;
 
       if (this.workLogo) {
         branchData.actualSelectedLogo = this.branchLogoUrl;
@@ -598,11 +597,11 @@ export class CompanyComponent implements OnInit {
   }
 
   private addWorks() {
-    let branches: Branch[] = this.workForms;
-
     if (this.workForm.valid) {
       this.addAnotherWork();
     }
+
+    let branches: Branch[] = this.workForms;
     this.bDataService.addBranches(this.editRequestData.backId, branches, this.LogoList).subscribe(response => {
       if (response) {
         this.snackbarService.open({
@@ -674,8 +673,6 @@ export class CompanyComponent implements OnInit {
   }
 
   private patchWorkIdData() {
-    let branch: Branch = this.workForm.value;
-
     if (this.workForm) {
       if (this.mapMarker) {
         this._workForm.geoX.setValue(this.mapMarker.latitude);
@@ -683,6 +680,8 @@ export class CompanyComponent implements OnInit {
         this.mapMarker = null;
       }
     }
+    let branch: Branch = this.workForm.value;
+
     this.bDataService.editBranch(this.editRequestData, branch, this.workLogo).subscribe(response => {
       if (response) {
         this.snackbarService.open({

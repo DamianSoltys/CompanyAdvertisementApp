@@ -19,6 +19,7 @@ export class CompanySectionComponent implements OnInit, OnDestroy {
   @Input() showWorks: boolean;
   public owner = new BehaviorSubject(false);
   public works: Branch[];
+
   constructor(
     private cDataService: CompanyService,
     private uDataService: UserService,
@@ -28,6 +29,7 @@ export class CompanySectionComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if (storage_Avaliable('localStorage')) {
       let userREST: UserREST = JSON.parse(localStorage.getItem('userREST'));
+
       if (userREST) {
         if (this.companyData) {
           if (userREST.companiesIDs) {
@@ -39,6 +41,7 @@ export class CompanySectionComponent implements OnInit, OnDestroy {
       }
     }
   }
+
   public showBranches() {
     if (this.showWorks && this.companyData && this.branchData) {
       return true;
@@ -73,6 +76,7 @@ export class CompanySectionComponent implements OnInit, OnDestroy {
       }
     );
   }
+
   ngOnDestroy() {
     if (this.companyData && !this.showWorks) {
       //this.cDataService.storeCompanyData(this.companyData);

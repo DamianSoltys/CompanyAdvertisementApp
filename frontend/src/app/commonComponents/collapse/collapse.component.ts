@@ -37,6 +37,7 @@ export class CollapseComponent implements OnInit {
 
   ngOnInit() {
     this.collapseId = 0;
+
     for (let char of this.branchData.name) {
       this.collapseId += char.charCodeAt(0) + Math.random();
     }
@@ -49,10 +50,16 @@ export class CollapseComponent implements OnInit {
       }
     });
   }
+
+  public close() {
+    this.isOpen.next(false);
+  }
+
   public open(e: Event) {
     e.preventDefault();
     this.service.open(this.collapseId);
   }
+
   private openCollapse() {
     if (this.isOpen.value) {
       setTimeout(() => {
@@ -62,8 +69,4 @@ export class CollapseComponent implements OnInit {
       this.isOpen.next(true);
     }
   }
-  public close() {
-    this.isOpen.next(false);
-  }
-
 }

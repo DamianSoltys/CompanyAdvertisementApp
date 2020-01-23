@@ -35,7 +35,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.subscription = this.pDataService.getActualPosition().subscribe(position => {
       this.actualPosition = position;
-      console.log(this.actualPosition);
     });
 
     if (data) {
@@ -104,7 +103,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       branch.recommendRate = this.getRecommendRate(branch);
     });
     this.branchList.sort(this.compare);
-    console.log(this.branchList);
   }
 
   private getRecommendRate(branch: RecommendationBranch) {

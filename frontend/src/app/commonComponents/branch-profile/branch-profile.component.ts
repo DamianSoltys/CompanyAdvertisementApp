@@ -241,7 +241,6 @@ export class BranchProfileComponent implements OnInit {
         label: 'Zakład'
       };
     }
-
   }
 
   private getStorageBranchData() {

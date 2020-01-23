@@ -9,10 +9,10 @@ import { CommentsService, OpinionData, RatingData } from 'src/app/services/comme
 import { HttpParams } from '@angular/common/http';
 import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
 export interface FavBranchData {
-  favData?:FavouriteResponse,
-  branchData?:Branch,
-  rating?:RatingData[],
-  avgRate?:number,
+  favData?: FavouriteResponse,
+  branchData?: Branch,
+  rating?: RatingData[],
+  avgRate?: number,
 }
 
 @Component({
@@ -21,11 +21,16 @@ export interface FavBranchData {
   styleUrls: ['./favourite-branches.component.scss']
 })
 export class FavouriteBranchesComponent implements OnInit {
-  public favBranchesData:FavouriteResponse[];
-  public branchData:FavBranchData[] =[];
-  public userData:UserREST;
-  public loaded:boolean = false;
-  constructor(private fDataService:FavouriteService,private bDataService:BranchService,private cDataService:CommentsService,private sDataService:SnackbarService) { }
+  public favBranchesData: FavouriteResponse[];
+  public branchData: FavBranchData[] = [];
+  public userData: UserREST;
+  public loaded: boolean = false;
+
+  constructor(
+    private fDataService: FavouriteService,
+    private bDataService: BranchService,
+    private cDataService: CommentsService,
+    private sDataService: SnackbarService) { }
 
   ngOnInit() {
     this.getUserData();
@@ -33,81 +38,84 @@ export class FavouriteBranchesComponent implements OnInit {
   }
 
   public getUserData() {
-    if(storage_Avaliable('localStorage')) {
+    if (storage_Avaliable('localStorage')) {
       this.userData = JSON.parse(localStorage.getItem('userREST'));
     }
   }
 
   public getFavBranches() {
-    if(this.userData) {
+    if (this.userData) {
       this.branchData = [];
-      this.fDataService.getFavouriteBranches(this.userData.userID).subscribe(response=>{
+      this.fDataService.getFavouriteBranches(this.userData.userID).subscribe(response => {
         this.favBranchesData = response;
-        if(response) {
-          if(!response.length) {
-            this.loaded = true;  
+
+        if (response) {
+          if (!response.length) {
+            this.loaded = true;
           }
-          this.favBranchesData.forEach(fav=>{
-            let favResponse:FavBranchData = {};
+          this.favBranchesData.forEach(fav => {
+            let favResponse: FavBranchData = {};
             favResponse.favData = fav;
-            this.bDataService.getBranch(fav.branchId).subscribe(response=>{
-              if(response) {
+            this.bDataService.getBranch(fav.branchId).subscribe(response => {
+              if (response) {
                 favResponse.branchData = response.body as Branch;
-                let httpParams = new HttpParams().set('branchId',favResponse.favData.branchId.toString());
-                this.cDataService.getRating(httpParams).subscribe(response=>{
-                  if(response) {
+                let httpParams = new HttpParams().set('branchId', favResponse.favData.branchId.toString());
+                this.cDataService.getRating(httpParams).subscribe(response => {
+                  if (response) {
                     favResponse.rating = response.rating;
                     favResponse.avgRate = this.calculateAvgRate(favResponse.rating);
-                    this.bDataService.getBranchLogo(favResponse.branchData).subscribe(response=>{
-                      if(response.status !=204) {
+                    this.bDataService.getBranchLogo(favResponse.branchData).subscribe(response => {
+                      if (response.status != 204) {
                         let reader = new FileReader();
-                      reader.addEventListener("load", () => {
+                        reader.addEventListener("load", () => {
                           favResponse.branchData.logo = reader.result;
                           this.branchData.push(favResponse);
-                          this.loaded = true;                                 
-                      }, false);
-          
-                      if (response.body) {
+                          this.loaded = true;
+                        }, false);
+
+                        if (response.body) {
                           reader.readAsDataURL(response.body);
-                      }
+                        }
                       } else {
                         favResponse.branchData.logo = this.bDataService.defaultLogoUrl;
                         this.branchData.push(favResponse);
-                        this.loaded = true;                 
+                        this.loaded = true;
                       }
                     });
                   }
-                });               
+                });
               }
             });
           });
         } else {
-          this.loaded = true;  
+          this.loaded = true;
         }
       });
     }
   }
 
-  private calculateAvgRate(rateData:RatingData[]):number {
-    let avgRate:number = 0;
-    rateData.forEach(data=>{
-      avgRate+=data.rating;
+  private calculateAvgRate(rateData: RatingData[]): number {
+    let avgRate: number = 0;
+
+    rateData.forEach(data => {
+      avgRate += data.rating;
     });
-    return avgRate/=rateData.length;
+
+    return avgRate /= rateData.length;
   }
 
-  public deleteFavBranch(favId:string) {
-    this.fDataService.deleteFavouriteBranch(favId).subscribe(response=>{
-      if(response) {
+  public deleteFavBranch(favId: string) {
+    this.fDataService.deleteFavouriteBranch(favId).subscribe(response => {
+      if (response) {
         this.sDataService.open({
-          message:'Pomyślnie usunięto zakład z ulubionych!',
-          snackbarType:SnackbarType.success
+          message: 'Pomyślnie usunięto zakład z ulubionych!',
+          snackbarType: SnackbarType.success
         });
         this.getFavBranches();
       } else {
         this.sDataService.open({
-          message:'Usunięcie zakładu z ulubionych nie powiodło się!',
-          snackbarType:SnackbarType.error
+          message: 'Usunięcie zakładu z ulubionych nie powiodło się!',
+          snackbarType: SnackbarType.error
         });
       }
     })

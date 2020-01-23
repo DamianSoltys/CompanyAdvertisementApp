@@ -6,6 +6,7 @@
   border-radius: 5px;
   margin: 10px;
   display: flex;
+
   @include phone {
     flex-direction: column;
   }
@@ -15,6 +16,7 @@
 
     .company-data__data-container {
       padding-left: 10px;
+
       .data-container__text-node {
         padding: 10px;
         margin: 0;
@@ -24,6 +26,7 @@
 
   .company-container__company-action {
     flex: 1;
+
     .company-action__button-container {
       display: flex;
       flex-direction: column;
@@ -32,6 +35,7 @@
       align-items: center;
 
       .company-action__button {
+
         &--delete,
         &--profile {
           background-color: $bgcolor;
@@ -42,6 +46,7 @@
           @include phone {
             width: 65%;
           }
+
           &:hover {
             background-color: $bgcolor1;
             opacity: 0.8;
@@ -56,25 +61,27 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin:10px;
+    margin: 10px;
 
     .company-logo__logo {
       min-height: 150px;
       min-width: 150px;
-      width:50%;
-      height:100%;
+      width: 50%;
+      height: 100%;
       max-height: 150px;
       max-width: 150px;
-      border:1px solid $bgcolor;
+      border: 1px solid $bgcolor;
     }
   }
 }
+
 .branch-section__branch-container {
   margin-top: 3%;
   @include boxShadow(0px 0px 5px -2px $bgcolor);
   border-radius: 5px;
   margin: 5px;
   display: flex;
+
   @include phone {
     flex-direction: column;
   }
@@ -84,28 +91,31 @@
 
     .branch-data__data-container {
       padding-left: 10px;
+
       .data-container__text-node {
         padding: 10px;
         margin: 0;
       }
     }
   }
-  
+
   .branch-container__branch-logo {
-    margin:10px;
+    margin: 10px;
+
     .branch-logo__logo {
       min-height: 150px;
       min-width: 150px;
-      width:50%;
-      height:100%;
+      width: 50%;
+      height: 100%;
       max-height: 150px;
       max-width: 150px;
-      border:1px solid $bgcolor;
+      border: 1px solid $bgcolor;
     }
   }
 
   .branch-container__branch-action {
     flex: 1;
+
     .branch-action__button-container {
       display: flex;
       flex-direction: column;
@@ -114,6 +124,7 @@
       align-items: center;
 
       .branch-action__button {
+
         &--delete,
         &--profile {
           background-color: $bgcolor;
@@ -124,6 +135,7 @@
           @include phone {
             width: 65%;
           }
+
           &:hover {
             background-color: $bgcolor1;
             opacity: 0.8;

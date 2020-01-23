@@ -5,7 +5,8 @@
     </div>
     <div class="main-container__content" *ngIf="branchData">
       <div class="content__section--logo col-12 col-md-4">
-        <img *ngIf="branchData.logo" class="content__section--logo__logo" src="{{branchData.logo}}" alt="{{branchData.companyName}}_logo">
+        <img *ngIf="branchData.logo" class="content__section--logo__logo" src="{{branchData.logo}}"
+          alt="{{branchData.companyName}}_logo">
       </div>
       <div class="content__section--main col-12 col-md-4">
         <div class="section--main__data">
@@ -51,17 +52,10 @@
         <div class="section--map__data">
           <p class="data__text-node">Lokalizacja:</p>
           <div class="data__map-container">
-            <agm-map
-              [latitude]="actualPosition.latitude"
-              [longitude]="actualPosition.longitude"
-              class="map-container__map"
-            >
-              <agm-marker
-                *ngIf="mapMarker"
-                [latitude]="mapMarker.latitude"
-                [longitude]="mapMarker.longitude"             
-              >
-              <agm-info-window>Lokalizacja</agm-info-window>
+            <agm-map [latitude]="actualPosition.latitude" [longitude]="actualPosition.longitude"
+              class="map-container__map">
+              <agm-marker *ngIf="mapMarker" [latitude]="mapMarker.latitude" [longitude]="mapMarker.longitude">
+                <agm-info-window>Lokalizacja</agm-info-window>
               </agm-marker>
             </agm-map>
           </div>
@@ -69,26 +63,17 @@
       </div>
       <div class="content__section--buttons col-12">
         <span class="section--buttons__owner-buttons" *ngIf="owner.value">
-          <button
-            class="btn btn-primary owner-buttons__button--edit"
-            (click)="showEditForm()"
-          >
+          <button class="btn btn-primary owner-buttons__button--edit" (click)="showEditForm()">
             Edycja danych
           </button>
         </span>
         <span class="section--buttons__user-buttons" *ngIf="!owner.value && userData">
-          <button
-            class="btn btn-primary user-buttons__button--favourites"
-            (click)="setFavouriteBranch()"
-            *ngIf="!isFavourite"
-          >
+          <button class="btn btn-primary user-buttons__button--favourites" (click)="setFavouriteBranch()"
+            *ngIf="!isFavourite">
             Dodaj do ulubionych
           </button>
-          <button
-            class="btn btn-primary user-buttons__button--favourites"
-            (click)="deleteFavouriteBranch()"
-            *ngIf="isFavourite"
-          >
+          <button class="btn btn-primary user-buttons__button--favourites" (click)="deleteFavouriteBranch()"
+            *ngIf="isFavourite">
             Usuń z ulubionych
           </button>
         </span>
@@ -100,18 +85,10 @@
   </div>
 
   <div class="branch-profile-component__shared--buttons col-12">
-    <button
-      class="btn btn-primary shared--buttons__button--back"
-      (click)="goBack(true)"
-      *ngIf="companyId"
-    >
+    <button class="btn btn-primary shared--buttons__button--back" (click)="goBack(true)" *ngIf="companyId">
       Wróć do profilu firmy
     </button>
-    <button
-      class="btn btn-primary shared--buttons__button--back"
-      (click)="goBack(false)"
-      *ngIf="!companyId"
-    >
+    <button class="btn btn-primary shared--buttons__button--back" (click)="goBack(false)" *ngIf="!companyId">
       Wróć do wyszukiwarki
     </button>
   </div>

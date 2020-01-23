@@ -1,41 +1,21 @@
 <div class="nearby-component">
-    <div class="nearby-component__map-container" *ngIf="actualPosition">
-        <agm-map
-          [latitude]="actualPosition.latitude"
-          [longitude]="actualPosition.longitude"
-          [minZoom]="zoom"
-          [zoom]="zoom"
-          [maxZoom]="zoom"
-          [draggable]="false"
-          class="map-container__map"
-          #googleMap
-        >
-          <agm-marker
-            *ngFor="let marker of markersArray"
-            [latitude]="marker.latitude"
-            [longitude]="marker.longitude"  
-            [opacity] = "marker?.opacity"           
-          >
-          <agm-info-window><a class="marker__link" (click)="goToBranchProfile(marker.branchId,marker.companyId)">Profil:{{marker.label}}</a></agm-info-window>
-          </agm-marker>
-          <agm-circle 
-              [latitude]="actualPosition.latitude"
-              [longitude]="actualPosition.longitude"
-              [circleDraggable]="false"
-              [editable]="false"
-              [radius]="radius">
-            </agm-circle>
-            <agm-circle 
-              [latitude]="actualPosition.latitude"
-              [longitude]="actualPosition.longitude"
-              [circleDraggable]="false"
-              [editable]="false"
-              [radius]="biggerRadius"
-              [fillOpacity] = "0.2">
-            </agm-circle>
-        </agm-map>
-      </div>
-      <div class="nearby-component__empty-postion" *ngIf="!actualPosition">
-        <p>Niestety nie można pobrac twojej lokalizacji!</p>
-      </div>
+  <div class="nearby-component__map-container" *ngIf="actualPosition">
+    <agm-map [latitude]="actualPosition.latitude" [longitude]="actualPosition.longitude" [minZoom]="zoom" [zoom]="zoom"
+      [maxZoom]="zoom" [draggable]="false" class="map-container__map" #googleMap>
+      <agm-marker *ngFor="let marker of markersArray" [latitude]="marker.latitude" [longitude]="marker.longitude"
+        [opacity]="marker?.opacity">
+        <agm-info-window><a class="marker__link"
+            (click)="goToBranchProfile(marker.branchId,marker.companyId)">Profil:{{marker.label}}</a></agm-info-window>
+      </agm-marker>
+      <agm-circle [latitude]="actualPosition.latitude" [longitude]="actualPosition.longitude" [circleDraggable]="false"
+        [editable]="false" [radius]="radius">
+      </agm-circle>
+      <agm-circle [latitude]="actualPosition.latitude" [longitude]="actualPosition.longitude" [circleDraggable]="false"
+        [editable]="false" [radius]="biggerRadius" [fillOpacity]="0.2">
+      </agm-circle>
+    </agm-map>
+  </div>
+  <div class="nearby-component__empty-postion" *ngIf="!actualPosition">
+    <p>Niestety nie można pobrac twojej lokalizacji!</p>
+  </div>
 </div>

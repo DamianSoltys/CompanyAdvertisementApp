@@ -1,113 +1,129 @@
-
 @import '../../../commonStyles/shared';
+
 .favourite-branches-component {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  width: 85%;
+  margin: auto;
+  margin-top: 4%;
+  margin-bottom: 1%;
+  max-width: 1200px;
+
+
+  @include phone {
+    width: 95%;
+    padding: 0;
+  }
+
+  @include tablet {
     width: 85%;
-    margin:auto;
-    margin-top: 4%;
-    margin-bottom: 1%;
-    max-width: 1200px;
+  }
 
+  .favourite-branches-component__main-container {
+    @include boxShadow(0px 4px 5px 0px #bbb9bf);
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
 
-    @include phone {
-        width: 95%;
-        padding: 0;
+    .main-container__header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 30px;
+      height: 6vh;
+      max-height: 60px;
+      background-color: $bgcolor;
+      border: 0;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+
+      .header__text-node {
+        color: #fff;
+        font-size: 1.2rem;
+        margin: 0;
+      }
+    }
+
+    .main-container__data {
+      padding: 15px;
+
+      .data__empty-list {
+        color: darken($bgcolor, 10%);
+        text-align: center;
+        font-size: 1.1rem;
       }
 
-    @include tablet {
-        width: 85%;
-    }
-    
-    .favourite-branches-component__main-container {
-        @include boxShadow(0px 4px 5px 0px #bbb9bf);
-        border-bottom-left-radius: 20px;
-        border-bottom-right-radius: 20px;
-            .main-container__header {
+      .data__container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        @include phone {
+          flex-direction: column;
+        }
+
+        .container {
+
+          &__logo,
+          &__info,
+          &__button {
+            flex: 1;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            min-height: 30px;
-            height: 6vh;
-            max-height: 60px;
-            background-color: $bgcolor;
-            border: 0;
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
+            align-items: center;
 
-            .header__text-node {
-                color: #fff;
+            .logo__image {
+              min-height: 150px;
+              min-width: 150px;
+              max-height: 150px;
+              max-width: 150px;
+              border: 1px solid $bgcolor;
+
+              @include phone {
+                width: 100%;
+                max-height: 250px;
+                max-width: 250px;
+              }
+            }
+
+            .button__button {
+              background-color: $bgcolor;
+              border: 1px solid $btborder;
+              margin: 5px;
+              width: 150px;
+
+              @include phone {
+                width: 100%;
+              }
+            }
+
+            .info__text-node {
+              .text-node__label {
+                font-size: 1.1rem;
+                color: darken($bgcolor, 10%);
+                padding-right: 5px;
+              }
+
+              .star {
+                color: darken($bgcolor, 10%);
                 font-size: 1.2rem;
-                margin:0;
+              }
+
+              .filled {
+                color: #fff200;
+              }
             }
+          }
         }
 
-        .main-container__data {
-            padding:15px;
-            .data__empty-list {
-                color: darken($bgcolor,10%);
-                text-align: center;
-                font-size:1.1rem;
-            }
-            .data__container {
-                display:flex;
-                justify-content: center;
-                align-items: center;
-                @include phone {
-                    flex-direction: column;
-                }
-                .container {
-                    &__logo,&__info,&__button {
-                        flex:1;
-                        display:flex;
-                        flex-direction: column;
-                        justify-content: center;
-                        align-items: center;
-                        .logo__image {
-                            min-height: 150px;
-                            min-width: 150px;
-                            max-height: 150px;
-                            max-width: 150px;
-                            border:1px solid $bgcolor;
-                            @include phone {
-                                width:100%;
-                                max-height: 250px;
-                                max-width: 250px;
-                            }
-                        }
-                        .button__button {
-                            background-color: $bgcolor;
-                            border: 1px solid $btborder;
-                            margin: 5px;    
-                            width: 150px;
-                            @include phone {
-                                width:100%;
-                            }
-                        }
-                        .info__text-node {
-                            .text-node__label {
-                                font-size: 1.1rem;
-                                color:darken($bgcolor,10%);
-                                padding-right: 5px;
-                            }
-                            .star {
-                                color:darken($bgcolor,10%);
-                                font-size:1.2rem;
-                            }                     
-                            .filled {
-                                color: #fff200;
-                            }
-                        }
-                    }
-                }
-                margin:10px;
-                padding:10px;
-                border-bottom: 1px solid $bgcolor;
-                
-                &:last-of-type {
-                    border-bottom: none;
-                }
-            }
+        margin:10px;
+        padding:10px;
+        border-bottom: 1px solid $bgcolor;
+
+        &:last-of-type {
+          border-bottom: none;
         }
+      }
     }
+  }
 }

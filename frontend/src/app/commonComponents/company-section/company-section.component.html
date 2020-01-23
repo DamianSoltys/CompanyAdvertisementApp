@@ -1,6 +1,6 @@
 <div class="company-section__company-container" *ngIf="!showWorks">
   <div class="company-container__company-logo">
-    
+
     <img class="company-logo__logo" src="{{companyData.logo}}" alt="{{companyData.companyName}}_logo">
   </div>
   <div class="company-container__company-data">
@@ -18,16 +18,9 @@
   </div>
   <div class="company-container__company-action">
     <div class="company-action__button-container">
-      <a
-        [routerLink]="['/companyProfile', companyData.companyId]"
-        class="btn btn-primary company-action__button--profile"
-        >Profil</a
-      >
-      <button
-        class="btn btn-primary company-action__button--delete"
-        *ngIf="owner.value"
-        (click)="deleteCompany()"
-      >
+      <a [routerLink]="['/companyProfile', companyData.companyId]"
+        class="btn btn-primary company-action__button--profile">Profil</a>
+      <button class="btn btn-primary company-action__button--delete" *ngIf="owner.value" (click)="deleteCompany()">
         Usuń
       </button>
     </div>
@@ -51,20 +44,12 @@
   </div>
   <div class="branch-container__branch-action">
     <div class="branch-action__button-container">
-      <a
-        [routerLink]="[
+      <a [routerLink]="[
           '/branchProfile',
           companyData.companyId,
           branchData.branchId
-        ]"
-        class="btn btn-primary branch-action__button--profile"
-        >Profil</a
-      >
-      <button
-        class="btn btn-primary branch-action__button--delete"
-        *ngIf="owner.value"
-        (click)="deleteBranch()"
-      >
+        ]" class="btn btn-primary branch-action__button--profile">Profil</a>
+      <button class="btn btn-primary branch-action__button--delete" *ngIf="owner.value" (click)="deleteBranch()">
         Usuń
       </button>
     </div>

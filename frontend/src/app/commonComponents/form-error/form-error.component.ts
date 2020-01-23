@@ -9,32 +9,31 @@ import { FormErrorOptions, FormErrorService } from 'src/app/services/form-error.
   animations: [
     trigger(
       'errorAnimate', [
-        transition(':enter', [
-          style({opacity: 0}),
-          animate('200ms', style({opacity: 1}))
-        ]),
-        transition(':leave', [
-          style({opacity: 1}),
-          animate('200ms', style({opacity: 0}))
-        ])
-      ]
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('200ms', style({ opacity: 1 }))
+      ]),
+      transition(':leave', [
+        style({ opacity: 1 }),
+        animate('200ms', style({ opacity: 0 }))
+      ])
+    ]
     )
   ],
 })
 
 export class FormErrorComponent implements OnInit {
-  formErrorOptions:FormErrorOptions;
-  constructor(private formErrorService:FormErrorService) { }
+  public formErrorOptions: FormErrorOptions;
+
+  constructor(private formErrorService: FormErrorService) { }
 
   ngOnInit() {
-    document.body.addEventListener('click', e => {     
-      
-      if(this.formErrorOptions.isOpen) {
+    document.body.addEventListener('click', e => {
+      if (this.formErrorOptions.isOpen) {
         this.formErrorService.close();
       }
-      
     });
-    this.formErrorService.formErrorOptions.subscribe(data=>{
+    this.formErrorService.formErrorOptions.subscribe(data => {
       this.formErrorOptions = data;
     });
   }

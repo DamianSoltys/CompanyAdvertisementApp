@@ -1,6 +1,8 @@
 <div class="snackbar-component" *ngIf="snackbarOptions.isOpen" [@snackbarAnimate]>
   <div class="snackbar-component__message-container">
-    <p class="message-container__text_node" [ngClass] = "{'message-container__text--error':snackbarOptions.snackbarType == 0,
-    'message-container__text--success':snackbarOptions.snackbarType == 1,'message-container__text--info':snackbarOptions.snackbarType == 2}">{{snackbarOptions.message}}</p>
+    <p class="message-container__text_node"
+      [ngClass]="{'message-container__text--error':snackbarOptions.snackbarType == 0,
+    'message-container__text--success':snackbarOptions.snackbarType == 1,'message-container__text--info':snackbarOptions.snackbarType == 2}">
+      {{snackbarOptions.message}}</p>
   </div>
 </div>

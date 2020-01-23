@@ -58,7 +58,6 @@ export class CommentsComponent implements OnInit {
   public currentRate = this.isOwner.value ? 1 : null;
   public numberOfPages: number;
   public actualPageLoaded: number = 0;
-
   public config = {
     toolbar: [['bold', 'italic', 'underline']]
   };
@@ -67,6 +66,7 @@ export class CommentsComponent implements OnInit {
   public companyId: string;
   public opinions: OpinionListData[] = [];
   public opinionData: OpinionListData;
+
   constructor(
     private fb: FormBuilder,
     private cDataService: CommentsService,
@@ -82,7 +82,6 @@ export class CommentsComponent implements OnInit {
       this.companyId = params['idCompany'];
     });
     this.getData();
-    console.log(this.userREST);
   }
 
   public getData() {
@@ -110,14 +109,15 @@ export class CommentsComponent implements OnInit {
   }
   public onSubmit($event) {
     event.preventDefault();
-
     this.opinionData.comment = this.ratingForm.controls.commentText.value;
+
     if (this.currentRate) {
       this.opinionData.rate = this.currentRate;
     } else {
       this.opinionData.rate = null;
     }
     let rateId = null;
+
     if (this.opinions) {
       this.opinions.forEach(opinion => {
         if (opinion.userId == this.opinionData.userId) {
@@ -173,7 +173,6 @@ export class CommentsComponent implements OnInit {
 
   @HostListener('scroll', ['$event'])
   public onScroll(event: any) {
-    //dokonczyc
     let tracker = event.target;
     let limit = tracker.scrollHeight - tracker.clientHeight;
     if (event.target.scrollTop === limit) {
@@ -189,12 +188,12 @@ export class CommentsComponent implements OnInit {
     subject.subscribe(data => {
       this.isLoaded.next(true);
     });
+
     if (clearOpinions) {
       this.opinions = [];
       this.actualPageLoaded = 0;
     }
     this.cDataService.getOpinion(this.opinionData, pageNumber).subscribe(data => {
-      console.log(data)
       this.numberOfPages = data.numberOfPages;
       data.comment.forEach(comment => {
         let opinion: OpinionListData = {
@@ -215,8 +214,6 @@ export class CommentsComponent implements OnInit {
           }
         });
       });
-
-      console.log(this.opinions);
       this.isOwner.next(this.coDataService.checkForUserPermission(Number(this.companyId)));
       subject.next(true);
     }, error => {

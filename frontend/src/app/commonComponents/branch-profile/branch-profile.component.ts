@@ -22,16 +22,15 @@ export class BranchProfileComponent implements OnInit {
     longitude: 22.568445
   };
   public mapMarker: Marker;
-
-  private branchData: Branch;
-  private branchId: number;
-  private companyId: number;
   public owner = new BehaviorSubject(false);
   public editData: EditRequestData;
   public userData: UserREST;
   public favouriteData: FavouriteResponse[];
   public isFavourite: boolean = false;
   private favUuid: string;
+  private branchData: Branch;
+  private branchId: number;
+  private companyId: number;
 
   constructor(
     private bDataService: BranchService,
@@ -59,6 +58,7 @@ export class BranchProfileComponent implements OnInit {
       this.getBranchData(true);
     });
   }
+
   public goBack(isCompany: boolean) {
     if (isCompany) {
       this.router.navigate(['/companyProfile', this.companyId]);
@@ -67,26 +67,10 @@ export class BranchProfileComponent implements OnInit {
     }
   }
 
-  private checkBranchOwnership() {
-    if (storage_Avaliable('localStorage')) {
-      let companyList: GetCompany[] = JSON.parse(
-        localStorage.getItem('companyData')
-      );
-      if (companyList && this.userData) {
-        if (this.userData.companiesIDs) {
-          this.userData.companiesIDs.forEach(companyId => {
-            if (companyId == this.companyId) {
-              this.owner.next(true);
-            }
-          });
-        }
-      }
-    }
-  }
-
   public showEditForm() {
     let editData = this.branchData;
     editData.logo = null;
+
     this.editData = {
       companyId: null,
       workId: this.branchData.branchId,
@@ -105,6 +89,7 @@ export class BranchProfileComponent implements OnInit {
       userId: this.userData.userID,
       branchId: this.branchId
     }
+
     this.fDataService.setFavouriteBranch(favouriteData).subscribe(response => {
       if (response) {
         this.getFavBranches();
@@ -121,25 +106,6 @@ export class BranchProfileComponent implements OnInit {
     })
   }
 
-  private getFavBranches() {
-    if (this.userData) {
-      this.fDataService.getFavouriteBranches(this.userData.userID).subscribe(response => {
-        if (response) {
-          this.favouriteData = response;
-          this.isFavourite = false;
-          this.favouriteData.forEach(fav => {
-            if (this.branchId == fav.branchId) {
-              this.isFavourite = true;
-              this.favUuid = fav.favouriteBranchId;
-            }
-          });
-        } else {
-          this.isFavourite = false;
-        }
-      });
-    }
-  }
-
   public deleteFavouriteBranch() {
     if (this.favUuid) {
       this.fDataService.deleteFavouriteBranch(this.favUuid).subscribe(response => {
@@ -154,6 +120,43 @@ export class BranchProfileComponent implements OnInit {
             message: 'Usunięcie z ulubionych się nie powiodło!',
             snackbarType: SnackbarType.error
           });
+        }
+      });
+    }
+  }
+
+  private checkBranchOwnership() {
+    if (storage_Avaliable('localStorage')) {
+      let companyList: GetCompany[] = JSON.parse(
+        localStorage.getItem('companyData')
+      );
+
+      if (companyList && this.userData) {
+        if (this.userData.companiesIDs) {
+          this.userData.companiesIDs.forEach(companyId => {
+            if (companyId == this.companyId) {
+              this.owner.next(true);
+            }
+          });
+        }
+      }
+    }
+  }
+
+  private getFavBranches() {
+    if (this.userData) {
+      this.fDataService.getFavouriteBranches(this.userData.userID).subscribe(response => {
+        if (response) {
+          this.favouriteData = response;
+          this.isFavourite = false;
+          this.favouriteData.forEach(fav => {
+            if (this.branchId == fav.branchId) {
+              this.isFavourite = true;
+              this.favUuid = fav.favouriteBranchId;
+            }
+          });
+        } else {
+          this.isFavourite = false;
         }
       });
     }
@@ -177,11 +180,13 @@ export class BranchProfileComponent implements OnInit {
       this.bDataService.deleteStorageData();
     }
     this.getStorageBranchData();
+
     if (!this.branchData) {
       this.bDataService.getBranch(this.branchId).subscribe(
         response => {
           this.branchData = <Branch>response.body;
           this.branchData.branchId = this.branchId;
+
           if (this.branchData) {
             this.rDataService.pushRecommendationData(this.branchData.category, this.branchData.branchId);
           }
@@ -236,10 +241,6 @@ export class BranchProfileComponent implements OnInit {
         label: 'Zakład'
       };
     }
-
-  }
-
-  private setRecommendationData() {
 
   }
 

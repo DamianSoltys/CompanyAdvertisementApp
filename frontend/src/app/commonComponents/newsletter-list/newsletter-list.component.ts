@@ -14,7 +14,12 @@ import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service
 export class NewsletterListComponent implements OnInit {
   public companyId: string;
   public newsletterList: PromotionItemResponse[] = [];
-  constructor(private nDataService: NewsletterService, private activatedRoute: ActivatedRoute, private router: Router, private snackbar: SnackbarService) { }
+
+  constructor(
+    private nDataService: NewsletterService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private snackbar: SnackbarService) { }
 
   ngOnInit() {
     this.activatedRoute.parent.params.subscribe(params => {
@@ -23,10 +28,46 @@ export class NewsletterListComponent implements OnInit {
     });
   }
 
+  public sendDelayedNewsletter(promotionUUID: any) {
+    this.nDataService.sendDelayedNewsletter(promotionUUID).subscribe(response => {
+      if (response) {
+        this.getNewsletters();
+        this.snackbar.open({
+          message: 'Newsletter zostal pomyślnie wysłany',
+          snackbarType: SnackbarType.success,
+        });
+      } else {
+        this.snackbar.open({
+          message: 'Nie udało się wysłać newslettera',
+          snackbarType: SnackbarType.error,
+        });
+      }
+    });
+  }
+
+  public checkStatus(status: string) {
+    if (status === SendStatusPL.WAITING) { //only_at_will
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public showSendTime(status: string) {
+    if (status == SendStatusPL.DELAYED) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public goBack() {
+    this.router.navigate(['/companyProfile', this.companyId]);
+  }
+
   private getNewsletters() {
     this.nDataService.getNewsletterData(this.companyId).subscribe(response => {
       if (response) {
-        console.log(response)
         this.newsletterList = <PromotionItemResponse[]>response.body;
         this.translateText();
         this.convertUnixToDate();
@@ -85,50 +126,16 @@ export class NewsletterListComponent implements OnInit {
     moment.locale('pl');
     this.newsletterList.map(newsletter => {
       newsletter.addedTime = moment.unix(newsletter.addedTime).format('LLL');
+
       if (newsletter.sendingStatus) {
         if (newsletter.sendingStatus[0].plannedSendingAt) {
           newsletter.sendingStatus[0].plannedSendingAt = moment.unix(newsletter.sendingStatus[0].plannedSendingAt).format('LLL');
         }
+
         if (newsletter.sendingStatus[0].sendAt) {
           newsletter.sendingStatus[0].sendAt = moment.unix(newsletter.sendingStatus[0].sendAt).format('LLL');
         }
       }
     });
-  }
-
-  public sendDelayedNewsletter(promotionUUID: any) {
-    this.nDataService.sendDelayedNewsletter(promotionUUID).subscribe(response => {
-      if (response) {
-        this.getNewsletters();
-        this.snackbar.open({
-          message: 'Newsletter zostal pomyślnie wysłany',
-          snackbarType: SnackbarType.success,
-        });
-      } else {
-        this.snackbar.open({
-          message: 'Nie udało się wysłać newslettera',
-          snackbarType: SnackbarType.error,
-        });
-      }
-    });
-  }
-  public checkStatus(status: string) {
-    if (status === SendStatusPL.WAITING) { //only_at_will
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  public showSendTime(status: string) {
-    if (status == SendStatusPL.DELAYED) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  public goBack() {
-    this.router.navigate(['/companyProfile', this.companyId]);
   }
 }

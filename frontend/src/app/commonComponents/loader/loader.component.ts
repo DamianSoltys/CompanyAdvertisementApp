@@ -9,12 +9,13 @@ import { BehaviorSubject, Subject } from 'rxjs';
 })
 export class LoaderComponent implements OnInit {
   public showLoader = new BehaviorSubject<boolean>(false);
-  constructor(private loaderService: LoaderService) {}
+
+  constructor(private loaderService: LoaderService) { }
 
   ngOnInit() {
-    this.loaderService.showLoaderComponent.subscribe(data=>{
-      setTimeout(() =>  this.showLoader.next(data), 0);  
+    this.loaderService.showLoaderComponent.subscribe(data => {
+      setTimeout(() => this.showLoader.next(data), 0);
     });
   }
- 
+
 }

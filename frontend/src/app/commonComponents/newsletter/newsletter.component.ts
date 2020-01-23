@@ -13,27 +13,28 @@ import { PromotionItem, SendingStrategy, Destination, PromotionType } from 'src/
 import { SnackbarService, SnackbarType } from 'src/app/services/snackbar.service';
 import { LoginService } from 'src/app/services/login.service';
 import { MediaConnection, MediaTypeEnum, ConnectionStatus } from 'src/app/interfaces/Company';
+
 enum FormType {
   info = 'Informacja',
   product = 'Produkt',
-  promotion = 'Promocja'
+  promotion = 'Promocja',
 }
 
 enum SendStrategy {
   delayed = 'Wysyłka z opóźnieniem',
   now = 'Wysyłka natychmiastowa',
-  at_will = 'Wysyłka na żądanie'
+  at_will = 'Wysyłka na żądanie',
 }
 
 enum MediaOptions {
   withoutMedia = 'Newsletter',
-  withMedia = 'Facebook'
+  withMedia = 'Facebook',
 }
 
 enum MediaType {
   FB = 'Facebook',
   TWITTER = 'Twitter',
-  NEWSLETTER = 'Newsletter'
+  NEWSLETTER = 'Newsletter',
 }
 
 @Component({
@@ -68,6 +69,10 @@ enum MediaType {
   ],
 })
 export class NewsletterComponent implements OnInit, AfterViewInit {
+  @ViewChild('typeSelect') typeSelect: SelectDropDownComponent;
+  @ViewChild('formTypeSelect') formTypeSelect: SelectDropDownComponent;
+  @ViewChild('sendingTypeSelect') sendingTypeSelect: SelectDropDownComponent;
+  @ViewChild('mediaSelect') mediaSelect: SelectDropDownComponent;
   public isInfo = new BehaviorSubject(false);
   public isPromotion = new BehaviorSubject(false);
   public isProduct = new BehaviorSubject(false);
@@ -122,12 +127,15 @@ export class NewsletterComponent implements OnInit, AfterViewInit {
     date: [],
     time: [],
   });
-  constructor(private nDataService: NewsletterService, private route: ActivatedRoute,
-    private cDataService: CompanyService, private router: Router, private fb: FormBuilder, private snackbar: SnackbarService, private lDataService: LoginService) { }
-  @ViewChild('typeSelect') typeSelect: SelectDropDownComponent;
-  @ViewChild('formTypeSelect') formTypeSelect: SelectDropDownComponent;
-  @ViewChild('sendingTypeSelect') sendingTypeSelect: SelectDropDownComponent;
-  @ViewChild('mediaSelect') mediaSelect: SelectDropDownComponent;
+
+  constructor(
+    private nDataService: NewsletterService,
+    private route: ActivatedRoute,
+    private cDataService: CompanyService,
+    private router: Router,
+    private fb: FormBuilder,
+    private snackbar: SnackbarService,
+    private lDataService: LoginService) { }
 
   ngOnInit() {
     this.getActualUser();
@@ -141,75 +149,6 @@ export class NewsletterComponent implements OnInit, AfterViewInit {
     }, 0);
   }
 
-  private checkForMediaConnection() {
-    this.lDataService.checkIfMediaConnected(this.paramId).subscribe(response => {
-      let connectionData = <MediaConnection[]>response;
-      if (connectionData.length) {
-        // connectionData.forEach(data=>{
-        //   if(data.socialPlatform === MediaTypeEnum.FB && data.connectionStatus.status === ConnectionStatus.connected) {
-        //     this.mediaTypeOptions = [...this.mediaTypeOptions,'Facebook'];      
-        //   } else if(data.socialPlatform === MediaTypeEnum.TWITTER && data.connectionStatus.status === ConnectionStatus.connected){
-        //     this.mediaTypeOptions = [...this.mediaTypeOptions,'Twitter'];
-        //   }
-        // });   
-
-        this.mediaOptions = [...this.mediaOptions, 'Facebook'];
-        this.isFBConnected = true;
-
-      } else {
-        console.log(response);
-      }
-    });
-  }
-  private setDefaultValues() {
-    this.mediaSelect.selectItem('Newsletter');
-    this.typeSelect.selectItem('Informacja');
-    this.formTypeSelect.selectItem('Edytor HTML');
-    this.sendingTypeSelect.selectItem('Wysyłka natychmiastowa');
-  }
-
-  private setFormVisibility() {
-    if (this.mediaSelect.value[0] === MediaOptions.withMedia && this.mediaSelect.value.length == 1) {
-      this.onlyMedia.next(true);
-      this.isText.next(false);
-      this.isEdit.next(false);
-    } else {
-      this.onlyMedia.next(false);
-      this.isText.next(false);
-      this.isEdit.next(true);
-    }
-
-    if (this.formTypeSelect) {
-      if (this.formTypeSelect.value === 'Edytor HTML') {
-        this.isText.next(false);
-        this.isEdit.next(true);
-      } else {
-        this.isText.next(true);
-        this.isEdit.next(false);
-      }
-    } else {
-      this.isEdit.next(false);
-    }
-
-    if (this.mediaSelect.value[0] === MediaOptions.withoutMedia && this.mediaSelect.value.length == 1) {
-      this.isMedia.next(false);
-    } else {
-      this.isMedia.next(true);
-      this.isText.next(false);
-      if (this.formTypeSelect) {
-        if (this.formTypeSelect.value === 'Formularz tekstowy') {
-          this.formTypeSelect.selectItem('Edytor HTML');
-        }
-      }
-    }
-
-    if (this.sendingTypeSelect.value === SendStrategy.now || this.sendingTypeSelect.value === SendStrategy.at_will) {
-      this.isDatePicker.next(false);
-    } else {
-      this.isDatePicker.next(true);
-    }
-  }
-
   public getActualUser() {
     if (storage_Avaliable('localStorage')) {
       if (localStorage.getItem('userREST')) {
@@ -220,18 +159,10 @@ export class NewsletterComponent implements OnInit, AfterViewInit {
 
   public checkForChanges(element: SelectDropDownComponent) {
     this.setFormVisibility();
+
     if (!element.value || !element.value.length) {
       element.selectItem(element.options[0]);
     }
-  }
-
-  private checkForPermissions() {
-    this.route.parent.params.subscribe(params => {
-      this.paramId = params['id'];
-      if (!this.cDataService.checkForUserPermission(this.paramId)) {
-        this.router.navigate(['companyProfile', this.paramId]);
-      }
-    });
   }
 
   public onDateSelect($event) {
@@ -267,6 +198,52 @@ export class NewsletterComponent implements OnInit, AfterViewInit {
     }
   }
 
+
+  public showEdit() {
+    if (!this.isText.value && this.isEdit.value && !this.onlyMedia.value) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public showText() {
+    if (this.isText.value && !this.isEdit.value && !this.onlyMedia.value) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public showTitle() {
+    if (!this.isMedia.value) {
+      return true;
+    } else if (this.isMedia.value && this.isEdit.value && !this.onlyMedia.value) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public showMediaTypeSelect() {
+    if (this.isMedia.value || this.onlyMedia.value) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  public isAnyMediaConnected() {
+    if (this.isFBConnected || this.isTWITTEDConnected) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public goBack() {
+    this.router.navigate(['/companyProfile', this.paramId]);
+  }
+
   private newsletterRequest() {
     this.nDataService.sendNewsletter(this.sendingOptions, this.files ? this.files : null).subscribe(response => {
       if (response) {
@@ -286,7 +263,6 @@ export class NewsletterComponent implements OnInit, AfterViewInit {
   private setStandardValues() {
     this.sendingOptions = {};
     this.sendingOptions.destinations = [];
-
     this.sendingOptions.companyId = this.paramId;
     this.sendingOptions.emailTitle = this.textForm.controls.title.value;
     this.sendingOptions.name = this.textForm.controls.name.value;
@@ -350,7 +326,6 @@ export class NewsletterComponent implements OnInit, AfterViewInit {
       if (this.onlyMedia.value) {
         this.sendingOptions.destinations = [];
       }
-
       let destinationValue: any[] = this.mediaSelect.value;
 
       destinationValue.forEach(value => {
@@ -383,49 +358,75 @@ export class NewsletterComponent implements OnInit, AfterViewInit {
       }
     }
   }
-  public showEdit() {
-    if (!this.isText.value && this.isEdit.value && !this.onlyMedia.value) {
-      return true;
-    } else {
-      return false;
-    }
+
+  private checkForPermissions() {
+    this.route.parent.params.subscribe(params => {
+      this.paramId = params['id'];
+
+      if (!this.cDataService.checkForUserPermission(this.paramId)) {
+        this.router.navigate(['companyProfile', this.paramId]);
+      }
+    });
   }
 
-  public showText() {
-    if (this.isText.value && !this.isEdit.value && !this.onlyMedia.value) {
-      return true;
-    } else {
-      return false;
-    }
+  private checkForMediaConnection() {
+    this.lDataService.checkIfMediaConnected(this.paramId).subscribe(response => {
+      let connectionData = <MediaConnection[]>response;
+
+      if (connectionData.length) {
+        this.mediaOptions = [...this.mediaOptions, 'Facebook'];
+        this.isFBConnected = true;
+      }
+    });
   }
 
-  public showTitle() {
-    if (!this.isMedia.value) {
-      return true;
-    } else if (this.isMedia.value && this.isEdit.value && !this.onlyMedia.value) {
-      return true;
-    } else {
-      return false;
-    }
+  private setDefaultValues() {
+    this.mediaSelect.selectItem('Newsletter');
+    this.typeSelect.selectItem('Informacja');
+    this.formTypeSelect.selectItem('Edytor HTML');
+    this.sendingTypeSelect.selectItem('Wysyłka natychmiastowa');
   }
 
-  public showMediaTypeSelect() {
-    if (this.isMedia.value || this.onlyMedia.value) {
-      return true;
+  private setFormVisibility() {
+    if (this.mediaSelect.value[0] === MediaOptions.withMedia && this.mediaSelect.value.length == 1) {
+      this.onlyMedia.next(true);
+      this.isText.next(false);
+      this.isEdit.next(false);
     } else {
-      return false;
+      this.onlyMedia.next(false);
+      this.isText.next(false);
+      this.isEdit.next(true);
     }
-  }
-  public isAnyMediaConnected() {
-    if (this.isFBConnected || this.isTWITTEDConnected) {
-      return true;
-    } else {
-      return false;
-    }
-  }
 
-  public goBack() {
-    this.router.navigate(['/companyProfile', this.paramId]);
+    if (this.formTypeSelect) {
+      if (this.formTypeSelect.value === 'Edytor HTML') {
+        this.isText.next(false);
+        this.isEdit.next(true);
+      } else {
+        this.isText.next(true);
+        this.isEdit.next(false);
+      }
+    } else {
+      this.isEdit.next(false);
+    }
+
+    if (this.mediaSelect.value[0] === MediaOptions.withoutMedia && this.mediaSelect.value.length == 1) {
+      this.isMedia.next(false);
+    } else {
+      this.isMedia.next(true);
+      this.isText.next(false);
+      if (this.formTypeSelect) {
+        if (this.formTypeSelect.value === 'Formularz tekstowy') {
+          this.formTypeSelect.selectItem('Edytor HTML');
+        }
+      }
+    }
+
+    if (this.sendingTypeSelect.value === SendStrategy.now || this.sendingTypeSelect.value === SendStrategy.at_will) {
+      this.isDatePicker.next(false);
+    } else {
+      this.isDatePicker.next(true);
+    }
   }
 
 }

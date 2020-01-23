@@ -5,53 +5,55 @@
     </div>
     <div class="main-container__data-container" *ngIf="isLoaded.value">
       <div class="data-container__section--button">
-        <button class="section--button__button btn-primary btn" (click)="showForm()" *ngIf="canShowAddButton()">Dodaj swoją opinie</button>
+        <button class="section--button__button btn-primary btn" (click)="showForm()" *ngIf="canShowAddButton()">Dodaj
+          swoją opinie</button>
       </div>
       <div class="data-container__section--rating" #scrollContainer (scroll)="onScroll($event)">
         <div class="section--rating__comment" *ngIf="canShowEmptyData()">
           <p class="comment__empty-opinion">Firma nie posiada żadnych opinii</p>
         </div>
-      <div class="section--rating__comment" *ngFor="let opinion of opinions">
-        <div class="comment_top-data">
-        <div class="top-data__user">
-          Użytkownik: <strong>{{opinion.userName}}</strong><strong *ngIf="opinion.isOwner">(Właściciel)</strong>
-        </div>
-          <div class="top-data__rate" *ngIf="opinion.rate">
+        <div class="section--rating__comment" *ngFor="let opinion of opinions">
+          <div class="comment_top-data">
+            <div class="top-data__user">
+              Użytkownik: <strong>{{opinion.userName}}</strong><strong *ngIf="opinion.isOwner">(Właściciel)</strong>
+            </div>
+            <div class="top-data__rate" *ngIf="opinion.rate">
               Ocena: <ngb-rating class="rate_rating-component" [(rate)]="opinion.rate" [max]="5" [readonly]="true">
-                  <ng-template let-fill="fill" let-index="index">
-                      <span class="star" [class.filled]="fill === 100">&#9733;</span>
-                    </ng-template>
+                <ng-template let-fill="fill" let-index="index">
+                  <span class="star" [class.filled]="fill === 100">&#9733;</span>
+                </ng-template>
               </ngb-rating>
             </div>
           </div>
-            <div class="comment__comment-container">
-              <div class="comment-container__label-container">
-                <p class="label-container__label">Komentarz:</p>
-              </div>
-                <div class="comment-container__text-container" [innerHtml] = "opinion.comment">
-                </div>
-              </div>
-      </div>
+          <div class="comment__comment-container">
+            <div class="comment-container__label-container">
+              <p class="label-container__label">Komentarz:</p>
+            </div>
+            <div class="comment-container__text-container" [innerHtml]="opinion.comment">
+            </div>
+          </div>
+        </div>
       </div>
       <div class="data-container__section--form" *ngIf="isForm.value" [@formAnimate]>
-       <form class="section--form__form" [formGroup]="ratingForm" (submit)="onSubmit($event)">
-        <div class="form__comment-input">
-          <label for="commentText" class="comment-input__label">Komentarz</label>
-          <quill-editor class="comment-input__input" formControlName="commentText" [modules]="config">
-          </quill-editor>
-        </div>
-        <div class="form__rating-input" *ngIf="canShowRatingForm()">
-          <label class="text-center rating-input__label" for="rating">Ocena</label>
-          <ngb-rating class="rating-input__rating" [(rate)]="currentRate" [max]="5">
+        <form class="section--form__form" [formGroup]="ratingForm" (submit)="onSubmit($event)">
+          <div class="form__comment-input">
+            <label for="commentText" class="comment-input__label">Komentarz</label>
+            <quill-editor class="comment-input__input" formControlName="commentText" [modules]="config">
+            </quill-editor>
+          </div>
+          <div class="form__rating-input" *ngIf="canShowRatingForm()">
+            <label class="text-center rating-input__label" for="rating">Ocena</label>
+            <ngb-rating class="rating-input__rating" [(rate)]="currentRate" [max]="5">
               <ng-template let-fill="fill" let-index="index">
-                  <span class="star" [class.filled]="fill === 100">&#9733;</span>
-                </ng-template>
-          </ngb-rating>
-        </div>
-        <div class="form__button-container">
-        <button [disabled]="!ratingForm.valid" type="submit" class="button-container__button--submit btn btn-primary">Dodaj</button>
-        </div>
-       </form>
+                <span class="star" [class.filled]="fill === 100">&#9733;</span>
+              </ng-template>
+            </ngb-rating>
+          </div>
+          <div class="form__button-container">
+            <button [disabled]="!ratingForm.valid" type="submit"
+              class="button-container__button--submit btn btn-primary">Dodaj</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

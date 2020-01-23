@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Branch } from 'src/app/interfaces/Company';
 import { BehaviorSubject } from 'rxjs';
-import { trigger, style, animate, transition ,state } from '@angular/animations';
+import { trigger, style, animate, transition, state } from '@angular/animations';
 import { CollapseService } from 'src/app/services/collapse.service';
 
 @Component({
@@ -13,15 +13,15 @@ import { CollapseService } from 'src/app/services/collapse.service';
       state(
         'visible',
         style({
-          height:'*',
-          overflow:'hidden'
+          height: '*',
+          overflow: 'hidden'
         })
       ),
       state(
         'hidden',
         style({
-          height:'0px',
-          overflow:'hidden'
+          height: '0px',
+          overflow: 'hidden'
         })
       ),
       transition('visible <=> hidden', [animate('.2s')])
@@ -29,19 +29,19 @@ import { CollapseService } from 'src/app/services/collapse.service';
   ],
 })
 export class CollapseComponent implements OnInit {
-  @Input() branchData:Branch;
+  @Input() branchData: Branch;
   public isOpen = new BehaviorSubject(false);
-  public collapseId:number;
-  constructor(private service:CollapseService) { }
+  public collapseId: number;
+
+  constructor(private service: CollapseService) { }
 
   ngOnInit() {
     this.collapseId = 0;
-    console.log(this.branchData.actualSelectedLogo)
-    for(let char of this.branchData.name) {
-      this.collapseId+=char.charCodeAt(0) + Math.random();
+    for (let char of this.branchData.name) {
+      this.collapseId += char.charCodeAt(0) + Math.random();
     }
-    this.service.saveId.subscribe(data=>{   
-      if(data === this.collapseId) {
+    this.service.saveId.subscribe(data => {
+      if (data === this.collapseId) {
         this.openCollapse();
       }
       else {
@@ -49,18 +49,18 @@ export class CollapseComponent implements OnInit {
       }
     });
   }
-  public open (e:Event) {
+  public open(e: Event) {
     e.preventDefault();
     this.service.open(this.collapseId);
   }
   private openCollapse() {
-    if(this.isOpen.value) {
-      setTimeout(()=>{
-       this.close();
-      },200);
-     } else {
-       this.isOpen.next(true);
-     }
+    if (this.isOpen.value) {
+      setTimeout(() => {
+        this.close();
+      }, 200);
+    } else {
+      this.isOpen.next(true);
+    }
   }
   public close() {
     this.isOpen.next(false);

@@ -6,7 +6,7 @@ import { CompanyComponent } from 'src/app/mainComponents/user/company/company.co
 
 const routes: Routes = [
   { path: '', component: BranchProfileComponent },
-  { path: 'edit', component: CompanyComponent,canActivate: [AuthGuard]},
+  { path: 'edit', component: CompanyComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: 'guest', pathMatch: 'full' }
 ];
 
@@ -14,4 +14,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class BranchProfileRoutingModule {}
+export class BranchProfileRoutingModule { }

@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, Input, AfterViewChecked } from '@angular/core';
-import  grapesjs from 'grapesjs';
+import grapesjs from 'grapesjs';
 import customPreset from 'grapesjs-preset-newsletter';
 import { NewsletterService } from 'src/app/services/newsletter.service';
 
@@ -8,14 +8,15 @@ import { NewsletterService } from 'src/app/services/newsletter.service';
   templateUrl: './grape-editor.component.html',
   styleUrls: ['./grape-editor.component.scss']
 })
-export class GrapeEditorComponent implements OnInit,AfterViewInit,OnDestroy {
+export class GrapeEditorComponent implements OnInit, AfterViewInit, OnDestroy {
+  @Input('editorName') nameOfEditor: string;
   public editor;
-  @Input('editorName') nameOfEditor:string;
-  constructor(private nDataService:NewsletterService) { }
+
+  constructor(private nDataService: NewsletterService) { }
 
   ngOnInit() {
-    this.nDataService.getHtmlTemplate.subscribe(name=>{
-      if(this.nameOfEditor === name) {
+    this.nDataService.getHtmlTemplate.subscribe(name => {
+      if (this.nameOfEditor === name) {
         this.getHtmlTemplate();
       }
     });
@@ -29,7 +30,7 @@ export class GrapeEditorComponent implements OnInit,AfterViewInit,OnDestroy {
   private getGrapeJsObject() {
     this.editor = grapesjs.init({
       container: `#${this.nameOfEditor}`,
-      plugins:[customPreset],
+      plugins: [customPreset],
       pluginsOpts: {
         [customPreset]: {
           modalTitleImport: 'Import template',
@@ -42,9 +43,8 @@ export class GrapeEditorComponent implements OnInit,AfterViewInit,OnDestroy {
         autoload: true,         // Autoload stored data on init
         stepsBeforeSave: 1,     // If autosave enabled, indicates how many changes are necessary before store method is triggered
       },
-      width:'auto',
+      width: 'auto',
     });
-    console.log(this.editor)
   }
 
   ngOnDestroy() {

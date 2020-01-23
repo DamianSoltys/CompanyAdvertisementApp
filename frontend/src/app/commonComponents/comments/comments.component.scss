@@ -9,187 +9,215 @@
     width: 100%;
     padding: 0;
   }
+
   .rating-component__main-container {
     .main-container__header {
       display: flex;
       align-items: center;
       justify-content: center;
+
       .header__text-node {
-        color: darken($bgcolor,10%);
+        color: darken($bgcolor, 10%);
         font-size: 1.2rem;
       }
     }
-    .main-container__data-container {
-        display:flex;
-        flex-direction: column;
-        justify-content: center;
-        position: relative;
-        border:1px solid $bgcolor;
-        border-radius: 20px;
 
-        .data-container__section--button {
+    .main-container__data-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      border: 1px solid $bgcolor;
+      border-radius: 20px;
+
+      .data-container__section--button {
+        display: flex;
+        justify-content: center;
+        z-index: 20;
+
+        .section--button__button {
+          padding: 0;
+          border-radius: 0;
+          border-bottom-left-radius: 20px;
+          border-bottom-right-radius: 20px;
+          width: 20%;
+          background-color: $bgcolor;
+
+          @include phone {
+            width: 80%;
+          }
+
+          @include tablet {
+            width: 50%;
+          }
+        }
+      }
+
+      .data-container__section--rating {
+        margin: 5px;
+        max-height: 300px;
+        overflow: auto;
+        min-height: 301px;
+
+        .section--rating__comment {
           display: flex;
-          justify-content: center;
-          z-index: 20;
-          .section--button__button {
-            padding: 0;
-            border-radius: 0;
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
-            width: 20%;      
-            background-color: $bgcolor;
+          flex-direction: column;
+          padding: 15px;
+          border-bottom: 1px solid $bgcolor;
+
+          &:last-child {
+            border: none;
+          }
+
+          .comment__empty-opinion {
+            color: $bgcolor;
+            font-size: 1.2rem;
+            margin: auto;
+          }
+
+          .comment_top-data {
+            display: flex;
+            color: darken($bgcolor, 10%);
+            font-size: 1.1rem;
+
             @include phone {
-              width: 80%; 
+              flex-direction: column;
+              align-items: center;
             }
-            @include tablet {
-              width: 50%; 
+
+            .top-data__user {
+              flex: 1;
+            }
+
+            .top-data__rate {
+              .filled {
+                color: #fff200;
+              }
+            }
+          }
+
+          .comment__comment-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .comment-container__label-container {
+              color: darken($bgcolor, 10%);
+              font-size: 1.1rem;
+            }
+
+            .comment-container__text-container {}
+          }
+        }
+      }
+
+      .data-container__section--form {
+        position: absolute;
+        z-index: 5;
+        width: 100%;
+        height: 100%;
+        border-radius: 20px;
+        background-color: #fff;
+        top: 0;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        overflow: auto;
+
+        .section--form__form {
+          padding-top: 20px;
+          display: flex;
+          width: 100%;
+          height: 100%;
+          flex-wrap: wrap;
+          padding-left: 20px;
+          padding-right: 20px;
+          justify-content: center;
+
+          @include phone {
+            flex-direction: column;
+            flex-wrap: nowrap;
+          }
+
+          .form__comment-input {
+            width: 80%;
+
+            @include phone {
+              width: 100%;
+              height: 200px;
+              margin-top: 10px;
+            }
+
+            .comment-input__label {
+              font-size: 1.1rem;
+              color: darken($bgcolor, 10%);
+            }
+
+            .comment-input__input {}
+          }
+
+          .form__rating-input {
+            display: flex;
+            flex-direction: column;
+            width: 20%;
+            font-size: 1.1rem;
+            color: darken($bgcolor, 10%);
+
+            @include phone {
+              width: 100%;
+              padding-top: 100px;
+              padding-bottom: 10px;
+            }
+
+            .rating-input__rating {
+              padding-top: 30px;
+              align-self: center;
+
+              &:focus {
+                outline: none;
+              }
+
+              .filled {
+                color: #fff200;
+              }
+
+              @include phone {
+                padding-top: 0;
+              }
+            }
+          }
+
+          .form__button-container {
+            width: 100%;
+            padding-top: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            @include phone {
+              padding-top: 0;
+            }
+
+            .button-container__button--submit {
+              width: 30%;
+              border-radius: 50px;
+              border: 0;
+              background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor, 20%) 51%, $bgcolor 100%);
+              transition: all .4s ease-in-out;
+              background-size: 200%;
+
+              &:hover {
+                background-position: 100% 0;
+              }
+
+              @include phone {
+                width: 100%;
+                margin-bottom: 10px;
+              }
             }
           }
         }
-
-        .data-container__section--rating {
-            margin:5px;
-            max-height:300px;
-            overflow: auto;
-            min-height: 301px;
-            .section--rating__comment {
-              display:flex;
-              flex-direction: column;
-              padding:15px;
-              border-bottom:1px solid $bgcolor;
-              &:last-child {
-                border:none;
-              }
-              .comment__empty-opinion {
-                color:$bgcolor;
-                font-size: 1.2rem;
-                margin: auto;
-              }
-              .comment_top-data {
-                display:flex;
-                color:darken($bgcolor,10%);
-                font-size: 1.1rem;
-                @include phone {
-                  flex-direction: column;
-                  align-items: center;
-                }
-                .top-data__user {
-                  flex:1;
-                }
-                .top-data__rate {
-                  .filled {
-                    color: #fff200;
-                  }
-                }
-              } 
-              .comment__comment-container {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                .comment-container__label-container {
-                  color:darken($bgcolor,10%);
-                  font-size: 1.1rem;
-                }
-                .comment-container__text-container {
-
-                }
-              }
-            }
-        }
-        .data-container__section--form {
-            position:absolute;
-            z-index: 5;
-            width:100%;
-            height:100%;
-            border-radius: 20px;
-            background-color: #fff;
-            top:0;
-            overflow:hidden;
-            display:flex;
-            align-items: center;
-            overflow: auto;
-            .section--form__form {
-              padding-top:20px;
-              display: flex;
-              width:100%;
-              height:100%;
-              flex-wrap: wrap;
-              padding-left: 20px;
-              padding-right: 20px;
-              justify-content: center;
-              @include phone {
-                flex-direction: column;
-                flex-wrap: nowrap;
-              }
-              .form__comment-input {
-                width:80%;
-        
-                @include phone {
-                  width:100%;
-                  height:200px;
-                  margin-top:10px;
-                }
-                .comment-input__label {
-                  font-size:1.1rem;
-                  color:darken($bgcolor,10%);
-                }
-                .comment-input__input {
-
-                }
-              }
-              .form__rating-input {
-                display: flex;
-                flex-direction: column;
-                width:20%;
-                font-size:1.1rem;
-                color:darken($bgcolor,10%);
-                @include phone {
-                  width:100%;
-                  padding-top:100px;
-                  padding-bottom: 10px;
-                }
-                .rating-input__rating {
-                  padding-top:30px;
-                  align-self: center;
-                  &:focus {
-                    outline: none;
-                  }
-                  .filled {
-                    color: #fff200;
-                  }
-                  @include phone {
-                    padding-top:0;
-                  }
-                }
-              }
-
-              .form__button-container {
-                width:100%;
-                padding-top: 80px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                @include phone {
-                  padding-top:0;
-                }
-                .button-container__button--submit {
-                  width:30%;
-                  border-radius: 50px;
-                  border: 0;
-                  background-image: linear-gradient(to right, $bgcolor 0%, lighten($bgcolor,20%) 51%, $bgcolor 100%);
-                  transition: all .4s ease-in-out;
-                  background-size: 200%;
-                  &:hover {
-                    background-position: 100% 0;
-                  }
-                  @include phone {
-                    width:100%;
-                    margin-bottom: 10px;
-                  }
-                }
-              }
-            }
-        }
+      }
     }
-}
+  }
 }

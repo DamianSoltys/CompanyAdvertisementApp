@@ -1,15 +1,16 @@
 @import '../../../commonStyles/shared';
 
 .nearby-component {
-    .nearby-component__map-container {
-        border:2px solid $bgcolor;
-        .map-container__map {
-            height:80vh;
-        }
+  .nearby-component__map-container {
+    border: 2px solid $bgcolor;
 
-        .marker__link {
-            color:$bgcolor;
-            cursor: pointer;
-        }
+    .map-container__map {
+      height: 80vh;
     }
+
+    .marker__link {
+      color: $bgcolor;
+      cursor: pointer;
+    }
+  }
 }

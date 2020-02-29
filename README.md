@@ -1,6 +1,56 @@
 # CompanyAdvertisementApp
 
-CLIENT PART INSTALLATION - DamianSoltys
+# Design
+<h2>1. Home page </h2>
+<img src="./design/home.png">
+<h2>2. Register form </h2>
+<img src="./design/register.png">
+<h2>3. Login form </h2>
+<img src="./design/login.png">
+<h2>4. User data form </h2>
+<img src="./design/data.png">
+<h2>5. Logged user </h2>
+<img src="./design/logged.png">
+<h2>6. Simple search </h2>
+<img src="./design/search.png">
+<h2>7. Advanced search </h2>
+<img src="./design/search1.png">
+<h2>8. Branch map </h2>
+<img src="./design/map.png">
+<h2>9. Company form with added branch </h2>
+<img src="./design/company.png">
+<h2>10. Branch form </h2>
+<img src="./design/branch.png">
+<h2>11. Comment form </h2>
+<img src="./design/comment.png">
+<h2>12. Company profile </h2>
+<img src="./design/company-profile.png">
+<h2>13. Branch profile </h2>
+<img src="./design/branch-profile.png">
+<h2>14. Favourite branches </h2>
+<img src="./design/favs.png">
+<h2>15. Form validation </h2>
+<img src="./design/form-validation.png">
+<h2>16. User company list </h2>
+<img src="./design/user-company.png">
+<h2>17. Newsletter form </h2>
+<img src="./design/newsletter.png">
+<h2>18. Html editor in newsletter form(GrapesJS) </h2>
+<img src="./design/html-editor.png">
+<h2>19. Newsletters already sent </h2>
+<img src="./design/news-send.png">
+<h2>20. Subscribe to the newsletter(guest) </h2>
+<img src="./design/news-guest.png">
+<h2>21. Subscribe to the newsletter(user) </h2>
+<img src="./design/news-login.png">
+<h2>22. Newsletter sent to facebook </h2>
+<img src="./design/fb-news.png">
+<h2>23. Newsletter sent to email(html) </h2>
+<img src="./design/email-html.png">
+<h2>24. Register check on email </h2>
+<img src="./design/check register.png">
+
+# CLIENT PART INSTALLATION - DamianSoltys
 ***
 
 1. You must install Node.js with NPM, it can be downloaded from there: https://nodejs.org/en/.
@@ -12,7 +62,7 @@ CLIENT PART INSTALLATION - DamianSoltys
 
 ***
 
-SERVER PART INSTALLATION - mmateu
+# SERVER PART INSTALLATION - mmateu
 ***
 First install:
 * OpenJDK 11.0.3 2019-04-16

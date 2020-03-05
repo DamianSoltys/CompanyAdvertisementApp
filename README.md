@@ -1,4 +1,4 @@
-# CompanyAdvertisementApp
+# CompanyAdvertisementApp (FirmyDM)
 
 # Design
 <h2>1. Home page </h2>
